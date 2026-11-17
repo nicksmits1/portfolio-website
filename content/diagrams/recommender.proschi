@@ -1,0 +1,103 @@
+title "Movie recommender with LLM cold start" "Serving, cold start, retraining and monitoring"
+
+layout ordered
+
+viewer "Viewer" [Actor] "Asks for 20 films"
+
+group serving "Recommendation service" [Service Group] {
+  api   "Router"            [Flask]   x2 "Picks the ranking model, the cold-start path or the fallback list"
+  model "Ranking model"     [Service] "In-process LightGBM LambdaMART, 300 ms budget"
+  cold  "Cold-start ranker" [Service] "In-process NumPy ranker over a taste profile, 1.4 ms"
+}
+
+group profiling "Cold-start profiling" [Service Group] {
+  events "Event stream"   [Kafka]
+  worker "Profile worker" [Python] "Turns a sign-up into a taste profile, off the request path"
+}
+
+profiles  "Taste profiles" [SQLite]         "Profiles, seen films and the profiling queue"
+artifacts "Fallback list"  [Object Storage] "Fallback list, catalogue and ranker config, hot-reloaded"
+
+group logging "Inference logging" [Service Group] {
+  inflog "Inference logger" [Flask]
+  logdb  "Inference log"    [PostgreSQL]
+}
+
+group training "Retraining" [Service Group] {
+  ingester "Lake ingester" [Service] "Archives the event stream"
+  trainer  "Trainer"       [Python]  "Trains a candidate and gates it against the champion on NDCG@20"
+  lake     "Data lake"     [AWS S3]
+}
+
+releases "Model releases" [Object Storage] "Versioned models with the evidence from their training run" # GUESS: drawn as a store; it is a mounted model directory
+
+jev "Jev (TypeSafe)" [Third Party API] "LLM that extracts a structured taste profile"
+
+group observability "Monitoring" [Service Group] {
+  prometheus "Prometheus" [Prometheus]
+  grafana    "Grafana"    [Service]
+}
+
+viewer     -> api        : HTTP
+api        -> model      : in-process call
+api        -> cold       : in-process call
+api        -> profiles   : SQL
+api        -> artifacts  : read files
+api        -> releases   : load champion     # GUESS: the service loads its model artifact at start; reload path not read
+api        -> inflog     : HTTP (background thread)
+cold       -> profiles   : SQL
+cold       -> artifacts  : read files
+events     -> worker     : Consume
+worker     -> profiles   : SQL
+worker     -> jev        : HTTPS
+inflog     -> logdb      : SQL
+events     -> ingester   : Consume
+ingester   -> lake       : write archive
+trainer    -> lake       : read interactions # GUESS: training data source inferred from the retraining docs
+trainer    -> releases   : save release
+prometheus -> serving    : scrape metrics
+grafana    -> prometheus : query
+
+usecase "Recommend for a viewer" "The ranking model first, then cold start, then the fallback list" {
+  viewer -> api : GET recommendations
+  alt "Known user" when "the ranking model returns a list" {
+    api    -> model  : recommend(user, k=20)
+    model --> api    : 20 film ids
+    api   --> viewer : 200 ranked films
+  } alt "New user, profile ready" when "the model has no history and a taste profile is stored" {
+    api    -> model     : recommend(user, k=20)
+    model --> api       : no history
+    api    -> cold      : rank from taste profile
+    cold   -> profiles  : SELECT taste profile
+    cold   -> artifacts : READ ranker config and catalogue
+    cold  --> api       : ranked film ids
+    api   --> viewer    : 200 ranked films
+  } alt "New user, no profile yet" when "the profile is missing or still pending" {
+    api    -> model    : recommend(user, k=20)
+    model --> api      : no history
+    api    -> cold     : rank from taste profile
+    cold   -> profiles : SELECT taste profile
+    cold  --> api      : fallback list
+    api   --> viewer   : 200 fallback films
+  } alt "Model error or timeout" when "the model raises or takes over 300 ms" {
+    api  -x model  : recommend(user, k=20)
+    api --> viewer : 200 fallback films
+  }
+  api   ->> inflog : recommendation event
+  inflog -> logdb  : INSERT event
+}
+
+usecase "Profile a new user" "One LLM call per user, made at sign-up" {
+  events ->> worker   : sign-up event
+  worker  -> jev      : POST free-text tastes
+  jev    --> worker   : structured taste profile
+  worker  -> profiles : UPSERT profile, status ready
+}
+
+test "Recommendations degrade instead of failing" {
+  "Recommend for a viewer" never waits for inflog
+  "Recommend for a viewer" never waits for jev
+  "Recommend for a viewer" never waits for worker
+  "Recommend for a viewer" calls model before cold
+  "Recommend for a viewer" handles failure of model
+}

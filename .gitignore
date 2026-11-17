@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+drafts/_preview/*.html
+.impeccable/config.local.json
+.impeccable/review/
+.env
+.secrets
+# CV: holds a personal phone number; the repo is public
+Nicolas_Smits_Resume_*.md

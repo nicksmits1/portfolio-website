@@ -1,0 +1,261 @@
+<title>Build Steps Draft</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: an instruction booklet. Sky-blue pages, black keylines, numbered steps that add one part
+   at a time. Red always means "the part added in this step"; yellow is the parts inventory. */
+:root{
+  --sky:#8FCBEE; --sky2:#79BCE4; --ink:#10151B; --ink2:#1D4560; --red:#D42A1B; --yellow:#F8CC1B; --white:#FFFFFF; --ghost:#C9E6F7; --hair:rgba(16,21,27,.35);
+  --text:"Rubik",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-color:var(--ink) var(--sky)}
+body{background:var(--sky);color:var(--ink);font:400 1.0625rem/1.5 var(--text);margin:0}
+::selection{background:var(--red);color:var(--white)}
+a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
+a:hover{color:var(--red)}
+:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.wrap{max-width:1240px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media(min-width:820px){.wrap{padding-left:max(44px,env(safe-area-inset-left,0px));padding-right:max(44px,env(safe-area-inset-right,0px))}}
+
+nav{display:flex;justify-content:flex-end;gap:1.5rem;padding-block:1.1rem;font-weight:700;font-size:.95rem}
+nav a{text-decoration:none}
+
+.cover{display:grid;gap:1.5rem 3rem;align-items:center;padding-block:clamp(1rem,3vw,2.5rem) clamp(2.5rem,6vw,5rem)}
+@media(min-width:900px){.cover{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}}
+h1{font:900 clamp(3.2rem,9.5vw,6rem)/.9 var(--text);letter-spacing:-.035em;margin:0 0 1.2rem}
+.cover p{margin:0;font-size:1.2rem;line-height:1.4;font-weight:500;max-width:30ch}
+.cover svg{display:block;width:100%;height:auto;overflow:visible}
+.cover svg a text{transition:fill .15s}
+.cover svg a:hover text,.cover svg a:focus text{fill:var(--red)}
+
+.build{padding-block:clamp(2.6rem,6vw,4.6rem);border-top:3px solid var(--ink)}
+.head{display:grid;gap:1.2rem 3rem;margin-bottom:clamp(1.4rem,3vw,2.4rem);align-items:end}
+@media(min-width:900px){.head{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}}
+.label{display:contents}
+.label h2{font:900 clamp(2rem,4.4vw,3.2rem)/1 var(--text);letter-spacing:-.03em;margin:0;text-wrap:balance;grid-column:1}
+.label .where{grid-column:1;margin:.5rem 0 0;font-weight:700;color:var(--ink2);font-size:.95rem}
+.label .line{grid-column:1;margin:.7rem 0 0;max-width:46ch}
+.label .run{grid-column:2;grid-row:1/span 3;list-style:none;margin:0;padding:.9rem 1rem;background:var(--yellow);border:2.5px solid var(--ink);border-radius:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem 1.2rem;align-self:start}
+@media(max-width:899px){.label .run{grid-column:1;grid-row:auto}}
+.run li{display:flex;flex-direction:column}
+.run b{font:900 1.55rem/1.05 var(--text);letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.run span{font-size:.85rem;line-height:1.25;font-weight:500}
+.label .meta{grid-column:1;display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;margin:.8rem 0 0;font-weight:700;font-size:.92rem}
+.note{color:#8E1509}
+
+.steps{display:grid;gap:1.6rem 2rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr))}
+.step{min-width:0;position:relative}
+.step .n{font:900 clamp(3rem,6vw,4.4rem)/.8 var(--text);letter-spacing:-.04em;display:block;margin-bottom:.4rem}
+.step svg{display:block;width:100%;height:auto}
+.step p{margin:.5rem 0 0;font-weight:500;font-size:.98rem;line-height:1.35}
+.call{position:absolute;top:.2rem;right:0;background:var(--white);border:2.5px solid var(--ink);border-radius:10px;padding:.3rem .6rem;font-weight:900;font-size:.95rem;white-space:nowrap}
+.call em{font-style:normal;color:var(--red)}
+.fine{margin:1.2rem 0 0;font-size:.88rem;color:var(--ink2);font-weight:500}
+.big{background:var(--white);border:2.5px solid var(--ink);border-radius:14px;padding:clamp(.8rem,2vw,1.4rem);min-width:0}
+.big svg{display:block;width:100%;height:auto}
+.scroll{overflow-x:auto}.scroll>svg{min-width:600px}
+.pick{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem;align-items:center}
+.pick button,.end button{font:900 1.05rem/1 var(--text);padding:.6rem .95rem;border:2.5px solid var(--ink);border-radius:999px;background:var(--white);color:var(--ink);cursor:pointer;transition:transform .12s cubic-bezier(.2,.8,.2,1),background .12s}
+.pick button:hover{background:var(--yellow)}
+.pick button:active{transform:translateY(2px)}
+.pick button[aria-pressed="true"]{background:var(--red);color:var(--white)}
+.cap{margin:1rem 0 0;font-weight:500;min-height:3em}
+.logo{display:block;width:min(100%,380px);height:auto;margin-bottom:1.4rem;border:2.5px solid var(--ink);border-radius:12px;background:var(--white);padding:.5rem .7rem}
+.shot{display:block;width:100%;height:auto;border:2.5px solid var(--ink);border-radius:14px}
+.two{display:grid;gap:0 3rem}
+@media(min-width:900px){.two{grid-template-columns:1fr 1fr}}
+.two .head{grid-template-columns:1fr}.two .label .run{grid-column:1;grid-row:auto;margin-top:1rem}
+.two .label h2{font-size:clamp(1.7rem,3vw,2.3rem)}
+
+.inv{background:var(--yellow);border-top:3px solid var(--ink);padding-block:clamp(2.6rem,6vw,4.6rem)}
+.inv h2,.end h2{font:900 clamp(2.4rem,6vw,4.2rem)/1 var(--text);letter-spacing:-.035em;margin:0 0 .4rem}
+.inv .sub{margin:0 0 1.6rem;font-weight:500;min-height:1.6em}
+.inv .sub a{font-weight:700}
+.parts{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1.2rem .8rem}
+.parts button{font:inherit;color:var(--ink);background:none;border:0;padding:.2rem;text-align:left;cursor:pointer;display:grid;gap:.1rem;border-radius:8px}
+.parts svg{display:block;width:150px;max-width:100%;height:92px;overflow:visible;transition:transform .16s cubic-bezier(.2,.8,.2,1)}
+.parts button:hover svg{transform:translateY(-4px)}
+.parts b{font-weight:900;font-size:1.2rem;line-height:1}
+.parts span{font-weight:500;font-size:.95rem;line-height:1.2}
+.parts button.dim{opacity:.4}
+
+.end{background:var(--ink);color:var(--sky);padding-block:clamp(3rem,8vw,6rem)}
+.end .mail{font:900 clamp(1.5rem,4.6vw,3rem)/1.1 var(--text);letter-spacing:-.03em;overflow-wrap:anywhere;margin:.6rem 0 1.2rem;user-select:all}
+.end .row{display:flex;flex-wrap:wrap;gap:.8rem 1.6rem;align-items:center;font-weight:700}
+.end a:hover{color:var(--white)}
+.end button{border-color:var(--sky);background:var(--sky)}
+.end button:hover{background:var(--white)}
+.end :focus-visible{outline-color:var(--yellow)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+
+<header class="wrap">
+  <nav aria-label="Sections"><a href="#thesis">Builds</a><a href="#skills">Parts</a><a href="#contact">Contact</a></nav>
+  <div class="cover">
+    <div>
+      <h1>Nicolas Smits</h1>
+      <p>Optimisation, machine learning and reinforcement learning for process systems. Six builds so far.</p>
+    </div>
+    <svg id="stack" role="group" aria-label="Six bricks, one for each project. The red brick is the newest."></svg>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="build" id="thesis">
+    <div class="head"><div class="label" data-label="thesis"></div></div>
+    <div class="steps" id="netsteps"></div>
+    <p class="fine">Illustrative episode on a 9-node network. The trained policy designs held-out networks of up to 70 nodes.</p>
+  </section>
+
+  <section class="build" id="sindae">
+    <img class="logo" src="assets/sindae-logo.png" alt="SiNDAE logo" width="1368" height="274">
+    <div class="head"><div class="label" data-label="sindae"></div></div>
+    <div class="steps" id="fitsteps"></div>
+    <p class="fine">The three stages of a fit, drawn as an illustration.</p>
+  </section>
+
+  <section class="build" id="recsys">
+    <div class="head"><div class="label" data-label="recsys"></div></div>
+    <div class="pick" id="recpick" role="group" aria-label="Build step"></div>
+    <div class="big scroll"><svg id="recsvg"></svg></div>
+    <p class="cap" id="reccap"></p>
+  </section>
+
+  <section class="build" id="wayfinder">
+    <div class="head"><div class="label" data-label="wayfinder"></div></div>
+    <img class="shot" src="assets/wayfinder-sidebar.webp" alt="The wayfinder sidebar docked beside a Claude Code chat, listing ready, claimed and blocked tickets" width="1400" height="725">
+  </section>
+
+  <div class="two">
+    <section class="build" id="fifa"><div class="head"><div class="label" data-label="fifa"></div></div><div class="big"><svg id="fifaS"></svg></div></section>
+    <section class="build" id="sepsis"><div class="head"><div class="label" data-label="sepsis"></div></div><div class="big"><svg id="sepsisS"></svg></div></section>
+  </div>
+</main>
+
+<section class="inv" id="skills">
+  <div class="wrap">
+    <h2>Parts</h2>
+    <p class="sub" id="used">One stud for every build a part is used in. Pick a part.</p>
+    <div class="parts" id="parts"></div>
+  </div>
+</section>
+
+<footer class="end" id="contact">
+  <div class="wrap">
+    <h2>Contact</h2>
+    <p class="mail">nsmits@andrew.cmu.edu</p>
+    <div class="row"><button type="button" data-copy="nsmits@andrew.cmu.edu">Copy address</button><a href="https://github.com/nicksmits1" target="_blank" rel="noopener">GitHub</a><a href="https://linkedin.com/in/nicolas-smits" target="_blank" rel="noopener">LinkedIn</a></div>
+  </div>
+</footer>
+
+<script src="shared/core.js"></script>
+<script>
+(function () {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const INK = css('--ink'), INK2 = css('--ink2'), RED = css('--red'), YEL = css('--yellow'), WHITE = css('--white'), SKY = css('--sky');
+  const font = '"Rubik",system-ui,sans-serif', el = NS.el;
+  NS.labels();
+
+  /* ---- isometric brick ---- */
+  function brick(g, o) {
+    const u = o.u || 24, hu = u * 0.62, P = (i, j, k) => [(i - j) * u * 0.866 + (o.x || 0), (i + j) * u * 0.5 - k * hu + (o.y || 0)];
+    const { i = 0, j = 0, k = 0, a = 4, b = 2, c = 1, fill = WHITE } = o, k1 = k + c;
+    const poly = (pts, shade) => { const d = pts.map(p => p.join(',')).join(' '); el('polygon', { points: d, fill, stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, g); if (shade) el('polygon', { points: d, fill: '#000', opacity: shade }, g); };
+    poly([P(i, j + b, k1), P(i + a, j + b, k1), P(i + a, j + b, k), P(i, j + b, k)], 0.1);
+    poly([P(i + a, j, k1), P(i + a, j + b, k1), P(i + a, j + b, k), P(i + a, j, k)], 0.22);
+    poly([P(i, j, k1), P(i + a, j, k1), P(i + a, j + b, k1), P(i, j + b, k1)]);
+    const rx = u * 0.29, ry = u * 0.17, sh = u * 0.2;
+    for (let n = 0; n < b; n++) for (let m = 0; m < a; m++) {
+      const [cx, cy] = P(i + m + 0.5, j + n + 0.5, k1);
+      el('path', { d: `M${cx - rx} ${cy - sh} V${cy} A${rx} ${ry} 0 0 0 ${cx + rx} ${cy} V${cy - sh}`, fill, stroke: INK, 'stroke-width': 1.6 }, g);
+      el('path', { d: `M${cx - rx} ${cy - sh} V${cy} A${rx} ${ry} 0 0 0 ${cx + rx} ${cy} V${cy - sh}`, fill: '#000', opacity: 0.16 }, g);
+      el('ellipse', { cx, cy: cy - sh, rx, ry, fill, stroke: INK, 'stroke-width': 1.6 }, g);
+    }
+    return P;
+  }
+
+  /* ---- cover: six bricks, oldest at the bottom, newest on top in red ---- */
+  const stack = document.getElementById('stack'); stack.setAttribute('viewBox', '0 0 600 330');
+  // [project, i, k, visible top-face i, leader direction, label y]
+  const layout = [['sepsis', 0, 0, 1, 'ul', 80], ['fifa', 4, 0, null, 'dl', 300], ['thesis', 8, 0, 11, 'ur', 176], ['sindae', 2, 1, 4, 'ul', 34], ['recsys', 6, 1, 9, 'ur', 116], ['wayfinder', 4, 2, 6, 'ur', 56]];
+  const U = 30, OX = 140, OY = 70, gB = el('g', {}, stack), gL = el('g', {}, stack);
+  layout.forEach(([id, i, k, ti, dir, ly]) => {
+    const p = NS.byId[id], a = el('a', { href: '#' + id, 'aria-label': p.name }, gB);
+    const P = brick(a, { u: U, x: OX, y: OY, i, j: 0, k, fill: id === 'wayfinder' ? RED : (k === 1 ? YEL : WHITE) });
+    const from = ti == null ? P(i + 2, 2, k + 0.5) : P(ti, 1, k + 1), right = dir === 'ur', dy = Math.abs(ly - from[1]);
+    const ex = from[0] + (right ? dy : -dy), lx = right ? 592 : 8, l = el('a', { href: '#' + id, tabindex: -1, 'aria-hidden': 'true' }, gL);
+    el('circle', { cx: from[0], cy: from[1], r: 3.2, fill: INK }, l);
+    el('path', { d: `M${from[0]} ${from[1]} L${ex} ${ly} H${lx}`, fill: 'none', stroke: INK, 'stroke-width': 1.8 }, l);
+    const t = el('text', { x: lx, y: ly - 8, 'text-anchor': right ? 'end' : 'start', 'font-family': font, 'font-weight': 900, 'font-size': 20, fill: INK }, l); t.textContent = p.short;
+  });
+
+  /* ---- thesis: four steps ---- */
+  const netTheme = { ink: INK, dim: '#4E88AA', fill: WHITE, fresh: RED, bad: RED, font, sw: 2, freshOnly: true };
+  const calls = [null, '1× <em>W1 → C3</em>', '1× <em>P1 → W3</em>', null];
+  [1, 2, 3, 4].forEach((s, n) => {
+    const d = document.createElement('div'); d.className = 'step';
+    d.innerHTML = `<span class="n">${n + 1}</span>${calls[n] ? `<span class="call">${calls[n]}</span>` : ''}<svg></svg><p>${NS.netStates[s].cap}</p>`;
+    document.getElementById('netsteps').appendChild(d);
+    NS.net(d.querySelector('svg'), Object.assign({ start: s }, netTheme));
+  });
+
+  /* ---- sindae: smoother, pre-train, train ---- */
+  const truth = t => 1 + 2 * Math.exp(-t / 5.5), rnd = (s => () => (s = (s * 16807) % 2147483647) / 2147483647)(7);
+  const data = Array.from({ length: 22 }, (_, n) => { const t = n * 1.9; return [t, truth(t) + (rnd() - 0.5) * 0.34]; });
+  const X = t => 24 + t / 40 * 292, Y = v => 196 - (v - 0.7) / 2.6 * 176;
+  const path = f => 'M' + Array.from({ length: 81 }, (_, n) => { const t = n / 2; return X(t).toFixed(1) + ' ' + Y(f(t)).toFixed(1); }).join(' L');
+  const smooth = t => truth(t) + 0.09 * Math.sin(t * 0.9) * Math.exp(-t / 30) + 0.05 * Math.sin(t * 0.37 + 1);
+  const fitCaps = ['Smoother: a smooth path through noisy data.', 'Pre-train the network on that path.', 'Train as one nonlinear program. The physics stays a hard constraint.'];
+  fitCaps.forEach((cap, n) => {
+    const d = document.createElement('div'); d.className = 'step';
+    d.innerHTML = `<span class="n">${n + 1}</span><svg viewBox="0 0 340 220" role="img" aria-label="${cap}"></svg><p>${cap}</p>`;
+    document.getElementById('fitsteps').appendChild(d);
+    const s = d.querySelector('svg');
+    el('path', { d: 'M24 14 V196 H322', fill: 'none', stroke: INK, 'stroke-width': 2 }, s);
+    if (n === 0) el('path', { d: path(smooth), fill: 'none', stroke: RED, 'stroke-width': 3.2 }, s);
+    if (n === 1) {
+      el('path', { d: path(smooth), fill: 'none', stroke: WHITE, 'stroke-width': 3.2 }, s);
+      const g = el('g', { transform: 'translate(226 34)' }, s), L = [[0, [14, 44, 74]], [44, [0, 29, 59, 88]], [88, [29, 59]]];
+      L.forEach(([x, ys], li) => { if (li < 2) ys.forEach(y1 => L[li + 1][1].forEach(y2 => el('line', { x1: x, y1, x2: L[li + 1][0], y2, stroke: RED, 'stroke-width': 1.5 }, g))); });
+      L.forEach(([x, ys]) => ys.forEach(y => el('circle', { cx: x, cy: y, r: 7, fill: WHITE, stroke: RED, 'stroke-width': 2.6 }, g)));
+    }
+    if (n === 2) el('path', { d: path(truth), fill: 'none', stroke: RED, 'stroke-width': 3.6 }, s);
+    data.forEach(([t, v]) => el('circle', { cx: X(t), cy: Y(v), r: 4, fill: INK }, s));
+  });
+
+  /* ---- recommender: three build steps on one diagram ---- */
+  const builds = [
+    { n: '1', only: ['client', 'api', 'model', 'log'], fresh: ['client', 'api', 'model', 'log'], play: 'known', cap: 'Serve known users. The ranking model answers with 20 films inside the latency budget.' },
+    { n: '2', only: ['client', 'api', 'model', 'log', 'cold', 'profiles'], fresh: ['cold', 'profiles'], play: 'new', cap: 'Add a cold-start path. A new user is ranked from a stored taste profile in 1.4 ms.' },
+    { n: '3', only: null, fresh: ['stream', 'worker', 'llm'], play: 'profile', cap: 'Add the LLM off the request path. It writes the taste profile before the first request arrives.' },
+  ];
+  const rsvg = document.getElementById('recsvg'), rcap = document.getElementById('reccap'), rpick = document.getElementById('recpick');
+  let rec = null;
+  const rb = builds.map((b, n) => { const x = document.createElement('button'); x.type = 'button'; x.textContent = b.n; x.setAttribute('aria-label', 'Step ' + b.n); rpick.appendChild(x); x.addEventListener('click', () => show(n)); return x; });
+  function show(n) { const b = builds[n]; if (rec) rec.stop(); rsvg.textContent = '';
+    rec = NS.rec(rsvg, { ink: INK, dim: INK2, fill: WHITE, pulse: RED, font, sw: 2, radius: 9, only: b.only, fresh: b.fresh });
+    rec.play(b.play); rsvg.querySelectorAll('g').forEach(g => (g.style.opacity = 1)); rsvg.querySelectorAll('path').forEach(p => (p.style.opacity = 1));
+    rcap.textContent = b.cap; rb.forEach((x, k) => x.setAttribute('aria-pressed', k === n ? 'true' : 'false')); }
+  show(2);
+
+  NS.scale(document.getElementById('fifaS'), NS.fifa, { ink: INK, dim: INK2, hi: RED, font });
+  NS.scale(document.getElementById('sepsisS'), NS.sepsis, { ink: INK, dim: INK2, hi: RED, font, ticks: 6 });
+
+  /* ---- parts inventory: a 1 x N brick per skill, N = builds that use it ---- */
+  const parts = document.getElementById('parts'), used = document.getElementById('used'), base = used.textContent;
+  const all = NS.methods.concat(NS.tools).map(s => ({ s, n: NS.count(s) })).sort((a, b) => b.n - a.n);
+  let cur = null;
+  all.forEach(p => {
+    const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<svg viewBox="-30 -26 150 92" aria-hidden="true"></svg><b>${p.n}×</b><span>${p.s}</span>`;
+    parts.appendChild(b); p.b = b; p.svg = b.querySelector('svg');
+    brick(p.svg, { u: 30, a: p.n, b: 1, fill: WHITE });
+    b.addEventListener('click', () => {
+      cur = cur === p ? null : p;
+      all.forEach(q => { q.svg.textContent = ''; brick(q.svg, { u: 30, a: q.n, b: 1, fill: q === cur ? RED : WHITE }); q.b.classList.toggle('dim', !!cur && q !== cur); q.b.setAttribute('aria-pressed', q === cur ? 'true' : 'false'); });
+      used.innerHTML = cur ? `${cur.s} is used in ` + NS.projects.filter(x => x.methods.includes(cur.s) || x.tools.includes(cur.s)).map(x => `<a href="#${x.id}">${x.short}</a>`).join(', ') + '.' : base;
+    });
+  });
+})();
+</script>

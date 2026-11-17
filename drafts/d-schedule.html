@@ -1,0 +1,231 @@
+<title>Schedule Draft</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=STIX+Two+Text:ital@1&display=swap">
+<style>
+/* Layout: a production schedule. Research threads are the units, projects are the tasks, and the
+   horizon stays open to the right. Each project section is a full-width block in its thread's colour. */
+:root{
+  --paper:#F1F3EA; --ink:#11160F; --ink2:#48523F; --grid:rgba(17,22,15,.16);
+  --rl:#D4371F; --opt:#2444D2; --sys:#F1B51E; --tool:#08785F;
+  --text:"Archivo",system-ui,sans-serif; --math:"STIX Two Text","Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-color:var(--ink) var(--paper)}
+body{background:var(--paper);color:var(--ink);font:400 1.0625rem/1.5 var(--text);margin:0}
+::selection{background:var(--ink);color:var(--sys)}
+a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:1.5px}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.wrap{max-width:1280px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media(min-width:820px){.wrap{padding-left:max(40px,env(safe-area-inset-left,0px));padding-right:max(40px,env(safe-area-inset-right,0px))}}
+
+.top{display:grid;gap:.8rem 3rem;align-items:end;padding-block:1.2rem clamp(1.2rem,3vw,2rem)}
+@media(min-width:900px){.top{grid-template-columns:auto minmax(0,32ch) auto}}
+h1{font:800 clamp(2.6rem,7vw,5rem)/.92 var(--text);font-stretch:118%;letter-spacing:-.035em;margin:0}
+.top p{margin:0;font-size:1.1rem;line-height:1.4;font-weight:500;color:var(--ink2)}
+nav{display:flex;gap:1.3rem;font-weight:700;font-stretch:80%;text-transform:uppercase;letter-spacing:.07em;font-size:.9rem;align-self:start;justify-self:end}
+nav a{text-decoration:none;border-bottom:2px solid transparent;padding-block:.3rem}
+nav a:hover{border-color:var(--ink)}
+
+/* the schedule */
+.sched{border-block:2px solid var(--ink)}
+.scroll{overflow-x:auto;scrollbar-width:thin}
+.gantt{--rh:clamp(58px,9.5vh,92px);--lab:clamp(104px,13vw,188px);min-width:900px;position:relative}
+.row{display:grid;grid-template-columns:var(--lab) 1fr;border-bottom:1px solid var(--grid)}
+.rlab{position:sticky;left:0;z-index:3;background:var(--paper);border-right:2px solid var(--ink);display:flex;align-items:center;padding:.3rem .7rem .3rem max(16px,env(safe-area-inset-left,0px));font-weight:700;font-stretch:78%;font-size:.95rem;line-height:1.1;text-transform:uppercase;letter-spacing:.05em}
+@media(min-width:820px){.rlab{padding-left:max(40px,env(safe-area-inset-left,0px))}}
+.track{position:relative;height:var(--rh);background-image:linear-gradient(to right,var(--grid) 1px,transparent 1px);background-size:calc(100%/14) 100%}
+.axis .track{height:2rem;background:none}
+.axis .rlab{font-weight:500;color:var(--ink2);text-transform:none;letter-spacing:0;font-size:.85rem}
+.yr{position:absolute;top:.35rem;font-weight:800;font-stretch:80%;font-size:1rem;padding-left:.4rem;border-left:2px solid var(--ink);height:100%}
+.blk{position:absolute;top:9%;height:82%;display:flex;flex-direction:column;justify-content:center;padding:0 .6rem;text-decoration:none;color:#fff;overflow:hidden;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s cubic-bezier(.16,1,.3,1)}
+.blk:hover,.blk:focus-visible{transform:translateY(-4px);box-shadow:0 10px 18px -8px rgba(17,22,15,.55)}
+.blk b{font-weight:800;font-stretch:76%;font-size:1rem;line-height:1.05;white-space:nowrap}
+.blk span{font-weight:500;font-stretch:76%;font-size:.86rem;line-height:1.1;white-space:nowrap;font-variant-numeric:tabular-nums}
+.blk.sys{color:var(--ink)}
+.blk.dim{opacity:.22}
+.tail{position:absolute;top:9%;height:82%;pointer-events:none;opacity:.9}
+.out{position:absolute;top:50%;transform:translateY(-50%);font-weight:800;font-stretch:76%;font-size:.95rem;white-space:nowrap;padding-right:.5rem;text-decoration:none}
+.out.dim{opacity:.22}
+.rl-c{background:var(--rl)}.opt-c{background:var(--opt)}.sys-c{background:var(--sys)}.tool-c{background:var(--tool)}
+.open{position:absolute;top:0;bottom:0;right:0;background:repeating-linear-gradient(135deg,transparent 0 9px,var(--grid) 9px 10px);pointer-events:none}
+.now{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);z-index:2;pointer-events:none}
+.now::after{content:"today";position:absolute;bottom:.35rem;left:6px;font-weight:700;font-stretch:78%;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--paper);padding:0 .25rem}
+.free{position:absolute;right:.8rem;top:50%;transform:translateY(-50%);font-weight:500;font-stretch:80%;color:var(--ink2);font-size:.9rem;background:var(--paper);padding:.1rem .4rem}
+.use .track{display:flex;align-items:flex-end;background-image:linear-gradient(to top,var(--grid) 1px,transparent 1px);background-size:100% 33.333%}
+.use i{flex:1 1 0;background:var(--ink);height:0;transition:height .5s cubic-bezier(.16,1,.3,1);margin-right:1px}
+.use .rlab{flex-direction:column;align-items:flex-start;justify-content:center;gap:.1rem}
+.use .rlab small{font-weight:500;color:var(--ink2);text-transform:none;letter-spacing:0;font-size:.8rem}
+@media(prefers-reduced-motion:no-preference){.blk{animation:slot .8s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i)*80ms)}@keyframes slot{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}}
+
+.chips{padding-block:1.1rem clamp(2rem,5vw,3.5rem);display:flex;flex-wrap:wrap;gap:.45rem;align-items:center}
+.chips span{font-weight:700;font-stretch:78%;text-transform:uppercase;letter-spacing:.06em;font-size:.9rem;margin-right:.5rem}
+.chips button{font:600 .95rem/1 var(--text);font-stretch:84%;padding:.5rem .7rem;border:1.5px solid var(--ink);background:none;color:var(--ink);cursor:pointer;transition:background .15s,color .15s}
+.chips button:hover{background:rgba(17,22,15,.1)}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* project blocks */
+.band{--fg:#fff;--fg2:rgba(255,255,255,.82);--hair:rgba(255,255,255,.4);color:var(--fg);padding-block:clamp(2.6rem,6vw,5rem)}
+.band.rl{background:var(--rl)}.band.opt{background:var(--opt)}.band.tool{background:var(--tool)}
+.band.sys{background:var(--sys);--fg:var(--ink);--fg2:#3B3407;--hair:rgba(17,22,15,.4)}
+.band ::selection{background:var(--fg);color:var(--ink)}
+.band.sys ::selection{color:var(--sys)}
+.band :focus-visible{outline-color:var(--fg)}
+.grid{display:grid;gap:1.6rem 3.5rem;align-items:center}
+@media(min-width:900px){.grid{grid-template-columns:repeat(12,minmax(0,1fr))}
+  .grid>.fig{grid-column:1/8}.grid>.label{grid-column:8/13}
+  .grid.flip>.fig{grid-column:6/13;grid-row:1}.grid.flip>.label{grid-column:1/6;grid-row:1}}
+.fig{min-width:0}.fig svg{display:block;width:100%;height:auto}
+.scrollx{overflow-x:auto}.scrollx>svg{min-width:600px}
+.label{min-width:0}
+.label h2{font:800 clamp(1.9rem,3.8vw,3rem)/1 var(--text);font-stretch:112%;letter-spacing:-.03em;margin:0 0 .6rem;text-wrap:balance}
+.where{font-weight:700;font-stretch:80%;text-transform:uppercase;letter-spacing:.06em;font-size:.9rem;color:var(--fg2);margin:0 0 1rem}
+.line{margin:0 0 1.4rem;max-width:44ch;font-weight:500}
+.run{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem 1.5rem}
+.run li{display:flex;flex-direction:column;border-top:2px solid var(--fg);padding-top:.45rem}
+.run b{font-weight:800;font-stretch:80%;font-size:1.75rem;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.run span{font-size:.86rem;line-height:1.3;color:var(--fg2);font-weight:500;margin-top:.2rem}
+.meta{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;margin:1.2rem 0 0;font-weight:700;font-stretch:84%;font-size:.92rem}
+.note{background:var(--fg);color:var(--rl);padding:.15rem .45rem}
+.figbar{display:flex;flex-wrap:wrap;gap:.6rem 1.2rem;align-items:center;justify-content:space-between;margin-top:.9rem;min-height:2.6rem}
+.figbar p{margin:0;flex:1 1 16rem;min-width:0;font-weight:600}
+.fine{margin:.5rem 0 0;font-size:.86rem;color:var(--fg2)}
+[data-netsteps]{display:flex;gap:4px}
+[data-netsteps] button{width:26px;height:22px;padding:0;border:0;background:none;cursor:pointer;position:relative}
+[data-netsteps] button::before{content:"";position:absolute;inset:6px 2px;background:var(--hair);transition:inset .2s,background .2s}
+[data-netsteps] button[aria-current="step"]::before{inset:2px;background:var(--fg)}
+[data-rectabs]{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:1rem}
+[data-rectabs] button{font:600 .92rem/1 var(--text);font-stretch:84%;padding:.5rem .7rem;border:1.5px solid var(--fg);background:none;color:var(--fg);cursor:pointer}
+[data-rectabs] button[aria-pressed="true"]{background:var(--fg);color:var(--sys)}
+.flowbox{position:relative;aspect-ratio:16/10;max-width:100%}
+.flowbox canvas{position:absolute;inset:0;width:100%;height:100%}
+.flowbox img{position:absolute;right:0;top:0;width:min(48%,340px);height:auto;outline:8px solid var(--opt)}
+.flowbox .ax{position:absolute;font:italic 1rem/1 var(--math);color:#fff;background:var(--opt);padding:.1rem .35rem}
+.eq{font:italic 1rem/1.5 var(--math);color:#fff}
+.eq span{font:500 .86rem/1.4 var(--text);color:var(--fg2)}
+.shot{display:block;width:100%;height:auto;box-shadow:0 22px 40px -18px rgba(0,0,0,.6)}
+.duo{display:grid}
+@media(min-width:900px){.duo{grid-template-columns:1fr 1fr}}
+.half{padding:clamp(2.6rem,6vw,5rem) max(16px,env(safe-area-inset-right,0px)) clamp(2.6rem,6vw,5rem) max(16px,env(safe-area-inset-left,0px))}
+@media(min-width:820px){.half{padding-left:max(40px,env(safe-area-inset-left,0px));padding-right:max(40px,env(safe-area-inset-right,0px))}}
+.half .fig{margin-bottom:1.5rem}
+.half .label h2{font-size:clamp(1.6rem,2.7vw,2.2rem)}
+
+.end{background:var(--ink);color:var(--paper);padding-block:clamp(3rem,8vw,6rem)}
+.end ::selection{background:var(--sys);color:var(--ink)}
+.end h2{font:800 clamp(2.2rem,6vw,4rem)/1 var(--text);font-stretch:118%;letter-spacing:-.035em;margin:0 0 1rem}
+.end .mail{font:700 clamp(1.4rem,4.4vw,2.8rem)/1.1 var(--text);font-stretch:84%;overflow-wrap:anywhere;margin:0 0 1.2rem;user-select:all}
+.end .rowx{display:flex;flex-wrap:wrap;gap:.8rem 1.6rem;align-items:center;font-weight:700;font-stretch:84%;text-transform:uppercase;letter-spacing:.06em}
+.end a:hover{color:var(--sys)}
+.end button{font:inherit;font-stretch:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink);background:var(--sys);border:0;padding:.7rem 1rem;cursor:pointer}
+.end button:hover{background:#fff}
+.end :focus-visible{outline-color:var(--sys)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+
+<header class="wrap top">
+  <h1>Nicolas Smits</h1>
+  <p>Optimisation, machine learning and reinforcement learning for process systems.</p>
+  <nav aria-label="Sections"><a href="#thesis">Work</a><a href="#skills">Skills</a><a href="#contact">Contact</a></nav>
+</header>
+
+<section class="sched" aria-label="Project schedule by research thread">
+  <div class="scroll"><div class="gantt" id="gantt"></div></div>
+</section>
+<div class="wrap chips" id="skills" role="group" aria-label="Show where a skill is in use"><span>Filter by skill</span></div>
+
+<main>
+  <section class="band rl" id="thesis"><div class="wrap grid">
+    <div class="fig" id="netfig"><svg data-net></svg>
+      <div class="figbar"><p data-netcap></p><div data-netsteps></div></div>
+      <p class="fine">Illustrative episode on a 9-node network. The trained policy designs held-out networks of up to 70 nodes.</p></div>
+    <div class="label" data-label="thesis"></div>
+  </div></section>
+
+  <section class="band opt" id="sindae"><div class="wrap grid flip">
+    <div class="fig"><div class="flowbox">
+        <canvas id="lg" role="img" aria-label="Phase portrait of the Leslie-Gower predator-prey system: every trajectory spirals into one equilibrium"></canvas>
+        <img src="assets/sindae-logo-dark.png" alt="SiNDAE logo" width="1284" height="312">
+        <span class="ax" style="left:0;bottom:0">prey x&#8320;</span><span class="ax" style="left:0;top:0">predator x&#8321;</span></div>
+      <p class="fine eq">x&#8320;&#8242; = x&#8320;(r&#8321; &minus; a&#8321;x&#8321; &minus; b&#8321;x&#8320;) &nbsp;&nbsp; x&#8321;&#8242; = x&#8321; &middot; NN(x&#8320;, x&#8321;) &nbsp; <span>The network learns the second bracket; the first stays a hard constraint.</span></p></div>
+    <div class="label" data-label="sindae"></div>
+  </div></section>
+
+  <section class="band sys" id="recsys"><div class="wrap grid">
+    <div class="fig" id="recfig"><div data-rectabs role="group" aria-label="Request scenario"></div>
+      <div class="scrollx"><svg data-rec></svg></div>
+      <div class="figbar"><p data-reccap></p></div></div>
+    <div class="label" data-label="recsys"></div>
+  </div></section>
+
+  <section class="band tool" id="wayfinder"><div class="wrap grid flip">
+    <div class="fig"><img class="shot" src="assets/wayfinder-sidebar.webp" alt="The wayfinder sidebar docked beside a Claude Code chat, listing ready, claimed and blocked tickets" width="1400" height="725"></div>
+    <div class="label" data-label="wayfinder"></div>
+  </div></section>
+
+  <div class="duo">
+    <section class="band sys half" id="fifa"><div class="fig"><svg id="fifaS"></svg></div><div class="label" data-label="fifa"></div></section>
+    <section class="band rl half" id="sepsis"><div class="fig"><svg id="sepsisS"></svg></div><div class="label" data-label="sepsis"></div></section>
+  </div>
+</main>
+
+<footer class="end" id="contact"><div class="wrap">
+  <h2>Contact</h2>
+  <p class="mail">nsmits@andrew.cmu.edu</p>
+  <div class="rowx"><button type="button" data-copy="nsmits@andrew.cmu.edu">Copy address</button><a href="https://github.com/nicksmits1" target="_blank" rel="noopener">GitHub</a><a href="https://linkedin.com/in/nicolas-smits" target="_blank" rel="noopener">LinkedIn</a></div>
+</div></footer>
+
+<script src="shared/core.js"></script>
+<script>
+(function () {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const INK = css('--ink'), PAPER = css('--paper'), RL = css('--rl'), OPT = css('--opt'), SYS = css('--sys');
+  const font = '"Archivo",system-ui,sans-serif';
+  NS.labels();
+
+  /* ---- the schedule ---- */
+  const T0 = 2025, T1 = 2028.5, pct = t => (t - T0) / (T1 - T0) * 100;
+  const d = new Date(), now = Math.min(T1 - 0.6, Math.max(2026.87, d.getFullYear() + (d.getMonth() + d.getDate() / 31) / 12));
+  const units = [['rl', 'Reinforcement learning', ['sepsis', 'thesis']], ['opt', 'Optimisation', ['sindae']], ['sys', 'ML systems', ['fifa', 'recsys']], ['tool', 'Agent tooling', ['wayfinder']]];
+  const key = { thesis: '21,000× faster', sindae: 'one NLP', recsys: '500k+ requests', wayfinder: '', fifa: 'R² 0.964', sepsis: '0.824 return' }, ongoing = { thesis: 1, recsys: 1, wayfinder: 1 };
+  const g = document.getElementById('gantt'), mk = (tag, cls, parent, html) => { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; parent.appendChild(n); return n; };
+  const ax = mk('div', 'row axis', g); mk('div', 'rlab', ax, 'Thread'); const axt = mk('div', 'track', ax);
+  [2025, 2026, 2027, 2028].forEach(y => { const e = mk('span', 'yr', axt, y); e.style.left = pct(y) + '%'; });
+  const blocks = {}; let n = 0; const trackW = axt.getBoundingClientRect().width || 800;
+  units.forEach(([cls, name, ids]) => {
+    const r = mk('div', 'row', g); mk('div', 'rlab', r, name); const t = mk('div', 'track', r);
+    const open = mk('div', 'open', t); open.style.left = pct(now) + '%';
+    ids.forEach(id => { const p = NS.byId[id], end = ongoing[id] ? now : p.to, w = pct(end) - pct(p.from), wide = w / 100 * trackW > p.short.length * 7.6 + 16;
+      const a = mk('a', `blk ${cls} ${cls}-c`, t, wide ? `<b>${p.short}</b>${w > 9 && key[id] ? `<span>${key[id]}</span>` : ''}` : ''); a.href = '#' + id; a.setAttribute('aria-label', p.name);
+      a.style.left = pct(p.from) + '%'; a.style.width = w + '%'; a.style.setProperty('--i', n++); blocks[id] = [a];
+      if (!wide) { const o = mk('a', 'out', t, p.short); o.href = '#' + id; o.tabIndex = -1; o.style.right = (100 - pct(p.from)) + '%'; blocks[id].push(o); } });
+  });
+  const use = mk('div', 'row use', g), ul = mk('div', 'rlab', use), ut = mk('div', 'track', use);
+  const months = Math.round((T1 - T0) * 12), bars = Array.from({ length: months }, () => mk('i', '', ut));
+  const free = mk('span', 'free', g.children[2].lastChild, 'Unscheduled');
+  const nowLine = mk('div', 'now', g); function placeNow() { const lab = g.querySelector('.rlab').getBoundingClientRect().width, w = g.getBoundingClientRect().width; nowLine.style.left = lab + (w - lab) * pct(now) / 100 + 'px'; }
+  placeNow(); new ResizeObserver(placeNow).observe(g);
+
+  const chips = document.getElementById('skills'), all = NS.tools.concat(NS.methods).map(s => ({ s, n: NS.count(s) })).sort((a, b) => b.n - a.n);
+  let sel = null;
+  function pick(s) {
+    sel = s === sel ? null : s;
+    const users = NS.projects.filter(p => !sel || p.tools.includes(sel) || p.methods.includes(sel));
+    bars.forEach((b, m) => { const t = T0 + (m + 0.5) / 12, c = users.filter(p => t >= p.from && t <= (ongoing[p.id] ? now : p.to)).length; b.style.height = c / 3 * 100 + '%'; });
+    NS.projects.forEach(p => blocks[p.id].forEach(e => e.classList.toggle('dim', !users.includes(p))));
+    ul.innerHTML = `${sel || 'All projects'}<small>running in parallel, 0 to 3</small>`;
+    all.forEach(c => c.b.setAttribute('aria-pressed', c.s === sel ? 'true' : 'false'));
+  }
+  all.forEach(c => { c.b = mk('button', '', chips, c.s); c.b.type = 'button'; c.b.addEventListener('click', () => pick(c.s)); });
+  pick(null);
+
+  /* ---- figures, each in its block's two inks ---- */
+  NS.netFigure(document.getElementById('netfig'), { ink: '#fff', dim: '#F6B3A6', fill: RL, fresh: INK, bad: INK, font, sw: 1.8 });
+  NS.recFigure(document.getElementById('recfig'), { ink: INK, dim: '#5A4E08', fill: '#FFF7D6', pulse: RL, font, sw: 1.7, radius: 0 });
+  NS.scale(document.getElementById('fifaS'), NS.fifa, { ink: INK, dim: '#5A4E08', hi: RL, font });
+  NS.scale(document.getElementById('sepsisS'), NS.sepsis, { ink: '#fff', dim: '#FBD3CB', hi: INK, font, ticks: 6 });
+  let eq = null;
+  NS.flow(document.getElementById('lg'), { color: '#fff', lw: 1, dsep: 11, alpha: 0.92,
+    field(w, h) { const f = NS.leslieGower(w, h, 0); eq = f.eq; return f; },
+    after(ctx) { if (!eq) return; ctx.fillStyle = SYS; ctx.beginPath(); ctx.arc(eq[0], eq[1], 6.5, 0, 7); ctx.fill(); } });
+})();
+</script>

@@ -1,0 +1,250 @@
+<title>Slide Rule Draft</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sofia+Sans:wght@400;500;700&family=Sofia+Sans+Condensed:wght@500;600;700&family=Sofia+Sans+Extra+Condensed:wght@700;900&family=STIX+Two+Text:ital@1&display=swap">
+<style>
+/* Layout: the page is the body of a slide rule. Scales run edge to edge on eye-saver yellow;
+   every figure sits in a white window; one red hairline is the only accent. */
+:root{
+  --y:#F4DC3C; --y-deep:#E6CB1F; --ink:#15140C; --ink2:#4A4410; --red:#BF1A1C; --win:#FFFEF4; --hair:rgba(21,20,12,.3);
+  --disp:"Sofia Sans Extra Condensed","Arial Narrow",sans-serif;
+  --cond:"Sofia Sans Condensed","Arial Narrow",sans-serif;
+  --text:"Sofia Sans",system-ui,sans-serif;
+  --math:"STIX Two Text","Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-color:var(--ink) var(--y)}
+body{background:var(--y);color:var(--ink);font:400 1.0625rem/1.5 var(--text);margin:0}
+::selection{background:var(--ink);color:var(--y)}
+a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:1px}
+a:hover{color:var(--red)}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.wrap{max-width:1240px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media(min-width:820px){.wrap{padding-left:max(44px,env(safe-area-inset-left,0px));padding-right:max(44px,env(safe-area-inset-right,0px))}}
+
+nav{display:flex;justify-content:flex-end;gap:1.6rem;padding-block:1.1rem;font:600 .95rem/1 var(--cond);letter-spacing:.09em;text-transform:uppercase}
+nav a{text-decoration:none;padding-block:.35rem;border-bottom:1.5px solid transparent}
+nav a:hover{color:var(--ink);border-color:var(--red)}
+
+.top{display:grid;gap:1rem 3rem;align-items:end;padding-block:clamp(1.5rem,5vw,4rem) clamp(1.4rem,3vw,2.4rem)}
+@media(min-width:820px){.top{grid-template-columns:auto minmax(0,30ch)}}
+h1{font:900 clamp(3.6rem,11vw,6rem)/.84 var(--disp);letter-spacing:-.01em;text-transform:uppercase;margin:0}
+.top p{margin:0;font-size:1.2rem;line-height:1.35;font-weight:500;color:var(--ink2)}
+
+/* the rule */
+.rulewrap{overflow-x:auto;border-block:1.5px solid var(--ink);scrollbar-width:thin}
+#rule{display:block;width:100%;min-width:1020px;height:auto;touch-action:pan-x;cursor:ew-resize}
+.readout{display:flex;flex-wrap:wrap;gap:.3rem 2rem;margin:0;padding-block:.8rem;font:600 1rem/1.3 var(--cond);letter-spacing:.04em;color:var(--ink2);font-variant-numeric:tabular-nums}
+.readout b{color:var(--ink);font-weight:700;display:inline-block;min-width:5.2ch}
+.readout .hint{margin-left:auto;font-weight:500}
+
+/* plates */
+.plate{display:grid;gap:1.4rem 3rem;padding-block:clamp(2.6rem,6vw,5rem);border-top:1px solid var(--hair);align-items:start}
+.plate:first-of-type{border-top:0}
+@media(min-width:900px){.plate{grid-template-columns:repeat(12,minmax(0,1fr))}
+  .plate>.win{grid-column:1/9}.plate>.label{grid-column:9/13}
+  .plate.flip>.win{grid-column:5/13;grid-row:1}.plate.flip>.label{grid-column:1/5;grid-row:1}}
+.win{background:var(--win);border:1.5px solid var(--ink);min-width:0;position:relative}
+.win svg{display:block;width:100%;height:auto}
+.win .pad{padding:clamp(.8rem,2vw,1.4rem)}
+.scroll{overflow-x:auto}.scroll>svg{min-width:600px}
+.label{min-width:0}
+.label h2{font:900 clamp(2.2rem,4.6vw,3.3rem)/.9 var(--disp);text-transform:uppercase;margin:0 0 .5rem;text-wrap:balance}
+.where{font:600 .9rem/1.2 var(--cond);letter-spacing:.09em;text-transform:uppercase;color:var(--ink2);margin:0 0 1rem}
+.line{margin:0 0 1.3rem;max-width:44ch}
+.run{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1.5px solid var(--ink)}
+.run li{padding:.55rem .6rem .6rem 0;border-bottom:1px solid var(--hair);display:flex;flex-direction:column}
+.run b{font:700 1.75rem/1 var(--cond);font-variant-numeric:tabular-nums;white-space:nowrap}
+.run span{font:500 .82rem/1.25 var(--cond);letter-spacing:.03em;color:var(--ink2);margin-top:.2rem}
+.meta{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;margin:1rem 0 0;font:600 .9rem/1.2 var(--cond);letter-spacing:.06em;text-transform:uppercase}
+.note{color:var(--red)}
+.figbar{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.2rem;justify-content:space-between;padding:.7rem clamp(.8rem,2vw,1.4rem);border-top:1px solid var(--hair);min-height:3.3rem}
+.figbar p{margin:0;font-weight:500;flex:1 1 16rem;min-width:0}
+.fine{margin:0;padding:.5rem clamp(.8rem,2vw,1.4rem) .7rem;font:500 .82rem/1.3 var(--cond);letter-spacing:.03em;color:var(--ink2);border-top:1px solid var(--hair)}
+[data-netsteps]{display:flex;gap:5px}
+[data-netsteps] button{width:26px;height:22px;padding:0;border:0;background:none;cursor:pointer;position:relative}
+[data-netsteps] button::before{content:"";position:absolute;left:12px;top:5px;width:2px;height:12px;background:var(--ink);transition:height .2s,top .2s,background .2s,width .2s}
+[data-netsteps] button[aria-current="step"]::before{top:0;height:22px;width:3px;background:var(--red)}
+[data-rectabs]{display:flex;flex-wrap:wrap;gap:0}
+[data-rectabs] button{font:600 .88rem/1 var(--cond);letter-spacing:.07em;text-transform:uppercase;padding:.6rem .8rem;border:1.5px solid var(--ink);margin:0 -1.5px -1.5px 0;background:var(--win);color:var(--ink);cursor:pointer}
+[data-rectabs] button:hover{background:var(--y)}
+[data-rectabs] button[aria-pressed="true"]{background:var(--ink);color:var(--y)}
+.flowbox{position:relative;aspect-ratio:16/10;max-width:100%}
+.flowbox canvas{position:absolute;inset:0;width:100%;height:100%}
+.flowbox img{position:absolute;right:4%;top:6%;width:min(46%,330px);height:auto;background:var(--win);padding:.5rem .7rem;border:1.5px solid var(--ink)}
+.flowbox .ax{position:absolute;font:italic 1rem/1 var(--math);color:var(--ink2);background:var(--win);padding:.1rem .35rem}
+.eq{font:italic 1.02rem/1.5 var(--math)}
+.pair{display:grid;gap:2rem 3rem;padding-block:clamp(2.6rem,6vw,5rem);border-top:1px solid var(--hair)}
+@media(min-width:900px){.pair{grid-template-columns:1fr 1fr}}
+.pair .label h2{font-size:clamp(1.9rem,3.4vw,2.6rem)}
+.pair .win{margin-bottom:1.3rem}
+.shot{display:block;width:100%;height:auto}
+
+.skills{padding-block:clamp(2.6rem,6vw,5rem);border-top:1.5px solid var(--ink)}
+.skills h2,.end h2{font:900 clamp(2.6rem,7vw,4.6rem)/.86 var(--disp);text-transform:uppercase;margin:0 0 1.2rem}
+.skills .scroll>svg{min-width:720px}
+
+.end{background:var(--ink);color:var(--y);padding-block:clamp(3rem,8vw,6rem)}
+.end ::selection{background:var(--y);color:var(--ink)}
+.end .mail{font:700 clamp(1.5rem,4.6vw,3rem)/1.1 var(--cond);overflow-wrap:anywhere;margin:0 0 1.2rem;user-select:all}
+.end .row{display:flex;flex-wrap:wrap;gap:.8rem 1.6rem;align-items:center;font:600 1rem/1 var(--cond);letter-spacing:.08em;text-transform:uppercase}
+.end a:hover{color:#fff}
+.end button{font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink);background:var(--y);border:0;padding:.7rem 1rem;cursor:pointer}
+.end button:hover{background:#fff}
+.end :focus-visible{outline-color:var(--y)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+
+<header class="wrap">
+  <nav aria-label="Sections"><a href="#thesis">Work</a><a href="#skills">Skills</a><a href="#contact">Contact</a></nav>
+  <div class="top">
+    <h1>Nicolas<br>Smits</h1>
+    <p>Optimisation, machine learning and reinforcement learning for process systems.</p>
+  </div>
+</header>
+
+<div class="rulewrap"><svg id="rule" tabindex="0" role="slider" aria-label="Cursor across the time scale and the project timeline" aria-valuemin="0" aria-valuemax="100"></svg></div>
+<div class="wrap"><p class="readout"><span>T <b id="rT"></b></span><span>Y <b id="rY"></b></span><span id="rP"></span><span class="hint">Slide the hairline</span></p></div>
+
+<main class="wrap">
+  <section class="plate" id="thesis">
+    <div class="win" id="netfig">
+      <div class="pad"><svg data-net></svg></div>
+      <div class="figbar"><p data-netcap></p><div data-netsteps></div></div>
+      <p class="fine">Illustrative episode on a 9-node network. The trained policy designs held-out networks of up to 70 nodes.</p>
+    </div>
+    <div class="label" data-label="thesis"></div>
+  </section>
+
+  <section class="plate flip" id="sindae">
+    <div class="win">
+      <div class="flowbox">
+        <canvas id="lg" aria-label="Phase portrait of the Leslie-Gower predator-prey system: every trajectory spirals into one equilibrium" role="img"></canvas>
+        <img src="assets/sindae-logo.png" alt="SiNDAE logo" width="1368" height="274">
+        <span class="ax" style="left:3%;bottom:4%">prey x&#8320;</span><span class="ax" style="left:3%;top:5%">predator x&#8321;</span>
+      </div>
+      <p class="fine eq">x&#8320;&#8242; = x&#8320;(r&#8321; &minus; a&#8321;x&#8321; &minus; b&#8321;x&#8320;) &nbsp;&nbsp; x&#8321;&#8242; = x&#8321; &middot; NN(x&#8320;, x&#8321;) &nbsp;&nbsp;<span style="font-family:var(--cond);font-style:normal">The network learns the second bracket; the first stays a hard constraint.</span></p>
+    </div>
+    <div class="label" data-label="sindae"></div>
+  </section>
+
+  <section class="plate" id="recsys">
+    <div class="win" id="recfig">
+      <div data-rectabs role="group" aria-label="Request scenario"></div>
+      <div class="pad scroll"><svg data-rec></svg></div>
+      <div class="figbar"><p data-reccap></p></div>
+    </div>
+    <div class="label" data-label="recsys"></div>
+  </section>
+
+  <section class="plate flip" id="wayfinder">
+    <div class="win"><img class="shot" src="assets/wayfinder-sidebar.webp" alt="The wayfinder sidebar docked beside a Claude Code chat, listing ready, claimed and blocked tickets" width="1400" height="725"></div>
+    <div class="label" data-label="wayfinder"></div>
+  </section>
+
+  <div class="pair">
+    <section id="fifa"><div class="win"><div class="pad"><svg id="fifaS"></svg></div></div><div class="label" data-label="fifa"></div></section>
+    <section id="sepsis"><div class="win"><div class="pad"><svg id="sepsisS"></svg></div></div><div class="label" data-label="sepsis"></div></section>
+  </div>
+
+  <section class="skills" id="skills">
+    <h2>Skills</h2>
+    <div class="win"><div class="pad scroll"><svg id="align"></svg></div></div>
+  </section>
+</main>
+
+<footer class="end" id="contact">
+  <div class="wrap">
+    <h2>Contact</h2>
+    <p class="mail">nsmits@andrew.cmu.edu</p>
+    <div class="row"><button type="button" data-copy="nsmits@andrew.cmu.edu">Copy address</button><a href="https://github.com/nicksmits1" target="_blank" rel="noopener">GitHub</a><a href="https://linkedin.com/in/nicolas-smits" target="_blank" rel="noopener">LinkedIn</a></div>
+  </div>
+</footer>
+
+<script src="shared/core.js"></script>
+<script>
+(function () {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const INK = css('--ink'), INK2 = css('--ink2'), RED = css('--red'), WIN = css('--win'), Y = css('--y');
+  const cond = '"Sofia Sans Condensed","Arial Narrow",sans-serif';
+  const el = NS.el;
+  NS.labels();
+
+  /* ---- the slide rule ---- */
+  const svg = document.getElementById('rule'), W = 1220, H = 262, X0 = 70, X1 = 1150;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const tx = s => X0 + (Math.log10(s) + 3) / 8 * (X1 - X0), yx = y => X0 + (y - 2025) / 2 * (X1 - X0);
+  const T = (x, y, s, a) => { const t = el('text', Object.assign({ x, y, 'font-family': cond, fill: INK }, a), svg); t.textContent = s; return t; };
+  // T scale
+  const base = 108;
+  el('line', { x1: X0, x2: X1, y1: base, y2: base, stroke: INK, 'stroke-width': 1.3 }, svg);
+  T(24, base - 2, 'T', { 'font-size': 30, 'font-weight': 700 }); T(1172, base - 2, 'seconds', { 'font-size': 12, fill: INK2, 'letter-spacing': '.06em' });
+  const dec = ['1 ms', '10 ms', '100 ms', '1 s', '10 s', '100 s', '1,000 s', '10⁴ s', '10⁵ s'];
+  for (let d = -3; d <= 5; d++) for (let m = 1; m <= 9; m++) {
+    if (d === 5 && m > 1) break;
+    const x = tx(m * Math.pow(10, d)), len = m === 1 ? 18 : m === 5 ? 12 : 7;
+    el('line', { x1: x, x2: x, y1: base, y2: base - len, stroke: INK, 'stroke-width': m === 1 ? 1.4 : 0.8 }, svg);
+    if (m === 1) T(x, base + 15, dec[d + 3], { 'font-size': 11.5, 'text-anchor': 'middle', fill: INK2 });
+  }
+  NS.times.forEach((t, i) => {
+    const x = tx(t.s), row = t.p === 'thesis' ? 26 : 50, end = i === 3;
+    el('line', { x1: x, x2: x, y1: row + 5, y2: base, stroke: INK, 'stroke-width': 1.6 }, svg);
+    el('circle', { cx: x, cy: row + 3, r: 3.6, fill: INK }, svg);
+    const lab = T(x + (end ? -9 : 9), row + 7, '', { 'font-size': 14.5, 'text-anchor': end ? 'end' : 'start' });
+    lab.innerHTML = `<tspan font-weight="700">${t.v}</tspan> ${t.label}`;
+  });
+  const bx0 = tx(1), bx1 = tx(21600);
+  el('path', { d: `M${bx0} 70 V78 H${bx1} V34`, fill: 'none', stroke: RED, 'stroke-width': 1.5 }, svg);
+  const big = T((bx0 + bx1) / 2, 72, '21,000×', { 'font-size': 30, 'font-weight': 700, 'text-anchor': 'middle', fill: RED, 'paint-order': 'stroke', stroke: Y, 'stroke-width': 8 });
+  // slide
+  el('rect', { x: 0, y: 132, width: W, height: 104, fill: WIN, stroke: INK, 'stroke-width': 1.3 }, svg);
+  T(24, 168, 'Y', { 'font-size': 30, 'font-weight': 700 });
+  for (let m = 0; m <= 24; m++) {
+    const x = yx(2025 + m / 12), yr = m % 12 === 0;
+    el('line', { x1: x, x2: x, y1: 132, y2: 132 + (yr ? 16 : m % 3 === 0 ? 10 : 6), stroke: INK, 'stroke-width': yr ? 1.4 : 0.8 }, svg);
+    if (yr) T(x + 5, 158, 2025 + m / 12, { 'font-size': 13, 'font-weight': 700 });
+  }
+  const lane = { sepsis: 0, fifa: 0, thesis: 0, sindae: 1, recsys: 1, wayfinder: 2 };
+  NS.projects.forEach(p => {
+    const x = yx(p.from), w = yx(p.to) - x, y = 168 + lane[p.id] * 21;
+    const a = el('a', { href: '#' + p.id, 'aria-label': p.name }, svg);
+    el('rect', { x, y, width: w, height: 16, fill: INK }, a);
+    const fits = w > p.short.length * 7.2 + 14;
+    const t = el('text', { x: fits ? x + 7 : x - 7, y: y + 12, 'font-size': 12.5, 'font-weight': 600, 'font-family': cond, fill: fits ? Y : INK, 'text-anchor': fits ? 'start' : 'end', 'letter-spacing': '.03em' }, a);
+    t.textContent = p.short;
+  });
+  // cursor
+  const cur = el('g', {}, svg);
+  el('rect', { x: -27, y: 5, width: 54, height: H - 10, fill: 'rgba(255,255,255,.2)', stroke: INK, 'stroke-width': 1.2 }, cur);
+  el('rect', { x: -27, y: 5, width: 54, height: 9, fill: INK }, cur); el('rect', { x: -27, y: H - 14, width: 54, height: 9, fill: INK }, cur);
+  el('line', { x1: 0, x2: 0, y1: 14, y2: H - 14, stroke: RED, 'stroke-width': 1.6 }, cur);
+  const rT = document.getElementById('rT'), rY = document.getElementById('rY'), rP = document.getElementById('rP');
+  const mon = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fmt(s) { if (s < 1) return (s * 1000).toPrecision(2) * 1 + ' ms'; if (s < 60) return s.toPrecision(2) * 1 + ' s'; if (s < 3600) return (s / 60).toPrecision(2) * 1 + ' min'; return (s / 3600).toPrecision(2) * 1 + ' h'; }
+  let cx = tx(1);
+  function place(x) {
+    cx = Math.max(X0, Math.min(X1, x)); cur.setAttribute('transform', `translate(${cx} 0)`);
+    const s = Math.pow(10, (cx - X0) / (X1 - X0) * 8 - 3), yr = 2025 + (cx - X0) / (X1 - X0) * 2;
+    const m = Math.min(23, Math.floor((yr - 2025) * 12));
+    rT.textContent = fmt(s); rY.textContent = mon[m % 12] + ' ' + (2025 + Math.floor(m / 12));
+    const act = NS.projects.filter(p => yr >= p.from && yr <= p.to).map(p => p.short);
+    rP.textContent = act.length ? act.join(' · ') : '';
+    svg.setAttribute('aria-valuenow', Math.round((cx - X0) / (X1 - X0) * 100)); svg.setAttribute('aria-valuetext', `${rT.textContent}, ${rY.textContent}${act.length ? ', ' + act.join(', ') : ''}`);
+  }
+  function fromEvent(e) { const r = svg.getBoundingClientRect(); place((e.clientX - r.left) / r.width * W); }
+  svg.addEventListener('pointermove', fromEvent); svg.addEventListener('pointerdown', fromEvent);
+  svg.addEventListener('keydown', e => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (d) { e.preventDefault(); place(cx + d * (e.shiftKey ? 60 : 12)); } });
+  place(cx);
+
+  /* ---- figures ---- */
+  const theme = { ink: INK, dim: '#8A8358', fill: WIN, fresh: RED, bad: RED, pulse: RED, hi: RED, font: cond };
+  NS.netFigure(document.getElementById('netfig'), theme);
+  NS.recFigure(document.getElementById('recfig'), Object.assign({}, theme, { radius: 0 }));
+  NS.scale(document.getElementById('fifaS'), NS.fifa, theme);
+  NS.scale(document.getElementById('sepsisS'), NS.sepsis, Object.assign({ ticks: 6 }, theme));
+  NS.alignment(document.getElementById('align'), theme);
+  let eq = null;
+  NS.flow(document.getElementById('lg'), { color: INK, lw: 1, dsep: 11,
+    field(w, h) { const f = NS.leslieGower(w, h, 0); eq = f.eq; return f; },
+    after(ctx) { if (!eq) return; ctx.fillStyle = RED; ctx.beginPath(); ctx.arc(eq[0], eq[1], 6, 0, 7); ctx.fill(); } });
+})();
+</script>

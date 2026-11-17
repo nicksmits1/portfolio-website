@@ -1,0 +1,238 @@
+<title>Console Draft</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=STIX+Two+Text:ital@1&display=swap">
+<style>
+/* Layout: one screen, four persistent panels (project list, figure, inspector, status line).
+   Graphite ground, hairline seams, colour only for a project's research thread. */
+:root{
+  color-scheme:dark;
+  --g0:#131416; --g1:#1A1B1E; --g2:#25272B; --seam:#303237; --fg:#E7E7E3; --fg2:#9C9EA1;
+  --rl:#C3A6FF; --opt:#6FC7DC; --sys:#F2A65A; --tool:#A5D68C;
+  --text:"Geist",system-ui,sans-serif; --mono:"Geist Mono",ui-monospace,monospace; --math:"STIX Two Text","Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+html{scrollbar-color:var(--seam) var(--g0)}
+body{background:var(--g0);color:var(--fg);font:400 .95rem/1.5 var(--text);margin:0}
+::selection{background:var(--fg);color:var(--g0)}
+a{color:inherit;text-underline-offset:.2em;text-decoration-color:var(--fg2)}
+a:hover{text-decoration-color:var(--fg)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:1.5px solid var(--fg);outline-offset:1px}
+.sc{font:500 .72rem/1 var(--text);letter-spacing:.09em;text-transform:uppercase;color:var(--fg2)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+.app{display:grid;grid-template-columns:minmax(0,1fr);min-height:100%;align-content:start}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.4rem;padding:.7rem max(16px,env(safe-area-inset-right,0px)) .7rem max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--seam)}
+h1{font:600 1rem/1.2 var(--text);margin:0}
+.bar p{margin:0;color:var(--fg2);flex:1 1 22rem;min-width:0}
+.bar .who{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1.1rem}
+.bar .mail{font-family:var(--mono);font-size:.86rem;user-select:all}
+.bar button{border:1px solid var(--seam);background:var(--g1);padding:.3rem .6rem;border-radius:5px;cursor:pointer}
+.bar button:hover{border-color:var(--fg2)}
+
+.rail{border-bottom:1px solid var(--seam);display:flex;overflow-x:auto;scrollbar-width:none;padding:.4rem max(10px,env(safe-area-inset-left,0px))}
+.rail .sc{display:none}
+.rail button{flex:none;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:.6rem;text-align:left;border:0;background:none;padding:.5rem .65rem;border-radius:6px;cursor:pointer;color:var(--fg2);white-space:nowrap;transition:background .15s,color .15s}
+.rail button:hover{color:var(--fg)}
+.rail button[aria-current="true"]{background:var(--g2);color:var(--fg)}
+.rail button .yr{display:none}
+.chip{font:500 .68rem/1 var(--mono);letter-spacing:.04em;padding:.22rem .34rem;border-radius:3px;color:var(--g0);min-width:2.9em;text-align:center}
+.rl{background:var(--rl)}.opt{background:var(--opt)}.sys{background:var(--sys)}.tool{background:var(--tool)}.all{background:var(--fg2)}
+
+.stage{position:relative;min-width:0;border-bottom:1px solid var(--seam)}
+.view{display:grid;grid-template-rows:auto minmax(0,1fr) auto;min-height:0}
+.vh{display:flex;justify-content:space-between;gap:1rem;padding:.75rem max(16px,env(safe-area-inset-right,0px)) .75rem max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--seam)}
+.vb{position:relative;min-height:0;padding:clamp(.8rem,2.4vw,1.8rem) max(16px,env(safe-area-inset-right,0px)) clamp(.8rem,2.4vw,1.8rem) max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:center}
+.vb>svg{display:block;width:100%;height:auto;max-width:900px}
+.vb.scroll{overflow-x:auto;justify-content:flex-start}.vb.scroll>svg{min-width:600px}
+.vf{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;justify-content:space-between;padding:.6rem max(16px,env(safe-area-inset-right,0px)) .6rem max(16px,env(safe-area-inset-left,0px));border-top:1px solid var(--seam);min-height:2.9rem}
+.vf p{margin:0;flex:1 1 16rem;min-width:0}
+.vf .fine{color:var(--fg2);font-size:.84rem;flex-basis:100%}
+[data-netsteps]{display:flex;gap:3px}
+[data-netsteps] button{width:22px;height:22px;padding:0;border:0;background:none;cursor:pointer;position:relative}
+[data-netsteps] button::before{content:"";position:absolute;inset:9px 2px;background:var(--seam);transition:background .15s,inset .15s}
+[data-netsteps] button[aria-current="step"]::before{inset:7px 2px;background:var(--rl)}
+[data-rectabs]{display:flex;flex-wrap:wrap;gap:.3rem}
+[data-rectabs] button{border:1px solid var(--seam);background:none;padding:.28rem .6rem;border-radius:5px;cursor:pointer;color:var(--fg2);font-size:.86rem}
+[data-rectabs] button:hover{color:var(--fg)}
+[data-rectabs] button[aria-pressed="true"]{background:var(--g2);color:var(--sys);border-color:var(--g2)}
+.flowbox{position:relative;width:100%;aspect-ratio:16/10}
+.flowbox canvas{position:absolute;inset:0;width:100%;height:100%}
+.flowbox img{position:absolute;right:0;top:0;width:min(46%,300px);height:auto;border:1px solid var(--seam)}
+.flowbox .ax{position:absolute;font:italic .95rem/1 var(--math);color:var(--fg2);background:var(--g0);padding:.1rem .35rem}
+.eq{font:italic 1rem/1.4 var(--math)}
+.shot{display:block;max-width:100%;max-height:100%;width:auto;height:auto;border:1px solid var(--seam);border-radius:6px}
+
+table{border-collapse:collapse;font-size:.88rem;width:100%;max-width:820px}
+th,td{padding:.34rem .5rem;border-bottom:1px solid var(--seam);text-align:center}
+thead th{font:500 .72rem/1.15 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--fg2);vertical-align:bottom;position:sticky;top:0;background:var(--g0)}
+thead th button{border:0;background:none;padding:.2rem;cursor:pointer;font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit}
+thead th button:hover{color:var(--fg)}
+tbody th{text-align:left;font-weight:400;white-space:nowrap}
+tbody th button{border:0;background:none;padding:0;cursor:pointer;text-align:left}
+tbody td:last-child{color:var(--fg2);text-align:right}
+td i{display:inline-block;width:.8rem;height:.8rem;border-radius:2px;background:var(--seam);vertical-align:middle;transition:background .15s,transform .15s}
+td.on i{background:var(--c)}
+tbody tr:hover{background:var(--g1)}
+tbody tr.sel{background:var(--g2)}
+tbody tr.sel td.on i{transform:scale(1.25)}
+.vb.tbl{align-items:flex-start;overflow:auto;justify-content:flex-start}
+
+.insp{min-width:0;padding:1.1rem max(16px,env(safe-area-inset-right,0px)) 1.6rem max(16px,env(safe-area-inset-left,0px))}
+.label h2{font:600 1.35rem/1.2 var(--text);letter-spacing:-.01em;margin:0 0 .3rem;text-wrap:balance}
+.where{color:var(--fg2);margin:0 0 .9rem}
+.line{margin:0 0 1.1rem;max-width:46ch}
+.run{list-style:none;margin:0;padding:0;border-top:1px solid var(--seam)}
+.run li{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.5rem 0;border-bottom:1px solid var(--seam)}
+.run b{font:500 1rem/1.2 var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;order:2}
+.run span{color:var(--fg2);font-size:.9rem;line-height:1.3}
+.meta{display:flex;flex-wrap:wrap;gap:.4rem 1rem;margin:1rem 0 0;font-size:.9rem}
+.note{color:var(--sys)}
+.tags{display:flex;flex-wrap:wrap;gap:.3rem;margin:1rem 0 0;padding:0;list-style:none}
+.tags li{font-size:.82rem;color:var(--fg2);border:1px solid var(--seam);border-radius:4px;padding:.12rem .42rem}
+
+.status{display:none}
+@media(min-width:960px){
+  .app{height:100%;grid-template-columns:232px minmax(0,1fr) 340px;grid-template-rows:auto minmax(0,1fr) auto}
+  .bar{grid-column:1/-1;padding-inline:1rem}
+  .rail{flex-direction:column;overflow:auto;border-bottom:0;border-right:1px solid var(--seam);padding:.6rem .5rem;gap:1px}
+  .rail .sc{display:block;padding:.5rem .65rem .45rem}
+  .rail .sc:not(:first-child){margin-top:.9rem}
+  .rail button .yr{display:inline;font-size:.78rem}
+  .stage{border-bottom:0}
+  .view{position:absolute;inset:0}
+  .vh,.vf{padding-inline:1rem}
+  .vb{padding-inline:clamp(1rem,2.4vw,2rem)}
+  .vb>svg{height:100%;max-height:100%}
+  .flowbox{position:absolute;inset:clamp(.8rem,2vw,1.6rem);width:auto;aspect-ratio:auto}
+  .insp{border-left:1px solid var(--seam);overflow:auto;padding:1.2rem 1.2rem 2rem}
+  .status{grid-column:1/-1;display:flex;justify-content:space-between;gap:1rem;padding:.4rem 1rem;border-top:1px solid var(--seam);color:var(--fg2);font-size:.8rem}
+  .status kbd{font:500 .74rem/1 var(--mono);border:1px solid var(--seam);border-radius:3px;padding:.1rem .3rem;color:var(--fg);margin-right:.25rem}
+}
+@media(prefers-reduced-motion:no-preference){.view.in .vb{animation:open .32s cubic-bezier(.16,1,.3,1)}@keyframes open{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="app">
+  <header class="bar">
+    <h1>Nicolas Smits</h1>
+    <p>Optimisation, machine learning and reinforcement learning for process systems.</p>
+    <div class="who"><span class="mail">nsmits@andrew.cmu.edu</span><button type="button" data-copy="nsmits@andrew.cmu.edu">Copy</button><a href="https://github.com/nicksmits1" target="_blank" rel="noopener">GitHub</a><a href="https://linkedin.com/in/nicolas-smits" target="_blank" rel="noopener">LinkedIn</a></div>
+  </header>
+
+  <nav class="rail" id="rail" aria-label="Views"></nav>
+
+  <main class="stage" id="stage">
+    <section class="view" data-view="thesis" id="netfig" aria-label="Supply chain design episode">
+      <div class="vh"><span class="sc">Design episode</span><span class="sc">Illustrative, 9 nodes</span></div>
+      <div class="vb"><svg data-net></svg></div>
+      <div class="vf"><p data-netcap></p><div data-netsteps></div></div>
+    </section>
+    <section class="view" data-view="sindae" aria-label="SiNDAE phase portrait" hidden>
+      <div class="vh"><span class="sc">Phase portrait</span><span class="sc">Leslie&#8211;Gower example</span></div>
+      <div class="vb"><div class="flowbox">
+        <canvas id="lg" role="img" aria-label="Phase portrait of the Leslie-Gower predator-prey system: every trajectory spirals into one equilibrium"></canvas>
+        <img src="assets/sindae-logo-dark.png" alt="SiNDAE logo" width="1284" height="312">
+        <span class="ax" style="left:0;bottom:0">prey x&#8320;</span><span class="ax" style="left:0;top:0">predator x&#8321;</span></div></div>
+      <div class="vf"><p class="eq">x&#8320;&#8242; = x&#8320;(r&#8321; &minus; a&#8321;x&#8321; &minus; b&#8321;x&#8320;) &nbsp;&nbsp; x&#8321;&#8242; = x&#8321; &middot; NN(x&#8320;, x&#8321;)</p><p class="fine">The network learns the second bracket; the first stays a hard constraint.</p></div>
+    </section>
+    <section class="view" data-view="recsys" id="recfig" aria-label="Recommender request path" hidden>
+      <div class="vh"><span class="sc">Request path</span><div data-rectabs role="group" aria-label="Request scenario"></div></div>
+      <div class="vb scroll"><svg data-rec></svg></div>
+      <div class="vf"><p data-reccap></p></div>
+    </section>
+    <section class="view" data-view="wayfinder" aria-label="wayfinder-sidebar screenshot" hidden>
+      <div class="vh"><span class="sc">The sidebar beside the chat</span><span class="sc">Screenshot</span></div>
+      <div class="vb"><img class="shot" src="assets/wayfinder-sidebar.webp" alt="The wayfinder sidebar docked beside a Claude Code chat, listing ready, claimed and blocked tickets" width="1400" height="725"></div>
+      <div class="vf"><p>Press play on a ready ticket and a new session starts on it, with a handoff from this one.</p></div>
+    </section>
+    <section class="view" data-view="fifa" aria-label="FIFA model comparison" hidden>
+      <div class="vh"><span class="sc">Test error by model</span><span class="sc">Lower is better</span></div>
+      <div class="vb"><svg id="fifaS"></svg></div>
+      <div class="vf"><p>Tree ensembles beat both neural networks on this tabular target.</p></div>
+    </section>
+    <section class="view" data-view="sepsis" aria-label="Sepsis DQN comparison" hidden>
+      <div class="vh"><span class="sc">Final return by variant</span><span class="sc">Higher is better</span></div>
+      <div class="vb"><svg id="sepsisS"></svg></div>
+      <div class="vf"><p>Dueling and prioritized replay help; the plain and double variants trail.</p></div>
+    </section>
+    <section class="view" data-view="skills" aria-label="Skills by project" hidden>
+      <div class="vh"><span class="sc">Skills by project</span><span class="sc">Select a row or a column</span></div>
+      <div class="vb tbl"><table id="matrix"><caption class="sc" style="caption-side:bottom;text-align:left;padding-top:.8rem">A filled cell means the project used that skill.</caption></table></div>
+      <div class="vf"><p id="skcap">25 skills across 6 projects.</p></div>
+    </section>
+  </main>
+
+  <aside class="insp" id="insp" aria-label="Details"></aside>
+
+  <footer class="status"><span><kbd>&uarr;</kbd><kbd>&darr;</kbd>or <kbd>j</kbd><kbd>k</kbd>move between views</span><span class="num" id="pos"></span></footer>
+</div>
+
+<script src="shared/core.js"></script>
+<script>
+(function () {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const G0 = css('--g0'), G1 = css('--g1'), FG = css('--fg'), FG2 = css('--fg2'), C = { rl: css('--rl'), opt: css('--opt'), sys: css('--sys'), tool: css('--tool') };
+  const font = '"Geist",system-ui,sans-serif';
+  const thread = { thesis: 'rl', sepsis: 'rl', sindae: 'opt', recsys: 'sys', fifa: 'sys', wayfinder: 'tool' }, tname = { rl: 'RL', opt: 'OPT', sys: 'SYS', tool: 'TOOL' };
+
+  /* ---- rail and inspector ---- */
+  const rail = document.getElementById('rail'), insp = document.getElementById('insp'), order = NS.projects.map(p => p.id).concat(['skills']);
+  const mk = (tag, cls, parent, html) => { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; parent.appendChild(n); return n; };
+  mk('span', 'sc', rail, 'Projects');
+  const btn = {};
+  NS.projects.forEach(p => { const b = mk('button', '', rail, `<span class="chip ${thread[p.id]}">${tname[thread[p.id]]}</span><span>${p.short}</span><span class="yr num">${Math.floor(p.from)}</span>`); b.type = 'button'; btn[p.id] = b;
+    const d = mk('div', 'label', insp); d.dataset.label = p.id; d.hidden = true; });
+  mk('span', 'sc', rail, 'Index');
+  btn.skills = mk('button', '', rail, '<span class="chip all">ALL</span><span>Skills</span><span class="yr num">25</span>'); btn.skills.type = 'button';
+  NS.labels();
+  NS.projects.forEach(p => { const d = insp.querySelector(`[data-label="${p.id}"]`); mk('ul', 'tags', d, p.methods.concat(p.tools).map(s => `<li>${s}</li>`).join('')); });
+  const skinsp = mk('div', 'label', insp, '<h2>Skills</h2><p class="where">Methods and tools</p><p class="line" id="skline">Pick a skill to see where it was used, or a project to see what it took.</p><ul class="run" id="sklist"></ul>'); skinsp.hidden = true;
+
+  const views = [...document.querySelectorAll('.view')], pos = document.getElementById('pos');
+  let cur = null;
+  function show(id) {
+    if (!order.includes(id)) id = 'thesis'; if (id === cur) return; cur = id;
+    views.forEach(v => { const on = v.dataset.view === id; v.hidden = !on; v.classList.toggle('in', on); });
+    order.forEach(k => btn[k].setAttribute('aria-current', k === id ? 'true' : 'false'));
+    insp.querySelectorAll('.label').forEach(d => (d.hidden = d !== skinsp ? d.dataset.label !== id : id !== 'skills'));
+    pos.textContent = `${order.indexOf(id) + 1} / ${order.length}`;
+    btn[id].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    try { if (location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id); } catch (e) { /* hash is a convenience */ }
+  }
+  order.forEach(k => btn[k].addEventListener('click', () => show(k)));
+  window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+  document.addEventListener('keydown', e => { if (e.metaKey || e.ctrlKey || e.altKey || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    const d = (e.key === 'j' || e.key === 'ArrowDown') ? 1 : (e.key === 'k' || e.key === 'ArrowUp') ? -1 : 0; if (!d) return; e.preventDefault();
+    const n = order[(order.indexOf(cur) + d + order.length) % order.length]; show(n); btn[n].focus({ preventScroll: true }); });
+
+  /* ---- figures ---- */
+  const base = { ink: FG, dim: FG2, fill: G1, font, sw: 1.4 };
+  NS.netFigure(document.getElementById('netfig'), Object.assign({}, base, { dim: '#63666B', fresh: C.rl, bad: C.rl }));
+  NS.recFigure(document.getElementById('recfig'), Object.assign({}, base, { pulse: C.sys, radius: 5 }));
+  NS.scale(document.getElementById('fifaS'), NS.fifa, Object.assign({}, base, { hi: C.sys }));
+  NS.scale(document.getElementById('sepsisS'), NS.sepsis, Object.assign({ ticks: 6 }, base, { hi: C.rl }));
+  let eq = null;
+  NS.flow(document.getElementById('lg'), { color: FG, lw: 1, dsep: 11, alpha: 0.7,
+    field(w, h) { const f = NS.leslieGower(w, h, 0); eq = f.eq; return f; },
+    after(ctx) { if (!eq) return; ctx.fillStyle = C.opt; ctx.beginPath(); ctx.arc(eq[0], eq[1], 6, 0, 7); ctx.fill(); } });
+
+  /* ---- skills matrix ---- */
+  const tb = document.getElementById('matrix'), skills = NS.tools.concat(NS.methods).map(s => ({ s, n: NS.count(s) })).sort((a, b) => b.n - a.n);
+  const head = mk('tr', '', mk('thead', '', tb)); mk('th', '', head, '<span class="sc">Skill</span>').scope = 'col';
+  NS.projects.forEach(p => { const th = mk('th', '', head); th.scope = 'col'; const b = mk('button', '', th, p.short); b.type = 'button'; b.addEventListener('click', () => pickP(p.id)); });
+  mk('th', '', head, 'n').scope = 'col';
+  const body = mk('tbody', '', tb), skline = document.getElementById('skline'), sklist = document.getElementById('sklist'), skcap = document.getElementById('skcap');
+  skills.forEach(k => { const tr = mk('tr', '', body), th = mk('th', '', tr); th.scope = 'row'; const b = mk('button', '', th, k.s); b.type = 'button'; b.addEventListener('click', () => pickS(k));
+    NS.projects.forEach(p => { const on = p.tools.includes(k.s) || p.methods.includes(k.s), td = mk('td', on ? 'on' : '', tr, `<i></i>`); td.style.setProperty('--c', C[thread[p.id]]); if (on) td.setAttribute('aria-label', 'used'); });
+    mk('td', 'num', tr, k.n); k.tr = tr; });
+  function pickS(k) { skills.forEach(x => x.tr.classList.toggle('sel', x === k)); const users = NS.projects.filter(p => p.tools.includes(k.s) || p.methods.includes(k.s));
+    skline.textContent = `${k.s} was used in ${users.length} project${users.length > 1 ? 's' : ''}.`; skcap.textContent = skline.textContent;
+    sklist.innerHTML = users.map(p => `<li><span><a href="#${p.id}">${p.name}</a></span><b>${Math.floor(p.from)}</b></li>`).join(''); }
+  function pickP(id) { const p = NS.byId[id], set = p.tools.concat(p.methods); skills.forEach(x => x.tr.classList.toggle('sel', set.includes(x.s)));
+    skline.innerHTML = `<a href="#${id}">${p.name}</a> took ${set.length} of the 25.`; skcap.textContent = `${p.short}: ${set.join(', ')}.`; sklist.innerHTML = set.map(s => `<li><span>${s}</span><b>${NS.count(s)}</b></li>`).join(''); }
+
+  show(location.hash.slice(1) || 'thesis');
+})();
+</script>

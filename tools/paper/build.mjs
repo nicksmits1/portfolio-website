@@ -1,0 +1,87 @@
+// Builds one portfolio mockup artboard in Paper. Usage: node build.mjs B|E
+import { connect } from './lib.mjs'; import fs from 'node:fs';
+const which = process.argv[2], AS = 'paper-asset:///Users/nicksmits/code/portfolio-website/drafts/paper-assets/';
+const TH = {
+  B: { name: 'B · Phase portrait', bg: '#1838C8', deep: '#0E2391', fg: '#F5F2E8', fg2: '#C5CEF8', acc: '#FF8E78', hair: 'rgba(245,242,232,0.28)', dim: '#8FA0EE', text: "'Schibsted Grotesk'", disp: "'Schibsted Grotesk'", math: "'STIX Two Text'",
+    h2: 'font-size:46px;font-weight:500;letter-spacing:-0.02em;line-height:48px', h2s: 'font-size:35px;font-weight:500;letter-spacing:-0.02em;line-height:38px', fact: "font-size:26px;font-weight:500;letter-spacing:-0.02em;line-height:28px", recFill: '#0E2391', radius: 23, lg: 'b-lg.svg' },
+  E: { name: 'E · Descent', bg: '#120A2A', deep: '#0D0722', fg: '#F3EDFF', fg2: '#B9AAE8', acc: '#FF7C6B', hair: 'rgba(243,237,255,0.22)', dim: '#7C6BB8', peach: '#FFD9C2', text: "'Onest'", disp: "'Unbounded'", math: "'STIX Two Text'",
+    h2: 'font-size:34px;font-weight:400;letter-spacing:-0.035em;line-height:39px', h2s: 'font-size:28px;font-weight:400;letter-spacing:-0.035em;line-height:33px', fact: "font-size:21px;font-weight:400;letter-spacing:-0.03em;line-height:24px;color:#FFD9C2", recFill: '#1E1244', radius: 23, lg: 'e-lg.svg' },
+};
+const t = TH[which], F = `font-family:${t.text};`, D = `font-family:${t.disp};`, M = `font-family:${t.math};font-style:italic;`;
+const P = {
+  thesis: { name: 'Graph RL for resilient supply chains', short: 'Supply chain RL', where: 'Master’s thesis, CMU', line: 'A policy learns which transport arcs to add so demand still arrives when plants, warehouses or routes fail.', facts: [['21,000×', 'faster than greedy search'], ['19 → 70', 'nodes, trained to designed'], ['64–80%', 'of greedy search value'], ['28,481', 'parameters']], note: 'Preliminary results' },
+  sindae: { name: 'SiNDAE', short: 'SiNDAE', where: 'CAPD, CMU', line: 'Neural networks embedded in differential-algebraic process models and trained as one nonlinear program.', facts: [['index-2', 'DAEs supported'], ['2', 'training backends'], ['JOSS', 'paper pending']], link: 'arXiv 2504.04665' },
+  recsys: { name: 'Movie recommender with LLM cold start', short: 'Recommender', where: 'Team project, CMU', line: 'A live recommendation service. An LLM turns a new user’s free-text tastes into a profile before their first request.', facts: [['500k+', 'live requests served'], ['1.4 ms', 'cold-start ranker'], ['2.2×', 'NDCG@20 over SVD'], ['$1/day', 'LLM cost']] },
+  wayfinder: { name: 'wayfinder-sidebar', short: 'wayfinder-sidebar', where: 'Open source', line: 'A Claude Code plugin. Your ticket map sits beside the chat, and one click starts a new agent session with a handoff.', facts: [['1 click', 'ticket to working session'], ['200k', 'token budget per session']], link: 'GitHub' },
+  fifa: { name: 'FIFA player analytics pipeline', short: 'FIFA pipeline', where: 'CMU, with Amogh Balaji', line: 'Spark to Postgres ETL, a live Kafka comment stream, and rating models trained locally and on GCP.', facts: [['R² 0.964', 'gradient-boosted trees'], ['8', 'seasons, 2015–2022']], link: 'GitHub' },
+  sepsis: { name: 'DQN variants for ICU sepsis treatment', short: 'Sepsis DQN', where: 'McGill, with J. Randolph and A. Paraha', line: 'Which DQN extensions help on a clinical benchmark with 716 health states and 25 treatments?', facts: [['0.824', 'return, Dueling DQN'], ['716 × 25', 'states × actions']], link: 'GitHub' },
+};
+const methods = ['Reinforcement learning', 'Graph neural networks', 'Simulation', 'Nonlinear optimisation', 'Hybrid modelling', 'Ranking & recommenders', 'LLM pipelines', 'MLOps', 'Data engineering', 'Supervised learning', 'Agent tooling'];
+const tools = ['PyTorch', 'PyG', 'Gymnasium', 'JAX', 'Pyomo', 'LightGBM', 'Kafka', 'Spark', 'PostgreSQL', 'Flask', 'Docker', 'AWS', 'GCP', 'TypeScript'];
+const counts = { PyTorch: 3, Gymnasium: 2, Kafka: 2, PostgreSQL: 2, Docker: 2, 'Reinforcement learning': 2 };
+const esc = s => s.replace(/&/g, '&amp;');
+
+function label(id, w, small) { const p = P[id], fw = Math.floor((w - 24) / 2);
+  return `<div layer-name="Label" style="display:flex;flex-direction:column;gap:22px;width:${w}px;flex-shrink:0">
+<div style="display:flex;flex-direction:column;gap:16px"><div style="display:flex;flex-direction:column;gap:9px"><div layer-name="Title" style="${D}${small ? t.h2s : t.h2};color:${t.fg};width:${w}px">${esc(p.name)}</div><div style="${F}font-size:15px;line-height:20px;color:${t.fg2}">${p.where}</div></div>
+<div style="${F}font-size:17px;line-height:26px;color:${t.fg};width:${Math.min(w, 500)}px">${p.line}</div></div>
+<div layer-name="Facts" style="display:flex;flex-wrap:wrap;column-gap:24px;row-gap:14px;width:${w}px">${p.facts.map(f => `<div style="display:flex;flex-direction:column;gap:3px;width:${fw}px;border-top:1px solid ${t.hair};padding-top:9px"><div style="${which === 'E' ? D : F}${t.fact};${which === 'B' ? 'color:' + t.fg : ''}">${f[0]}</div><div style="${F}font-size:14px;line-height:18px;color:${t.fg2}">${f[1]}</div></div>`).join('')}</div>
+${p.note || p.link ? `<div style="display:flex;gap:18px">${p.note ? `<div style="${F}font-size:15px;line-height:20px;color:${t.acc}">${p.note}</div>` : ''}${p.link ? `<div style="${F}font-size:15px;line-height:20px;color:${t.fg};text-decoration:underline">${p.link}</div>` : ''}</div>` : ''}</div>`; }
+
+const txt = (x, y, s, o) => { o = Object.assign({ size: 13, w: 160, anchor: 'middle', color: t.fg, weight: 400, font: F }, o); const left = o.anchor === 'middle' ? x - o.w / 2 : o.anchor === 'end' ? x - o.w : x;
+  return `<div style="position:absolute;left:${left.toFixed(1)}px;top:${(y - o.size * 0.62).toFixed(1)}px;width:${o.w}px;text-align:${o.anchor === 'middle' ? 'center' : o.anchor === 'end' ? 'right' : 'left'};${o.font}font-size:${o.size}px;line-height:${Math.round(o.size * 1.24)}px;font-weight:${o.weight};color:${o.color};${o.ls ? 'letter-spacing:' + o.ls + ';' : ''}${o.op ? 'opacity:' + o.op + ';' : ''}">${s}</div>`; };
+
+function net(FW) { const k = FW / 640, H = Math.round(370 * k), N = { P1: [80, 130, 'p'], P2: [80, 250, 'p'], W1: [320, 70, 'w'], W2: [320, 190, 'w'], W3: [320, 310, 'w'], C1: [560, 50, 'c'], C2: [560, 140, 'c'], C3: [560, 230, 'c'], C4: [560, 320, 'c'] };
+  const BASE = [['P1', 'W1'], ['P1', 'W2'], ['P2', 'W2'], ['P2', 'W3'], ['W1', 'C1'], ['W1', 'C2'], ['W2', 'C2'], ['W2', 'C3'], ['W3', 'C4']], ADD = [['W1', 'C3'], ['P1', 'W3']];
+  const arc = ([a, b], c, sw) => { const [x1, y1] = N[a], [x2, y2] = N[b], d = Math.hypot(x2 - x1, y2 - y1), r = 21, sx = x1 + (x2 - x1) * r / d, sy = y1 + (y2 - y1) * r / d, ex = x2 - (x2 - x1) * (r + 5) / d, ey = y2 - (y2 - y1) * (r + 5) / d, an = Math.atan2(ey - sy, ex - sx), h = 8;
+    return `<path d="M${sx.toFixed(1)} ${sy.toFixed(1)}L${ex.toFixed(1)} ${ey.toFixed(1)}" stroke="${c}" stroke-width="${sw}" fill="none" stroke-linecap="round"/><path d="M${(ex + 4 * Math.cos(an)).toFixed(1)} ${(ey + 4 * Math.sin(an)).toFixed(1)}L${(ex - h * Math.cos(an - 0.42)).toFixed(1)} ${(ey - h * Math.sin(an - 0.42)).toFixed(1)}L${(ex - h * Math.cos(an + 0.42)).toFixed(1)} ${(ey - h * Math.sin(an + 0.42)).toFixed(1)}Z" fill="${c}"/>`; };
+  let s = BASE.map(a => arc(a, t.fg, 1.6)).join('') + ADD.map(a => arc(a, t.acc, 3)).join(''), L = '';
+  for (const id in N) { const [x, y, ty] = N[id];
+    s += ty === 'p' ? `<rect x="${x - 16}" y="${y - 16}" width="32" height="32" fill="${t.bg}" stroke="${t.fg}" stroke-width="2"/>` : ty === 'w' ? `<path d="M${x - 17} ${y + 15}V${y - 4}L${x} ${y - 18}L${x + 17} ${y - 4}V${y + 15}Z" fill="${t.bg}" stroke="${t.fg}" stroke-width="2"/>` : `<circle cx="${x}" cy="${y}" r="16" fill="${t.fg}"/>`;
+    L += txt(x * k, (y + (ty === 'w' ? 2 : 0)) * k, id, { size: Math.round(11 * k), w: 60, weight: 600, color: ty === 'c' ? t.bg : t.fg }); }
+  [['PLANTS', 80], ['WAREHOUSES', 320], ['CUSTOMERS', 560]].forEach(([n, x]) => (L += txt(x * k, 361 * k, n, { size: 12, w: 180, color: t.dim, ls: '0.08em' })));
+  return `<div layer-name="Network" style="position:relative;width:${FW}px;height:${H}px;flex-shrink:0"><svg width="${FW}" height="${H}" viewBox="0 0 640 370" style="position:absolute;left:0;top:0">${s}</svg>${L}</div>`; }
+
+function rec(FW) { const k = FW / 700, H = Math.round(400 * k), R = { client: [70, 150, 'Viewer', 'request'], api: [225, 150, 'Router', 'Flask × 2'], model: [405, 60, 'Ranking model', 'LightGBM'], cold: [405, 240, 'Cold-start ranker', 'NumPy, 1.4 ms'], log: [610, 150, 'Inference log', 'PostgreSQL'], profiles: [610, 240, 'Taste profiles', 'SQLite'], stream: [225, 345, 'Event stream', 'Kafka'], worker: [405, 345, 'Profile worker', 'async'], llm: [610, 345, 'Jev', 'TypeSafe LLM'] };
+  const RE = [['client', 'api'], ['api', 'model'], ['api', 'cold'], ['cold', 'profiles'], ['api', 'log'], ['stream', 'worker'], ['worker', 'llm'], ['worker', 'profiles']], on = new Set(['client', 'api', 'model', 'cold', 'profiles']);
+  let s = RE.map(([a, b]) => { const u = on.has(a) && on.has(b); return `<path d="M${R[a][0]} ${R[a][1]}L${R[b][0]} ${R[b][1]}" stroke="${t.fg}" stroke-width="${u ? 2.4 : 1.4}" fill="none" opacity="${u ? 1 : 0.22}"${a === 'api' && b === 'log' ? ' stroke-dasharray="5 4"' : ''}/>`; }).join('');
+  let nodes = ''; for (const id in R) { const [x, y, a, b] = R[id], W = 132 * k, Hh = 46 * k;
+    nodes += `<div layer-name="${a}" style="position:absolute;left:${((x - 66) * k).toFixed(1)}px;top:${((y - 23) * k).toFixed(1)}px;width:${W.toFixed(1)}px;height:${Hh.toFixed(1)}px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background-color:${t.recFill};border:1.6px solid ${t.fg};border-radius:${Math.round(t.radius * k)}px;opacity:${on.has(id) ? 1 : 0.3}"><div style="${F}font-size:${Math.round(13 * k)}px;line-height:${Math.round(16 * k)}px;font-weight:700;color:${t.fg}">${a}</div><div style="${F}font-size:${Math.round(10.5 * k)}px;line-height:${Math.round(13 * k)}px;color:${t.fg2}">${b}</div></div>`; }
+  const dx = (R.cold[0] + R.profiles[0]) / 2 * k, dy = R.cold[1] * k;
+  return `<div layer-name="Request path" style="position:relative;width:${FW}px;height:${H}px;flex-shrink:0"><svg width="${FW}" height="${H}" viewBox="0 0 700 400" style="position:absolute;left:0;top:0">${s}</svg>${nodes}<div layer-name="Request" style="position:absolute;left:${(dx - 8).toFixed(1)}px;top:${(dy - 8).toFixed(1)}px;width:16px;height:16px;border-radius:8px;background-color:${t.acc};border:2px solid ${t.recFill}"></div></div>`; }
+
+function scale(d, FW, ticks) { const W = 520, k = FW / W, x0 = 14, x1 = W - 14, rows = d.marks.length, H = 58 + rows * 24, X = v => x0 + (v - d.min) / (d.max - d.min) * (x1 - x0), base = H - 30;
+  let s = `<line x1="${x0}" x2="${x1}" y1="${base}" y2="${base}" stroke="${t.fg}" stroke-width="1.4"/>`, L = ''; const n = ticks * 5;
+  for (let i = 0; i <= n; i++) { const v = d.min + (d.max - d.min) * i / n, maj = i % 5 === 0; s += `<line x1="${X(v).toFixed(1)}" x2="${X(v).toFixed(1)}" y1="${base}" y2="${base - (maj ? 11 : 5)}" stroke="${t.fg}" stroke-width="${maj ? 1.2 : 0.7}"/>`; if (maj) L += txt(X(v) * k, (base + 12) * k, String(+v.toFixed(3)), { size: 12, w: 60, color: t.fg2 }); }
+  L += txt(x1 * k, (H + 2) * k, d.unit, { size: 12, w: 240, anchor: 'end', color: t.fg2 });
+  d.marks.slice().sort((a, b) => a.v - b.v).forEach((m, i) => { const x = X(m.v), y = 16 + i * 24, c = m.hi ? t.acc : t.fg, right = x < W * 0.62;
+    s += `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${y + 4}" y2="${base}" stroke="${c}" stroke-width="${m.hi ? 2 : 1}"/><circle cx="${x.toFixed(1)}" cy="${y}" r="${m.hi ? 5 : 3.5}" fill="${c}"/>`;
+    L += txt((x + (right ? 10 : -10)) * k, y * k, m.label + ' ' + m.v, { size: 15, w: 260, anchor: right ? 'start' : 'end', color: c, weight: m.hi ? 700 : 500 }); });
+  return `<div layer-name="Scale" style="position:relative;width:${FW}px;height:${Math.round((H + 14) * k)}px;flex-shrink:0"><svg width="${FW}" height="${Math.round(H * k)}" viewBox="0 0 ${W} ${H}" style="position:absolute;left:0;top:0">${s}</svg>${L}</div>`; }
+
+const fifa = { unit: 'test RMSE, rating points', min: 1, max: 2.6, marks: [{ v: 1.292, label: 'Gradient-boosted trees', hi: true }, { v: 1.656, label: 'Random forest' }, { v: 2.372, label: 'Deep MLP' }, { v: 2.487, label: 'Shallow MLP' }] };
+const sepsis = { unit: 'final return', min: 0.8, max: 0.83, marks: [{ v: 0.8238, label: 'Dueling DQN', hi: true }, { v: 0.8135, label: 'Prioritized DQN' }, { v: 0.8089, label: 'DQN' }, { v: 0.8056, label: 'Double DQN' }] };
+const FWD = 756, LW = 540;
+const section = (name, inner, last) => `<div layer-name="${name}" style="display:flex;flex-direction:column;width:1440px;padding:0 44px;flex-shrink:0"><div style="display:flex;gap:56px;align-items:center;padding:96px 0;width:1352px;${last ? '' : 'border-bottom:1px solid ' + t.hair}">${inner}</div></div>`;
+const figcol = (inner) => `<div layer-name="Figure" style="display:flex;flex-direction:column;gap:14px;width:${FWD}px;flex-shrink:0">${inner}</div>`;
+const fine = s => `<div style="${F}font-size:14px;line-height:19px;color:${t.fg2}">${s}</div>`;
+const dots = `<div layer-name="Steps" style="display:flex;gap:10px;align-items:center">${[0, 1, 2, 3, 4].map(i => i === 3 ? `<div style="width:14px;height:14px;border-radius:7px;background-color:${t.acc}"></div>` : `<div style="width:8px;height:8px;border-radius:4px;${which === 'B' ? 'border:1.5px solid ' + t.fg : 'background-color:' + t.hair}"></div>`).join('')}</div>`;
+const tabs = `<div layer-name="Scenario" style="display:flex;gap:${which === 'B' ? 24 : 7}px;align-items:center">${['Known user', 'New user', 'Off the request path', 'Model fails'].map((s, i) => which === 'B'
+  ? `<div style="${F}font-size:15px;line-height:20px;font-weight:500;color:${i === 1 ? t.acc : t.fg2};padding:7px 0;${i === 1 ? 'border-bottom:1.5px solid ' + t.acc : ''}">${s}</div>`
+  : `<div style="${F}font-size:15px;line-height:18px;font-weight:500;color:${i === 1 ? t.bg : t.fg};padding:8px 13px;border-radius:999px;${i === 1 ? 'background-color:' + t.acc + ';border:1px solid ' + t.acc : 'border:1px solid ' + t.hair}">${s}</div>`).join('')}</div>`;
+
+const steps = [];
+steps.push(['Thesis', section('Thesis', figcol(net(FWD) + `<div style="display:flex;justify-content:space-between;align-items:center;width:${FWD}px"><div style="${F}font-size:17px;line-height:24px;color:${t.fg}">then P1 → W3, and stops</div>${dots}</div>` + fine('Illustrative episode on a 9-node network. The trained policy designs held-out networks of up to 70 nodes.')) + label('thesis', LW))]);
+steps.push(['SiNDAE', section('SiNDAE', label('sindae', LW) + figcol(`<div layer-name="Phase portrait" style="position:relative;width:${FWD}px;height:472px;flex-shrink:0"><img src="${AS}${t.lg}" style="position:absolute;left:0;top:0;width:${FWD}px;height:472px"><img layer-name="SiNDAE logo" src="${AS}sindae-logo-dark.png" style="position:absolute;right:0;top:0;width:340px;height:83px;border:8px solid ${t.bg}"><div style="position:absolute;left:0;top:0;${M}font-size:16px;line-height:20px;color:${t.fg2};background-color:${t.bg};padding:2px 6px">predator x₁</div><div style="position:absolute;left:0;bottom:0;${M}font-size:16px;line-height:20px;color:${t.fg2};background-color:${t.bg};padding:2px 6px">prey x₀</div></div>` + `<div style="display:flex;flex-direction:column;gap:4px"><div style="${M}font-size:17px;line-height:24px;color:${t.fg}">x₀′ = x₀(r₁ − a₁x₁ − b₁x₀)  x₁′ = x₁ · NN(x₀, x₁)</div>${fine('The network learns the second bracket; the first stays a hard constraint.')}</div>`))]);
+steps.push(['Recommender', section('Recommender', figcol(tabs + rec(FWD) + `<div style="${F}font-size:17px;line-height:24px;color:${t.fg}">No history, so the cold-start ranker reads the taste profile the LLM already wrote.</div>`) + label('recsys', LW))]);
+steps.push(['wayfinder', section('wayfinder-sidebar', label('wayfinder', LW) + `<img layer-name="Screenshot" src="${AS}wayfinder-sidebar.png" style="width:${FWD}px;height:391px;flex-shrink:0;border:1px solid ${t.hair};${which === 'E' ? 'border-radius:10px;' : ''}">`)]);
+const half = (id, d, tk) => `<div layer-name="${P[id].short}" style="display:flex;flex-direction:column;gap:26px;width:648px;flex-shrink:0">${scale(d, 648, tk)}${label(id, 648, true)}</div>`;
+steps.push(['Pair', `<div layer-name="FIFA and sepsis" style="display:flex;width:1440px;padding:96px 44px;gap:56px;align-items:flex-start;flex-shrink:0;${which === 'B' ? 'border-bottom:1px solid ' + t.hair : ''}">${half('fifa', fifa, 8)}${half('sepsis', sepsis, 6)}</div>`]);
+
+const c = await connect();
+const mode = process.argv[3] || 'all';
+let ab = process.argv[4];
+if (!ab) { const a = await c.call('create_artboard', { name: t.name, styles: { width: '1440px', height: '900px', backgroundColor: t.bg, display: 'flex', flexDirection: 'column' } }); ab = a.id; console.log('ARTBOARD', ab, JSON.stringify(a)); }
+const write = async (name, html) => { const r = await c.call('write_html', { targetNodeId: ab, mode: 'insert-children', html }); const top = r.createdNodes && r.createdNodes[0]; console.log('WROTE', name, top && top.id, r.createdNodes ? r.createdNodes.length + ' nodes' : JSON.stringify(r).slice(0, 300)); return top && top.id; };
+fs.writeFileSync(`state-${which}.json`, JSON.stringify({ ab, steps: steps.map(s => s[0]) }));
+export { c, ab, write, steps, t, F, D, M, AS, P, methods, tools, counts, which, esc };

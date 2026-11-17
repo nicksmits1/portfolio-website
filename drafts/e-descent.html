@@ -1,0 +1,283 @@
+<title>Descent Draft</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Onest:wght@400;500;600&family=STIX+Two+Text:ital@1&display=swap">
+<style>
+/* Layout: an objective function fills the opening as banded contours, coloured with the coral-to-violet
+   of the SiNDAE logo. Each project is a local minimum; click anywhere and a solver descends to one. */
+:root{
+  color-scheme:dark;
+  --bg:#120A2A; --fg:#F3EDFF; --fg2:#B9AAE8; --coral:#FF7C6B; --violet:#8B5CF6; --peach:#FFD9C2; --hair:rgba(243,237,255,.22);
+  --disp:"Unbounded",system-ui,sans-serif; --text:"Onest",system-ui,sans-serif; --math:"STIX Two Text","Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-color:var(--violet) var(--bg)}
+body{background:var(--bg);color:var(--fg);font:400 1.0625rem/1.55 var(--text);margin:0}
+::selection{background:var(--coral);color:var(--bg)}
+a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
+a:hover{color:var(--coral)}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px}
+.wrap{max-width:1240px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media(min-width:820px){.wrap{padding-left:max(44px,env(safe-area-inset-left,0px));padding-right:max(44px,env(safe-area-inset-right,0px))}}
+
+.land{position:absolute;inset:0;overflow:hidden;cursor:crosshair;touch-action:pan-y}
+.land canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.land svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.lab{position:absolute;transform:translate(-50%,14px);z-index:1;text-decoration:none;font-weight:600;font-size:.92rem;line-height:1.1;white-space:nowrap;padding:.2rem .5rem;border-radius:999px;background:rgba(13,7,34,.72);transition:background .3s,color .3s,opacity .3s}
+.lab:hover,.lab.hit{background:var(--coral);color:var(--bg)}
+.lab.off{opacity:.35}
+.lab i{font:italic .95em/1 var(--math);margin-right:.3em;font-weight:400}
+
+.hero{position:relative;height:min(90vh,820px);min-height:620px;border-bottom:1px solid var(--hair)}
+.hero nav{position:absolute;top:0;right:0;z-index:2;display:flex;gap:1.5rem;padding:1.1rem max(16px,env(safe-area-inset-right,0px)) .7rem 1.1rem;font-weight:500;font-size:.95rem;background:rgba(13,7,34,.72);border-bottom-left-radius:14px}
+@media(min-width:820px){.hero nav{padding-right:max(44px,env(safe-area-inset-right,0px))}}
+.hero nav a{text-decoration:none}
+.who{position:absolute;left:max(16px,env(safe-area-inset-left,0px));bottom:clamp(1.4rem,4vw,3rem);z-index:1;max-width:min(88vw,620px);pointer-events:none}
+@media(min-width:820px){.who{left:max(44px,env(safe-area-inset-left,0px))}}
+.who a,.who button{pointer-events:auto}
+h1{font:300 clamp(2.5rem,7.4vw,5.6rem)/.98 var(--disp);letter-spacing:-.04em;margin:0 0 1rem}
+.who p{margin:0;font-size:1.15rem;line-height:1.4;font-weight:500;max-width:34ch}
+.read{margin-top:.8rem!important;font-size:.95rem!important;font-weight:400!important;color:var(--fg2);min-height:2.8em;font-variant-numeric:tabular-nums}
+.read b{color:var(--fg);font-weight:600}
+.read a{color:var(--coral);font-weight:600}
+
+.proj{display:grid;gap:1.6rem 3.5rem;padding-block:clamp(3rem,7vw,6rem);border-bottom:1px solid var(--hair);align-items:center}
+@media(min-width:900px){.proj{grid-template-columns:repeat(12,minmax(0,1fr))}
+  .proj>.fig{grid-column:1/8}.proj>.label{grid-column:8/13}
+  .proj.flip>.fig{grid-column:6/13;grid-row:1}.proj.flip>.label{grid-column:1/6;grid-row:1}}
+.fig{min-width:0}.fig svg{display:block;width:100%;height:auto}
+.scroll{overflow-x:auto}.scroll>svg{min-width:600px}
+.label{min-width:0}
+.label h2{font:400 clamp(1.5rem,2.7vw,2.15rem)/1.12 var(--disp);letter-spacing:-.035em;margin:0 0 .7rem;text-wrap:balance}
+.where{color:var(--fg2);margin:0 0 1rem;font-size:.95rem}
+.line{margin:0 0 1.4rem;max-width:44ch}
+.run{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem 1.5rem}
+.run li{display:flex;flex-direction:column;border-top:1px solid var(--hair);padding-top:.55rem}
+.run b{font:400 1.35rem/1.1 var(--disp);letter-spacing:-.03em;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--peach)}
+.run span{font-size:.85rem;line-height:1.3;color:var(--fg2);margin-top:.25rem}
+.meta{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;margin:1.2rem 0 0;font-size:.92rem}
+.note{color:var(--coral)}
+.figbar{display:flex;flex-wrap:wrap;gap:.6rem 1.2rem;align-items:center;justify-content:space-between;margin-top:.9rem;min-height:2.6rem}
+.figbar p{margin:0;flex:1 1 16rem;min-width:0}
+.fine{margin:.5rem 0 0;font-size:.85rem;color:var(--fg2)}
+[data-netsteps]{display:flex;gap:8px}
+[data-netsteps] button{width:22px;height:22px;padding:0;border:0;background:none;cursor:pointer;position:relative}
+[data-netsteps] button::before{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--hair);transition:inset .2s,background .2s}
+[data-netsteps] button[aria-current="step"]::before{inset:4px;background:var(--coral)}
+[data-rectabs],.chips{display:flex;flex-wrap:wrap;gap:.45rem}
+[data-rectabs]{margin-bottom:1rem}
+[data-rectabs] button,.chips button{font:500 .92rem/1 var(--text);padding:.5rem .8rem;border:1px solid var(--hair);border-radius:999px;background:none;color:var(--fg);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+[data-rectabs] button:hover,.chips button:hover{border-color:var(--fg)}
+[data-rectabs] button[aria-pressed="true"],.chips button[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:var(--bg)}
+.flowbox{position:relative;aspect-ratio:16/10;max-width:100%}
+.flowbox canvas{position:absolute;inset:0;width:100%;height:100%}
+.flowbox img{position:absolute;right:0;top:0;width:min(48%,340px);height:auto;outline:8px solid var(--bg)}
+.flowbox .ax{position:absolute;font:italic 1rem/1 var(--math);color:var(--fg2);background:var(--bg);padding:.1rem .35rem}
+.eq{font:italic 1rem/1.5 var(--math);color:var(--fg)}
+.eq span{font:400 .85rem/1.4 var(--text);color:var(--fg2)}
+.shot{display:block;width:100%;height:auto;border:1px solid var(--hair);border-radius:10px}
+.pair{display:grid;gap:3rem 3.5rem;padding-block:clamp(3rem,7vw,6rem)}
+@media(min-width:900px){.pair{grid-template-columns:1fr 1fr}}
+.pair .fig{margin-bottom:1.4rem}
+
+.skills{border-top:1px solid var(--hair)}
+.skills h2,.end h2{font:300 clamp(2rem,5.4vw,3.8rem)/1 var(--disp);letter-spacing:-.04em;margin:0 0 1.2rem}
+.skills .head{padding-block:clamp(2.6rem,6vw,4.5rem) 1.4rem}
+.skills .read{margin:1rem 0 0!important}
+.stage{position:relative;height:clamp(340px,48vw,500px);border-block:1px solid var(--hair)}
+
+.end{background:var(--peach);color:var(--bg);padding-block:clamp(3rem,8vw,6rem)}
+.end ::selection{background:var(--bg);color:var(--peach)}
+.end .mail{font:400 clamp(1.15rem,3.8vw,2.5rem)/1.15 var(--disp);letter-spacing:-.035em;overflow-wrap:anywhere;margin:0 0 1.3rem;user-select:all}
+.end .row{display:flex;flex-wrap:wrap;gap:.8rem 1.6rem;align-items:center;font-weight:600}
+.end a:hover{color:#5B2BD6}
+.end button{font:inherit;color:var(--peach);background:var(--bg);border:0;border-radius:999px;padding:.75rem 1.1rem;cursor:pointer}
+.end button:hover{background:#2A1670}
+.end :focus-visible{outline-color:var(--bg)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+
+<header class="hero" id="top">
+  <div class="land" id="land1"><canvas role="img" aria-label="Contours of an objective function with one local minimum for each project"></canvas><svg aria-hidden="true"></svg><div class="labs"></div></div>
+  <nav aria-label="Sections"><a href="#thesis">Work</a><a href="#skills">Skills</a><a href="#contact">Contact</a></nav>
+  <div class="who" id="who">
+    <h1>Nicolas<br>Smits</h1>
+    <p>Optimisation, machine learning and reinforcement learning for process systems.</p>
+    <p class="read" id="read1" aria-live="polite">Click anywhere to start a solver there.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="proj" id="thesis">
+    <div class="fig" id="netfig"><svg data-net></svg>
+      <div class="figbar"><p data-netcap></p><div data-netsteps></div></div>
+      <p class="fine">Illustrative episode on a 9-node network. The trained policy designs held-out networks of up to 70 nodes.</p></div>
+    <div class="label" data-label="thesis"></div>
+  </section>
+  <section class="proj flip" id="sindae">
+    <div class="fig"><div class="flowbox">
+        <canvas id="lg" role="img" aria-label="Phase portrait of the Leslie-Gower predator-prey system: every trajectory spirals into one equilibrium"></canvas>
+        <img src="assets/sindae-logo-dark.png" alt="SiNDAE logo" width="1284" height="312">
+        <span class="ax" style="left:0;bottom:0">prey x&#8320;</span><span class="ax" style="left:0;top:0">predator x&#8321;</span></div>
+      <p class="fine eq">x&#8320;&#8242; = x&#8320;(r&#8321; &minus; a&#8321;x&#8321; &minus; b&#8321;x&#8320;) &nbsp;&nbsp; x&#8321;&#8242; = x&#8321; &middot; NN(x&#8320;, x&#8321;) &nbsp; <span>The network learns the second bracket; the first stays a hard constraint.</span></p></div>
+    <div class="label" data-label="sindae"></div>
+  </section>
+  <section class="proj" id="recsys">
+    <div class="fig" id="recfig"><div data-rectabs role="group" aria-label="Request scenario"></div>
+      <div class="scroll"><svg data-rec></svg></div>
+      <div class="figbar"><p data-reccap></p></div></div>
+    <div class="label" data-label="recsys"></div>
+  </section>
+  <section class="proj flip" id="wayfinder">
+    <div class="fig"><img class="shot" src="assets/wayfinder-sidebar.webp" alt="The wayfinder sidebar docked beside a Claude Code chat, listing ready, claimed and blocked tickets" width="1400" height="725"></div>
+    <div class="label" data-label="wayfinder"></div>
+  </section>
+  <div class="pair">
+    <section id="fifa"><div class="fig"><svg id="fifaS"></svg></div><div class="label" data-label="fifa"></div></section>
+    <section id="sepsis"><div class="fig"><svg id="sepsisS"></svg></div><div class="label" data-label="sepsis"></div></section>
+  </div>
+</main>
+
+<section class="skills" id="skills">
+  <div class="wrap head">
+    <h2>Skills</h2>
+    <div class="chips" id="chips" role="group" aria-label="Reshape the landscape by skill"></div>
+    <p class="read" id="read2" aria-live="polite">Pick a skill. The projects that use it stay deep; the rest flatten out.</p>
+  </div>
+  <div class="stage"><div class="land" id="land2"><canvas role="img" aria-label="The same landscape with only the selected skill's projects left as minima"></canvas><svg aria-hidden="true"></svg><div class="labs"></div></div></div>
+</section>
+
+<footer class="end" id="contact"><div class="wrap">
+  <h2>Contact</h2>
+  <p class="mail">nsmits@andrew.cmu.edu</p>
+  <div class="row"><button type="button" data-copy="nsmits@andrew.cmu.edu">Copy address</button><a href="https://github.com/nicksmits1" target="_blank" rel="noopener">GitHub</a><a href="https://linkedin.com/in/nicolas-smits" target="_blank" rel="noopener">LinkedIn</a></div>
+</div></footer>
+
+<script src="shared/core.js"></script>
+<script>
+(function () {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const FG = css('--fg'), FG2 = css('--fg2'), CORAL = css('--coral'), BG = css('--bg'), PEACH = css('--peach');
+  const font = '"Onest",system-ui,sans-serif', el = NS.el;
+  NS.labels();
+
+  /* ---- the landscape: one fragment shader, and the same function in JS for the solver ---- */
+  const STOPS = [[0, [13, 7, 34]], [0.3, [42, 22, 112]], [0.56, [112, 68, 232]], [0.8, [238, 107, 96]], [1, [255, 214, 191]]];
+  const FRAG = `#version 300 es
+precision highp float;
+uniform vec2 uRes; uniform float uT; uniform vec2 uM; uniform vec4 uW[8]; uniform int uN; out vec4 o;
+float F(vec2 p){ float f=0.12*sin(2.1*p.x+0.6+uT)*cos(1.7*p.y-0.4)+0.08*sin(3.3*p.y+1.2*p.x+1.0-uT*0.7);
+  for(int i=0;i<8;i++){ if(i>=uN) break; vec2 d=p-uW[i].xy; f-=uW[i].z*exp(-dot(d,d)/(2.0*uW[i].w*uW[i].w)); }
+  vec2 dm=p-uM; f+=0.09*exp(-dot(dm,dm)/0.0072); return f; }
+vec3 ramp(float v){ vec3 a=vec3(13.,7.,34.)/255., b=vec3(42.,22.,112.)/255., c=vec3(112.,68.,232.)/255., d=vec3(238.,107.,96.)/255., e=vec3(255.,214.,191.)/255.;
+  if(v<0.3) return mix(a,b,v/0.3); if(v<0.56) return mix(b,c,(v-0.3)/0.26); if(v<0.8) return mix(c,d,(v-0.56)/0.24); return mix(d,e,(v-0.8)/0.2); }
+float hash(vec2 p){ return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453); }
+void main(){ vec2 p=vec2(gl_FragCoord.x,uRes.y-gl_FragCoord.y)/uRes.y; float n=13.; float s=clamp((F(p)+0.95)/1.2,0.,1.)*n;
+  vec3 c=ramp(clamp(floor(s)/(n-1.),0.,1.)); float e=fract(s), fw=fwidth(s); float line=1.-smoothstep(0.,fw*1.4,min(e,1.-e));
+  c=mix(c,c*0.7,line*0.85); c+=(hash(gl_FragCoord.xy)-0.5)*0.035; o=vec4(c,1.); }`;
+  const VERT = `#version 300 es
+in vec2 a; void main(){ gl_Position=vec4(a,0.,1.); }`;
+
+  function landscape(root, getPts, opts) {
+    const cv = root.querySelector('canvas'), svg = root.querySelector('svg'), labs = root.querySelector('.labs'), read = opts.read;
+    let W = 1, H = 1, pts = [], T = 0, mouse = [-9, -9], vis = false, raf = 0, tok = 0, dirty = true, weights = {};
+    let gl = null, loc = {};
+    try { gl = cv.getContext('webgl2', { antialias: false }); } catch (e) { gl = null; }
+    if (gl) {
+      const sh = (t, s) => { const x = gl.createShader(t); gl.shaderSource(x, s); gl.compileShader(x); return x; };
+      const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, VERT)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FRAG)); gl.linkProgram(pr);
+      if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) gl = null; else {
+        gl.useProgram(pr); const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+        const a = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
+        ['uRes', 'uT', 'uM', 'uW', 'uN'].forEach(n => (loc[n] = gl.getUniformLocation(pr, n)));
+      }
+    }
+    const ctx2 = gl ? null : cv.getContext('2d');
+    const F = (x, y) => { let f = 0.12 * Math.sin(2.1 * x + 0.6 + T) * Math.cos(1.7 * y - 0.4) + 0.08 * Math.sin(3.3 * y + 1.2 * x + 1.0 - T * 0.7);
+      for (const p of pts) { const dx = x - p.x, dy = y - p.y; f -= p.c * Math.exp(-(dx * dx + dy * dy) / (2 * p.s * p.s)); } return f; };
+    function ramp(v) { for (let i = 1; i < STOPS.length; i++) if (v <= STOPS[i][0]) { const [a, A] = STOPS[i - 1], [b, B] = STOPS[i], k = (v - a) / (b - a); return A.map((q, j) => q + (B[j] - q) * k); } return STOPS[4][1]; }
+    function size() {
+      const r = cv.getBoundingClientRect(); W = Math.max(1, r.width); H = Math.max(1, r.height);
+      const d = gl ? Math.min(devicePixelRatio || 1, 1.5) : 0.3; cv.width = Math.round(W * d); cv.height = Math.round(H * d);
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      const old = Object.fromEntries(pts.map(p => [p.id, p.c]));
+      pts = getPts(W, H).map(p => ({ id: p.id, x: p.fx * W / H, y: p.fy, d: p.d, s: p.s, c: old[p.id] != null ? old[p.id] : p.d * (weights[p.id] != null ? weights[p.id] : 1), lab: p.lab }));
+      pts.forEach(p => { if (p.lab === false) return; let a = labs.querySelector(`[data-id="${p.id}"]`);
+        if (!a) { a = document.createElement('a'); a.className = 'lab'; a.dataset.id = p.id; a.href = '#' + p.id; a.innerHTML = `<i>x*</i>${NS.byId[p.id].short}`; labs.appendChild(a); }
+        a.style.left = p.x * H + 'px'; a.style.top = p.y * H + 'px'; });
+      svg.textContent = ''; dirty = true; draw();
+    }
+    function draw() {
+      if (gl) { gl.viewport(0, 0, cv.width, cv.height); gl.uniform2f(loc.uRes, cv.width, cv.height); gl.uniform1f(loc.uT, T); gl.uniform2f(loc.uM, mouse[0], mouse[1]);
+        const arr = new Float32Array(32); pts.forEach((p, i) => arr.set([p.x, p.y, p.c, p.s], i * 4)); gl.uniform4fv(loc.uW, arr); gl.uniform1i(loc.uN, pts.length); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      } else if (dirty) { const w = cv.width, h = cv.height, im = ctx2.createImageData(w, h);
+        for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { const s = Math.max(0, Math.min(1, (F(i / h, j / h) + 0.95) / 1.2)) * 13, c = ramp(Math.min(1, Math.floor(s) / 12)), k = (j * w + i) * 4; im.data[k] = c[0]; im.data[k + 1] = c[1]; im.data[k + 2] = c[2]; im.data[k + 3] = 255; }
+        ctx2.putImageData(im, 0, 0); dirty = false; }
+    }
+    function loop() { if (!vis) return; let moving = false;
+      pts.forEach(p => { const t = p.d * (weights[p.id] != null ? weights[p.id] : 1); if (Math.abs(t - p.c) > 0.002) { p.c += (t - p.c) * 0.09; moving = true; } });
+      if (moving) dirty = true; if (!NS.reduce && gl) T += 0.0016; if (gl || dirty) draw(); raf = requestAnimationFrame(loop); }
+    function run(ux, uy, instant) {
+      const my = ++tok, path = [[ux, uy]]; let x = ux, y = uy, vx = 0, vy = 0; const h = 1e-3, T0 = T;
+      for (let k = 0; k < 220; k++) { const gx = (F(x + h, y) - F(x - h, y)) / (2 * h), gy = (F(x, y + h) - F(x, y - h)) / (2 * h);
+        vx = 0.8 * vx - 0.011 * gx; vy = 0.8 * vy - 0.011 * gy; x += vx; y += vy; path.push([x, y]); if (Math.hypot(gx, gy) < 0.02 && Math.hypot(vx, vy) < 4e-4) break; }
+      svg.textContent = '';
+      const line = el('polyline', { fill: 'none', stroke: FG, 'stroke-width': 1.6, 'stroke-linejoin': 'round' }, svg), dots = el('g', { fill: FG }, svg);
+      el('circle', { cx: ux * H, cy: uy * H, r: 5, fill: 'none', stroke: FG, 'stroke-width': 1.6 }, svg);
+      labs.querySelectorAll('.lab').forEach(a => a.classList.remove('hit'));
+      let i = 0;
+      function done() { const end = path[path.length - 1]; let best = null, bd = 1e9; pts.forEach(p => { const dd = Math.hypot(p.x - end[0], p.y - end[1]); if (dd < bd) { bd = dd; best = p; } });
+        el('circle', { cx: end[0] * H, cy: end[1] * H, r: 9, fill: 'none', stroke: CORAL, 'stroke-width': 2.4 }, svg);
+        const id = best && bd < 0.16 ? best.id : null, a = id && labs.querySelector(`[data-id="${id}"]`); if (a) a.classList.add('hit');
+        if (read) read.innerHTML = id === 'contact' ? `Converged in <b>${path.length - 1}</b> iterations, right on <a href="#contact">Contact</a>.` : id ? `Converged in <b>${path.length - 1}</b> iterations on <a href="#${id}">${NS.byId[id].short}</a>.` : `Stopped after <b>${path.length - 1}</b> iterations on a saddle. Try another start.`; }
+      function step() { if (my !== tok) return; const n = instant ? path.length : Math.min(path.length, i + 2);
+        for (; i < n; i++) el('circle', { cx: path[i][0] * H, cy: path[i][1] * H, r: 2.1 }, dots);
+        line.setAttribute('points', path.slice(0, i).map(p => (p[0] * H).toFixed(1) + ',' + (p[1] * H).toFixed(1)).join(' '));
+        if (read && i < path.length) read.innerHTML = `Iteration <b>${i}</b>, f = <b>${F(path[i - 1][0], path[i - 1][1]).toFixed(3)}</b>`;
+        if (i < path.length) requestAnimationFrame(step); else done(); }
+      step();
+    }
+    root.addEventListener('pointermove', e => { const r = cv.getBoundingClientRect(); mouse = [(e.clientX - r.left) / H, (e.clientY - r.top) / H]; });
+    root.addEventListener('pointerleave', () => (mouse = [-9, -9]));
+    root.addEventListener('click', e => { if (e.target.closest('a')) return; const r = cv.getBoundingClientRect(); run((e.clientX - r.left) / H, (e.clientY - r.top) / H, NS.reduce); });
+    let lw = 0, lh = 0; new ResizeObserver(() => { const r = cv.getBoundingClientRect(); if (Math.round(r.width) === lw && Math.round(r.height) === lh) return; lw = Math.round(r.width); lh = Math.round(r.height); size(); if (opts.onSize) opts.onSize(W, H); }).observe(cv);
+    new IntersectionObserver(es => es.forEach(e => { vis = e.isIntersecting; cancelAnimationFrame(raf); if (vis) raf = requestAnimationFrame(loop); })).observe(root);
+    return { run, setWeights(w) { weights = w; labs.querySelectorAll('.lab').forEach(a => a.classList.toggle('off', (w[a.dataset.id] != null ? w[a.dataset.id] : 1) < 0.5)); svg.textContent = ''; }, get size() { return [W, H]; } };
+  }
+
+  /* hero: six project minima, plus a broad basin under the name that leads to Contact */
+  const wide = { sepsis: [0.12, 0.25], sindae: [0.36, 0.19], thesis: [0.61, 0.3], recsys: [0.86, 0.2], fifa: [0.58, 0.7], wayfinder: [0.85, 0.66] };
+  const tall = { sepsis: [0.26, 0.1], sindae: [0.74, 0.16], thesis: [0.3, 0.3], recsys: [0.74, 0.38], fifa: [0.28, 0.5], wayfinder: [0.72, 0.58] };
+  const hero = document.getElementById('top'), who = document.getElementById('who');
+  let started = false;
+  const L1 = landscape(document.getElementById('land1'), (W, H) => {
+    const m = W < 700 ? tall : wide, hr = hero.getBoundingClientRect(), r = who.getBoundingClientRect();
+    return NS.projects.map(p => ({ id: p.id, fx: m[p.id][0], fy: m[p.id][1], d: 0.82, s: W < 700 ? 0.085 : 0.125 }))
+      .concat([{ id: 'contact', fx: (r.left - hr.left + Math.min(r.width, W * 0.9) * 0.42) / W, fy: (r.top - hr.top + r.height * 0.5) / H, d: 0.86, s: W < 700 ? 0.2 : 0.27, lab: false }]);
+  }, { read: document.getElementById('read1'), onSize(W, H) { if (!started) { started = true; setTimeout(() => L1.run(W < 700 ? 0.5 * W / H : 0.47 * W / H, W < 700 ? 0.22 : 0.52, NS.reduce), NS.reduce ? 0 : 700); } } });
+
+  /* skills: the same function, re-weighted by the selected skill */
+  const grid = { thesis: [0.2, 0.3], sindae: [0.5, 0.25], recsys: [0.8, 0.3], sepsis: [0.2, 0.74], wayfinder: [0.5, 0.74], fifa: [0.8, 0.74] };
+  const gridT = { thesis: [0.27, 0.16], sindae: [0.73, 0.16], recsys: [0.27, 0.48], sepsis: [0.73, 0.48], wayfinder: [0.27, 0.8], fifa: [0.73, 0.8] };
+  const read2 = document.getElementById('read2');
+  const L2 = landscape(document.getElementById('land2'), (W, H) => NS.projects.map(p => { const q = (W < 600 ? gridT : grid)[p.id]; return { id: p.id, fx: q[0], fy: q[1], d: 0.8, s: W < 600 ? 0.11 : 0.16 }; }), { read: read2 });
+  const chips = document.getElementById('chips'); let cur = null;
+  NS.tools.concat(NS.methods).map(s => ({ s, n: NS.count(s) })).sort((a, b) => b.n - a.n).forEach(c => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = c.s; b.setAttribute('aria-pressed', 'false'); chips.appendChild(b);
+    b.addEventListener('click', () => { cur = cur === c.s ? null : c.s; chips.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b && cur ? 'true' : 'false'));
+      const users = NS.projects.filter(p => !cur || p.tools.includes(cur) || p.methods.includes(cur));
+      L2.setWeights(Object.fromEntries(NS.projects.map(p => [p.id, users.includes(p) ? 1 : 0.1])));
+      read2.innerHTML = cur ? `<b>${cur}</b>: ${users.map(p => `<a href="#${p.id}">${p.short}</a>`).join(', ')}. Click the landscape to see where a solver ends up.` : 'Pick a skill. The projects that use it stay deep; the rest flatten out.'; });
+  });
+
+  /* ---- figures ---- */
+  const theme = { ink: FG, dim: FG2, fill: BG, fresh: CORAL, bad: CORAL, pulse: CORAL, hi: CORAL, font };
+  NS.netFigure(document.getElementById('netfig'), Object.assign({}, theme, { dim: '#7C6BB8' }));
+  NS.recFigure(document.getElementById('recfig'), Object.assign({}, theme, { fill: '#1E1244', radius: 23 }));
+  NS.scale(document.getElementById('fifaS'), NS.fifa, theme);
+  NS.scale(document.getElementById('sepsisS'), NS.sepsis, Object.assign({ ticks: 6 }, theme));
+  let eq = null;
+  NS.flow(document.getElementById('lg'), { color: FG, lw: 1, dsep: 11, alpha: 0.85,
+    field(w, h) { const f = NS.leslieGower(w, h, 0); eq = f.eq; return f; },
+    after(ctx) { if (!eq) return; ctx.fillStyle = CORAL; ctx.beginPath(); ctx.arc(eq[0], eq[1], 6, 0, 7); ctx.fill(); } });
+})();
+</script>
