@@ -6,7 +6,7 @@ You are the owner and long term maintainer of this codebase, and its design is u
 
 ## State
 
-Direction chosen: **draft E, descent** (`drafts/e-descent.html`), recorded in `DESIGN.md`. Site structure Nicolas chose: the home page is the landscape plus a project index (each minimum links to its project); every project lives on its own page, `/projects/<id>`; the skills landscape stays. No site scaffold yet. Next: scaffold Astro (see `## Stack` in `PRODUCT.md`), port draft E to parity, then the project pages. Hosting is Cloudflare Pages, deploying from the public GitHub repo `nicksmits1/portfolio-website`.
+Direction chosen: **draft E, descent** (`drafts/e-descent.html`): its palette, typefaces, landscape solver, iteration readout and peach contact footer stay. Every project lives on its own page, `/projects/<id>`, and the site also covers publications, experience, education, a CV link and a headshot (see `PRODUCT.md`). Nicolas is choosing the home layout and skills placement from `drafts/options/layout-options.html`. Once he picks, record the direction contract with `/impeccable`, then scaffold Astro (see `## Stack` in `PRODUCT.md`) and build. `DESIGN.md` is written at the end, from the built site. Layout and page changes get an options artifact for Nicolas to pick from before they are built. Hosting is Cloudflare Pages, deploying from the public GitHub repo `nicksmits1/portfolio-website`.
 
 ## The repo is public
 
