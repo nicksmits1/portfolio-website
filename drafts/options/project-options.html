@@ -1,0 +1,504 @@
+<title>Project Page Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Onest:wght@400;500;600&family=STIX+Two+Text:ital@1&display=swap">
+<style>
+/* Layout: an options board in the site's own world. Three layouts for /projects/<id>, each drawn as a desktop
+   and a phone mock at design size and zoomed to fit its frame. One switcher re-renders every mock with any of
+   the six projects, so each layout is judged on its hardest and its thinnest page. */
+:root{
+  color-scheme:dark;
+  --bg:#120A2A; --panel:#1A1038; --ink:#0D0722; --fg:#F3EDFF; --fg2:#B9AAE8; --dim:#7C6BB8;
+  --coral:#FF7C6B; --violet:#8B5CF6; --peach:#FFD9C2; --hair:rgba(243,237,255,.22); --hair2:rgba(243,237,255,.1);
+  --disp:"Unbounded",system-ui,sans-serif; --text:"Onest",system-ui,sans-serif; --math:"STIX Two Text","Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--violet) var(--bg)}
+body{background:var(--bg);color:var(--fg);font:400 1rem/1.55 var(--text);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+::selection{background:var(--coral);color:var(--bg)}
+a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px}
+.wrap{max-width:1320px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---- board chrome ---- */
+.intro{padding-block:clamp(2rem,5vw,3.6rem) 1.6rem}
+.intro h1{font:300 clamp(2rem,5vw,3.4rem)/1 var(--disp);letter-spacing:-.04em;margin:0 0 1rem;text-wrap:balance}
+.intro p{margin:0 0 .7rem;max-width:68ch;color:var(--fg2)}
+.intro p b{color:var(--fg);font-weight:600}
+.toc{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.2rem}
+.toc a{font:500 .9rem/1 var(--text);padding:.5rem .8rem;border:1px solid var(--hair);border-radius:999px;text-decoration:none}
+.toc a:hover{border-color:var(--coral);color:var(--coral)}
+.switch{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-block:1px solid var(--hair)}
+.switch .wrap{display:flex;align-items:center;gap:.4rem 1rem;padding-block:.7rem}
+.switch .wrap>span{font:600 .78rem/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);flex:none}
+.pick{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none;min-width:0;padding:2px}
+.pick button{flex:none;font:500 .9rem/1 var(--text);padding:.55rem .85rem;border:1px solid var(--hair);border-radius:999px;background:none;color:var(--fg);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.pick button:hover{border-color:var(--fg)}
+.pick button[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:var(--bg)}
+.decision{border-top:1px solid var(--hair);padding-block:clamp(2rem,5vw,3.2rem)}
+.decision:first-child{border-top:0}
+.opt{display:grid;gap:1.2rem}
+.opt header{display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap}
+.tag{font:600 .85rem/1 var(--disp);color:var(--bg);background:var(--coral);border-radius:999px;padding:.4rem .7rem;letter-spacing:.02em}
+.opt h2{font:400 clamp(1.3rem,2.6vw,1.8rem)/1.15 var(--disp);letter-spacing:-.03em;margin:0}
+.opt header p{flex-basis:100%;margin:0;color:var(--fg2);max-width:72ch}
+.views{display:grid;gap:1.2rem;align-items:start}
+@media(min-width:860px){.views{grid-template-columns:minmax(0,1fr) 250px}}
+.cap{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 .45rem}
+.frame{border:1px solid var(--hair);border-radius:10px;overflow:hidden;background:var(--ink);min-width:0}
+.notes{display:grid;gap:1rem 2.4rem;font-size:.95rem}
+@media(min-width:860px){.notes{grid-template-columns:repeat(3,1fr)}}
+.notes h3,.after h3{font:600 .78rem/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 .5rem}
+.notes p{margin:0}
+.after{display:grid;gap:1.6rem 2.4rem;padding-block:clamp(2rem,5vw,3rem) clamp(3rem,7vw,5rem);border-top:1px solid var(--hair)}
+@media(min-width:860px){.after{grid-template-columns:1fr 1fr}}
+.after h2{font:400 1.3rem/1.15 var(--disp);letter-spacing:-.03em;margin:0;grid-column:1/-1}
+.after ul{margin:0;padding-left:1.1rem;color:var(--fg2)}
+.after li{margin-bottom:.35rem}.after li b{color:var(--fg);font-weight:600}
+
+/* ---- inside the mocks: design-size px, scaled by zoom ---- */
+.screen{background:var(--bg);color:var(--fg);font:400 16px/1.5 var(--text);position:relative;overflow:hidden}
+.screen svg text{font-family:var(--text)}
+.m-body{padding:0 44px}
+.p-top{display:flex;justify-content:space-between;align-items:center;height:64px;padding:0 44px;border-bottom:1px solid var(--hair)}
+.p-name{font:300 20px/1 var(--disp);letter-spacing:-.03em}
+.p-nav,.m-nav{display:flex;gap:24px;font:500 15px/1 var(--text)}
+.p-nav .on,.m-nav .on{color:var(--coral)}
+.p-h1{font:400 40px/1.08 var(--disp);letter-spacing:-.035em;margin:0 0 12px;text-wrap:balance}
+.p-where{color:var(--fg2);font-size:15px;margin:0}
+.p-line{font-size:18px;line-height:1.45;margin:18px 0 0;max-width:40ch}
+.run{list-style:none;margin:26px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px}
+.run li{display:flex;flex-direction:column;border-top:1px solid var(--hair);padding-top:9px;min-width:0}
+.run b{font:400 24px/1.1 var(--disp);letter-spacing:-.03em;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--peach)}
+.run span{font-size:13px;line-height:1.3;color:var(--fg2);margin-top:5px}
+.p-meta{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-top:24px}
+.note{color:var(--coral);font-size:14px;font-weight:600}
+.pill{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 12px;border:1px solid var(--hair);border-radius:999px;font:500 14px/1 var(--text)}
+.pill svg{width:16px;height:16px;flex:none}
+.p-skills{margin-top:26px}
+.p-skills p{margin:0 0 8px;font:600 12px/1 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips span{font:500 13px/1 var(--text);padding:7px 11px;border:1px solid var(--hair);border-radius:999px}
+.fg{min-width:0}
+.fg>svg,.scroll>svg{display:block;width:100%;height:auto}
+.scroll{overflow-x:auto;scrollbar-width:thin}
+.figbar{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;justify-content:space-between;margin-top:14px;min-height:40px}
+.figbar p{margin:0;flex:1 1 260px;min-width:0;font-size:15px}
+.fine{margin:8px 0 0;font-size:13px;color:var(--fg2)}
+.fine.todo{color:var(--coral)}
+[data-netsteps]{display:flex;gap:8px}
+[data-netsteps] button{width:22px;height:22px;padding:0;border:0;background:none;cursor:pointer;position:relative}
+[data-netsteps] button::before{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--hair);transition:inset .2s,background .2s}
+[data-netsteps] button[aria-current="step"]::before{inset:4px;background:var(--coral)}
+[data-rectabs]{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+[data-rectabs] button{font:500 14px/1 var(--text);padding:8px 12px;border:1px solid var(--hair);border-radius:999px;background:none;color:var(--fg);cursor:pointer}
+[data-rectabs] button:hover{border-color:var(--fg)}
+[data-rectabs] button[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:var(--bg)}
+.flowbox{position:relative;aspect-ratio:16/10}
+.flowbox canvas{position:absolute;inset:0;width:100%;height:100%}
+.flowbox .logo{position:absolute;right:0;top:0;width:44%;height:auto;border-radius:8px;outline:8px solid var(--bg)}
+.flowbox .ax{position:absolute;font:italic 15px/1 var(--math);color:var(--fg2);background:var(--bg);padding:2px 6px}
+.eq{font:italic 15px/1.5 var(--math);color:var(--fg)}
+.eq span{font:400 13px/1.4 var(--text);color:var(--fg2)}
+.shot{display:block;width:100%;height:auto;border:1px solid var(--hair);border-radius:10px;background:var(--ink)}
+.sup{margin:0;min-width:0}
+.plate{background:#fff;border-radius:10px;padding:12px;box-shadow:0 0 0 1px var(--hair)}
+.plate img{display:block;width:100%;height:auto}
+.fig-cap{font-size:14px;line-height:1.45;color:var(--fg);margin:12px 0 0;max-width:60ch}
+.fig-cap .src{display:block;color:var(--fg2);font-size:13px;margin-top:4px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:30px 0 44px;border-top:1px solid var(--hair)}
+.pn a{display:flex;align-items:center;gap:18px;text-decoration:none;min-width:0}
+.pn a.next{justify-content:flex-end;text-align:right}
+.pn svg{flex:none;width:120px;height:69px;border-radius:8px;background:var(--panel)}
+.pn small{display:block;font-size:13px;color:var(--dim)}
+.pn b{display:block;font:400 18px/1.2 var(--disp);letter-spacing:-.03em;margin-top:4px}
+.m-foot{background:var(--peach);color:var(--ink);padding:56px 44px}
+.m-foot h2{font:300 44px/1 var(--disp);letter-spacing:-.04em;margin:0 0 16px}
+.m-foot .mail{font:400 30px/1.15 var(--disp);letter-spacing:-.035em;margin:0 0 18px}
+.ic{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ic span{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;min-width:40px;border:1px solid rgba(13,7,34,.25);border-radius:999px;font:500 14px/1 var(--text)}
+.ic svg{width:18px;height:18px;flex:none}
+.ic span.cp{background:var(--ink);color:var(--peach);padding:0 16px;border-color:var(--ink)}
+.ic span.lb{padding:0 14px 0 12px}
+
+/* A: split, after draft E's project section */
+.a-split{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:28px;align-items:start;padding:56px 0 60px}
+.a-fig{grid-column:1/8;min-width:0}.a-label{grid-column:8/13;min-width:0;padding-left:12px}
+.a-more{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:44px 0 52px;border-top:1px solid var(--hair)}
+.a-more.one{grid-template-columns:repeat(12,minmax(0,1fr));column-gap:28px}.a-more.one>*{grid-column:1/8}
+
+/* B: the figure on a full-width wall, a plate of text under it */
+.b-wall{background:var(--ink);padding:44px 44px 24px;border-bottom:1px solid var(--hair)}
+.b-lead{max-width:1000px;margin:0 auto}
+.b-lead [data-fig="flow"]{max-width:900px;margin:0 auto}
+.b-plate{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:28px;padding:40px 0 48px}
+.b-id{grid-column:1/6;min-width:0}.b-txt{grid-column:7/13;min-width:0}
+.b-txt .p-line{margin-top:0;max-width:46ch}
+.b-txt .run{grid-template-columns:repeat(var(--n,2),minmax(0,1fr))}
+.b-more{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:28px;padding:40px 0;border-top:1px solid var(--hair)}
+.b-more .fig-cap{grid-column:1/4;grid-row:1;margin:0;align-self:start}.b-more .plate{grid-column:4/13}
+.b-sk{padding:0 0 40px}.b-sk .p-skills{margin:0}
+
+/* C: arrival on the landscape, then a rail beside the figures */
+.c-land{position:relative;height:300px;border-bottom:1px solid var(--hair)}
+.m-land{position:absolute;inset:0;overflow:hidden}
+.m-land canvas,.m-land svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.lab{position:absolute;transform:translate(-50%,12px);font:600 14px/1.1 var(--text);white-space:nowrap;padding:3px 8px;border-radius:999px;background:rgba(13,7,34,.72);z-index:1}
+.lab i{font:italic 15px/1 var(--math);margin-right:4px;font-weight:400}
+.lab.hit{background:var(--coral);color:var(--bg)}
+.lab small{font:500 11px/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--fg2);margin-left:6px}
+.c-name{position:absolute;top:0;left:0;z-index:2;padding:18px 22px 12px 44px;font:300 18px/1 var(--disp);letter-spacing:-.03em;background:rgba(13,7,34,.72);border-bottom-right-radius:14px}
+.c-land .m-nav{position:absolute;top:0;right:0;z-index:2;padding:18px 44px 12px 20px;background:rgba(13,7,34,.72);border-bottom-left-radius:14px}
+.c-who{position:absolute;left:44px;bottom:26px;z-index:1;max-width:640px}
+.c-who h1{font:300 50px/1 var(--disp);letter-spacing:-.04em;margin:0 0 12px;text-wrap:balance}
+.m-read{margin:8px 0 0;font-size:14px;color:var(--fg2);min-height:21px;font-variant-numeric:tabular-nums}
+.m-read b{color:var(--fg);font-weight:600}
+.c-cols{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:28px;align-items:start;padding:48px 0 56px}
+.c-rail{grid-column:1/5;position:sticky;top:24px;min-width:0;padding-right:8px}
+.c-rail .p-line{margin-top:0}
+.c-figs{grid-column:5/13;min-width:0;display:grid;gap:48px}
+
+/* phone mocks */
+.ph .m-body{padding:0 16px}
+.ph .p-top{height:52px;padding:0 16px}
+.ph .p-name{font-size:16px}
+.ph .p-nav,.ph .m-nav{gap:14px;font-size:13px}
+.ph .p-h1{font-size:27px;margin-bottom:10px}
+.ph .p-where{font-size:13px}
+.ph .p-line{font-size:15px;margin-top:14px}
+.ph .run{gap:12px 16px;margin-top:20px}
+.ph .run b{font-size:20px}.ph .run span{font-size:12px}
+.ph .pill{height:32px;font-size:13px}
+.ph .p-meta{margin-top:18px}
+.ph .p-skills{margin-top:20px}
+.ph .chips{flex-wrap:nowrap;overflow:hidden}
+.ph .chips span{font-size:12px;padding:6px 9px;white-space:nowrap}
+.ph .figbar p{font-size:13px}
+.ph .fine,.ph .fig-cap .src{font-size:12px}
+.ph .fig-cap{font-size:13px}
+.ph [data-rectabs] button{font-size:12px;padding:6px 9px}
+.ph .scroll>svg{min-width:560px}
+.ph .flowbox .ax{font-size:12px}
+.ph .eq{font-size:13px}
+.ph .pn{grid-template-columns:1fr;gap:14px;padding:22px 0 30px}
+.ph .pn svg{width:84px;height:48px}
+.ph .pn b{font-size:15px}
+.ph .m-foot{padding:34px 16px}
+.ph .m-foot h2{font-size:30px}.ph .m-foot .mail{font-size:18px}
+.ph .ic span{height:34px;min-width:34px;font-size:12px}.ph .ic svg{width:15px;height:15px}
+.ph .a-split{display:flex;flex-direction:column;align-items:stretch;gap:22px;padding:28px 0 34px}
+.ph .a-label{display:contents}
+.ph .a-head{order:1}.ph .a-fig{order:2}.ph .a-rest{order:3}
+.ph .a-rest>:first-child{margin-top:0}
+.ph .a-more,.ph .a-more.one{grid-template-columns:1fr;gap:30px;padding:30px 0}
+.ph .a-more.one>*{grid-column:auto}
+.ph .b-wall{padding:16px 0 10px}
+.ph .b-wall .figbar,.ph .b-wall .fine,.ph .b-wall [data-rectabs]{padding-inline:16px}
+.ph .b-wall .flowbox{margin-inline:16px}
+.ph .b-wall .shot{border-radius:0;border-inline:0}
+.ph .b-plate{display:block;padding:24px 0 30px}
+.ph .b-txt{margin-top:14px}
+.ph .b-txt .run{grid-template-columns:repeat(2,minmax(0,1fr))}
+.ph .b-more{display:block;padding:26px 0}
+.ph .b-more .fig-cap{margin-top:12px}
+.ph .b-sk{padding-bottom:28px}
+.ph .c-land{height:300px}
+.ph .c-name{padding:14px 16px 10px 16px;font-size:14px}
+.ph .c-land .m-nav{padding:14px 16px 10px 14px}
+.ph .c-who{left:16px;right:16px;bottom:16px}
+.ph .c-who h1{font-size:28px;margin-bottom:8px}
+.ph .m-read{font-size:12px;min-height:18px}
+.ph .lab{font-size:12px;padding:2px 6px}.ph .lab i{font-size:13px}.ph .lab small{display:none}
+.ph .c-cols{display:block;padding:24px 0 30px}
+.ph .c-rail{position:static;padding:0}
+.ph .c-figs{margin-top:26px;gap:30px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="wrap intro">
+  <h1>Project page options</h1>
+  <p>Three layouts for <b>/projects/&lt;id&gt;</b>. Each opens with the project's own figure, one line, and at most four facts from its content file, and ends on the peach contact footer.</p>
+  <p>Use the switcher to put any project into all three. The <b>thesis</b> is the heaviest page (three figures, four facts); <b>wayfinder</b> and <b>sepsis</b> are the thinnest (one figure, no facts). A layout has to carry both. The figures are live: step the episode, pick a request scenario.</p>
+  <nav class="toc" aria-label="Sections"><a href="#opt-a">A, Split</a><a href="#opt-b">B, Wall</a><a href="#opt-c">C, Arrival</a><a href="#same">Same in all three</a></nav>
+</header>
+
+<div class="switch"><div class="wrap"><span id="pick-l">Project</span><div class="pick" id="pick" role="group" aria-labelledby="pick-l"></div></div></div>
+
+<main class="wrap">
+<section class="decision" id="opt-a">
+  <article class="opt">
+    <header><span class="tag">A</span><h2>Split</h2><p>Draft E's project section made into a page. The figure takes seven columns, and the title, line and facts sit beside it while you step through it. Extra figures follow in a row underneath.</p></header>
+    <div class="views">
+      <div><p class="cap">Desktop, 1200 px</p><div class="frame"><div class="screen" data-opt="a" data-kind="desk" data-w="1200"></div></div></div>
+      <div><p class="cap">Phone, 390 px</p><div class="frame"><div class="screen ph" data-opt="a" data-kind="phone" data-w="390"></div></div></div>
+    </div>
+    <div class="notes">
+      <div><h3>Good at</h3><p>The one you already liked. Facts stay beside the figure, so you can read a number while watching the episode.</p></div>
+      <div><h3>Costs</h3><p>The figure gets seven of twelve columns, so the network and the architecture read smaller than in B. Extra figures sit below the fold.</p></div>
+      <div><h3>On a phone</h3><p>Title and line first, then the figure, then the facts.</p></div>
+    </div>
+  </article>
+</section>
+
+<section class="decision" id="opt-b">
+  <article class="opt">
+    <header><span class="tag">B</span><h2>Wall</h2><p>The figure fills the full width on a darker wall, as large as it gets. Title, line and facts sit under it like the label under a painting. Each extra figure gets its own row with the caption on the left.</p></header>
+    <div class="views">
+      <div><p class="cap">Desktop, 1200 px</p><div class="frame"><div class="screen" data-opt="b" data-kind="desk" data-w="1200"></div></div></div>
+      <div><p class="cap">Phone, 390 px</p><div class="frame"><div class="screen ph" data-opt="b" data-kind="phone" data-w="390"></div></div></div>
+    </div>
+    <div class="notes">
+      <div><h3>Good at</h3><p>The biggest figure. Best for the recommender's architecture and the phase portrait, which have detail worth the room.</p></div>
+      <div><h3>Costs</h3><p>On a short laptop screen the title lands near the fold. The FIFA and sepsis scales look thin at full width.</p></div>
+      <div><h3>On a phone</h3><p>The figure runs edge to edge; the title follows it.</p></div>
+    </div>
+  </article>
+</section>
+
+<section class="decision" id="opt-c">
+  <article class="opt">
+    <header><span class="tag">C</span><h2>Arrival</h2><p>The page opens on the home landscape, close in on this project's minimum, with the solver arriving and the readout under the title. The neighbouring minima are the previous and next projects. Below, a rail keeps the line and facts in view while the figures scroll beside it.</p></header>
+    <div class="views">
+      <div><p class="cap">Desktop, 1200 px</p><div class="frame"><div class="screen" data-opt="c" data-kind="desk" data-w="1200"></div></div></div>
+      <div><p class="cap">Phone, 390 px</p><div class="frame"><div class="screen ph" data-opt="c" data-kind="phone" data-w="390"></div></div></div>
+    </div>
+    <div class="notes">
+      <div><h3>Good at</h3><p>Ties every page back to home: you arrive where the solver converged. Handles the most figures, which suits PhD chapters later.</p></div>
+      <div><h3>Costs</h3><p>A second landscape to render per page, and the lead figure starts about 300 px lower than in A or B.</p></div>
+      <div><h3>On a phone</h3><p>A shorter landscape with the title on it. The rail stops being sticky and sits above the figures.</p></div>
+    </div>
+  </article>
+</section>
+
+<section class="after" id="same">
+  <h2>Same in all three</h2>
+  <div><h3>On every project page</h3><ul>
+    <li><b>Your name</b> top left goes home; the nav matches home, with Research marked.</li>
+    <li><b>Skills chips</b> open the skills landscape on home with that skill picked, so the skills only live in one place.</li>
+    <li><b>Previous and next</b> project at the bottom, in the order of the home list.</li>
+    <li><b>Reduced motion</b> shows results as stills: the episode's final step, the streamlines fully drawn, the solver path already converged, the video paused on its first frame.</li></ul></div>
+  <div><h3>Content to settle</h3><ul>
+    <li><b>Wayfinder and sepsis show no facts.</b> Their only candidate facts repeat the line or the figure. Give me one each if you want the block.</li>
+    <li><b>Sepsis:</b> which of 0.8089 and 0.8056 is DQN and which is Double DQN still needs confirming.</li>
+    <li><b>Thesis:</b> the two results figures are crops of the poster here. The build redraws them in the site palette from the thesis repo's result files, and the episode stays labelled illustrative until a real trace is exported.</li>
+    <li><b>Recommender</b> has no public link, since the course repo is private.</li></ul></div>
+</section>
+</main>
+
+<script src="shared/core.js"></script>
+<script>
+(function () {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const FG = css('--fg'), FG2 = css('--fg2'), CORAL = css('--coral'), BG = css('--bg');
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  const A = 'options/assets/';
+
+  /* ---- content: copy and facts from content/projects/<id>.md ---- */
+  const P = {
+    thesis: { short: 'Supply chain RL', name: 'Graph RL for resilient supply chains', where: 'Master’s thesis, CMU', with: 'with Arsh Bhatia and Carl D. Laird', when: '2026 – present',
+      line: 'A policy learns which transport arcs to add so demand still arrives when plants, warehouses or routes fail.',
+      facts: [['21,000×', 'faster than greedy search'], ['19 → 70', 'nodes, trained on → designed'], ['64–80%', 'of greedy search’s value at training sizes'], ['28,481', 'parameters at every network size']],
+      note: 'Preliminary results', links: [['file', 'Poster (PDF)']],
+      skills: ['Reinforcement learning', 'Graph neural networks', 'Simulation', 'PyTorch', 'PyG', 'Gymnasium'],
+      figs: [{ t: 'net' },
+        { t: 'img', src: A + 'thesis-value.webp', w: 1100, h: 602, alt: 'Held-out design value by network size for the learned policy, greedy search and random baselines', cap: 'Held-out design value by network size, mean and 95% interval: the policy in red, greedy search in black. Shaded sizes are larger than any training network.', from: 'Crop of the thesis poster; the build redraws it in the site palette.' },
+        { t: 'img', src: A + 'thesis-cpu.webp', w: 1100, h: 396, alt: 'Median CPU time to design one network, greedy search against the learned policy, log scale', cap: 'Median CPU time to design one network, on a log scale.', from: 'Crop of the thesis poster; the build redraws it in the site palette.' }] },
+    sindae: { short: 'SiNDAE', name: 'SiNDAE', where: 'CAPD, Carnegie Mellon', with: 'with Laurens Lueg and Victor Alves', when: 'Jun – Aug 2026',
+      line: 'Neural networks embedded in differential-algebraic process models and trained as one nonlinear program.',
+      facts: [['index-2', 'DAEs as well as ODEs'], ['2', 'training backends, simultaneous and decomposition'], ['JOSS', 'first-author software paper, pending']],
+      links: [['gh', 'GitHub'], ['paper', 'Method paper, Lueg et al.']],
+      skills: ['Nonlinear optimisation', 'Hybrid modelling', 'JAX', 'Pyomo'],
+      figs: [{ t: 'flow' },
+        { t: 'img', src: A + 'sindae-fit.webp', w: 1200, h: 895, alt: 'Tank levels and discharge over time for three trajectories: ground truth, a smoother and the hybrid fit', cap: 'The tank example from the paper: the hybrid fit against ground truth and a smoother, on three trajectories.', from: 'Figure from the JOSS paper.' }] },
+    recsys: { short: 'Recommender', name: 'Movie recommender with LLM cold start', where: 'Team project, CMU', with: '', when: 'Sep 2026 – present',
+      line: 'A live recommendation service. An LLM turns a new user’s free-text tastes into a profile before their first request.',
+      facts: [['500k+', 'live requests inside a 600 ms limit'], ['1.4 ms', 'cold-start ranker'], ['2.2×', 'NDCG@20 over SVD'], ['$1/day', 'LLM cost']],
+      links: [], skills: ['Ranking & recommenders', 'LLM pipelines', 'MLOps', 'LightGBM', 'Kafka', 'Flask', 'Docker', 'PostgreSQL', 'AWS'],
+      figs: [{ t: 'rec' }] },
+    wayfinder: { short: 'wayfinder-sidebar', name: 'wayfinder-sidebar', where: 'Open source', with: '', when: 'Nov 2026',
+      line: 'A Claude Code plugin. Your ticket map sits beside the chat, and one click starts a new agent session with a handoff.',
+      facts: [], links: [['gh', 'GitHub']], skills: ['Agent tooling', 'TypeScript'], figs: [{ t: 'video' }] },
+    fifa: { short: 'FIFA pipeline', name: 'FIFA player analytics pipeline', where: 'CMU', with: 'with Amogh Balaji', when: 'Sep – Dec 2025',
+      line: 'Spark to Postgres ETL, a live Kafka comment stream, and rating models trained locally and on GCP.',
+      facts: [['R² 0.964', 'gradient-boosted trees'], ['8', 'seasons, 2015–2022']], links: [['gh', 'GitHub']],
+      skills: ['Data engineering', 'Supervised learning', 'Spark', 'PostgreSQL', 'Kafka', 'PyTorch', 'GCP', 'Docker'], figs: [{ t: 'scale', d: 'fifa' }] },
+    sepsis: { short: 'Sepsis DQN', name: 'DQN variants for ICU sepsis treatment', where: 'McGill, COMP 579', with: 'with James Randolph and Abdullah Paraha', when: 'Jan – Apr 2025',
+      line: 'Which DQN extensions help on a clinical benchmark with 716 health states and 25 treatments?',
+      facts: [], links: [['gh', 'GitHub']], skills: ['Reinforcement learning', 'PyTorch', 'Gymnasium'],
+      figs: [{ t: 'scale', d: 'sepsis', todo: 'To confirm: which of 0.8089 and 0.8056 is DQN and which is Double DQN.' }] }
+  };
+  const ORDER = ['thesis', 'sindae', 'recsys', 'wayfinder', 'fifa', 'sepsis'];
+  ORDER.forEach(id => (P[id].id = id));
+
+  const BRAND = d => `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="${d}"/></svg>`;
+  const LINE = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const ICONS = {
+    gh: BRAND('M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'),
+    li: BRAND('M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z'),
+    orcid: BRAND('M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.025-5.325 5.025h-3.919V7.416zm1.444 1.303v7.444h2.297c3.272 0 4.022-2.484 4.022-3.722 0-2.016-1.284-3.722-4.097-3.722h-2.222z'),
+    file: LINE('<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/>'),
+    paper: LINE('<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h8"/><path d="M8 17h5"/>')
+  };
+
+  function thumb(id) {
+    const s = { thesis: '<g stroke="#7C6BB8" stroke-width="1.4"><path d="M30 30L70 22L110 34L140 60M30 30L46 70L92 76L140 60M70 22L92 76"/></g><path d="M46 70L110 34" stroke="#FF7C6B" stroke-width="2.2"/><g fill="#F3EDFF"><circle cx="30" cy="30" r="5"/><circle cx="70" cy="22" r="5"/><circle cx="110" cy="34" r="5"/><circle cx="140" cy="60" r="5"/><circle cx="46" cy="70" r="5"/><circle cx="92" cy="76" r="5"/></g>',
+      sindae: '<path d="M18 84C40 20 140 14 150 52S70 92 64 58S118 34 112 52S86 64 88 54" fill="none" stroke="#F3EDFF" stroke-width="1.3"/><path d="M150 86C120 60 30 72 40 40" fill="none" stroke="#7C6BB8" stroke-width="1.1"/><circle cx="92" cy="54" r="4.5" fill="#FF7C6B"/>',
+      recsys: '<g fill="#2A1670" stroke="#B9AAE8"><rect x="12" y="38" width="30" height="20" rx="4"/><rect x="62" y="16" width="38" height="20" rx="4"/><rect x="62" y="60" width="38" height="20" rx="4"/><rect x="122" y="38" width="34" height="20" rx="4"/></g><path d="M42 48H52L62 26M52 48L62 70M100 26L122 48M100 70L122 48" fill="none" stroke="#7C6BB8"/><circle cx="62" cy="26" r="4" fill="#FF7C6B"/>',
+      wayfinder: '<rect x="14" y="12" width="140" height="72" rx="5" fill="#0D0722" stroke="#7C6BB8"/><rect x="104" y="12" width="50" height="72" fill="#2A1670"/><g fill="#B9AAE8"><rect x="110" y="22" width="36" height="5" rx="2"/><rect x="110" y="34" width="30" height="5" rx="2"/><rect x="110" y="46" width="34" height="5" rx="2"/></g><rect x="110" y="58" width="26" height="5" rx="2" fill="#FF7C6B"/><g fill="#7C6BB8"><rect x="24" y="24" width="60" height="4" rx="2"/><rect x="24" y="34" width="70" height="4" rx="2"/><rect x="24" y="44" width="50" height="4" rx="2"/></g>',
+      fifa: '<path d="M16 60H152" stroke="#B9AAE8"/><g stroke="#7C6BB8"><path d="M16 54V66M50 56V64M84 56V64M118 56V64M152 54V66"/></g><g fill="#F3EDFF"><circle cx="128" cy="60" r="4"/><circle cx="100" cy="60" r="4"/><circle cx="74" cy="60" r="4"/></g><circle cx="40" cy="60" r="6" fill="#FF7C6B"/>',
+      sepsis: '<path d="M16 60H152" stroke="#B9AAE8"/><g stroke="#7C6BB8"><path d="M16 54V66M43 56V64M70 56V64M97 56V64M124 56V64M152 54V66"/></g><g fill="#F3EDFF"><circle cx="52" cy="60" r="4"/><circle cx="78" cy="60" r="4"/><circle cx="104" cy="60" r="4"/></g><circle cx="132" cy="60" r="6" fill="#FF7C6B"/>' }[id];
+    return `<svg viewBox="0 0 168 96" aria-hidden="true">${s}</svg>`;
+  }
+
+  /* ---- shared page parts ---- */
+  const whereLine = p => [p.where, p.with, p.when].filter(Boolean).join(' · ');
+  const NAV_D = ['Research', 'Publications', 'Experience', 'Skills', 'CV', 'Contact'], NAV_P = ['Research', 'CV', 'Contact'];
+  const navItems = kind => (kind === 'phone' ? NAV_P : NAV_D).map(n => `<span${n === 'Research' ? ' class="on"' : ''}>${n}</span>`).join('');
+  const top = kind => `<div class="p-top"><span class="p-name">Nicolas Smits</span><nav class="p-nav">${navItems(kind)}</nav></div>`;
+  const head = p => `<h1 class="p-h1">${p.name}</h1><p class="p-where">${whereLine(p)}</p>`;
+  const lineP = p => `<p class="p-line">${p.line}</p>`;
+  const facts = (p, n) => p.facts.length ? `<ul class="run"${n ? ` style="--n:${p.facts.length >= 3 ? p.facts.length : 2}"` : ''}>${p.facts.map(f => `<li><b>${f[0]}</b><span>${f[1]}</span></li>`).join('')}</ul>` : '';
+  const meta = p => { const h = (p.note ? `<span class="note">${p.note}</span>` : '') + p.links.map(l => `<span class="pill">${ICONS[l[0]]}${l[1]}</span>`).join(''); return h ? `<div class="p-meta">${h}</div>` : ''; };
+  const skills = p => `<div class="p-skills"><p>Skills</p><div class="chips">${p.skills.map(s => `<span>${s}</span>`).join('')}</div></div>`;
+  function pn(p) {
+    const i = ORDER.indexOf(p.id), a = P[ORDER[(i + 5) % 6]], b = P[ORDER[(i + 1) % 6]];
+    return `<nav class="pn"><a class="prev">${thumb(a.id)}<span><small>Previous</small><b>${a.name}</b></span></a><a class="next"><span><small>Next</small><b>${b.name}</b></span>${thumb(b.id)}</a></nav>`;
+  }
+  const foot = () => `<div class="m-foot"><h2>Contact</h2><p class="mail">nsmits@andrew.cmu.edu</p><div class="ic"><span class="cp">Copy address</span><span aria-label="LinkedIn">${ICONS.li}</span><span aria-label="GitHub">${ICONS.gh}</span><span aria-label="ORCID">${ICONS.orcid}</span><span class="lb">${ICONS.file}CV (PDF)</span></div></div>`;
+
+  /* ---- figures ---- */
+  function lead(p) {
+    const f = p.figs[0];
+    if (f.t === 'net') return `<div class="fg" data-fig="net"><svg data-net></svg><div class="figbar"><p data-netcap></p><div data-netsteps></div></div><p class="fine">Illustrative 9-node episode. A trace exported from the trained policy replaces it.</p></div>`;
+    if (f.t === 'rec') return `<div class="fg" data-fig="rec"><div data-rectabs role="group" aria-label="Request scenario"></div><div class="scroll"><svg data-rec></svg></div><div class="figbar"><p data-reccap></p></div></div>`;
+    if (f.t === 'scale') return `<div class="fg" data-fig="scale" data-d="${f.d}"><svg></svg>${f.todo ? `<p class="fine todo">${f.todo}</p>` : ''}</div>`;
+    if (f.t === 'flow') return `<div class="fg" data-fig="flow"><div class="flowbox"><canvas role="img" aria-label="Phase portrait of the Leslie-Gower predator-prey system: every trajectory spirals into one equilibrium"></canvas><img class="logo" src="${A}sindae-logo-dark.webp" alt="SiNDAE logo" width="800" height="195"><span class="ax" style="left:0;bottom:0">prey x&#8320;</span><span class="ax" style="left:0;top:0">predator x&#8321;</span></div><p class="fine eq">x&#8320;&#8242; = x&#8320;(r&#8321; &minus; a&#8321;x&#8321; &minus; b&#8321;x&#8320;) &nbsp;&nbsp; x&#8321;&#8242; = x&#8321; &middot; NN(x&#8320;, x&#8321;) &nbsp; <span>The network learns the second bracket; the first stays a hard constraint.</span></p></div>`;
+    if (f.t === 'video') return `<div class="fg" data-fig="video"><video class="shot" src="${A}wayfinder-demo.mp4" poster="${A}wayfinder-sidebar.webp" muted loop playsinline${reduce ? ' controls' : ' autoplay'} aria-label="Pressing play on a ticket in the sidebar opens a new Claude Code tab working that ticket"></video><p class="fine">Pressing play on a ticket opens a new tab that works it.</p></div>`;
+    return '';
+  }
+  const sup = f => `<figure class="sup"><div class="plate"><img src="${f.src}" alt="${f.alt}" width="${f.w}" height="${f.h}" loading="lazy"></div><figcaption class="fig-cap">${f.cap}<span class="src">${f.from}</span></figcaption></figure>`;
+  const supB = f => `<figure class="sup b-more"><figcaption class="fig-cap">${f.cap}<span class="src">${f.from}</span></figcaption><div class="plate"><img src="${f.src}" alt="${f.alt}" width="${f.w}" height="${f.h}" loading="lazy"></div></figure>`;
+
+  /* ---- the three layouts ---- */
+  const OPT = {
+    a(p, kind) {
+      const more = p.figs.slice(1);
+      return top(kind) + `<div class="m-body"><section class="a-split"><div class="a-fig">${lead(p)}</div><div class="a-label"><div class="a-head">${head(p)}${lineP(p)}</div><div class="a-rest">${facts(p)}${meta(p)}${skills(p)}</div></div></section>`
+        + (more.length ? `<section class="a-more${more.length === 1 ? ' one' : ''}">${more.map(sup).join('')}</section>` : '') + pn(p) + '</div>' + foot();
+    },
+    b(p, kind) {
+      return top(kind) + `<section class="b-wall"><div class="b-lead">${lead(p)}</div></section><div class="m-body"><section class="b-plate"><div class="b-id">${head(p)}${meta(p)}</div><div class="b-txt">${lineP(p)}${facts(p, true)}</div></section>`
+        + p.figs.slice(1).map(supB).join('') + `<div class="b-sk">${skills(p)}</div>` + pn(p) + '</div>' + foot();
+    },
+    c(p, kind) {
+      const ph = kind === 'phone', w = ph ? 390 : 1200, h = 300;
+      return `<section class="c-land"><div class="m-land" data-land data-w="${w}" data-h="${h}"></div><span class="c-name">Nicolas Smits</span><nav class="m-nav">${navItems(kind)}</nav>`
+        + `<div class="c-who"><h1>${p.name}</h1><p class="p-where">${whereLine(p)}</p><p class="m-read" data-read></p></div></section>`
+        + `<div class="m-body"><section class="c-cols"><aside class="c-rail">${lineP(p)}${facts(p)}${meta(p)}${skills(p)}</aside><div class="c-figs">${lead(p)}${p.figs.slice(1).map(sup).join('')}</div></section>` + pn(p) + '</div>' + foot();
+    }
+  };
+
+  /* ---- mounting live figures ---- */
+  const theme = { ink: FG, dim: FG2, fill: BG, fresh: CORAL, bad: CORAL, pulse: CORAL, hi: CORAL, font: '"Onest",system-ui,sans-serif' };
+  let stops = [];
+  const flowLines = {};
+  /* drawn at roughly display size, so the streamline spacing reads the same in the desktop and phone mocks */
+  function flow(cv, ph) {
+    const W = ph ? 560 : 1000, H = W * .625, ctx = cv.getContext('2d'); cv.width = W; cv.height = H;
+    const fld = NS.leslieGower(W, H, 0);
+    if (!flowLines[W]) flowLines[W] = NS.streamlines(Object.assign({ w: W, h: H, dsep: ph ? 13 : 15 }, fld));
+    const L = flowLines[W], n = L.length; let raf = 0, t0 = 0;
+    function paint(k) {
+      ctx.clearRect(0, 0, W, H); ctx.lineWidth = ph ? 1.1 : 1.3; ctx.strokeStyle = FG; ctx.globalAlpha = .85; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      for (let i = 0; i < n; i++) { const s = (i / n) * .62, q = Math.max(0, Math.min(1, (k - s) / .38)); if (q <= 0) continue;
+        const p = L[i], m = Math.max(2, Math.floor(p.length * (1 - Math.pow(1 - q, 3)))); ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]); for (let j = 1; j < m; j++) ctx.lineTo(p[j][0], p[j][1]); ctx.stroke(); }
+      ctx.globalAlpha = 1; ctx.fillStyle = CORAL; ctx.beginPath(); ctx.arc(fld.eq[0], fld.eq[1], 8, 0, 7); ctx.fill();
+    }
+    if (reduce) paint(1); else { const tick = now => { if (!t0) t0 = now; const k = Math.min(1, (now - t0) / 2600); paint(k); if (k < 1) raf = requestAnimationFrame(tick); }; raf = requestAnimationFrame(tick); }
+    stops.push(() => cancelAnimationFrame(raf));
+  }
+
+  /* C's landscape: the home objective, close in on one minimum, with the neighbours as the previous and next projects */
+  const STOPS = [[0, [13, 7, 34]], [.3, [42, 22, 112]], [.56, [112, 68, 232]], [.8, [238, 107, 96]], [1, [255, 214, 191]]];
+  function ramp(v) { for (let i = 1; i < STOPS.length; i++) if (v <= STOPS[i][0]) { const [a, X] = STOPS[i - 1], [b, Y] = STOPS[i], k = (v - a) / (b - a); return X.map((q, j) => q + (Y[j] - q) * k); } return STOPS[4][1]; }
+  const svgEl = (t, a, p) => { const e = document.createElementNS(SVGNS, t); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+  function land(root, p, screen) {
+    const W = +root.dataset.w, H = +root.dataset.h, R = W / H, ph = W < 500, i = ORDER.indexOf(p.id);
+    const prev = P[ORDER[(i + 5) % 6]], next = P[ORDER[(i + 1) % 6]];
+    const spots = ph ? { cur: [.76, .34], prev: [.16, .33], next: [.44, .17], who: [.4, .9] } : { cur: [.64, .44], prev: [.36, .2], next: [.9, .62], who: [.22, .86] };
+    const pts = [
+      { id: p.id, name: p.short, q: spots.cur, c: .92, s: ph ? .16 : .19, hit: true },
+      { id: prev.id, name: prev.short, q: spots.prev, c: .62, s: ph ? .1 : .12, tag: 'previous' },
+      { id: next.id, name: next.short, q: spots.next, c: .62, s: ph ? .1 : .12, tag: 'next' },
+      { id: 'who', q: spots.who, c: .7, s: ph ? .3 : .34, hidden: true }
+    ].map(o => Object.assign(o, { x: o.q[0] * R, y: o.q[1] }));
+    /* the strip holds three minima where home holds seven, so it sits lower to keep the same share of dark bands */
+    const F = (x, y) => { let f = -.4 + .12 * Math.sin(2.1 * x + .6) * Math.cos(1.7 * y - .4) + .08 * Math.sin(3.3 * y + 1.2 * x + 1);
+      for (const o of pts) { const dx = x - o.x, dy = y - o.y; f -= o.c * Math.exp(-(dx * dx + dy * dy) / (2 * o.s * o.s)); } return f; };
+    const cv = document.createElement('canvas'); cv.width = Math.round(W / 2); cv.height = Math.round(H / 2);
+    cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', `Contour landscape with the solver converged on ${p.short}`);
+    const svg = document.createElementNS(SVGNS, 'svg'); svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('aria-hidden', 'true');
+    root.append(cv, svg);
+    const ctx = cv.getContext('2d'), w = cv.width, h = cv.height, im = ctx.createImageData(w, h), band = new Int8Array(w * h);
+    for (let j = 0; j < h; j++) for (let k = 0; k < w; k++) band[j * w + k] = Math.min(12, Math.floor(Math.max(0, Math.min(1, (F((k + .5) / h, (j + .5) / h) + .95) / 1.2)) * 13));
+    for (let j = 0; j < h; j++) for (let k = 0; k < w; k++) { const m = j * w + k, b = band[m], c = ramp(b / 12);
+      const e = (k < w - 1 && band[m + 1] !== b) || (j < h - 1 && band[m + w] !== b) ? .75 : 1, n = (((k * 73 + j * 151) % 17) / 17 - .5) * 9;
+      im.data[m * 4] = c[0] * e + n; im.data[m * 4 + 1] = c[1] * e + n; im.data[m * 4 + 2] = c[2] * e + n; im.data[m * 4 + 3] = 255; }
+    ctx.putImageData(im, 0, 0);
+    pts.forEach(o => { if (o.hidden) return; const l = document.createElement('span'); l.className = 'lab' + (o.hit ? ' hit' : '');
+      l.innerHTML = `<i>x*</i>${o.name}${o.tag ? `<small>${o.tag}</small>` : ''}`; l.style.left = (o.q[0] * 100) + '%'; l.style.top = (o.q[1] * 100) + '%'; root.appendChild(l); });
+    /* descend from a start above the minimum; take the first start that converges on it */
+    const cur = pts[0], starts = ph ? [[.62, .1], [.95, .5], [.6, .4]] : [[.5, .1], [.8, .14], [.5, .6], [.78, .3]];
+    let path = null;
+    for (const s of starts) {
+      const pa = [[s[0] * R, s[1]]]; let x = s[0] * R, y = s[1], vx = 0, vy = 0; const e = 1e-3;
+      for (let k = 0; k < 260; k++) { const gx = (F(x + e, y) - F(x - e, y)) / (2 * e), gy = (F(x, y + e) - F(x, y - e)) / (2 * e);
+        vx = .8 * vx - .011 * gx; vy = .8 * vy - .011 * gy; x += vx; y += vy; pa.push([x, y]); if (Math.hypot(gx, gy) < .02 && Math.hypot(vx, vy) < 4e-4) break; }
+      const end = pa[pa.length - 1]; if (Math.hypot(end[0] - cur.x, end[1] - cur.y) < .08) { path = pa; break; }
+    }
+    if (!path) return;
+    const read = screen.querySelector('[data-read]'), lw = ph ? 1.4 : 1.8;
+    const line = svgEl('polyline', { fill: 'none', stroke: FG, 'stroke-width': lw, 'stroke-linejoin': 'round' }, svg), dots = svgEl('g', { fill: FG }, svg);
+    svgEl('circle', { cx: path[0][0] * H, cy: path[0][1] * H, r: 5, fill: 'none', stroke: FG, 'stroke-width': lw }, svg);
+    let k = 0, raf = 0;
+    function step() {
+      const n = reduce ? path.length : Math.min(path.length, k + 2);
+      for (; k < n; k++) svgEl('circle', { cx: path[k][0] * H, cy: path[k][1] * H, r: ph ? 1.7 : 2.1 }, dots);
+      line.setAttribute('points', path.slice(0, k).map(q => (q[0] * H).toFixed(1) + ',' + (q[1] * H).toFixed(1)).join(' '));
+      if (k < path.length) { read.innerHTML = `Iteration <b>${k}</b>, f = <b>${F(path[k - 1][0], path[k - 1][1]).toFixed(3)}</b>`; raf = requestAnimationFrame(step); }
+      else { const end = path[path.length - 1]; svgEl('circle', { cx: end[0] * H, cy: end[1] * H, r: 9, fill: 'none', stroke: CORAL, 'stroke-width': 2.4 }, svg);
+        read.innerHTML = `Converged in <b>${path.length - 1}</b> iterations on <b>${p.short}</b>.`; }
+    }
+    step(); stops.push(() => cancelAnimationFrame(raf));
+  }
+
+  function mount(screen, p) {
+    screen.querySelectorAll('[data-fig]').forEach(el => {
+      const t = el.dataset.fig;
+      if (t === 'net') { const net = NS.netFigure(el, Object.assign({}, theme, { dim: '#7C6BB8' })); stops.push(() => net.stop()); }
+      if (t === 'rec') { const rec = NS.recFigure(el, Object.assign({}, theme, { fill: '#1E1244', radius: 23 })); stops.push(() => rec.stop()); }
+      if (t === 'scale') NS.scale(el.querySelector('svg'), NS[el.dataset.d], Object.assign({ ticks: el.dataset.d === 'sepsis' ? 6 : 8 }, theme));
+      if (t === 'flow') flow(el.querySelector('canvas'), screen.dataset.kind === 'phone');
+    });
+    screen.querySelectorAll('[data-land]').forEach(el => land(el, p, screen));
+  }
+
+  /* ---- switcher, rendering, fitting ---- */
+  const screens = [...document.querySelectorAll('.screen[data-opt]')];
+  function fit() { screens.forEach(s => { s.style.width = s.dataset.w + 'px'; s.style.zoom = s.parentElement.clientWidth / +s.dataset.w; }); }
+  let curId = 'thesis';
+  try { const saved = localStorage.getItem('project-options:id'); if (P[saved]) curId = saved; } catch (e) { /* storage blocked: start on the thesis */ }
+  function render(id) {
+    curId = id; stops.forEach(f => f()); stops = [];
+    const p = P[id];
+    screens.forEach(s => { s.innerHTML = OPT[s.dataset.opt](p, s.dataset.kind); mount(s, p); });
+    pick.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id ? 'true' : 'false'));
+    try { localStorage.setItem('project-options:id', id); } catch (e) { /* not remembered */ }
+  }
+  const pick = document.getElementById('pick');
+  pick.innerHTML = ORDER.map(id => `<button type="button" data-id="${id}" aria-pressed="false">${P[id].short}</button>`).join('');
+  pick.addEventListener('click', e => { const b = e.target.closest('button[data-id]'); if (b && b.dataset.id !== curId) render(b.dataset.id); });
+  fit(); render(curId); addEventListener('resize', fit);
+})();
+</script>
