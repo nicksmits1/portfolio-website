@@ -6,11 +6,15 @@ You are the owner and long term maintainer of this codebase, and its design is u
 
 ## State
 
-Direction chosen: **draft E, descent** (`drafts/e-descent.html`): its palette, typefaces, landscape solver, iteration readout and peach contact footer stay. Every project lives on its own page, `/projects/<id>`, and the site also covers publications, experience, education, a CV link and a headshot (see `PRODUCT.md`). Nicolas is choosing the home layout and skills placement from `drafts/options/layout-options.html`. Once he picks, record the direction contract with `/impeccable`, then scaffold Astro (see `## Stack` in `PRODUCT.md`) and build. `DESIGN.md` is written at the end, from the built site. Layout and page changes get an options artifact for Nicolas to pick from before they are built. Hosting is Cloudflare Pages, deploying from the public GitHub repo `nicksmits1/portfolio-website`.
+Direction chosen: **draft E, descent** (`drafts/e-descent.html`): its palette, typefaces, landscape solver, iteration readout and peach contact footer stay. Every project lives on its own page, `/projects/<id>`, and the site also covers publications, experience, education, a CV link and a headshot (see `PRODUCT.md`). Home layout chosen (round 2 of `drafts/options/layout-options.html`): layout A (landscape hero with name, headshot, links), a Latest strip directly under it, research and projects, publications | experience, teaching and education, then the skills landscape at the bottom of home turned sideways (skill list left, landscape right), then the peach contact footer. Open: which skills list style (K1 grouped chips, K2 ranked list, K3 matrix). Once he picks, record the direction contract with `/impeccable`, then scaffold Astro (see `## Stack` in `PRODUCT.md`) and build. `DESIGN.md` is written at the end, from the built site. Layout and page changes get an options artifact for Nicolas to pick from before they are built. Hosting is Cloudflare Pages, deploying from the public GitHub repo `nicksmits1/portfolio-website`.
 
 ## The repo is public
 
-Commit only what may appear on the public site. The CV (`Nicolas_Smits_Resume_Oct_2026_ML.md`) holds a personal phone number, so it stays local and gitignored. Read it for facts; never commit it.
+Commit only what may appear on the public site. The private CV (`Nicolas_Smits_Resume_Oct_2026_ML.md`) holds a personal phone number, so it stays local and gitignored. Read it for facts; never commit it. The public CV is `content/cv/cv.md`; `tools/cv/build.sh` renders it to the downloadable `content/cv/Nicolas_Smits_CV.pdf` (rebuild and commit both after any edit).
+
+`/assets/` at the repo root is Nicolas's upload inbox and is gitignored. Process what he drops there (resize, strip metadata) into `content/assets/<project or profile>/` and commit only the processed copy.
+
+Student work is never source material. `../Sys&Tool TA` holds submissions and grades; read only its course-level READMEs.
 
 ## Sources are read-only
 

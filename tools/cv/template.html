@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>$title$, CV</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400&family=Onest:wght@400;500;600&display=swap">
+<style>
+/* The site's type on paper: Unbounded for the name and section heads, Onest for text, the site's coral as the only colour. */
+:root{--ink:#140C2E;--ink2:#4A3F6B;--rule:#D9D2EA;--coral:#E2584A;--disp:"Unbounded",system-ui,sans-serif;--text:"Onest",system-ui,sans-serif}
+@page{size:Letter;margin:.55in .6in .6in}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;color:var(--ink);font:400 9.6pt/1.42 var(--text)}
+header{display:grid;gap:3pt;padding-bottom:10pt;border-bottom:1.4pt solid var(--ink);margin-bottom:4pt}
+h1{font:400 23pt/1 var(--disp);letter-spacing:-.04em;margin:0}
+.sub{margin:2pt 0 0;font-weight:500;font-size:10.5pt}
+.contact{margin:0;color:var(--ink2)}
+.contact span+span::before{content:"·";margin:0 .5em;color:var(--coral)}
+h2{font:400 10.5pt/1 var(--disp);letter-spacing:-.02em;margin:15pt 0 6pt;padding-bottom:4pt;border-bottom:.6pt solid var(--rule);break-after:avoid}
+h2::before{content:"";display:inline-block;width:5pt;height:5pt;border-radius:50%;background:var(--coral);margin-right:6pt;vertical-align:1pt}
+.entry{margin-top:7pt;break-inside:avoid;break-after:avoid}
+.line-block{margin:0}
+.r{float:right;margin-left:12pt;color:var(--ink2)}
+.entry em{color:var(--ink2)}
+ul{margin:2pt 0 0;padding-left:12pt}
+li{margin:1.5pt 0;break-inside:avoid}
+li::marker{color:var(--coral)}
+h2+ul{margin-top:0}
+strong{font-weight:600}
+footer{margin-top:14pt;color:var(--ink2);font-size:8pt}
+</style>
+</head>
+<body>
+<header>
+<h1>$title$</h1>
+<p class="sub">$subtitle$</p>
+<p class="contact">$for(contact)$<span>$contact$</span>$endfor$</p>
+</header>
+$body$
+<footer>Updated $updated$.</footer>
+</body>
+</html>

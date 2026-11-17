@@ -2,8 +2,9 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Onest:wght@400;500;600&family=STIX+Two+Text:ital@1&display=swap">
 <style>
-/* Layout: an options board in the site's own world. Each option is a scaled mock of the real page,
-   desktop beside phone, with its trade-offs underneath. Mocks are drawn at design size and zoomed to fit. */
+/* Layout: an options board in the site's own world. Round 2: the chosen page (A with Latest, skills at the
+   bottom) as one full mock, then three ways to set the skills list beside its landscape. Mocks are drawn at
+   design size and zoomed to fit their frame. */
 :root{
   color-scheme:dark;
   --bg:#120A2A; --panel:#1A1038; --ink:#0D0722; --fg:#F3EDFF; --fg2:#B9AAE8; --dim:#7C6BB8;
@@ -25,7 +26,6 @@ a{color:inherit}
 .toc{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.2rem}
 .toc a{font:500 .9rem/1 var(--text);padding:.5rem .8rem;border:1px solid var(--hair);border-radius:999px;text-decoration:none}
 .toc a:hover{border-color:var(--coral);color:var(--coral)}
-.toc span{align-self:center;color:var(--dim);font-size:.85rem;margin:0 .3rem}
 .decision{border-top:1px solid var(--hair);padding-block:clamp(2rem,5vw,3.2rem)}
 .decision>h2{font:400 clamp(1.4rem,3vw,2rem)/1.1 var(--disp);letter-spacing:-.035em;margin:0 0 .5rem}
 .decision>p{margin:0 0 2rem;color:var(--fg2);max-width:70ch}
@@ -38,19 +38,18 @@ a{color:inherit}
 @media(min-width:860px){.views.two{grid-template-columns:minmax(0,1fr) 250px}}
 .cap{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 .45rem}
 .frame{border:1px solid var(--hair);border-radius:10px;overflow:hidden;background:var(--ink);min-width:0}
-.screen{transform-origin:0 0}
 .notes{display:grid;gap:1rem 2.4rem;font-size:.95rem}
-@media(min-width:860px){.notes{grid-template-columns:1.1fr 1fr 1fr}}
+@media(min-width:860px){.notes{grid-template-columns:repeat(3,1fr)}}
 .notes h4{font:600 .78rem/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 .5rem}
 .notes ol,.notes ul{margin:0;padding-left:1.1rem}
 .notes li{margin-bottom:.25rem}
 .notes p{margin:0}
-.took{display:grid;gap:1rem 2.4rem;padding-block:clamp(2rem,5vw,3rem) clamp(3rem,7vw,5rem);border-top:1px solid var(--hair)}
-@media(min-width:860px){.took{grid-template-columns:1fr 1fr}}
-.took h2{font:400 1.3rem/1.15 var(--disp);letter-spacing:-.03em;margin:0 0 .6rem;grid-column:1/-1}
-.took h4{font:600 .78rem/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 .5rem}
-.took ul{margin:0;padding-left:1.1rem;color:var(--fg2)}
-.took li{margin-bottom:.3rem}.took li b{color:var(--fg);font-weight:600}
+.changes{display:grid;gap:1rem 2.4rem;padding-block:clamp(2rem,5vw,3rem) clamp(3rem,7vw,5rem);border-top:1px solid var(--hair)}
+@media(min-width:860px){.changes{grid-template-columns:1fr 1fr}}
+.changes h2{font:400 1.3rem/1.15 var(--disp);letter-spacing:-.03em;margin:0 0 .6rem;grid-column:1/-1}
+.changes h4{font:600 .78rem/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 .5rem}
+.changes ul{margin:0;padding-left:1.1rem;color:var(--fg2)}
+.changes li{margin-bottom:.3rem}.changes li b{color:var(--fg);font-weight:600}
 
 /* ---- inside the mocks: design-size px, scaled by zoom ---- */
 .screen{background:var(--bg);color:var(--fg);font:400 16px/1.5 var(--text);position:relative}
@@ -62,12 +61,10 @@ a{color:inherit}
 .lab i{font:italic 15px/1 var(--math);margin-right:4px;font-weight:400}
 .lab.hit{background:var(--coral);color:var(--bg)}
 .lab.off{opacity:.3}
-.lab.sec{font:400 15px/1 var(--disp);letter-spacing:-.02em;padding:6px 11px;background:rgba(255,217,194,.92);color:var(--ink)}
-.lab.sec.hit{background:var(--coral)}
 .m-nav{position:absolute;top:0;right:0;z-index:2;display:flex;gap:24px;padding:18px 44px 12px 20px;font:500 15px/1 var(--text);background:rgba(13,7,34,.72);border-bottom-left-radius:14px}
 .m-who{position:absolute;left:44px;bottom:40px;z-index:1;pointer-events:none;max-width:640px}
 .m-id{display:flex;gap:22px;align-items:flex-end}
-.m-head{flex:none;width:118px;height:118px;border-radius:14px;border:1.5px dashed var(--peach);background:repeating-linear-gradient(135deg,rgba(255,217,194,.14) 0 6px,transparent 6px 12px),var(--ink);display:grid;place-items:center;text-align:center;font:600 11px/1.3 var(--text);letter-spacing:.08em;color:var(--peach)}
+.m-head{flex:none;width:118px;height:118px;border-radius:14px;object-fit:cover;object-position:50% 22%;display:block;box-shadow:0 0 0 1px rgba(243,237,255,.3)}
 .m-h1{font:300 76px/.96 var(--disp);letter-spacing:-.04em;margin:0}
 .m-focus{margin:16px 0 0;font:500 18px/1.4 var(--text);max-width:34ch}
 .m-read{margin:10px 0 0;font-size:15px;color:var(--fg2);min-height:22px}
@@ -75,9 +72,9 @@ a{color:inherit}
 .m-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;pointer-events:auto}
 .m-links span{font:500 14px/1 var(--text);padding:8px 12px;border:1px solid var(--hair);border-radius:999px;background:rgba(13,7,34,.6)}
 .m-links span.tbd{border-style:dashed;color:var(--fg2)}
+.m-links span.cv{background:var(--peach);color:var(--ink);border-color:var(--peach)}
 .m-body{padding:0 44px}
 .m-sec{padding:56px 0;border-bottom:1px solid var(--hair)}
-.m-sec:last-child{border-bottom:0}
 .m-sec h2{font:400 30px/1.1 var(--disp);letter-spacing:-.035em;margin:0 0 26px}
 .m-two{display:grid;grid-template-columns:1fr 1fr;gap:56px}
 .row{display:grid;grid-template-columns:168px 300px 1fr 90px;gap:28px;align-items:center;padding:16px 0;border-top:1px solid var(--hair2)}
@@ -86,7 +83,6 @@ a{color:inherit}
 .row small{display:block;color:var(--fg2);font-size:13px;margin-top:4px}
 .row p{margin:0;font-size:15px;color:var(--fg2);max-width:48ch}
 .row em{font-style:normal;font-size:13px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums}
-.row.on{background:linear-gradient(90deg,rgba(255,124,107,.12),transparent 70%)}
 .item{display:grid;grid-template-columns:92px 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--hair2);font-size:15px}
 .item em{font-style:normal;color:var(--dim);font-size:13px;font-variant-numeric:tabular-nums;padding-top:2px}
 .item b{font-weight:600;display:block}
@@ -94,54 +90,55 @@ a{color:inherit}
 .item.pend b::after{content:"pending";margin-left:8px;font:500 11px/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--coral);border:1px solid var(--coral);border-radius:999px;padding:2px 6px;vertical-align:2px}
 .subh{font:600 12px/1 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:22px 0 4px}
 .subh:first-child{margin-top:0}
-.m-foot{background:var(--peach);color:var(--ink);padding:56px 44px}
-.m-foot h2{font:300 44px/1 var(--disp);letter-spacing:-.04em;margin:0 0 16px}
-.m-foot .mail{font:400 30px/1.15 var(--disp);letter-spacing:-.035em;margin:0 0 18px}
-.m-foot .r{display:flex;gap:22px;align-items:center;font-weight:600;font-size:15px}
-.m-foot .r span:first-child{background:var(--ink);color:var(--peach);border-radius:999px;padding:11px 16px}
-.chips{display:flex;flex-wrap:wrap;gap:7px}
-.chips button{font:500 14px/1 var(--text);padding:8px 12px;border:1px solid var(--hair);border-radius:999px;background:rgba(13,7,34,.6);color:var(--fg);cursor:pointer}
-.chips button:hover{border-color:var(--fg)}
-.chips button[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:var(--bg)}
-
-/* B: profile beside the landscape */
-.m-split{display:grid;grid-template-columns:480px 1fr;border-bottom:1px solid var(--hair)}
-.m-prof{padding:30px 44px 40px;display:flex;flex-direction:column}
-.m-prof .brand{font:400 15px/1 var(--disp);letter-spacing:-.02em;margin-bottom:auto;display:flex;gap:22px;align-items:center}
-.m-prof .brand nav{display:flex;gap:18px;font:500 14px/1 var(--text);color:var(--fg2)}
-.m-prof .m-head{width:172px;height:206px;margin-bottom:24px}
-.m-prof .m-h1{font-size:60px}
-.m-prof .bio{margin:14px 0 0;font-size:15px;color:var(--fg2);max-width:40ch}
-.m-panel{position:relative;border-left:1px solid var(--hair)}
 .latest{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
 .latest div{border-top:2px solid var(--coral);padding-top:12px}
 .latest em{font-style:normal;display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
 .latest b{display:block;font:400 16px/1.25 var(--disp);letter-spacing:-.025em;margin-top:8px}
 .latest span{display:block;font-size:13px;color:var(--fg2);margin-top:6px}
+.m-latest{padding:30px 0 34px;border-bottom:1px solid var(--hair)}
+.m-latest .lh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px}
+.m-latest .lh b{font:600 12px/1 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.m-latest .lh span{font-size:13px;color:var(--fg2)}
+.m-foot{background:var(--peach);color:var(--ink);padding:56px 44px}
+.m-foot h2{font:300 44px/1 var(--disp);letter-spacing:-.04em;margin:0 0 16px}
+.m-foot .mail{font:400 30px/1.15 var(--disp);letter-spacing:-.035em;margin:0 0 18px}
+.m-foot .r{display:flex;gap:22px;align-items:center;font-weight:600;font-size:15px}
+.m-foot .r span:first-child{background:var(--ink);color:var(--peach);border-radius:999px;padding:11px 16px}
 
-/* C: profile band under a landscape of sections */
-.band{display:grid;grid-template-columns:140px 1fr auto;gap:30px;align-items:center;padding:34px 44px;border-bottom:1px solid var(--hair)}
-.band .m-head{width:140px;height:140px}
-.band .m-links{margin:0;justify-content:flex-end;max-width:330px}
-.band p{margin:0;font-size:16px;color:var(--fg2);max-width:56ch}
-.band p b{color:var(--fg);font:400 22px/1.2 var(--disp);letter-spacing:-.03em;display:block;margin-bottom:8px}
-
-/* skills page / section */
-.s-head{padding:44px 44px 22px}
-.s-head h2{font:300 54px/1 var(--disp);letter-spacing:-.04em;margin:0 0 18px}
-.s-head p{margin:14px 0 0;color:var(--fg2);font-size:15px}
-.s-stage{position:relative;border-block:1px solid var(--hair)}
-.s-cats{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;padding:40px 44px 56px}
-.s-cats b{display:block;font:400 17px/1.2 var(--disp);letter-spacing:-.03em;margin-bottom:10px}
-.s-cats span{display:block;font-size:14px;color:var(--fg2);line-height:1.7}
-.s-hchips{position:absolute;left:44px;right:44px;top:66px;z-index:2}
-.s-hchips .chips{max-width:900px}
-.ghost{opacity:.4}
+/* skills section: list left, landscape right */
+.sk{display:grid;grid-template-columns:470px 1fr;border-bottom:1px solid var(--hair)}
+.sk-l{padding:48px 36px 40px 44px;display:flex;flex-direction:column;min-width:0}
+.sk-l h2{font:300 46px/1 var(--disp);letter-spacing:-.04em;margin:0 0 10px}
+.sk-l .m-read{margin:0 0 22px}
+.sk-r{position:relative;border-left:1px solid var(--hair)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button,.slist button,.mx button{font:500 14px/1 var(--text);color:var(--fg);cursor:pointer;background:none}
+.chips button{padding:8px 12px;border:1px solid var(--hair);border-radius:999px}
+.chips button:hover{border-color:var(--fg)}
+.chips button[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:var(--bg)}
+.grp+.grp{margin-top:18px}
+.grp p{margin:0 0 8px;font:600 12px/1 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.slist{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}
+.slist button{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 2px;border:0;border-top:1px solid var(--hair2);text-align:left}
+.slist button:hover{color:var(--coral)}
+.slist button i{font-style:normal;display:flex;gap:3px}
+.slist button i u{width:7px;height:7px;border-radius:50%;background:var(--dim);display:block}
+.slist button[aria-pressed="true"]{color:var(--coral)}
+.slist button[aria-pressed="true"] i u{background:var(--coral)}
+.mx{display:grid;grid-template-columns:1fr repeat(6,34px);align-items:center;font-size:14px}
+.mx .ph{height:96px;position:relative}
+.mx .ph span{position:absolute;left:50%;bottom:6px;transform-origin:0 50%;transform:rotate(-60deg);white-space:nowrap;font:500 12px/1 var(--text);color:var(--fg2)}
+.mx button{grid-column:1/-1;display:grid;grid-template-columns:1fr repeat(6,34px);align-items:center;border:0;border-top:1px solid var(--hair2);padding:6px 0;text-align:left}
+.mx button:hover{color:var(--coral)}
+.mx button u{justify-self:center;width:9px;height:9px;border-radius:50%;border:1px solid var(--dim)}
+.mx button u.y{background:var(--fg2);border-color:var(--fg2)}
+.mx button[aria-pressed="true"]{color:var(--coral)}
+.mx button[aria-pressed="true"] u.y{background:var(--coral);border-color:var(--coral)}
 
 /* phone mocks */
 .ph .m-nav{padding:14px 16px 10px 14px;gap:16px;font-size:13px}
 .ph .m-who{left:16px;bottom:22px;right:16px}
-.ph .m-head{width:64px;height:64px;font-size:8px;border-radius:10px}
+.ph .m-head{width:64px;height:64px;border-radius:10px}
 .ph .m-h1{font-size:40px}
 .ph .m-focus{font-size:15px;margin-top:10px}
 .ph .m-read{font-size:13px}
@@ -156,211 +153,130 @@ a{color:inherit}
 .ph .row em{display:none}
 .ph .item{grid-template-columns:62px 1fr;gap:10px;font-size:13px}
 .ph .item span{font-size:12px}
-.ph .m-foot{padding:34px 16px}
-.ph .m-foot h2{font-size:30px}.ph .m-foot .mail{font-size:18px}.ph .m-foot .r{font-size:13px;gap:14px;flex-wrap:wrap}
-.ph .lab{font-size:12px;padding:2px 6px}.ph .lab i{font-size:13px}
-.ph .lab.sec{font-size:12px;padding:4px 8px}
-.ph .m-prof{padding:18px 16px 26px}
-.ph .m-prof .brand{margin-bottom:22px}
-.ph .m-prof .m-head{width:96px;height:116px;margin-bottom:14px}
-.ph .m-prof .m-h1{font-size:38px}
-.ph .m-prof .bio{font-size:13px}
+.ph .m-latest{padding:22px 0}
 .ph .latest{display:flex;overflow:hidden;gap:14px}
 .ph .latest div{flex:0 0 150px}
 .ph .latest b{font-size:14px}
-.ph .band{grid-template-columns:72px 1fr;gap:14px;padding:22px 16px}
-.ph .band .m-head{width:72px;height:72px}
-.ph .band .m-links{grid-column:1/-1;justify-content:flex-start;max-width:none}
-.ph .band p{font-size:13px}.ph .band p b{font-size:17px}
+.ph .sk{grid-template-columns:1fr}
+.ph .sk-l{padding:34px 16px 20px}
+.ph .sk-l h2{font-size:30px}
+.ph .sk-r{border-left:0;border-top:1px solid var(--hair)}
+.ph .chips{flex-wrap:nowrap;overflow:hidden}
+.ph .chips button{font-size:12px;padding:6px 9px;white-space:nowrap}
+.ph .m-foot{padding:34px 16px}
+.ph .m-foot h2{font-size:30px}.ph .m-foot .mail{font-size:18px}.ph .m-foot .r{font-size:13px;gap:14px;flex-wrap:wrap}
+.ph .lab{font-size:12px;padding:2px 6px}.ph .lab i{font-size:13px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
 <header class="wrap intro">
-  <h1>Layout options</h1>
-  <p>Two decisions, each with three options, all built in draft E's palette, type and landscape. <b>Click any landscape to run the solver</b>, and use the skill chips in the second set; they work.</p>
-  <p>Pick one per decision, or mix: "B, with skills as S1" is a fine answer. Section content comes from your CV and project files; the wording is placeholder. Dashed boxes are assets you would upload (headshot) or links still to come (ORCID).</p>
-  <nav class="toc" aria-label="Options"><a href="#opt-a">A</a><a href="#opt-b">B</a><a href="#opt-c">C</a><span>skills</span><a href="#opt-s1">S1</a><a href="#opt-s2">S2</a><a href="#opt-s3">S3</a><span>·</span><a href="#took">What came from johnspeaks.com</a></nav>
+  <h1>Layout options, round 2</h1>
+  <p>Your picks combined: <b>layout A</b>, the <b>Latest strip</b> straight under the landscape, and the <b>skills landscape at the bottom of home</b>, now turned sideways with the list on the left and the landscape on the right.</p>
+  <p>One question is left: how to set that skills list. The full page below uses the grouped chips (K1); the second section shows all three. Click any landscape to run the solver; every skill control works.</p>
+  <nav class="toc" aria-label="Sections"><a href="#page">The full page</a><a href="#opt-k1">K1</a><a href="#opt-k2">K2</a><a href="#opt-k3">K3</a><a href="#changes">What changed</a></nav>
 </header>
 
 <main class="wrap">
-<section class="decision" id="home">
-  <h2>1. Home page structure</h2>
-  <p>Every option has the same sections: who you are, research and projects (each row opens its own page), publications and talks, experience and education, contact. They differ in what gets the first screen and what the landscape does.</p>
-
-  <!-- A -->
-  <article class="opt" id="opt-a">
-    <header><span class="tag">A</span><h3>Landscape first</h3><p>Draft E's hero, unchanged in spirit: the landscape fills the first screen and your name, headshot and links sit on it. Everything else follows as a calm list.</p></header>
+<section class="decision" id="page">
+  <h2>The home page</h2>
+  <p>Latest takes the place it had in option B: first thing below the landscape, before the project list. Teaching sits with experience and education. The CV link is the peach one in the hero and opens the downloadable PDF.</p>
+  <article class="opt">
     <div class="views two">
       <div><p class="cap">Desktop, 1200 px</p><div class="frame"><div class="screen" data-w="1200">
         <div class="m-hero" style="height:640px">
           <div class="m-land" data-w="1200" data-h="640" data-map="wide" data-start=".47,.5" data-contact="1"></div>
-          <nav class="m-nav"><span>Research</span><span>Publications</span><span>Experience</span><span>CV</span><span>Contact</span></nav>
-          <div class="m-who"><div class="m-id"><div class="m-head">HEADSHOT<br>UPLOAD</div><p class="m-h1">Nicolas<br>Smits</p></div>
+          <nav class="m-nav"><span>Research</span><span>Publications</span><span>Experience</span><span>Skills</span><span>CV</span><span>Contact</span></nav>
+          <div class="m-who"><div class="m-id"><img class="m-head" data-hs alt="Nicolas Smits"><p class="m-h1">Nicolas<br>Smits</p></div>
             <p class="m-focus">Optimisation, machine learning and reinforcement learning for process systems.</p>
             <div class="m-links" data-part="links"></div><p class="m-read">Click anywhere to start a solver there.</p></div>
         </div>
-        <div class="m-body"><div class="m-sec"><h2>Research and projects</h2><div data-part="rows"></div></div>
-          <div class="m-sec m-two"><div><h2>Publications and talks</h2><div data-part="pubs"></div></div><div><h2>Experience and education</h2><div data-part="timeline"></div></div></div></div>
+        <div class="m-body">
+          <div class="m-latest"><div class="lh"><b>Latest</b><span>All news</span></div><div class="latest" data-part="latest"></div></div>
+          <div class="m-sec"><h2>Research and projects</h2><div data-part="rows"></div></div>
+          <div class="m-sec m-two"><div><h2>Publications</h2><div data-part="pubs"></div></div><div><h2>Experience and education</h2><div data-part="timeline"></div></div></div>
+        </div>
+        <div class="sk"><div class="sk-l"><h2>Skills</h2><p class="m-read">Pick a skill. The projects that use it stay deep; the rest flatten out.</p><div data-skills-ui="k1" data-for="full"></div></div>
+          <div class="sk-r"><div class="m-land" data-w="730" data-h="560" data-map="side" data-skills="full"></div></div></div>
         <div data-part="foot"></div>
       </div></div></div>
       <div><p class="cap">Phone, 390 px</p><div class="frame"><div class="screen ph" data-w="390">
         <div class="m-hero" style="height:600px">
           <div class="m-land" data-w="390" data-h="600" data-map="tall" data-start=".5,.2"></div>
           <nav class="m-nav"><span>Research</span><span>CV</span><span>Contact</span></nav>
-          <div class="m-who"><div class="m-id"><div class="m-head">HEADSHOT</div><p class="m-h1">Nicolas<br>Smits</p></div>
+          <div class="m-who"><div class="m-id"><img class="m-head" data-hs alt="Nicolas Smits"><p class="m-h1">Nicolas<br>Smits</p></div>
             <div class="m-links" data-part="links"></div><p class="m-read"></p></div>
         </div>
-        <div class="m-body"><div class="m-sec"><h2>Research and projects</h2><div data-part="rows"></div></div>
-          <div class="m-sec"><h2>Publications and talks</h2><div data-part="pubs"></div></div>
-          <div class="m-sec"><h2>Experience and education</h2><div data-part="timeline"></div></div></div>
-        <div data-part="foot"></div>
-      </div></div></div>
-    </div>
-    <div class="notes">
-      <div><h4>Order</h4><ol><li>Landscape with name, headshot, links</li><li>Research and projects</li><li>Publications | Experience and education</li><li>Contact</li></ol></div>
-      <div><h4>Good at</h4><p>The strongest first impression; closest to the draft you liked. The solver is the first thing anyone touches.</p></div>
-      <div><h4>Costs</h4><p>The headshot and links compete with the landscape for the same corner. Someone checking "who is this" scrolls past a toy first.</p></div>
-    </div>
-  </article>
-
-  <!-- B -->
-  <article class="opt" id="opt-b">
-    <header><span class="tag">B</span><h3>Profile beside the landscape</h3><p>The first screen splits: you on the left (headshot, short bio, every link), the landscape on the right as the index of your work. A dated "Latest" strip follows, like the recent posts on your friend's site.</p></header>
-    <div class="views two">
-      <div><p class="cap">Desktop, 1200 px</p><div class="frame"><div class="screen" data-w="1200">
-        <div class="m-split" style="height:640px">
-          <div class="m-prof"><div class="brand">N. Smits<nav><span>Research</span><span>Publications</span><span>Experience</span><span>CV</span></nav></div>
-            <div class="m-head">HEADSHOT<br>UPLOAD</div><p class="m-h1">Nicolas Smits</p>
-            <p class="m-focus">Optimisation, machine learning and reinforcement learning for process systems.</p>
-            <p class="bio">MS in AI Engineering, Chemical Engineering at Carnegie Mellon. Thesis on graph reinforcement learning for resilient supply chains, with Carl Laird.</p>
-            <div class="m-links" data-part="links"></div></div>
-          <div class="m-panel"><div class="m-land" data-w="720" data-h="640" data-map="panel" data-start=".5,.42"></div>
-            <p class="m-read" style="position:absolute;left:24px;bottom:18px;margin:0;z-index:1;background:rgba(13,7,34,.72);padding:6px 12px;border-radius:999px">Click anywhere to start a solver there.</p></div>
-        </div>
-        <div class="m-body"><div class="m-sec"><h2>Latest</h2><div class="latest" data-part="latest"></div></div>
+        <div class="m-body">
+          <div class="m-latest"><div class="lh"><b>Latest</b></div><div class="latest" data-part="latest"></div></div>
           <div class="m-sec"><h2>Research and projects</h2><div data-part="rows"></div></div>
-          <div class="m-sec m-two"><div><h2>Publications and talks</h2><div data-part="pubs"></div></div><div><h2>Experience and education</h2><div data-part="timeline"></div></div></div></div>
-        <div data-part="foot"></div>
-      </div></div></div>
-      <div><p class="cap">Phone, 390 px</p><div class="frame"><div class="screen ph" data-w="390">
-        <div class="m-prof"><div class="brand">N. Smits</div><div class="m-head">HEADSHOT</div><p class="m-h1">Nicolas Smits</p>
-          <p class="bio">MS in AI Engineering, Chemical Engineering at Carnegie Mellon. Optimisation, ML and RL for process systems.</p><div class="m-links" data-part="links"></div></div>
-        <div class="m-hero" style="height:420px;border-top:1px solid var(--hair)"><div class="m-land" data-w="390" data-h="420" data-map="tallpanel" data-start=".5,.4"></div></div>
-        <div class="m-body"><div class="m-sec"><h2>Latest</h2><div class="latest" data-part="latest"></div></div>
-          <div class="m-sec"><h2>Research and projects</h2><div data-part="rows"></div></div>
-          <div class="m-sec"><h2>Publications and talks</h2><div data-part="pubs"></div></div>
-          <div class="m-sec"><h2>Experience and education</h2><div data-part="timeline"></div></div></div>
+          <div class="m-sec"><h2>Publications</h2><div data-part="pubs"></div></div>
+          <div class="m-sec"><h2>Experience and education</h2><div data-part="timeline"></div></div>
+        </div>
+        <div class="sk"><div class="sk-l"><h2>Skills</h2><p class="m-read">Pick a skill.</p><div data-skills-ui="k1" data-for="phone"></div></div>
+          <div class="sk-r" style="height:380px"><div class="m-land" data-w="390" data-h="380" data-map="tallgrid" data-skills="phone"></div></div></div>
         <div data-part="foot"></div>
       </div></div></div>
     </div>
     <div class="notes">
-      <div><h4>Order</h4><ol><li>Profile | landscape</li><li>Latest (dated news)</li><li>Research and projects</li><li>Publications | Experience and education</li><li>Contact</li></ol></div>
-      <div><h4>Good at</h4><p>An advisor or recruiter learns who you are, where you study and how to reach you in the first second. The landscape still owns most of the screen.</p></div>
-      <div><h4>Costs</h4><p>The most conventional of the three. "Latest" only works if you keep adding to it; a stale news strip reads worse than none.</p></div>
-    </div>
-  </article>
-
-  <!-- C -->
-  <article class="opt" id="opt-c">
-    <header><span class="tag">C</span><h3>The landscape maps the whole site</h3><p>Every section is a minimum, not only the projects: Publications, Experience, CV and Contact are broad basins, the projects a cluster of deep ones. The solver becomes the site's navigation. A profile band with your headshot follows.</p></header>
-    <div class="views two">
-      <div><p class="cap">Desktop, 1200 px</p><div class="frame"><div class="screen" data-w="1200">
-        <div class="m-hero" style="height:680px">
-          <div class="m-land" data-w="1200" data-h="680" data-map="sections" data-start=".5,.36"></div>
-          <nav class="m-nav"><span>Research</span><span>Publications</span><span>Experience</span><span>CV</span><span>Contact</span></nav>
-          <div class="m-who" style="bottom:34px"><p class="m-h1" style="font-size:64px">Nicolas<br>Smits</p><p class="m-read">Click anywhere to start a solver there.</p></div>
-        </div>
-        <div class="band"><div class="m-head">HEADSHOT<br>UPLOAD</div><p><b>Optimisation, machine learning and reinforcement learning for process systems.</b>MS in AI Engineering, Chemical Engineering at Carnegie Mellon. Thesis on graph reinforcement learning for resilient supply chains, with Carl Laird.</p><div class="m-links" data-part="links"></div></div>
-        <div class="m-body"><div class="m-sec"><h2>Research and projects</h2><div data-part="rows"></div></div>
-          <div class="m-sec m-two"><div><h2>Publications and talks</h2><div data-part="pubs"></div></div><div><h2>Experience and education</h2><div data-part="timeline"></div></div></div></div>
-        <div data-part="foot"></div>
-      </div></div></div>
-      <div><p class="cap">Phone, 390 px</p><div class="frame"><div class="screen ph" data-w="390">
-        <div class="m-hero" style="height:640px">
-          <div class="m-land" data-w="390" data-h="640" data-map="tallsections" data-start=".5,.2"></div>
-          <nav class="m-nav"><span>Research</span><span>CV</span><span>Contact</span></nav>
-          <div class="m-who"><p class="m-h1">Nicolas<br>Smits</p><p class="m-read"></p></div>
-        </div>
-        <div class="band"><div class="m-head">HEADSHOT</div><p><b>Optimisation, ML and RL for process systems.</b>MS in AI Engineering, Chemical Engineering, CMU.</p><div class="m-links" data-part="links"></div></div>
-        <div class="m-body"><div class="m-sec"><h2>Research and projects</h2><div data-part="rows"></div></div>
-          <div class="m-sec"><h2>Publications and talks</h2><div data-part="pubs"></div></div>
-          <div class="m-sec"><h2>Experience and education</h2><div data-part="timeline"></div></div></div>
-        <div data-part="foot"></div>
-      </div></div></div>
-    </div>
-    <div class="notes">
-      <div><h4>Order</h4><ol><li>Landscape of sections and projects</li><li>Profile band with headshot, links</li><li>Research and projects</li><li>Publications | Experience and education</li><li>Contact</li></ol></div>
-      <div><h4>Good at</h4><p>The most distinctive: the descent idea carries the whole site, not only the project list. Grows naturally as sections are added.</p></div>
-      <div><h4>Costs</h4><p>Ten labels on one landscape get crowded, especially on a phone. Some visitors will not realise the landscape is a menu, so the nav bar has to stay.</p></div>
+      <div><h4>Order</h4><ol><li>Landscape with name, headshot, links, CV</li><li>Latest</li><li>Research and projects</li><li>Publications | Experience, teaching, education</li><li>Skills: list | landscape</li><li>Contact</li></ol></div>
+      <div><h4>On a phone</h4><p>The skills list goes above its landscape and the chips scroll sideways in one row. Latest scrolls sideways too.</p></div>
+      <div><h4>Two landscapes</h4><p>The hero's is wide and open; the skills one is framed in a panel and laid out on a grid, so they read as the same function used two ways rather than a repeat.</p></div>
     </div>
   </article>
 </section>
 
 <section class="decision" id="skills">
-  <h2>2. Where the skills landscape lives</h2>
-  <p>The interaction is the same in all three: pick a skill and the projects that use it stay deep while the rest flatten out. Try the chips.</p>
+  <h2>How to set the skills list</h2>
+  <p>Same section, same landscape on the right; only the list changes. Pick a skill in each to compare.</p>
 
-  <article class="opt" id="opt-s1">
-    <header><span class="tag">S1</span><h3>Merged into the hero</h3><p>The skill chips sit on the hero landscape and reshape it in place. One landscape on the whole site; the project rows below filter along with it.</p></header>
-    <div class="views"><div><p class="cap">Desktop, 1200 px: hero plus the top of the project list</p><div class="frame"><div class="screen" data-w="1200">
-      <div class="m-hero" style="height:620px">
-        <div class="m-land" data-w="1200" data-h="620" data-map="wide" data-skills="s1" data-start=".47,.55"></div>
-        <nav class="m-nav"><span>Research</span><span>Publications</span><span>Experience</span><span>CV</span><span>Contact</span></nav>
-        <div class="s-hchips"><div class="chips" data-chips="s1"></div></div>
-        <div class="m-who"><p class="m-h1" style="font-size:64px">Nicolas<br>Smits</p><p class="m-read">Pick a skill, or click to start a solver.</p></div>
-      </div>
-      <div class="m-body"><div class="m-sec" style="padding-bottom:30px"><h2>Research and projects</h2><div data-part="rows" data-filter="s1" data-limit="3"></div></div></div>
+  <article class="opt" id="opt-k1">
+    <header><span class="tag">K1</span><h3>Chips, grouped by kind</h3><p>Methods, machine learning, optimisation, systems: every skill as a chip under its heading.</p></header>
+    <div class="views"><div><p class="cap">Desktop, skills section</p><div class="frame"><div class="screen" data-w="1200">
+      <div class="sk" style="border:0"><div class="sk-l"><h2>Skills</h2><p class="m-read">Pick a skill. The projects that use it stay deep; the rest flatten out.</p><div data-skills-ui="k1" data-for="k1"></div></div>
+        <div class="sk-r"><div class="m-land" data-w="730" data-h="560" data-map="side" data-skills="k1"></div></div></div>
     </div></div></div></div>
     <div class="notes">
-      <div><h4>Good at</h4><p>One landscape, one interaction to learn. Home stays short. "Which of his projects use PyTorch?" is answered on the first screen.</p></div>
-      <div><h4>Costs</h4><p>Twenty-five chips crowd the hero; on a phone they need a collapsed "Filter by skill" row.</p></div>
-      <div><h4>Pairs with</h4><p>A and C directly. With B, the chips go above the landscape panel.</p></div>
+      <div><h4>Good at</h4><p>Reads like a CV skills block, so nobody needs instructions. Skills without a project (MATLAB, Neo4j) can still be listed, shown dimmed.</p></div>
+      <div><h4>Costs</h4><p>Gives no sense of how much each skill is used; PyTorch and Pyomo look equally important.</p></div>
+      <div><h4>Phone</h4><p>Collapses to one scrolling row per group.</p></div>
     </div>
   </article>
 
-  <article class="opt" id="opt-s2">
-    <header><span class="tag">S2</span><h3>Its own page</h3><p>A Skills page in the nav: chips, a full-width landscape, and the skills grouped by kind underneath for anyone who wants the plain list.</p></header>
-    <div class="views"><div><p class="cap">Desktop, 1200 px: /skills</p><div class="frame"><div class="screen" data-w="1200">
-      <div class="s-head"><h2>Skills</h2><div class="chips" data-chips="s2"></div><p class="m-read">Pick a skill. The projects that use it stay deep; the rest flatten out.</p></div>
-      <div class="s-stage" style="height:440px"><div class="m-land" data-w="1200" data-h="440" data-map="grid" data-skills="s2"></div></div>
-      <div class="s-cats" data-part="cats"></div>
+  <article class="opt" id="opt-k2">
+    <header><span class="tag">K2</span><h3>A ranked list</h3><p>One skill per row, sorted by how many projects use it, with a dot per project. The landscape's depth and the dots tell the same story.</p></header>
+    <div class="views"><div><p class="cap">Desktop, skills section</p><div class="frame"><div class="screen" data-w="1200">
+      <div class="sk" style="border:0"><div class="sk-l"><h2>Skills</h2><p class="m-read">Pick a skill. The projects that use it stay deep; the rest flatten out.</p><div data-skills-ui="k2" data-for="k2"></div></div>
+        <div class="sk-r"><div class="m-land" data-w="730" data-h="560" data-map="side" data-skills="k2"></div></div></div>
     </div></div></div></div>
     <div class="notes">
-      <div><h4>Good at</h4><p>Room for everything, including skills no project shows yet (languages, MATLAB, Neo4j). A recruiter can be linked straight to it.</p></div>
-      <div><h4>Costs</h4><p>A page fewer visitors reach. The landscape appears twice on the site, once on home and once here.</p></div>
-      <div><h4>Pairs with</h4><p>Any home option.</p></div>
+      <div><h4>Good at</h4><p>Shows weight at a glance: reinforcement learning and PyTorch lead. Scans quickly, like an index.</p></div>
+      <div><h4>Costs</h4><p>Methods and tools mix in one list. It gets long as projects are added, so it needs a "show all".</p></div>
+      <div><h4>Phone</h4><p>Top eight rows, then "show all".</p></div>
     </div>
   </article>
 
-  <article class="opt" id="opt-s3">
-    <header><span class="tag">S3</span><h3>A section further down home</h3><p>As in draft E: after the project list, a second landscape laid out as a grid, with the chips above it.</p></header>
-    <div class="views"><div><p class="cap">Desktop, 1200 px: bottom of the home page</p><div class="frame"><div class="screen" data-w="1200">
-      <div class="m-body ghost"><div class="m-sec" style="padding:24px 0"><div data-part="rows" data-limit="2" data-skip="4"></div></div></div>
-      <div class="s-head" style="border-top:1px solid var(--hair)"><h2>Skills</h2><div class="chips" data-chips="s3"></div><p class="m-read">Pick a skill. The projects that use it stay deep; the rest flatten out.</p></div>
-      <div class="s-stage" style="height:420px"><div class="m-land" data-w="1200" data-h="420" data-map="grid" data-skills="s3"></div></div>
-      <div data-part="foot"></div>
+  <article class="opt" id="opt-k3">
+    <header><span class="tag">K3</span><h3>A skill-by-project matrix</h3><p>Skills down the side, projects across the top, a filled dot where a project uses a skill. Picking a row reshapes the landscape.</p></header>
+    <div class="views"><div><p class="cap">Desktop, skills section</p><div class="frame"><div class="screen" data-w="1200">
+      <div class="sk" style="border:0"><div class="sk-l"><h2>Skills</h2><p class="m-read">Pick a skill. The projects that use it stay deep; the rest flatten out.</p><div data-skills-ui="k3" data-for="k3"></div></div>
+        <div class="sk-r"><div class="m-land" data-w="730" data-h="560" data-map="side" data-skills="k3"></div></div></div>
     </div></div></div></div>
     <div class="notes">
-      <div><h4>Good at</h4><p>Exactly what you saw in the draft. The skills get a stage of their own without a separate page.</p></div>
-      <div><h4>Costs</h4><p>The longest home page of the three, and two landscapes on it. With more sections added, it sits far down.</p></div>
-      <div><h4>Pairs with</h4><p>A and B. With C, two landscapes that both act as menus would confuse.</p></div>
+      <div><h4>Good at</h4><p>The most information in the least space, and the most "engineer": you can answer "what did the thesis use?" by reading a column.</p></div>
+      <div><h4>Costs</h4><p>Densest to read. Columns get tight past about ten projects; it would then show the most recent ten.</p></div>
+      <div><h4>Phone</h4><p>Columns become initials; the matrix scrolls sideways inside its box.</p></div>
     </div>
   </article>
 </section>
 
-<section class="took" id="took">
-  <h2>What came from johnspeaks.com</h2>
-  <div><h4>Taken</h4><ul>
-    <li><b>Headshot, a short bio and every link</b> on the first screen.</li>
-    <li><b>Experience and Education</b> as sections of their own (merged into one timeline here; they can split).</li>
-    <li><b>A CV link</b> in the nav. A public CV needs a copy without your phone number.</li>
-    <li><b>Dated recent posts</b>, as "Latest" in option B.</li>
-    <li><b>Teasers on home that open full pages</b>: each project row opens /projects/&lt;id&gt;.</li></ul></div>
-  <div><h4>Left out, tell me if you want them</h4><ul>
-    <li><b>Leadership.</b> Your CV lists none. Teaching, TA work, reviewing or student groups would go here.</li>
-    <li><b>A separate Contact page.</b> The peach footer does that job on every page.</li>
-    <li><b>Writing or notes.</b> Still undecided in the product brief.</li>
-    <li><b>Google Scholar.</b> Added beside ORCID once you have a profile.</li></ul></div>
+<section class="changes" id="changes">
+  <h2>What changed since round 1</h2>
+  <div><h4>From your notes</h4><ul>
+    <li><b>Your headshot</b> is in, cropped square.</li>
+    <li><b>Teaching:</b> TA for Systems and Toolchains for AI in Engineering (06-763), in Latest and under experience.</li>
+    <li><b>CV</b> is a peach link in the hero and the nav; it downloads the new public PDF.</li></ul></div>
+  <div><h4>Corrected</h4><ul>
+    <li><b>Publications.</b> Round 1 listed the SiNDAE arXiv preprint as yours; you are not an author on it. Your paper is the SiNDAE software paper for JOSS, first author, pending.</li></ul></div>
 </section>
 </main>
 
@@ -368,6 +284,8 @@ a{color:inherit}
 (function () {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const NS = 'http://www.w3.org/2000/svg';
+  const HEADSHOT = 'data:image/webp;base64,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';
+  document.querySelectorAll('[data-hs]').forEach(i => (i.src = HEADSHOT));
   const P = [
     { id: 'thesis', short: 'Supply chain RL', name: 'Graph RL for resilient supply chains', where: "Master's thesis, CMU", yr: '2026', line: 'A policy learns which transport arcs to add so demand still arrives when plants, warehouses or routes fail.', m: ['Reinforcement learning', 'Graph neural networks', 'Simulation'], t: ['PyTorch', 'PyG', 'Gymnasium'] },
     { id: 'sindae', short: 'SiNDAE', name: 'SiNDAE', where: 'CAPD, CMU', yr: '2026', line: 'Neural networks embedded in differential-algebraic process models and trained as one nonlinear program.', m: ['Nonlinear optimisation', 'Hybrid modelling'], t: ['JAX', 'Pyomo'] },
@@ -377,20 +295,22 @@ a{color:inherit}
     { id: 'sepsis', short: 'Sepsis DQN', name: 'DQN variants for ICU sepsis treatment', where: 'McGill, COMP 579', yr: '2025', line: 'Which DQN extensions help on a clinical benchmark with 716 health states and 25 treatments?', m: ['Reinforcement learning'], t: ['PyTorch', 'Gymnasium'] }
   ];
   const byId = Object.fromEntries(P.map(p => [p.id, p]));
-  const SKILLS = [...new Set(P.flatMap(p => p.t.concat(p.m)))].map(s => ({ s, n: P.filter(p => p.t.includes(s) || p.m.includes(s)).length })).sort((a, b) => b.n - a.n || a.s.localeCompare(b.s));
+  const uses = s => P.filter(p => p.t.includes(s) || p.m.includes(s));
+  const SKILLS = [...new Set(P.flatMap(p => p.m.concat(p.t)))].map(s => ({ s, n: uses(s).length })).sort((a, b) => b.n - a.n || a.s.localeCompare(b.s));
+  const GROUPS = [['Methods', ['Reinforcement learning', 'Graph neural networks', 'Supervised learning', 'Ranking & recommenders', 'Hybrid modelling', 'Nonlinear optimisation', 'Simulation', 'LLM pipelines', 'Agent tooling']],
+    ['Machine learning', ['PyTorch', 'PyG', 'JAX', 'Gymnasium', 'LightGBM']], ['Optimisation', ['Pyomo']],
+    ['Data and systems', ['Kafka', 'Spark', 'PostgreSQL', 'Flask', 'Docker', 'AWS', 'GCP', 'TypeScript', 'MLOps', 'Data engineering']]];
 
   /* ---- section content ---- */
-  const LINKS = ['Email', 'LinkedIn', 'GitHub', 'ORCID · soon', 'CV'];
+  const LINKS = ['Email', 'LinkedIn', 'GitHub', 'ORCID · soon', 'CV ↓'];
   const PUBS = [
-    ['2025', 'SiNDAE preprint', 'Lueg, Smits, Alves · arXiv 2504.04665'],
-    ['2026', 'SiNDAE software paper', 'Journal of Open Source Software', 1],
-    ['2027', 'Graph RL for resilient supply chain design', 'ESCAPE 37 abstract, Trondheim · first author', 1],
-    ['2026', 'Thesis poster', 'Carnegie Mellon']
+    ['2026', 'SiNDAE: the simultaneous neural DAE training Python package', 'Smits, Lueg, Alves, Laird, Kitchin, Biegler · Journal of Open Source Software', 1],
+    ['2027', 'Graph RL for resilient supply chain network design', 'ESCAPE 37 abstract, Trondheim · first author', 1]
   ];
   const EXP = [['2026', 'CAPD, Carnegie Mellon', 'Graduate Research Assistant'], ['2024', 'HydrateTech Laboratory, McGill', 'Computational Research Assistant'], ['2022–23', 'Lhoist Group, Belgium', 'R&D Engineer Intern, flue gas treatment']];
+  const TEACH = [['2026', 'Systems and Toolchains for AI in Engineering', 'Teaching Assistant, 06-763, Carnegie Mellon']];
   const EDU = [['2026', 'Carnegie Mellon University', 'MS, AI Engineering, Chemical Engineering'], ['2025', 'McGill University', 'BEng Chemical Engineering, minor in Applied AI']];
-  const LATEST = [['Nov 2026', 'Abstract', 'ESCAPE 37 abstract prepared', 'First author, with Bhatia and Laird'], ['Nov 2026', 'Open source', 'wayfinder-sidebar released', 'Claude Code plugin'], ['Sep 2026', 'Project', 'Recommender live', '500k+ requests within 600 ms'], ['Aug 2026', 'Software', 'SiNDAE package released', 'CAPD, Carnegie Mellon']];
-  const CATS = [['Learning', ['PyTorch', 'PyG', 'JAX', 'scikit-learn', 'Hugging Face', 'Ray / RLlib']], ['Optimisation & modelling', ['Pyomo', 'NLP solvers', 'Hybrid DAEs', 'SciPy', 'MATLAB']], ['Systems', ['Kafka', 'Spark', 'PostgreSQL', 'Flask', 'Docker', 'AWS, GCP']], ['Languages', ['Python, Java, TypeScript', 'English, French, Dutch', 'German (intermediate)']]];
+  const LATEST = [['Nov 2026', 'Abstract', 'ESCAPE 37 abstract prepared', 'Graph RL for supply chain design, first author'], ['Nov 2026', 'Open source', 'wayfinder-sidebar released', 'Claude Code plugin'], ['Sep 2026', 'Teaching', 'TA for Systems and Toolchains for AI in Engineering', '06-763, Carnegie Mellon'], ['Sep 2026', 'Paper', 'SiNDAE software paper, first author', 'Journal of Open Source Software, pending']];
 
   function thumb(id) {
     const s = { thesis: '<g stroke="#7C6BB8" stroke-width="1.4"><path d="M30 30L70 22L110 34L140 60M30 30L46 70L92 76L140 60M70 22L92 76"/></g><path d="M46 70L110 34" stroke="#FF7C6B" stroke-width="2.2"/><g fill="#F3EDFF"><circle cx="30" cy="30" r="5"/><circle cx="70" cy="22" r="5"/><circle cx="110" cy="34" r="5"/><circle cx="140" cy="60" r="5"/><circle cx="46" cy="70" r="5"/><circle cx="92" cy="76" r="5"/></g>',
@@ -401,16 +321,14 @@ a{color:inherit}
       sepsis: '<path d="M16 60H152" stroke="#B9AAE8"/><g stroke="#7C6BB8"><path d="M16 54V66M43 56V64M70 56V64M97 56V64M124 56V64M152 54V66"/></g><g fill="#F3EDFF"><circle cx="52" cy="60" r="4"/><circle cx="78" cy="60" r="4"/><circle cx="104" cy="60" r="4"/></g><circle cx="132" cy="60" r="6" fill="#FF7C6B"/>' }[id];
     return `<svg viewBox="0 0 168 96" aria-hidden="true">${s}</svg>`;
   }
-  const item = (a, i) => `<div class="item${a[3] ? ' pend' : ''}"><em>${a[0]}</em><div><b>${a[1]}</b><span>${a[2]}</span></div></div>`;
+  const item = a => `<div class="item${a[3] ? ' pend' : ''}"><em>${a[0]}</em><div><b>${a[1]}</b><span>${a[2]}</span></div></div>`;
   const PART = {
-    links: () => LINKS.map(l => `<span${l.includes('soon') ? ' class="tbd"' : ''}>${l}</span>`).join(''),
-    rows: el => { const skip = +(el.dataset.skip || 0), lim = +(el.dataset.limit || 99);
-      return P.slice(skip, skip + lim).map(p => `<div class="row" data-id="${p.id}">${thumb(p.id)}<div><b>${p.name}</b><small>${p.where}</small></div><p>${p.line}</p><em>${p.yr}</em></div>`).join(''); },
+    links: () => LINKS.map(l => `<span${l.includes('soon') ? ' class="tbd"' : l.startsWith('CV') ? ' class="cv"' : ''}>${l}</span>`).join(''),
+    rows: () => P.map(p => `<div class="row">${thumb(p.id)}<div><b>${p.name}</b><small>${p.where}</small></div><p>${p.line}</p><em>${p.yr}</em></div>`).join(''),
     pubs: () => PUBS.map(item).join(''),
-    timeline: () => '<p class="subh">Experience</p>' + EXP.map(item).join('') + '<p class="subh">Education</p>' + EDU.map(item).join(''),
+    timeline: () => '<p class="subh">Experience</p>' + EXP.map(item).join('') + '<p class="subh">Teaching</p>' + TEACH.map(item).join('') + '<p class="subh">Education</p>' + EDU.map(item).join(''),
     latest: () => LATEST.map(a => `<div><em>${a[0]} · ${a[1]}</em><b>${a[2]}</b><span>${a[3]}</span></div>`).join(''),
-    cats: () => CATS.map(c => `<div><b>${c[0]}</b>${c[1].map(x => `<span>${x}</span>`).join('')}</div>`).join(''),
-    foot: () => '<div class="m-foot"><h2>Contact</h2><p class="mail">nsmits@andrew.cmu.edu</p><div class="r"><span>Copy address</span><span>GitHub</span><span>LinkedIn</span><span>ORCID</span></div></div>'
+    foot: () => '<div class="m-foot"><h2>Contact</h2><p class="mail">nsmits@andrew.cmu.edu</p><div class="r"><span>Copy address</span><span>GitHub</span><span>LinkedIn</span><span>ORCID</span><span>CV (PDF)</span></div></div>'
   };
   document.querySelectorAll('[data-part]').forEach(el => { el.innerHTML = PART[el.dataset.part](el); });
 
@@ -418,13 +336,8 @@ a{color:inherit}
   const MAPS = {
     wide: { sepsis: [.12, .25], sindae: [.36, .19], thesis: [.61, .3], recsys: [.86, .2], fifa: [.58, .7], wayfinder: [.85, .66] },
     tall: { sepsis: [.26, .1], sindae: [.74, .16], thesis: [.3, .3], recsys: [.74, .38], fifa: [.28, .5], wayfinder: [.72, .58] },
-    panel: { thesis: [.28, .22], sindae: [.7, .15], recsys: [.8, .47], wayfinder: [.3, .55], fifa: [.62, .78], sepsis: [.2, .84] },
-    tallpanel: { thesis: [.28, .2], sindae: [.74, .16], recsys: [.72, .5], wayfinder: [.28, .54], fifa: [.3, .84], sepsis: [.74, .82] },
-    grid: { thesis: [.2, .3], sindae: [.5, .25], recsys: [.8, .3], sepsis: [.2, .74], wayfinder: [.5, .74], fifa: [.8, .74] },
-    sections: { thesis: [.5, .2], sindae: [.63, .13], recsys: [.77, .22], wayfinder: [.89, .38], fifa: [.6, .4], sepsis: [.74, .5],
-      '§Publications': [.25, .2], '§Experience': [.4, .5], '§Contact': [.62, .8], '§CV': [.88, .76] },
-    tallsections: { thesis: [.24, .1], sindae: [.62, .07], recsys: [.82, .2], wayfinder: [.3, .27], fifa: [.62, .3], sepsis: [.84, .42],
-      '§Publications': [.28, .46], '§Experience': [.72, .6], '§CV': [.26, .66], '§Contact': [.7, .8] }
+    side: { thesis: [.22, .27], sindae: [.52, .2], recsys: [.8, .3], sepsis: [.24, .72], wayfinder: [.52, .78], fifa: [.8, .7] },
+    tallgrid: { thesis: [.27, .2], sindae: [.73, .2], recsys: [.27, .5], sepsis: [.73, .5], wayfinder: [.27, .8], fifa: [.73, .8] }
   };
   const STOPS = [[0, [13, 7, 34]], [.3, [42, 22, 112]], [.56, [112, 68, 232]], [.8, [238, 107, 96]], [1, [255, 214, 191]]];
   function ramp(v) { for (let i = 1; i < STOPS.length; i++) if (v <= STOPS[i][0]) { const [a, A] = STOPS[i - 1], [b, B] = STOPS[i], k = (v - a) / (b - a); return A.map((q, j) => q + (B[j] - q) * k); } return STOPS[4][1]; }
@@ -433,17 +346,16 @@ a{color:inherit}
   const lands = {};
   document.querySelectorAll('.m-land').forEach(root => {
     const W = +root.dataset.w, H = +root.dataset.h, A = W / H, phone = W < 500, map = MAPS[root.dataset.map];
-    const screen = root.closest('.screen'), read = screen.querySelector('.m-read');
-    const pts = Object.entries(map).map(([id, q]) => { const sec = id[0] === '§';
-      const s = sec ? (phone ? .1 : .13) : (root.dataset.map.includes('sections') ? (phone ? .065 : .075) : root.dataset.map === 'grid' ? .16 : phone ? .085 : .125);
-      return { id, sec, name: sec ? id.slice(1) : byId[id].short, x: q[0] * A, y: q[1], d: sec ? .62 : .82, s, c: sec ? .62 : .82 }; });
+    const box = root.closest('.sk') || root.closest('.screen'), read = box.querySelector('.m-read');
+    const sw = root.dataset.map === 'side' ? .15 : root.dataset.map === 'tallgrid' ? .1 : phone ? .085 : .125;
+    const pts = Object.entries(map).map(([id, q]) => ({ id, name: byId[id].short, x: q[0] * A, y: q[1], d: .82, s: sw, c: .82 }));
     if (root.dataset.contact) pts.push({ id: 'contact', hidden: true, x: .2 * A, y: .74, d: .86, s: .27, c: .86 });
     const cv = document.createElement('canvas'); cv.width = Math.round(W / 2); cv.height = Math.round(H / 2);
-    cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', 'Contour landscape with one minimum per ' + (root.dataset.map.includes('sections') ? 'section and project' : 'project'));
+    cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', 'Contour landscape with one minimum per project');
     const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('aria-hidden', 'true');
     root.append(cv, svg);
     const ctx = cv.getContext('2d');
-    pts.forEach(p => { if (p.hidden) return; const l = document.createElement('span'); l.className = 'lab' + (p.sec ? ' sec' : ''); l.innerHTML = p.sec ? p.name : `<i>x*</i>${p.name}`;
+    pts.forEach(p => { if (p.hidden) return; const l = document.createElement('span'); l.className = 'lab'; l.innerHTML = `<i>x*</i>${p.name}`;
       l.style.left = (p.x / A * 100) + '%'; l.style.top = (p.y * 100) + '%'; root.appendChild(l); p.lab = l; });
     const F = (x, y) => { let f = .12 * Math.sin(2.1 * x + .6) * Math.cos(1.7 * y - .4) + .08 * Math.sin(3.3 * y + 1.2 * x + 1);
       for (const p of pts) { const dx = x - p.x, dy = y - p.y; f -= p.c * Math.exp(-(dx * dx + dy * dy) / (2 * p.s * p.s)); } return f; };
@@ -461,8 +373,8 @@ a{color:inherit}
       for (let k = 0; k < 220; k++) { const gx = (F(x + e, y) - F(x - e, y)) / (2 * e), gy = (F(x, y + e) - F(x, y - e)) / (2 * e);
         vx = .8 * vx - .011 * gx; vy = .8 * vy - .011 * gy; x += vx; y += vy; path.push([x, y]); if (Math.hypot(gx, gy) < .02 && Math.hypot(vx, vy) < 4e-4) break; }
       svg.textContent = ''; pts.forEach(p => p.lab && p.lab.classList.remove('hit'));
-      const sw = phone ? 1.4 : 1.8, line = svgEl('polyline', { fill: 'none', stroke: '#F3EDFF', 'stroke-width': sw, 'stroke-linejoin': 'round' }, svg), dots = svgEl('g', { fill: '#F3EDFF' }, svg);
-      svgEl('circle', { cx: fx * W, cy: fy * H, r: 5, fill: 'none', stroke: '#F3EDFF', 'stroke-width': sw }, svg);
+      const lw = phone ? 1.4 : 1.8, line = svgEl('polyline', { fill: 'none', stroke: '#F3EDFF', 'stroke-width': lw, 'stroke-linejoin': 'round' }, svg), dots = svgEl('g', { fill: '#F3EDFF' }, svg);
+      svgEl('circle', { cx: fx * W, cy: fy * H, r: 5, fill: 'none', stroke: '#F3EDFF', 'stroke-width': lw }, svg);
       let i = 0;
       function done() { const end = path[path.length - 1]; let best = null, bd = 1e9; pts.forEach(p => { const d = Math.hypot(p.x - end[0], p.y - end[1]); if (d < bd) { bd = d; best = p; } });
         svgEl('circle', { cx: end[0] * H, cy: end[1] * H, r: 9, fill: 'none', stroke: '#FF7C6B', 'stroke-width': 2.4 }, svg);
@@ -477,29 +389,29 @@ a{color:inherit}
     }
     let anim = 0;
     function setWeights(on) {
-      pts.forEach(p => { p.t = p.hidden || p.sec || !on || on.has(p.id) ? p.d : p.d * .1; if (p.lab) p.lab.classList.toggle('off', p.t < p.d * .5); });
+      pts.forEach(p => { p.t = p.hidden || !on || on.has(p.id) ? p.d : p.d * .1; if (p.lab) p.lab.classList.toggle('off', p.t < p.d * .5); });
       svg.textContent = ''; cancelAnimationFrame(anim); let f = 0;
       (function tick() { f++; pts.forEach(p => { p.c += (p.t - p.c) * (reduce ? 1 : .35); }); render(); if (!reduce && f < 9) anim = requestAnimationFrame(tick); else { pts.forEach(p => (p.c = p.t)); render(); } })();
     }
     root.addEventListener('click', e => { const r = root.getBoundingClientRect(); run((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height, reduce); });
     render();
     if (root.dataset.start) { const [a, b] = root.dataset.start.split(',').map(Number); run(a, b, true); }
-    if (root.dataset.skills) lands[root.dataset.skills] = { setWeights, read, screen };
+    if (root.dataset.skills) lands[root.dataset.skills] = { setWeights, read };
   });
 
-  /* ---- skill chips ---- */
-  document.querySelectorAll('[data-chips]').forEach(box => {
-    const key = box.dataset.chips, L = lands[key]; let cur = null;
-    const list = key === 's1' ? SKILLS.slice(0, 12) : SKILLS;
-    list.forEach(({ s }) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = s; b.setAttribute('aria-pressed', 'false'); box.appendChild(b);
-      b.addEventListener('click', () => { cur = cur === s ? null : s;
-        box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b && cur ? 'true' : 'false'));
-        const users = P.filter(p => cur && (p.t.includes(cur) || p.m.includes(cur))), on = cur ? new Set(users.map(p => p.id)) : null;
-        L.setWeights(on);
-        if (L.read) L.read.innerHTML = cur ? `<b>${cur}</b>: ${users.map(p => p.short).join(', ')}.` : 'Pick a skill. The projects that use it stay deep; the rest flatten out.';
-        const rows = L.screen.querySelector('[data-filter]');
-        if (rows) rows.innerHTML = (cur ? users : P).slice(0, 3).map(p => `<div class="row${cur ? ' on' : ''}" data-id="${p.id}">${thumb(p.id)}<div><b>${p.name}</b><small>${p.where}</small></div><p>${p.line}</p><em>${p.yr}</em></div>`).join(''); }); });
-    if (key === 's1') { const more = document.createElement('button'); more.type = 'button'; more.textContent = `+${SKILLS.length - 12} more`; more.style.borderStyle = 'dashed'; box.appendChild(more); }
+  /* ---- the three skill lists; each drives its own landscape ---- */
+  const IDLE = 'Pick a skill. The projects that use it stay deep; the rest flatten out.';
+  document.querySelectorAll('[data-skills-ui]').forEach(host => {
+    const kind = host.dataset.skillsUi, L = lands[host.dataset.for]; let cur = null;
+    const pick = s => { cur = cur === s ? null : s;
+      host.querySelectorAll('button[data-s]').forEach(b => b.setAttribute('aria-pressed', b.dataset.s === cur ? 'true' : 'false'));
+      const u = cur ? uses(cur) : []; L.setWeights(cur ? new Set(u.map(p => p.id)) : null);
+      if (L.read) L.read.innerHTML = cur ? `<b>${cur}</b>: ${u.map(p => p.short).join(', ')}.` : (host.dataset.for === 'phone' ? 'Pick a skill.' : IDLE); };
+    const btn = (s, inner) => `<button type="button" data-s="${s}" aria-pressed="false">${inner || s}</button>`;
+    if (kind === 'k1') host.innerHTML = GROUPS.map(g => `<div class="grp"><p>${g[0]}</p><div class="chips">${g[1].filter(s => uses(s).length).map(s => btn(s)).join('')}</div></div>`).join('');
+    if (kind === 'k2') host.innerHTML = `<div class="slist">${SKILLS.slice(0, 22).map(({ s, n }) => btn(s, `<span>${s}</span><i>${'<u></u>'.repeat(n)}</i>`)).join('')}</div>`;
+    if (kind === 'k3') host.innerHTML = `<div class="mx"><span></span>${P.map(p => `<div class="ph"><span>${p.short}</span></div>`).join('')}${SKILLS.slice(0, 13).map(({ s }) => btn(s, `<span>${s}</span>${P.map(p => `<u class="${p.t.includes(s) || p.m.includes(s) ? 'y' : ''}"></u>`).join('')}`)).join('')}</div>`;
+    host.addEventListener('click', e => { const b = e.target.closest('button[data-s]'); if (b) pick(b.dataset.s); });
   });
 
   /* ---- scale each mock to its frame ---- */

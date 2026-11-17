@@ -9,3 +9,7 @@ drafts/_preview/*.html
 .secrets
 # CV: holds a personal phone number; the repo is public
 Nicolas_Smits_Resume_*.md
+# Upload inbox: originals as Nicolas drops them; processed copies live in content/assets/
+/assets/
+# CV build intermediate; the PDF is committed
+content/cv/cv.html

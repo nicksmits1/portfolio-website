@@ -7,7 +7,9 @@ period: 2026-06 to 2026-08
 methods: [Nonlinear optimisation, Hybrid modelling]
 tools: [JAX, Pyomo]
 source: ../CMU/SiNDAE (read-only); https://github.com/Alves-research-group/SiNDAE
-links: [https://arxiv.org/abs/2504.04665]
+links: [https://github.com/Alves-research-group/SiNDAE]
+method_paper: https://arxiv.org/abs/2504.04665 (Lueg, Alves, Schicksnus, Kitchin, Laird, Biegler; Nicolas is not an author, cite it as the method the package implements)
+publication: "SiNDAE: The Simultaneous Neural Differential-Algebraic systems of equations training Python package", Smits, Lueg, Alves, Laird, Kitchin, Biegler, Journal of Open Source Software, pending
 disclosure: public, open source
 ---
 Neural networks embedded in differential-algebraic process models and trained as one nonlinear program.
@@ -15,7 +17,7 @@ Neural networks embedded in differential-algebraic process models and trained as
 ## Facts
 - ODEs and high-index DAEs (index-2 four-tank example), discretised with Pyomo collocation.
 - Two training backends: simultaneous and decomposition.
-- JOSS paper pending.
+- First-author JOSS software paper pending.
 
 ## Visual
 Lead: phase portrait of the Leslie-Gower example drawn as evenly spaced streamlines, from the package's own equations and default parameters (`sindae/example_problems.py`).
