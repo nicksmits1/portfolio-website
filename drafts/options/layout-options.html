@@ -1,0 +1,510 @@
+<title>Descent Layout Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Onest:wght@400;500;600&family=STIX+Two+Text:ital@1&display=swap">
+<style>
+/* Layout: an options board in the site's own world. Each option is a scaled mock of the real page,
+   desktop beside phone, with its trade-offs underneath. Mocks are drawn at design size and zoomed to fit. */
+:root{
+  color-scheme:dark;
+  --bg:#120A2A; --panel:#1A1038; --ink:#0D0722; --fg:#F3EDFF; --fg2:#B9AAE8; --dim:#7C6BB8;
+  --coral:#FF7C6B; --violet:#8B5CF6; --peach:#FFD9C2; --hair:rgba(243,237,255,.22); --hair2:rgba(243,237,255,.1);
+  --disp:"Unbounded",system-ui,sans-serif; --text:"Onest",system-ui,sans-serif; --math:"STIX Two Text","Times New Roman",serif;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 1rem/1.55 var(--text);margin:0}
+::selection{background:var(--coral);color:var(--bg)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px}
+.wrap{max-width:1320px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---- board chrome ---- */
+.intro{padding-block:clamp(2rem,5vw,3.6rem) 1.4rem}
+.intro h1{font:300 clamp(2rem,5vw,3.4rem)/1 var(--disp);letter-spacing:-.04em;margin:0 0 1rem;text-wrap:balance}
+.intro p{margin:0 0 .7rem;max-width:68ch;color:var(--fg2)}
+.intro p b{color:var(--fg);font-weight:600}
+.toc{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.2rem}
+.toc a{font:500 .9rem/1 var(--text);padding:.5rem .8rem;border:1px solid var(--hair);border-radius:999px;text-decoration:none}
+.toc a:hover{border-color:var(--coral);color:var(--coral)}
+.toc span{align-self:center;color:var(--dim);font-size:.85rem;margin:0 .3rem}
+.decision{border-top:1px solid var(--hair);padding-block:clamp(2rem,5vw,3.2rem)}
+.decision>h2{font:400 clamp(1.4rem,3vw,2rem)/1.1 var(--disp);letter-spacing:-.035em;margin:0 0 .5rem}
+.decision>p{margin:0 0 2rem;color:var(--fg2);max-width:70ch}
+.opt{display:grid;gap:1.2rem;margin-bottom:clamp(2.5rem,6vw,4rem)}
+.opt header{display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap}
+.tag{font:600 .85rem/1 var(--disp);color:var(--bg);background:var(--coral);border-radius:999px;padding:.4rem .7rem;letter-spacing:.02em}
+.opt h3{font:400 clamp(1.15rem,2.2vw,1.5rem)/1.15 var(--disp);letter-spacing:-.03em;margin:0}
+.opt header p{flex-basis:100%;margin:0;color:var(--fg2);max-width:72ch}
+.views{display:grid;gap:1.2rem;align-items:start}
+@media(min-width:860px){.views.two{grid-template-columns:minmax(0,1fr) 250px}}
+.cap{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 .45rem}
+.frame{border:1px solid var(--hair);border-radius:10px;overflow:hidden;background:var(--ink);min-width:0}
+.screen{transform-origin:0 0}
+.notes{display:grid;gap:1rem 2.4rem;font-size:.95rem}
+@media(min-width:860px){.notes{grid-template-columns:1.1fr 1fr 1fr}}
+.notes h4{font:600 .78rem/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 .5rem}
+.notes ol,.notes ul{margin:0;padding-left:1.1rem}
+.notes li{margin-bottom:.25rem}
+.notes p{margin:0}
+.took{display:grid;gap:1rem 2.4rem;padding-block:clamp(2rem,5vw,3rem) clamp(3rem,7vw,5rem);border-top:1px solid var(--hair)}
+@media(min-width:860px){.took{grid-template-columns:1fr 1fr}}
+.took h2{font:400 1.3rem/1.15 var(--disp);letter-spacing:-.03em;margin:0 0 .6rem;grid-column:1/-1}
+.took h4{font:600 .78rem/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 .5rem}
+.took ul{margin:0;padding-left:1.1rem;color:var(--fg2)}
+.took li{margin-bottom:.3rem}.took li b{color:var(--fg);font-weight:600}
+
+/* ---- inside the mocks: design-size px, scaled by zoom ---- */
+.screen{background:var(--bg);color:var(--fg);font:400 16px/1.5 var(--text);position:relative}
+.m-hero{position:relative;border-bottom:1px solid var(--hair)}
+.m-land{position:absolute;inset:0;overflow:hidden;cursor:crosshair}
+.m-land canvas,.m-land svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.m-land svg{pointer-events:none}
+.lab{position:absolute;transform:translate(-50%,12px);font:600 14px/1.1 var(--text);white-space:nowrap;padding:3px 8px;border-radius:999px;background:rgba(13,7,34,.72);transition:background .3s,color .3s,opacity .3s;pointer-events:none}
+.lab i{font:italic 15px/1 var(--math);margin-right:4px;font-weight:400}
+.lab.hit{background:var(--coral);color:var(--bg)}
+.lab.off{opacity:.3}
+.lab.sec{font:400 15px/1 var(--disp);letter-spacing:-.02em;padding:6px 11px;background:rgba(255,217,194,.92);color:var(--ink)}
+.lab.sec.hit{background:var(--coral)}
+.m-nav{position:absolute;top:0;right:0;z-index:2;display:flex;gap:24px;padding:18px 44px 12px 20px;font:500 15px/1 var(--text);background:rgba(13,7,34,.72);border-bottom-left-radius:14px}
+.m-who{position:absolute;left:44px;bottom:40px;z-index:1;pointer-events:none;max-width:640px}
+.m-id{display:flex;gap:22px;align-items:flex-end}
+.m-head{flex:none;width:118px;height:118px;border-radius:14px;border:1.5px dashed var(--peach);background:repeating-linear-gradient(135deg,rgba(255,217,194,.14) 0 6px,transparent 6px 12px),var(--ink);display:grid;place-items:center;text-align:center;font:600 11px/1.3 var(--text);letter-spacing:.08em;color:var(--peach)}
+.m-h1{font:300 76px/.96 var(--disp);letter-spacing:-.04em;margin:0}
+.m-focus{margin:16px 0 0;font:500 18px/1.4 var(--text);max-width:34ch}
+.m-read{margin:10px 0 0;font-size:15px;color:var(--fg2);min-height:22px}
+.m-read b{color:var(--fg)}
+.m-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;pointer-events:auto}
+.m-links span{font:500 14px/1 var(--text);padding:8px 12px;border:1px solid var(--hair);border-radius:999px;background:rgba(13,7,34,.6)}
+.m-links span.tbd{border-style:dashed;color:var(--fg2)}
+.m-body{padding:0 44px}
+.m-sec{padding:56px 0;border-bottom:1px solid var(--hair)}
+.m-sec:last-child{border-bottom:0}
+.m-sec h2{font:400 30px/1.1 var(--disp);letter-spacing:-.035em;margin:0 0 26px}
+.m-two{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.row{display:grid;grid-template-columns:168px 300px 1fr 90px;gap:28px;align-items:center;padding:16px 0;border-top:1px solid var(--hair2)}
+.row svg{display:block;width:168px;height:96px;border-radius:8px;background:var(--panel)}
+.row b{display:block;font:400 18px/1.2 var(--disp);letter-spacing:-.03em}
+.row small{display:block;color:var(--fg2);font-size:13px;margin-top:4px}
+.row p{margin:0;font-size:15px;color:var(--fg2);max-width:48ch}
+.row em{font-style:normal;font-size:13px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums}
+.row.on{background:linear-gradient(90deg,rgba(255,124,107,.12),transparent 70%)}
+.item{display:grid;grid-template-columns:92px 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--hair2);font-size:15px}
+.item em{font-style:normal;color:var(--dim);font-size:13px;font-variant-numeric:tabular-nums;padding-top:2px}
+.item b{font-weight:600;display:block}
+.item span{color:var(--fg2);font-size:14px}
+.item.pend b::after{content:"pending";margin-left:8px;font:500 11px/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--coral);border:1px solid var(--coral);border-radius:999px;padding:2px 6px;vertical-align:2px}
+.subh{font:600 12px/1 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:22px 0 4px}
+.subh:first-child{margin-top:0}
+.m-foot{background:var(--peach);color:var(--ink);padding:56px 44px}
+.m-foot h2{font:300 44px/1 var(--disp);letter-spacing:-.04em;margin:0 0 16px}
+.m-foot .mail{font:400 30px/1.15 var(--disp);letter-spacing:-.035em;margin:0 0 18px}
+.m-foot .r{display:flex;gap:22px;align-items:center;font-weight:600;font-size:15px}
+.m-foot .r span:first-child{background:var(--ink);color:var(--peach);border-radius:999px;padding:11px 16px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button{font:500 14px/1 var(--text);padding:8px 12px;border:1px solid var(--hair);border-radius:999px;background:rgba(13,7,34,.6);color:var(--fg);cursor:pointer}
+.chips button:hover{border-color:var(--fg)}
+.chips button[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:var(--bg)}
+
+/* B: profile beside the landscape */
+.m-split{display:grid;grid-template-columns:480px 1fr;border-bottom:1px solid var(--hair)}
+.m-prof{padding:30px 44px 40px;display:flex;flex-direction:column}
+.m-prof .brand{font:400 15px/1 var(--disp);letter-spacing:-.02em;margin-bottom:auto;display:flex;gap:22px;align-items:center}
+.m-prof .brand nav{display:flex;gap:18px;font:500 14px/1 var(--text);color:var(--fg2)}
+.m-prof .m-head{width:172px;height:206px;margin-bottom:24px}
+.m-prof .m-h1{font-size:60px}
+.m-prof .bio{margin:14px 0 0;font-size:15px;color:var(--fg2);max-width:40ch}
+.m-panel{position:relative;border-left:1px solid var(--hair)}
+.latest{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.latest div{border-top:2px solid var(--coral);padding-top:12px}
+.latest em{font-style:normal;display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.latest b{display:block;font:400 16px/1.25 var(--disp);letter-spacing:-.025em;margin-top:8px}
+.latest span{display:block;font-size:13px;color:var(--fg2);margin-top:6px}
+
+/* C: profile band under a landscape of sections */
+.band{display:grid;grid-template-columns:140px 1fr auto;gap:30px;align-items:center;padding:34px 44px;border-bottom:1px solid var(--hair)}
+.band .m-head{width:140px;height:140px}
+.band .m-links{margin:0;justify-content:flex-end;max-width:330px}
+.band p{margin:0;font-size:16px;color:var(--fg2);max-width:56ch}
+.band p b{color:var(--fg);font:400 22px/1.2 var(--disp);letter-spacing:-.03em;display:block;margin-bottom:8px}
+
+/* skills page / section */
+.s-head{padding:44px 44px 22px}
+.s-head h2{font:300 54px/1 var(--disp);letter-spacing:-.04em;margin:0 0 18px}
+.s-head p{margin:14px 0 0;color:var(--fg2);font-size:15px}
+.s-stage{position:relative;border-block:1px solid var(--hair)}
+.s-cats{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;padding:40px 44px 56px}
+.s-cats b{display:block;font:400 17px/1.2 var(--disp);letter-spacing:-.03em;margin-bottom:10px}
+.s-cats span{display:block;font-size:14px;color:var(--fg2);line-height:1.7}
+.s-hchips{position:absolute;left:44px;right:44px;top:66px;z-index:2}
+.s-hchips .chips{max-width:900px}
+.ghost{opacity:.4}
+
+/* phone mocks */
+.ph .m-nav{padding:14px 16px 10px 14px;gap:16px;font-size:13px}
+.ph .m-who{left:16px;bottom:22px;right:16px}
+.ph .m-head{width:64px;height:64px;font-size:8px;border-radius:10px}
+.ph .m-h1{font-size:40px}
+.ph .m-focus{font-size:15px;margin-top:10px}
+.ph .m-read{font-size:13px}
+.ph .m-links span{font-size:12px;padding:6px 9px}
+.ph .m-body{padding:0 16px}
+.ph .m-sec{padding:34px 0}
+.ph .m-sec h2{font-size:22px;margin-bottom:14px}
+.ph .row{grid-template-columns:92px 1fr;gap:6px 14px;padding:12px 0}
+.ph .row svg{width:92px;height:56px;grid-row:span 2}
+.ph .row b{font-size:15px}.ph .row small{font-size:11px}
+.ph .row p{font-size:12px;grid-column:2}
+.ph .row em{display:none}
+.ph .item{grid-template-columns:62px 1fr;gap:10px;font-size:13px}
+.ph .item span{font-size:12px}
+.ph .m-foot{padding:34px 16px}
+.ph .m-foot h2{font-size:30px}.ph .m-foot .mail{font-size:18px}.ph .m-foot .r{font-size:13px;gap:14px;flex-wrap:wrap}
+.ph .lab{font-size:12px;padding:2px 6px}.ph .lab i{font-size:13px}
+.ph .lab.sec{font-size:12px;padding:4px 8px}
+.ph .m-prof{padding:18px 16px 26px}
+.ph .m-prof .brand{margin-bottom:22px}
+.ph .m-prof .m-head{width:96px;height:116px;margin-bottom:14px}
+.ph .m-prof .m-h1{font-size:38px}
+.ph .m-prof .bio{font-size:13px}
+.ph .latest{display:flex;overflow:hidden;gap:14px}
+.ph .latest div{flex:0 0 150px}
+.ph .latest b{font-size:14px}
+.ph .band{grid-template-columns:72px 1fr;gap:14px;padding:22px 16px}
+.ph .band .m-head{width:72px;height:72px}
+.ph .band .m-links{grid-column:1/-1;justify-content:flex-start;max-width:none}
+.ph .band p{font-size:13px}.ph .band p b{font-size:17px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="wrap intro">
+  <h1>Layout options</h1>
+  <p>Two decisions, each with three options, all built in draft E's palette, type and landscape. <b>Click any landscape to run the solver</b>, and use the skill chips in the second set; they work.</p>
+  <p>Pick one per decision, or mix: "B, with skills as S1" is a fine answer. Section content comes from your CV and project files; the wording is placeholder. Dashed boxes are assets you would upload (headshot) or links still to come (ORCID).</p>
+  <nav class="toc" aria-label="Options"><a href="#opt-a">A</a><a href="#opt-b">B</a><a href="#opt-c">C</a><span>skills</span><a href="#opt-s1">S1</a><a href="#opt-s2">S2</a><a href="#opt-s3">S3</a><span>·</span><a href="#took">What came from johnspeaks.com</a></nav>
+</header>
+
+<main class="wrap">
+<section class="decision" id="home">
+  <h2>1. Home page structure</h2>
+  <p>Every option has the same sections: who you are, research and projects (each row opens its own page), publications and talks, experience and education, contact. They differ in what gets the first screen and what the landscape does.</p>
+
+  <!-- A -->
+  <article class="opt" id="opt-a">
+    <header><span class="tag">A</span><h3>Landscape first</h3><p>Draft E's hero, unchanged in spirit: the landscape fills the first screen and your name, headshot and links sit on it. Everything else follows as a calm list.</p></header>
+    <div class="views two">
+      <div><p class="cap">Desktop, 1200 px</p><div class="frame"><div class="screen" data-w="1200">
+        <div class="m-hero" style="height:640px">
+          <div class="m-land" data-w="1200" data-h="640" data-map="wide" data-start=".47,.5" data-contact="1"></div>
+          <nav class="m-nav"><span>Research</span><span>Publications</span><span>Experience</span><span>CV</span><span>Contact</span></nav>
+          <div class="m-who"><div class="m-id"><div class="m-head">HEADSHOT<br>UPLOAD</div><p class="m-h1">Nicolas<br>Smits</p></div>
+            <p class="m-focus">Optimisation, machine learning and reinforcement learning for process systems.</p>
+            <div class="m-links" data-part="links"></div><p class="m-read">Click anywhere to start a solver there.</p></div>
+        </div>
+        <div class="m-body"><div class="m-sec"><h2>Research and projects</h2><div data-part="rows"></div></div>
+          <div class="m-sec m-two"><div><h2>Publications and talks</h2><div data-part="pubs"></div></div><div><h2>Experience and education</h2><div data-part="timeline"></div></div></div></div>
+        <div data-part="foot"></div>
+      </div></div></div>
+      <div><p class="cap">Phone, 390 px</p><div class="frame"><div class="screen ph" data-w="390">
+        <div class="m-hero" style="height:600px">
+          <div class="m-land" data-w="390" data-h="600" data-map="tall" data-start=".5,.2"></div>
+          <nav class="m-nav"><span>Research</span><span>CV</span><span>Contact</span></nav>
+          <div class="m-who"><div class="m-id"><div class="m-head">HEADSHOT</div><p class="m-h1">Nicolas<br>Smits</p></div>
+            <div class="m-links" data-part="links"></div><p class="m-read"></p></div>
+        </div>
+        <div class="m-body"><div class="m-sec"><h2>Research and projects</h2><div data-part="rows"></div></div>
+          <div class="m-sec"><h2>Publications and talks</h2><div data-part="pubs"></div></div>
+          <div class="m-sec"><h2>Experience and education</h2><div data-part="timeline"></div></div></div>
+        <div data-part="foot"></div>
+      </div></div></div>
+    </div>
+    <div class="notes">
+      <div><h4>Order</h4><ol><li>Landscape with name, headshot, links</li><li>Research and projects</li><li>Publications | Experience and education</li><li>Contact</li></ol></div>
+      <div><h4>Good at</h4><p>The strongest first impression; closest to the draft you liked. The solver is the first thing anyone touches.</p></div>
+      <div><h4>Costs</h4><p>The headshot and links compete with the landscape for the same corner. Someone checking "who is this" scrolls past a toy first.</p></div>
+    </div>
+  </article>
+
+  <!-- B -->
+  <article class="opt" id="opt-b">
+    <header><span class="tag">B</span><h3>Profile beside the landscape</h3><p>The first screen splits: you on the left (headshot, short bio, every link), the landscape on the right as the index of your work. A dated "Latest" strip follows, like the recent posts on your friend's site.</p></header>
+    <div class="views two">
+      <div><p class="cap">Desktop, 1200 px</p><div class="frame"><div class="screen" data-w="1200">
+        <div class="m-split" style="height:640px">
+          <div class="m-prof"><div class="brand">N. Smits<nav><span>Research</span><span>Publications</span><span>Experience</span><span>CV</span></nav></div>
+            <div class="m-head">HEADSHOT<br>UPLOAD</div><p class="m-h1">Nicolas Smits</p>
+            <p class="m-focus">Optimisation, machine learning and reinforcement learning for process systems.</p>
+            <p class="bio">MS in AI Engineering, Chemical Engineering at Carnegie Mellon. Thesis on graph reinforcement learning for resilient supply chains, with Carl Laird.</p>
+            <div class="m-links" data-part="links"></div></div>
+          <div class="m-panel"><div class="m-land" data-w="720" data-h="640" data-map="panel" data-start=".5,.42"></div>
+            <p class="m-read" style="position:absolute;left:24px;bottom:18px;margin:0;z-index:1;background:rgba(13,7,34,.72);padding:6px 12px;border-radius:999px">Click anywhere to start a solver there.</p></div>
+        </div>
+        <div class="m-body"><div class="m-sec"><h2>Latest</h2><div class="latest" data-part="latest"></div></div>
+          <div class="m-sec"><h2>Research and projects</h2><div data-part="rows"></div></div>
+          <div class="m-sec m-two"><div><h2>Publications and talks</h2><div data-part="pubs"></div></div><div><h2>Experience and education</h2><div data-part="timeline"></div></div></div></div>
+        <div data-part="foot"></div>
+      </div></div></div>
+      <div><p class="cap">Phone, 390 px</p><div class="frame"><div class="screen ph" data-w="390">
+        <div class="m-prof"><div class="brand">N. Smits</div><div class="m-head">HEADSHOT</div><p class="m-h1">Nicolas Smits</p>
+          <p class="bio">MS in AI Engineering, Chemical Engineering at Carnegie Mellon. Optimisation, ML and RL for process systems.</p><div class="m-links" data-part="links"></div></div>
+        <div class="m-hero" style="height:420px;border-top:1px solid var(--hair)"><div class="m-land" data-w="390" data-h="420" data-map="tallpanel" data-start=".5,.4"></div></div>
+        <div class="m-body"><div class="m-sec"><h2>Latest</h2><div class="latest" data-part="latest"></div></div>
+          <div class="m-sec"><h2>Research and projects</h2><div data-part="rows"></div></div>
+          <div class="m-sec"><h2>Publications and talks</h2><div data-part="pubs"></div></div>
+          <div class="m-sec"><h2>Experience and education</h2><div data-part="timeline"></div></div></div>
+        <div data-part="foot"></div>
+      </div></div></div>
+    </div>
+    <div class="notes">
+      <div><h4>Order</h4><ol><li>Profile | landscape</li><li>Latest (dated news)</li><li>Research and projects</li><li>Publications | Experience and education</li><li>Contact</li></ol></div>
+      <div><h4>Good at</h4><p>An advisor or recruiter learns who you are, where you study and how to reach you in the first second. The landscape still owns most of the screen.</p></div>
+      <div><h4>Costs</h4><p>The most conventional of the three. "Latest" only works if you keep adding to it; a stale news strip reads worse than none.</p></div>
+    </div>
+  </article>
+
+  <!-- C -->
+  <article class="opt" id="opt-c">
+    <header><span class="tag">C</span><h3>The landscape maps the whole site</h3><p>Every section is a minimum, not only the projects: Publications, Experience, CV and Contact are broad basins, the projects a cluster of deep ones. The solver becomes the site's navigation. A profile band with your headshot follows.</p></header>
+    <div class="views two">
+      <div><p class="cap">Desktop, 1200 px</p><div class="frame"><div class="screen" data-w="1200">
+        <div class="m-hero" style="height:680px">
+          <div class="m-land" data-w="1200" data-h="680" data-map="sections" data-start=".5,.36"></div>
+          <nav class="m-nav"><span>Research</span><span>Publications</span><span>Experience</span><span>CV</span><span>Contact</span></nav>
+          <div class="m-who" style="bottom:34px"><p class="m-h1" style="font-size:64px">Nicolas<br>Smits</p><p class="m-read">Click anywhere to start a solver there.</p></div>
+        </div>
+        <div class="band"><div class="m-head">HEADSHOT<br>UPLOAD</div><p><b>Optimisation, machine learning and reinforcement learning for process systems.</b>MS in AI Engineering, Chemical Engineering at Carnegie Mellon. Thesis on graph reinforcement learning for resilient supply chains, with Carl Laird.</p><div class="m-links" data-part="links"></div></div>
+        <div class="m-body"><div class="m-sec"><h2>Research and projects</h2><div data-part="rows"></div></div>
+          <div class="m-sec m-two"><div><h2>Publications and talks</h2><div data-part="pubs"></div></div><div><h2>Experience and education</h2><div data-part="timeline"></div></div></div></div>
+        <div data-part="foot"></div>
+      </div></div></div>
+      <div><p class="cap">Phone, 390 px</p><div class="frame"><div class="screen ph" data-w="390">
+        <div class="m-hero" style="height:640px">
+          <div class="m-land" data-w="390" data-h="640" data-map="tallsections" data-start=".5,.2"></div>
+          <nav class="m-nav"><span>Research</span><span>CV</span><span>Contact</span></nav>
+          <div class="m-who"><p class="m-h1">Nicolas<br>Smits</p><p class="m-read"></p></div>
+        </div>
+        <div class="band"><div class="m-head">HEADSHOT</div><p><b>Optimisation, ML and RL for process systems.</b>MS in AI Engineering, Chemical Engineering, CMU.</p><div class="m-links" data-part="links"></div></div>
+        <div class="m-body"><div class="m-sec"><h2>Research and projects</h2><div data-part="rows"></div></div>
+          <div class="m-sec"><h2>Publications and talks</h2><div data-part="pubs"></div></div>
+          <div class="m-sec"><h2>Experience and education</h2><div data-part="timeline"></div></div></div>
+        <div data-part="foot"></div>
+      </div></div></div>
+    </div>
+    <div class="notes">
+      <div><h4>Order</h4><ol><li>Landscape of sections and projects</li><li>Profile band with headshot, links</li><li>Research and projects</li><li>Publications | Experience and education</li><li>Contact</li></ol></div>
+      <div><h4>Good at</h4><p>The most distinctive: the descent idea carries the whole site, not only the project list. Grows naturally as sections are added.</p></div>
+      <div><h4>Costs</h4><p>Ten labels on one landscape get crowded, especially on a phone. Some visitors will not realise the landscape is a menu, so the nav bar has to stay.</p></div>
+    </div>
+  </article>
+</section>
+
+<section class="decision" id="skills">
+  <h2>2. Where the skills landscape lives</h2>
+  <p>The interaction is the same in all three: pick a skill and the projects that use it stay deep while the rest flatten out. Try the chips.</p>
+
+  <article class="opt" id="opt-s1">
+    <header><span class="tag">S1</span><h3>Merged into the hero</h3><p>The skill chips sit on the hero landscape and reshape it in place. One landscape on the whole site; the project rows below filter along with it.</p></header>
+    <div class="views"><div><p class="cap">Desktop, 1200 px: hero plus the top of the project list</p><div class="frame"><div class="screen" data-w="1200">
+      <div class="m-hero" style="height:620px">
+        <div class="m-land" data-w="1200" data-h="620" data-map="wide" data-skills="s1" data-start=".47,.55"></div>
+        <nav class="m-nav"><span>Research</span><span>Publications</span><span>Experience</span><span>CV</span><span>Contact</span></nav>
+        <div class="s-hchips"><div class="chips" data-chips="s1"></div></div>
+        <div class="m-who"><p class="m-h1" style="font-size:64px">Nicolas<br>Smits</p><p class="m-read">Pick a skill, or click to start a solver.</p></div>
+      </div>
+      <div class="m-body"><div class="m-sec" style="padding-bottom:30px"><h2>Research and projects</h2><div data-part="rows" data-filter="s1" data-limit="3"></div></div></div>
+    </div></div></div></div>
+    <div class="notes">
+      <div><h4>Good at</h4><p>One landscape, one interaction to learn. Home stays short. "Which of his projects use PyTorch?" is answered on the first screen.</p></div>
+      <div><h4>Costs</h4><p>Twenty-five chips crowd the hero; on a phone they need a collapsed "Filter by skill" row.</p></div>
+      <div><h4>Pairs with</h4><p>A and C directly. With B, the chips go above the landscape panel.</p></div>
+    </div>
+  </article>
+
+  <article class="opt" id="opt-s2">
+    <header><span class="tag">S2</span><h3>Its own page</h3><p>A Skills page in the nav: chips, a full-width landscape, and the skills grouped by kind underneath for anyone who wants the plain list.</p></header>
+    <div class="views"><div><p class="cap">Desktop, 1200 px: /skills</p><div class="frame"><div class="screen" data-w="1200">
+      <div class="s-head"><h2>Skills</h2><div class="chips" data-chips="s2"></div><p class="m-read">Pick a skill. The projects that use it stay deep; the rest flatten out.</p></div>
+      <div class="s-stage" style="height:440px"><div class="m-land" data-w="1200" data-h="440" data-map="grid" data-skills="s2"></div></div>
+      <div class="s-cats" data-part="cats"></div>
+    </div></div></div></div>
+    <div class="notes">
+      <div><h4>Good at</h4><p>Room for everything, including skills no project shows yet (languages, MATLAB, Neo4j). A recruiter can be linked straight to it.</p></div>
+      <div><h4>Costs</h4><p>A page fewer visitors reach. The landscape appears twice on the site, once on home and once here.</p></div>
+      <div><h4>Pairs with</h4><p>Any home option.</p></div>
+    </div>
+  </article>
+
+  <article class="opt" id="opt-s3">
+    <header><span class="tag">S3</span><h3>A section further down home</h3><p>As in draft E: after the project list, a second landscape laid out as a grid, with the chips above it.</p></header>
+    <div class="views"><div><p class="cap">Desktop, 1200 px: bottom of the home page</p><div class="frame"><div class="screen" data-w="1200">
+      <div class="m-body ghost"><div class="m-sec" style="padding:24px 0"><div data-part="rows" data-limit="2" data-skip="4"></div></div></div>
+      <div class="s-head" style="border-top:1px solid var(--hair)"><h2>Skills</h2><div class="chips" data-chips="s3"></div><p class="m-read">Pick a skill. The projects that use it stay deep; the rest flatten out.</p></div>
+      <div class="s-stage" style="height:420px"><div class="m-land" data-w="1200" data-h="420" data-map="grid" data-skills="s3"></div></div>
+      <div data-part="foot"></div>
+    </div></div></div></div>
+    <div class="notes">
+      <div><h4>Good at</h4><p>Exactly what you saw in the draft. The skills get a stage of their own without a separate page.</p></div>
+      <div><h4>Costs</h4><p>The longest home page of the three, and two landscapes on it. With more sections added, it sits far down.</p></div>
+      <div><h4>Pairs with</h4><p>A and B. With C, two landscapes that both act as menus would confuse.</p></div>
+    </div>
+  </article>
+</section>
+
+<section class="took" id="took">
+  <h2>What came from johnspeaks.com</h2>
+  <div><h4>Taken</h4><ul>
+    <li><b>Headshot, a short bio and every link</b> on the first screen.</li>
+    <li><b>Experience and Education</b> as sections of their own (merged into one timeline here; they can split).</li>
+    <li><b>A CV link</b> in the nav. A public CV needs a copy without your phone number.</li>
+    <li><b>Dated recent posts</b>, as "Latest" in option B.</li>
+    <li><b>Teasers on home that open full pages</b>: each project row opens /projects/&lt;id&gt;.</li></ul></div>
+  <div><h4>Left out, tell me if you want them</h4><ul>
+    <li><b>Leadership.</b> Your CV lists none. Teaching, TA work, reviewing or student groups would go here.</li>
+    <li><b>A separate Contact page.</b> The peach footer does that job on every page.</li>
+    <li><b>Writing or notes.</b> Still undecided in the product brief.</li>
+    <li><b>Google Scholar.</b> Added beside ORCID once you have a profile.</li></ul></div>
+</section>
+</main>
+
+<script>
+(function () {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const NS = 'http://www.w3.org/2000/svg';
+  const P = [
+    { id: 'thesis', short: 'Supply chain RL', name: 'Graph RL for resilient supply chains', where: "Master's thesis, CMU", yr: '2026', line: 'A policy learns which transport arcs to add so demand still arrives when plants, warehouses or routes fail.', m: ['Reinforcement learning', 'Graph neural networks', 'Simulation'], t: ['PyTorch', 'PyG', 'Gymnasium'] },
+    { id: 'sindae', short: 'SiNDAE', name: 'SiNDAE', where: 'CAPD, CMU', yr: '2026', line: 'Neural networks embedded in differential-algebraic process models and trained as one nonlinear program.', m: ['Nonlinear optimisation', 'Hybrid modelling'], t: ['JAX', 'Pyomo'] },
+    { id: 'recsys', short: 'Recommender', name: 'Movie recommender with LLM cold start', where: 'Team project, CMU', yr: '2026', line: "A live recommendation service. An LLM turns a new user's free-text tastes into a profile before their first request.", m: ['Ranking & recommenders', 'LLM pipelines', 'MLOps'], t: ['LightGBM', 'Kafka', 'Flask', 'Docker', 'PostgreSQL', 'AWS'] },
+    { id: 'wayfinder', short: 'wayfinder-sidebar', name: 'wayfinder-sidebar', where: 'Open source', yr: '2026', line: 'A Claude Code plugin. Your ticket map sits beside the chat; one click starts a new agent session with a handoff.', m: ['Agent tooling'], t: ['TypeScript'] },
+    { id: 'fifa', short: 'FIFA pipeline', name: 'FIFA player analytics pipeline', where: 'CMU, with Amogh Balaji', yr: '2025', line: 'Spark to Postgres ETL, a live Kafka comment stream, and rating models trained locally and on GCP.', m: ['Data engineering', 'Supervised learning'], t: ['Spark', 'PostgreSQL', 'Kafka', 'PyTorch', 'GCP', 'Docker'] },
+    { id: 'sepsis', short: 'Sepsis DQN', name: 'DQN variants for ICU sepsis treatment', where: 'McGill, COMP 579', yr: '2025', line: 'Which DQN extensions help on a clinical benchmark with 716 health states and 25 treatments?', m: ['Reinforcement learning'], t: ['PyTorch', 'Gymnasium'] }
+  ];
+  const byId = Object.fromEntries(P.map(p => [p.id, p]));
+  const SKILLS = [...new Set(P.flatMap(p => p.t.concat(p.m)))].map(s => ({ s, n: P.filter(p => p.t.includes(s) || p.m.includes(s)).length })).sort((a, b) => b.n - a.n || a.s.localeCompare(b.s));
+
+  /* ---- section content ---- */
+  const LINKS = ['Email', 'LinkedIn', 'GitHub', 'ORCID · soon', 'CV'];
+  const PUBS = [
+    ['2025', 'SiNDAE preprint', 'Lueg, Smits, Alves · arXiv 2504.04665'],
+    ['2026', 'SiNDAE software paper', 'Journal of Open Source Software', 1],
+    ['2027', 'Graph RL for resilient supply chain design', 'ESCAPE 37 abstract, Trondheim · first author', 1],
+    ['2026', 'Thesis poster', 'Carnegie Mellon']
+  ];
+  const EXP = [['2026', 'CAPD, Carnegie Mellon', 'Graduate Research Assistant'], ['2024', 'HydrateTech Laboratory, McGill', 'Computational Research Assistant'], ['2022–23', 'Lhoist Group, Belgium', 'R&D Engineer Intern, flue gas treatment']];
+  const EDU = [['2026', 'Carnegie Mellon University', 'MS, AI Engineering, Chemical Engineering'], ['2025', 'McGill University', 'BEng Chemical Engineering, minor in Applied AI']];
+  const LATEST = [['Nov 2026', 'Abstract', 'ESCAPE 37 abstract prepared', 'First author, with Bhatia and Laird'], ['Nov 2026', 'Open source', 'wayfinder-sidebar released', 'Claude Code plugin'], ['Sep 2026', 'Project', 'Recommender live', '500k+ requests within 600 ms'], ['Aug 2026', 'Software', 'SiNDAE package released', 'CAPD, Carnegie Mellon']];
+  const CATS = [['Learning', ['PyTorch', 'PyG', 'JAX', 'scikit-learn', 'Hugging Face', 'Ray / RLlib']], ['Optimisation & modelling', ['Pyomo', 'NLP solvers', 'Hybrid DAEs', 'SciPy', 'MATLAB']], ['Systems', ['Kafka', 'Spark', 'PostgreSQL', 'Flask', 'Docker', 'AWS, GCP']], ['Languages', ['Python, Java, TypeScript', 'English, French, Dutch', 'German (intermediate)']]];
+
+  function thumb(id) {
+    const s = { thesis: '<g stroke="#7C6BB8" stroke-width="1.4"><path d="M30 30L70 22L110 34L140 60M30 30L46 70L92 76L140 60M70 22L92 76"/></g><path d="M46 70L110 34" stroke="#FF7C6B" stroke-width="2.2"/><g fill="#F3EDFF"><circle cx="30" cy="30" r="5"/><circle cx="70" cy="22" r="5"/><circle cx="110" cy="34" r="5"/><circle cx="140" cy="60" r="5"/><circle cx="46" cy="70" r="5"/><circle cx="92" cy="76" r="5"/></g>',
+      sindae: '<path d="M18 84C40 20 140 14 150 52S70 92 64 58S118 34 112 52S86 64 88 54" fill="none" stroke="#F3EDFF" stroke-width="1.3"/><path d="M150 86C120 60 30 72 40 40" fill="none" stroke="#7C6BB8" stroke-width="1.1"/><circle cx="92" cy="54" r="4.5" fill="#FF7C6B"/>',
+      recsys: '<g fill="#2A1670" stroke="#B9AAE8"><rect x="12" y="38" width="30" height="20" rx="4"/><rect x="62" y="16" width="38" height="20" rx="4"/><rect x="62" y="60" width="38" height="20" rx="4"/><rect x="122" y="38" width="34" height="20" rx="4"/></g><path d="M42 48H52L62 26M52 48L62 70M100 26L122 48M100 70L122 48" fill="none" stroke="#7C6BB8"/><circle cx="62" cy="26" r="4" fill="#FF7C6B"/>',
+      wayfinder: '<rect x="14" y="12" width="140" height="72" rx="5" fill="#0D0722" stroke="#7C6BB8"/><rect x="104" y="12" width="50" height="72" fill="#2A1670"/><g fill="#B9AAE8"><rect x="110" y="22" width="36" height="5" rx="2"/><rect x="110" y="34" width="30" height="5" rx="2"/><rect x="110" y="46" width="34" height="5" rx="2"/></g><rect x="110" y="58" width="26" height="5" rx="2" fill="#FF7C6B"/><g fill="#7C6BB8"><rect x="24" y="24" width="60" height="4" rx="2"/><rect x="24" y="34" width="70" height="4" rx="2"/><rect x="24" y="44" width="50" height="4" rx="2"/></g>',
+      fifa: '<path d="M16 60H152" stroke="#B9AAE8"/><g stroke="#7C6BB8"><path d="M16 54V66M50 56V64M84 56V64M118 56V64M152 54V66"/></g><g fill="#F3EDFF"><circle cx="128" cy="60" r="4"/><circle cx="100" cy="60" r="4"/><circle cx="74" cy="60" r="4"/></g><circle cx="40" cy="60" r="6" fill="#FF7C6B"/>',
+      sepsis: '<path d="M16 60H152" stroke="#B9AAE8"/><g stroke="#7C6BB8"><path d="M16 54V66M43 56V64M70 56V64M97 56V64M124 56V64M152 54V66"/></g><g fill="#F3EDFF"><circle cx="52" cy="60" r="4"/><circle cx="78" cy="60" r="4"/><circle cx="104" cy="60" r="4"/></g><circle cx="132" cy="60" r="6" fill="#FF7C6B"/>' }[id];
+    return `<svg viewBox="0 0 168 96" aria-hidden="true">${s}</svg>`;
+  }
+  const item = (a, i) => `<div class="item${a[3] ? ' pend' : ''}"><em>${a[0]}</em><div><b>${a[1]}</b><span>${a[2]}</span></div></div>`;
+  const PART = {
+    links: () => LINKS.map(l => `<span${l.includes('soon') ? ' class="tbd"' : ''}>${l}</span>`).join(''),
+    rows: el => { const skip = +(el.dataset.skip || 0), lim = +(el.dataset.limit || 99);
+      return P.slice(skip, skip + lim).map(p => `<div class="row" data-id="${p.id}">${thumb(p.id)}<div><b>${p.name}</b><small>${p.where}</small></div><p>${p.line}</p><em>${p.yr}</em></div>`).join(''); },
+    pubs: () => PUBS.map(item).join(''),
+    timeline: () => '<p class="subh">Experience</p>' + EXP.map(item).join('') + '<p class="subh">Education</p>' + EDU.map(item).join(''),
+    latest: () => LATEST.map(a => `<div><em>${a[0]} · ${a[1]}</em><b>${a[2]}</b><span>${a[3]}</span></div>`).join(''),
+    cats: () => CATS.map(c => `<div><b>${c[0]}</b>${c[1].map(x => `<span>${x}</span>`).join('')}</div>`).join(''),
+    foot: () => '<div class="m-foot"><h2>Contact</h2><p class="mail">nsmits@andrew.cmu.edu</p><div class="r"><span>Copy address</span><span>GitHub</span><span>LinkedIn</span><span>ORCID</span></div></div>'
+  };
+  document.querySelectorAll('[data-part]').forEach(el => { el.innerHTML = PART[el.dataset.part](el); });
+
+  /* ---- landscape: the draft's objective, rendered in 2D at half resolution ---- */
+  const MAPS = {
+    wide: { sepsis: [.12, .25], sindae: [.36, .19], thesis: [.61, .3], recsys: [.86, .2], fifa: [.58, .7], wayfinder: [.85, .66] },
+    tall: { sepsis: [.26, .1], sindae: [.74, .16], thesis: [.3, .3], recsys: [.74, .38], fifa: [.28, .5], wayfinder: [.72, .58] },
+    panel: { thesis: [.28, .22], sindae: [.7, .15], recsys: [.8, .47], wayfinder: [.3, .55], fifa: [.62, .78], sepsis: [.2, .84] },
+    tallpanel: { thesis: [.28, .2], sindae: [.74, .16], recsys: [.72, .5], wayfinder: [.28, .54], fifa: [.3, .84], sepsis: [.74, .82] },
+    grid: { thesis: [.2, .3], sindae: [.5, .25], recsys: [.8, .3], sepsis: [.2, .74], wayfinder: [.5, .74], fifa: [.8, .74] },
+    sections: { thesis: [.5, .2], sindae: [.63, .13], recsys: [.77, .22], wayfinder: [.89, .38], fifa: [.6, .4], sepsis: [.74, .5],
+      '§Publications': [.25, .2], '§Experience': [.4, .5], '§Contact': [.62, .8], '§CV': [.88, .76] },
+    tallsections: { thesis: [.24, .1], sindae: [.62, .07], recsys: [.82, .2], wayfinder: [.3, .27], fifa: [.62, .3], sepsis: [.84, .42],
+      '§Publications': [.28, .46], '§Experience': [.72, .6], '§CV': [.26, .66], '§Contact': [.7, .8] }
+  };
+  const STOPS = [[0, [13, 7, 34]], [.3, [42, 22, 112]], [.56, [112, 68, 232]], [.8, [238, 107, 96]], [1, [255, 214, 191]]];
+  function ramp(v) { for (let i = 1; i < STOPS.length; i++) if (v <= STOPS[i][0]) { const [a, A] = STOPS[i - 1], [b, B] = STOPS[i], k = (v - a) / (b - a); return A.map((q, j) => q + (B[j] - q) * k); } return STOPS[4][1]; }
+  const svgEl = (t, a, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+
+  const lands = {};
+  document.querySelectorAll('.m-land').forEach(root => {
+    const W = +root.dataset.w, H = +root.dataset.h, A = W / H, phone = W < 500, map = MAPS[root.dataset.map];
+    const screen = root.closest('.screen'), read = screen.querySelector('.m-read');
+    const pts = Object.entries(map).map(([id, q]) => { const sec = id[0] === '§';
+      const s = sec ? (phone ? .1 : .13) : (root.dataset.map.includes('sections') ? (phone ? .065 : .075) : root.dataset.map === 'grid' ? .16 : phone ? .085 : .125);
+      return { id, sec, name: sec ? id.slice(1) : byId[id].short, x: q[0] * A, y: q[1], d: sec ? .62 : .82, s, c: sec ? .62 : .82 }; });
+    if (root.dataset.contact) pts.push({ id: 'contact', hidden: true, x: .2 * A, y: .74, d: .86, s: .27, c: .86 });
+    const cv = document.createElement('canvas'); cv.width = Math.round(W / 2); cv.height = Math.round(H / 2);
+    cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', 'Contour landscape with one minimum per ' + (root.dataset.map.includes('sections') ? 'section and project' : 'project'));
+    const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('aria-hidden', 'true');
+    root.append(cv, svg);
+    const ctx = cv.getContext('2d');
+    pts.forEach(p => { if (p.hidden) return; const l = document.createElement('span'); l.className = 'lab' + (p.sec ? ' sec' : ''); l.innerHTML = p.sec ? p.name : `<i>x*</i>${p.name}`;
+      l.style.left = (p.x / A * 100) + '%'; l.style.top = (p.y * 100) + '%'; root.appendChild(l); p.lab = l; });
+    const F = (x, y) => { let f = .12 * Math.sin(2.1 * x + .6) * Math.cos(1.7 * y - .4) + .08 * Math.sin(3.3 * y + 1.2 * x + 1);
+      for (const p of pts) { const dx = x - p.x, dy = y - p.y; f -= p.c * Math.exp(-(dx * dx + dy * dy) / (2 * p.s * p.s)); } return f; };
+    function render() {
+      const w = cv.width, h = cv.height, im = ctx.createImageData(w, h), band = new Int8Array(w * h);
+      for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) band[j * w + i] = Math.min(12, Math.floor(Math.max(0, Math.min(1, (F((i + .5) / h, (j + .5) / h) + .95) / 1.2)) * 13));
+      for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { const k = j * w + i, b = band[k], c = ramp(b / 12);
+        const edge = (i < w - 1 && band[k + 1] !== b) || (j < h - 1 && band[k + w] !== b) ? .75 : 1, n = (Math.random() - .5) * 9;
+        im.data[k * 4] = c[0] * edge + n; im.data[k * 4 + 1] = c[1] * edge + n; im.data[k * 4 + 2] = c[2] * edge + n; im.data[k * 4 + 3] = 255; }
+      ctx.putImageData(im, 0, 0);
+    }
+    let tok = 0;
+    function run(fx, fy, instant) {
+      const my = ++tok, path = [[fx * A, fy]]; let x = fx * A, y = fy, vx = 0, vy = 0; const e = 1e-3;
+      for (let k = 0; k < 220; k++) { const gx = (F(x + e, y) - F(x - e, y)) / (2 * e), gy = (F(x, y + e) - F(x, y - e)) / (2 * e);
+        vx = .8 * vx - .011 * gx; vy = .8 * vy - .011 * gy; x += vx; y += vy; path.push([x, y]); if (Math.hypot(gx, gy) < .02 && Math.hypot(vx, vy) < 4e-4) break; }
+      svg.textContent = ''; pts.forEach(p => p.lab && p.lab.classList.remove('hit'));
+      const sw = phone ? 1.4 : 1.8, line = svgEl('polyline', { fill: 'none', stroke: '#F3EDFF', 'stroke-width': sw, 'stroke-linejoin': 'round' }, svg), dots = svgEl('g', { fill: '#F3EDFF' }, svg);
+      svgEl('circle', { cx: fx * W, cy: fy * H, r: 5, fill: 'none', stroke: '#F3EDFF', 'stroke-width': sw }, svg);
+      let i = 0;
+      function done() { const end = path[path.length - 1]; let best = null, bd = 1e9; pts.forEach(p => { const d = Math.hypot(p.x - end[0], p.y - end[1]); if (d < bd) { bd = d; best = p; } });
+        svgEl('circle', { cx: end[0] * H, cy: end[1] * H, r: 9, fill: 'none', stroke: '#FF7C6B', 'stroke-width': 2.4 }, svg);
+        const hit = best && bd < .16 ? best : null; if (hit && hit.lab) hit.lab.classList.add('hit');
+        if (read) read.innerHTML = hit ? (hit.id === 'contact' ? `Converged in <b>${path.length - 1}</b> iterations, right on Contact.` : `Converged in <b>${path.length - 1}</b> iterations on <b>${hit.name}</b>.`) : `Stopped after <b>${path.length - 1}</b> iterations on a saddle. Try another start.`; }
+      function step() { if (my !== tok) return; const n = instant ? path.length : Math.min(path.length, i + 2);
+        for (; i < n; i++) svgEl('circle', { cx: path[i][0] * H, cy: path[i][1] * H, r: phone ? 1.7 : 2.1 }, dots);
+        line.setAttribute('points', path.slice(0, i).map(p => (p[0] * H).toFixed(1) + ',' + (p[1] * H).toFixed(1)).join(' '));
+        if (read && i < path.length) read.innerHTML = `Iteration <b>${i}</b>, f = <b>${F(path[i - 1][0], path[i - 1][1]).toFixed(3)}</b>`;
+        if (i < path.length) requestAnimationFrame(step); else done(); }
+      step();
+    }
+    let anim = 0;
+    function setWeights(on) {
+      pts.forEach(p => { p.t = p.hidden || p.sec || !on || on.has(p.id) ? p.d : p.d * .1; if (p.lab) p.lab.classList.toggle('off', p.t < p.d * .5); });
+      svg.textContent = ''; cancelAnimationFrame(anim); let f = 0;
+      (function tick() { f++; pts.forEach(p => { p.c += (p.t - p.c) * (reduce ? 1 : .35); }); render(); if (!reduce && f < 9) anim = requestAnimationFrame(tick); else { pts.forEach(p => (p.c = p.t)); render(); } })();
+    }
+    root.addEventListener('click', e => { const r = root.getBoundingClientRect(); run((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height, reduce); });
+    render();
+    if (root.dataset.start) { const [a, b] = root.dataset.start.split(',').map(Number); run(a, b, true); }
+    if (root.dataset.skills) lands[root.dataset.skills] = { setWeights, read, screen };
+  });
+
+  /* ---- skill chips ---- */
+  document.querySelectorAll('[data-chips]').forEach(box => {
+    const key = box.dataset.chips, L = lands[key]; let cur = null;
+    const list = key === 's1' ? SKILLS.slice(0, 12) : SKILLS;
+    list.forEach(({ s }) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = s; b.setAttribute('aria-pressed', 'false'); box.appendChild(b);
+      b.addEventListener('click', () => { cur = cur === s ? null : s;
+        box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b && cur ? 'true' : 'false'));
+        const users = P.filter(p => cur && (p.t.includes(cur) || p.m.includes(cur))), on = cur ? new Set(users.map(p => p.id)) : null;
+        L.setWeights(on);
+        if (L.read) L.read.innerHTML = cur ? `<b>${cur}</b>: ${users.map(p => p.short).join(', ')}.` : 'Pick a skill. The projects that use it stay deep; the rest flatten out.';
+        const rows = L.screen.querySelector('[data-filter]');
+        if (rows) rows.innerHTML = (cur ? users : P).slice(0, 3).map(p => `<div class="row${cur ? ' on' : ''}" data-id="${p.id}">${thumb(p.id)}<div><b>${p.name}</b><small>${p.where}</small></div><p>${p.line}</p><em>${p.yr}</em></div>`).join(''); }); });
+    if (key === 's1') { const more = document.createElement('button'); more.type = 'button'; more.textContent = `+${SKILLS.length - 12} more`; more.style.borderStyle = 'dashed'; box.appendChild(more); }
+  });
+
+  /* ---- scale each mock to its frame ---- */
+  const screens = [...document.querySelectorAll('.screen')];
+  function fit() { screens.forEach(s => { s.style.width = s.dataset.w + 'px'; s.style.zoom = s.parentElement.clientWidth / +s.dataset.w; }); }
+  fit(); addEventListener('resize', fit);
+})();
+</script>

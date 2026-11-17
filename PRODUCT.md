@@ -41,6 +41,8 @@ Each project is shown through a visual made from the project's own mathematics, 
 - Disclosure, recommender: describe the team's own implementation broadly (the system built, its architecture, the novel parts such as the Jev cold start). Do not publish anything specific to what the course hosts or manages: the course's code, its Kafka stream, its user simulation, endpoints, hostnames, topic names, credentials, or the private repo itself. Credit it as a team project.
 - SiNDAE's page must include the SiNDAE logo, which Nicolas designed.
 - Structure (Nicolas, 2026-11-17): the home page is an index; each project has its own page and none is shown in full on the home page.
+- Beyond projects (Nicolas, 2026-11-17): the site covers the whole profile, with sections for publications and talks, experience and education, a CV link, and a first screen with his headshot and links (LinkedIn, GitHub, ORCID once he has it, email). His friend's site johnspeaks.com is the reference for which sections to include, not for styling. Section set and home layout are being chosen from `drafts/options/layout-options.html`.
+- A public CV download needs a copy without the personal phone number.
 - Undecided: domain name, whether a CV download and a writing/notes section are wanted.
 
 ## Brand Commitments
@@ -59,7 +61,8 @@ Each project is shown through a visual made from the project's own mathematics, 
 - wayfinder-sidebar: `../wayfinder-sidebar/assets/demo.gif`, `demo.mp4`, `sidebar.png`, `icon.svg`; public repo.
 - FIFA: public repo `nicksmits1/FIFA-player-analytics-ml-pipeline` (with Amogh Balaji). Spark to Postgres ETL, Kafka + YouTube comment streaming, Spark MLlib and PyTorch regressors on GCP Dataproc. Best model GBT: RMSE 1.292, R² 0.964.
 - RL course project: public repo `nicksmits1/COMP-579-Reinforcement-Learning` (final project with James Randolph and Abdullah Paraha). ICU-Sepsis-v2, 716 states, 25 actions; Dueling DQN best at about 0.824 return.
-- Absent, do not fabricate: a photo of Nicolas, publication list beyond the above, testimonials, a real exported episode trace from a trained thesis policy (the animation needs one exported from the thesis repo), FIFA and sepsis figures as image files (they live inside notebooks and GitHub-hosted README images).
+- Headshot: Nicolas will upload one (2026-11-17); until then the layout shows a labelled placeholder.
+- Absent, do not fabricate: publication list beyond the above, testimonials, a real exported episode trace from a trained thesis policy (the animation needs one exported from the thesis repo), FIFA and sepsis figures as image files (they live inside notebooks and GitHub-hosted README images).
 
 ## Product Principles
 
