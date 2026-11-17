@@ -1,0 +1,74 @@
+title "FIFA player analytics pipeline" "Ingestion, live comment streaming and rating models, locally and on GCP Dataproc"
+
+layout ordered
+
+analyst "Analyst" [Actor] "Runs the notebook, locally or on the Dataproc cluster"
+
+csvs "Player tables" [Object Storage] "FIFA 15 to 22 career-mode CSVs, male and female, one file per season"
+
+group etl "Ingestion" [Service Group] {
+  loader "Spark loader" [Python] "Explicit schema, tags every row with season and gender, unions all files"
+}
+
+players "fifa.players" [PostgreSQL] "One row per player and season"
+
+group streaming "Comment streaming" [Service Group] {
+  youtube  "YouTube Data API" [Third Party API] "Comments on FIFA videos"
+  producer "Producer"         [Python]          "Polls comments and publishes them"
+  topic    "Comment topic"    [Kafka]
+  consumer "Consumer"         [Python]          "Finds player names and keeps a live mention leaderboard"
+}
+
+group modelling "Rating models" [Service Group] {
+  features "Feature pipeline" [Python] "Spark ML stages: primary position, skill columns, scaling"
+  mllib    "Spark MLlib"      [Python] "Random forest and gradient-boosted trees, cross-validated on RMSE"
+  shards   "Training shards"  [Object Storage] "MosaicML streaming shards of the transformed features"
+  torch    "PyTorch MLPs"     [Python] "Shallow and deep networks, grid search with checkpoints"
+}
+
+analyst  -> loader   : run ingestion
+csvs     -> loader   : read CSV
+loader   -> players  : JDBC write
+producer -> youtube  : HTTPS
+producer -> topic    : Publish
+topic    -> consumer : Consume
+analyst  -> features : run modelling
+features -> players  : JDBC read
+features -> mllib    : in-process call
+features -> shards   : write shards
+torch    -> shards   : stream batches
+
+usecase "Load the player tables" "Eight seasons into one table" {
+  analyst -> loader  : run ingestion
+  loader  -> csvs    : read every season
+  csvs   --> loader  : rows
+  loader  -> players : INSERT rows
+  players --> loader : row count
+  loader --> analyst : schema and sample rows
+}
+
+usecase "Count player mentions" "Live leaderboard from video comments" {
+  producer  -> youtube  : GET new comments
+  youtube  --> producer : comments
+  producer ->> topic    : Produce comment
+  topic    ->> consumer : Consume comment
+}
+
+usecase "Train the rating models" "Predict a player's overall rating from their skills" {
+  analyst  -> features : run modelling
+  features -> players  : read male players
+  players --> features : feature table
+  par {
+    features -> mllib  : fit RF and GBT with cross-validation
+    features -> shards : PUT train, validation and test shards
+  }
+  mllib   --> features : test RMSE and R²
+  torch    -> shards   : READ batches
+  shards  --> torch    : feature batches
+  features --> analyst : parity plots and metrics
+}
+
+test "Streaming stays off the modelling path" {
+  "Train the rating models" never waits for topic
+  "Load the player tables" never waits for youtube
+}

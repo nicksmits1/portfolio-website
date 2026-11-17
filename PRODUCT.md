@@ -34,7 +34,8 @@ Each project is shown through a visual made from the project's own mathematics, 
 
 ## Capabilities and Constraints
 
-- Six launch projects: movie recommendation service (MLiP, team project), SiNDAE, master's thesis (graph RL for supply chain network design), FIFA player analytics pipeline, RL course final project (DQN variants for ICU sepsis treatment), wayfinder-sidebar.
+- Seven launch projects: movie recommendation service (MLiP, team project), SiNDAE, master's thesis (graph RL for supply chain network design), FIFA player analytics pipeline, RL course final project (DQN variants for ICU sepsis treatment), wayfinder-sidebar, multimodal RAG (CMU Generative AI, with John Speaks and Darren Chen; added 2026-11-17).
+- Project pages may carry short prose sections between their figures (motivation, formulation, method, results), at Nicolas's request (2026-11-17); each stays short and sits beside a figure, never as a wall of text.
 - An animated, interactive skills page.
 - Visual first: avoid text-heavy pages; cut repetition.
 - Disclosure, thesis: everything may be shown, including preliminary numbers.
@@ -61,7 +62,13 @@ Each project is shown through a visual made from the project's own mathematics, 
 - wayfinder-sidebar: `../wayfinder-sidebar/assets/demo.gif`, `demo.mp4`, `sidebar.png`, `icon.svg`; public repo.
 - FIFA: public repo `nicksmits1/FIFA-player-analytics-ml-pipeline` (with Amogh Balaji). Spark to Postgres ETL, Kafka + YouTube comment streaming, Spark MLlib and PyTorch regressors on GCP Dataproc. Best model GBT: RMSE 1.292, R² 0.964.
 - RL course project: public repo `nicksmits1/COMP-579-Reinforcement-Learning` (final project with James Randolph and Abdullah Paraha). ICU-Sepsis-v2, 716 states, 25 actions; Dueling DQN best at about 0.824 return.
-- Headshot: Nicolas will upload one (2026-11-17); until then the layout shows a labelled placeholder.
+- Headshot: `content/assets/profile/`.
+- Thesis, added 2026-11-17: problem statement `../rl-sc-design/paper/optimisation-problem/problem.tex` (use sections 1 to 5, nothing on the mixed-integer encoding); ESCAPE 37 abstract accepted (Trondheim, 7 to 10 June 2027), logo in `content/assets/thesis/`.
+- SiNDAE, added 2026-11-17: docs at alves-research-group.github.io/SiNDAE (written by Nicolas); JOSS drafts in the repo's `paper/` (latest Draft 03); two-tank figures from the paper; featured in Victor Alves's talk at AIChE 2026 (Minneapolis, 8 to 12 November).
+- wayfinder-sidebar: r/claudeskills post with 14k views and 36 upvotes; 10 GitHub stars (Nicolas, 2026-11-17).
+- Sepsis: the team's report (local OneDrive, McGill/COMP 579/Final Project) compares eight variants; hosting the PDF needs Nicolas's approval.
+- Multimodal RAG: report from johnspeaks.com/gen_ai_final.pdf (`content/assets/mmrag/report.pdf`); code github.com/JTSIV1/multimodal-rag.
+- Recommender: Grafana dashboards exist but need a login; screenshots pending.
 - Absent, do not fabricate: publication list beyond the above, testimonials, a real exported episode trace from a trained thesis policy (the animation needs one exported from the thesis repo), FIFA and sepsis figures as image files (they live inside notebooks and GitHub-hosted README images).
 
 ## Product Principles

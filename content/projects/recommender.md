@@ -18,3 +18,5 @@ A live recommendation service. An LLM turns a new user's free-text tastes into a
 ## Visual
 Lead: the system diagram with a request travelling through it.
 Model: `content/diagrams/recommender.proschi` (passes `proschi check` and `proschi test`). Rendered SVGs and the interactive player are in `content/diagrams/rendered/`. Marked guesses in the file need the team's confirmation.
+
+TODO: Grafana dashboards (https://beigeterrace805.grafana.net/dashboards) need a login, so they could not be read. Ask Nicolas for screenshots or a public snapshot, then crop out anything course-managed (hostnames, endpoints, topic names) before using one as a supporting figure.

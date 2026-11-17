@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="707" height="338" viewBox="0 0 707 338" font-family="ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'" role="img">
+<title>Count player mentions</title>
+<defs><marker id="solid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#111111"/></marker><marker id="open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1,1 L9,5 L1,9" fill="none" stroke="#111111" stroke-width="1.5" stroke-linejoin="round"/></marker><marker id="reply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1,1 L9,5 L1,9" fill="none" stroke="#5B5B5B" stroke-width="1.5" stroke-linejoin="round"/></marker><marker id="solid-error" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#FF3B30"/></marker><marker id="open-error" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1,1 L9,5 L1,9" fill="none" stroke="#FF3B30" stroke-width="1.5" stroke-linejoin="round"/></marker></defs>
+<rect width="100%" height="100%" fill="#FFF8E7"/>
+<text x="24" y="40" font-size="16" font-weight="700" fill="#111111">Count player mentions</text>
+<text x="24" y="60" font-size="12" fill="#5B5B5B">GET new</text>
+<g data-participant="producer">
+<line x1="85" y1="126" x2="85" y2="314" stroke="#5B5B5B" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="5 4"/>
+<rect x="27" y="83" width="122" height="46" rx="4" fill="#111111"/>
+<rect x="25" y="81" width="120" height="44" rx="4" fill="#FFFFFF" stroke="#111111" stroke-width="2"/>
+<rect x="34" y="91" width="24" height="24" rx="4" fill="#FFF8E7" stroke="#111111" stroke-width="1.5"/>
+<svg x="39" y="96" width="14" height="14" color="#111111" stroke="currentColor" fill="currentColor" stroke-width="0" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"></path></svg>
+<text x="66" y="100" font-size="13" font-weight="700" fill="#111111">Producer</text>
+<text x="66" y="116" font-size="10" font-weight="500" fill="#5B5B5B" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Python</text>
+</g>
+<g data-participant="youtube">
+<line x1="261.3" y1="126" x2="261.3" y2="314" stroke="#5B5B5B" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="5 4"/>
+<rect x="173" y="83" width="182.6" height="46" rx="4" fill="#111111"/>
+<rect x="171" y="81" width="180.6" height="44" rx="4" fill="#FFFFFF" stroke="#111111" stroke-width="2"/>
+<rect x="180" y="91" width="24" height="24" rx="4" fill="#FFF8E7" stroke="#111111" stroke-width="1.5"/>
+<svg x="184.98600000000005" y="96" width="14" height="14" color="#111111" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
+<text x="212" y="100" font-size="13" font-weight="700" fill="#111111">YouTube Data API</text>
+<text x="212" y="116" font-size="10" font-weight="500" fill="#5B5B5B" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Third Party API</text>
+</g>
+<g data-participant="topic">
+<line x1="454.6" y1="126" x2="454.6" y2="314" stroke="#5B5B5B" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="5 4"/>
+<rect x="379.6" y="83" width="155.9" height="46" rx="4" fill="#111111"/>
+<rect x="377.6" y="81" width="153.9" height="44" rx="4" fill="#FFFFFF" stroke="#111111" stroke-width="2"/>
+<rect x="386.6" y="91" width="24" height="24" rx="4" fill="#FFF8E7" stroke="#111111" stroke-width="1.5"/>
+<svg x="391.61960000000005" y="96" width="14" height="14" color="#111111" stroke="currentColor" fill="currentColor" stroke-width="0" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.71 2.136a1.43 1.43 0 0 0-2.047 0h-.007a1.48 1.48 0 0 0-.421 1.042c0 .41.161.777.422 1.039l.007.007c.257.264.616.426 1.019.426.404 0 .766-.162 1.027-.426l.003-.007c.261-.262.421-.629.421-1.039 0-.408-.159-.777-.421-1.042H9.71zM8.683 22.295c.404 0 .766-.167 1.027-.429l.003-.008c.261-.261.421-.631.421-1.036 0-.41-.159-.778-.421-1.044H9.71a1.42 1.42 0 0 0-1.027-.432 1.4 1.4 0 0 0-1.02.432h-.007c-.26.266-.422.634-.422 1.044 0 .406.161.775.422 1.036l.007.008c.258.262.617.429 1.02.429zm7.89-4.462c.359-.096.683-.33.882-.684l.027-.052a1.47 1.47 0 0 0 .114-1.067 1.454 1.454 0 0 0-.675-.896l-.021-.014a1.425 1.425 0 0 0-1.078-.132c-.36.091-.684.335-.881.686-.2.349-.241.75-.146 1.119.099.363.33.691.675.896h.002c.346.203.737.239 1.101.144zm-6.405-7.342a2.083 2.083 0 0 0-1.485-.627c-.58 0-1.103.242-1.482.627-.378.385-.612.916-.612 1.507s.233 1.124.612 1.514a2.08 2.08 0 0 0 2.967 0c.379-.39.612-.923.612-1.514s-.233-1.122-.612-1.507zm-.835-2.51c.843.141 1.6.552 2.178 1.144h.004c.092.093.182.196.265.299l1.446-.851a3.176 3.176 0 0 1-.047-1.808 3.149 3.149 0 0 1 1.456-1.926l.025-.016a3.062 3.062 0 0 1 2.345-.306c.77.21 1.465.721 1.898 1.482v.002c.431.757.518 1.626.313 2.408a3.145 3.145 0 0 1-1.456 1.928l-.198.118h-.02a3.095 3.095 0 0 1-2.154.201 3.127 3.127 0 0 1-1.514-.944l-1.444.848a4.162 4.162 0 0 1 0 2.879l1.444.846c.413-.47.939-.789 1.514-.944a3.041 3.041 0 0 1 2.371.319l.048.023v.002a3.17 3.17 0 0 1 1.408 1.906 3.215 3.215 0 0 1-.313 2.405l-.026.053-.003-.005a3.147 3.147 0 0 1-1.867 1.436 3.096 3.096 0 0 1-2.371-.318v-.006a3.156 3.156 0 0 1-1.456-1.927 3.175 3.175 0 0 1 .047-1.805l-1.446-.848a3.905 3.905 0 0 1-.265.294l-.004.005a3.938 3.938 0 0 1-2.178 1.138v1.699a3.09 3.09 0 0 1 1.56.862l.002.004c.565.572.914 1.368.914 2.243 0 .873-.35 1.664-.914 2.239l-.002.009a3.1 3.1 0 0 1-2.21.931 3.1 3.1 0 0 1-2.206-.93h-.002v-.009a3.186 3.186 0 0 1-.916-2.239c0-.875.35-1.672.916-2.243v-.004h.002a3.1 3.1 0 0 1 1.558-.862v-1.699a3.926 3.926 0 0 1-2.176-1.138l-.006-.005a4.098 4.098 0 0 1-1.173-2.874c0-1.122.452-2.136 1.173-2.872h.006a3.947 3.947 0 0 1 2.176-1.144V6.289a3.137 3.137 0 0 1-1.558-.864h-.002v-.004a3.192 3.192 0 0 1-.916-2.243c0-.871.35-1.669.916-2.243l.002-.002A3.084 3.084 0 0 1 8.683 0c.861 0 1.641.355 2.21.932v.002h.002c.565.574.914 1.372.914 2.243 0 .876-.35 1.667-.914 2.243l-.002.005a3.142 3.142 0 0 1-1.56.864v1.692zm8.121-1.129l-.012-.019a1.452 1.452 0 0 0-.87-.668 1.43 1.43 0 0 0-1.103.146h.002c-.347.2-.58.529-.677.896-.095.365-.054.768.146 1.119l.007.009c.2.347.519.579.874.673.357.103.755.059 1.098-.144l.019-.009a1.47 1.47 0 0 0 .657-.885 1.493 1.493 0 0 0-.141-1.118"></path></svg>
+<text x="418.6" y="100" font-size="13" font-weight="700" fill="#111111">Comment topic</text>
+<text x="418.6" y="116" font-size="10" font-weight="500" fill="#5B5B5B" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Kafka</text>
+</g>
+<g data-participant="consumer">
+<line x1="619.6" y1="126" x2="619.6" y2="314" stroke="#5B5B5B" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="5 4"/>
+<rect x="559.5" y="83" width="126.2" height="46" rx="4" fill="#111111"/>
+<rect x="557.5" y="81" width="124.2" height="44" rx="4" fill="#FFFFFF" stroke="#111111" stroke-width="2"/>
+<rect x="566.5" y="91" width="24" height="24" rx="4" fill="#FFF8E7" stroke="#111111" stroke-width="1.5"/>
+<svg x="571.546" y="96" width="14" height="14" color="#111111" stroke="currentColor" fill="currentColor" stroke-width="0" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"></path></svg>
+<text x="598.5" y="100" font-size="13" font-weight="700" fill="#111111">Consumer</text>
+<text x="598.5" y="116" font-size="10" font-weight="500" fill="#5B5B5B" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Python</text>
+</g>
+<g data-step="1" data-kind="request">
+<line x1="85" y1="162" x2="259.3" y2="162" stroke="#111111" stroke-width="2" marker-end="url(#solid)"/>
+<circle cx="113.1" cy="150" r="8" fill="#FF5DA2" stroke="#111111" stroke-width="1.5"/>
+<text x="113.1" y="153.5" font-size="10" font-weight="700" fill="#111111" text-anchor="middle">1</text>
+<text x="127.1" y="154" font-size="12" fill="#111111">GET new comments</text>
+</g>
+<g data-step="1" data-kind="response">
+<line x1="261.3" y1="202" x2="87" y2="202" stroke="#5B5B5B" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#reply)"/>
+<text x="144.1" y="194" font-size="12" fill="#111111">comments</text>
+</g>
+<g data-step="2" data-kind="request">
+<line x1="85" y1="242" x2="452.6" y2="242" stroke="#111111" stroke-width="2" marker-end="url(#open)"/>
+<circle cx="214.9" cy="230" r="8" fill="#FF5DA2" stroke="#111111" stroke-width="1.5"/>
+<text x="214.9" y="233.5" font-size="10" font-weight="700" fill="#111111" text-anchor="middle">2</text>
+<text x="228.9" y="234" font-size="12" fill="#111111">Produce comment</text>
+</g>
+<g data-step="3" data-kind="request">
+<line x1="454.6" y1="282" x2="617.6" y2="282" stroke="#111111" stroke-width="2" marker-end="url(#open)"/>
+<circle cx="480.5" cy="270" r="8" fill="#FF5DA2" stroke="#111111" stroke-width="1.5"/>
+<text x="480.5" y="273.5" font-size="10" font-weight="700" fill="#111111" text-anchor="middle">3</text>
+<text x="494.5" y="274" font-size="12" fill="#111111">Consume comment</text>
+</g>
+</svg>

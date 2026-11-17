@@ -41,7 +41,7 @@
       methods: ['Ranking & recommenders', 'LLM pipelines', 'MLOps'], tools: ['LightGBM', 'Kafka', 'Flask', 'Docker', 'PostgreSQL', 'AWS'] },
     { id: 'wayfinder', name: 'wayfinder-sidebar', short: 'wayfinder-sidebar', where: 'Open source', from: 2026.84, to: 2026.95,
       line: 'A Claude Code plugin. Your ticket map sits beside the chat, and one click starts a new agent session with a handoff.',
-      facts: [['1 click', 'ticket to working session'], ['200k', 'token budget per session']],
+      facts: [['14k', 'views on r/claudeskills'], ['10', 'GitHub stars']],
       link: ['GitHub', 'https://github.com/nicksmits1/wayfinder-sidebar'],
       methods: ['Agent tooling'], tools: ['TypeScript'] },
     { id: 'fifa', name: 'FIFA player analytics pipeline', short: 'FIFA pipeline', where: 'CMU, with Amogh Balaji', from: 2025.67, to: 2025.95,
@@ -49,7 +49,7 @@
       facts: [['R² 0.964', 'gradient-boosted trees'], ['8', 'seasons, 2015–2022']],
       link: ['GitHub', 'https://github.com/nicksmits1/FIFA-player-analytics-ml-pipeline'],
       methods: ['Data engineering', 'Supervised learning'], tools: ['Spark', 'PostgreSQL', 'Kafka', 'PyTorch', 'GCP', 'Docker'] },
-    { id: 'sepsis', name: 'DQN variants for ICU sepsis treatment', short: 'Sepsis DQN', where: 'McGill, with J. Randolph and A. Paraha', from: 2025.0, to: 2025.3,
+    { id: 'sepsis', name: 'DQN variants for ICU sepsis treatment', short: 'Sepsis DQN', where: 'McGill, with J. Randolph and A. Paracha', from: 2025.0, to: 2025.3,
       line: 'Which DQN extensions help on a clinical benchmark with 716 health states and 25 treatments?',
       facts: [['0.824', 'return, Dueling DQN'], ['716 × 25', 'states × actions']],
       link: ['GitHub', 'https://github.com/nicksmits1/COMP-579-Reinforcement-Learning'],
@@ -71,9 +71,12 @@
   NS.fifa = { unit: 'test RMSE, rating points', min: 1, max: 2.6, marks: [
     { v: 1.292, label: 'Gradient-boosted trees', hi: true }, { v: 1.656, label: 'Random forest' },
     { v: 2.372, label: 'Deep MLP' }, { v: 2.487, label: 'Shallow MLP' } ] };
-  NS.sepsis = { unit: 'final return', min: 0.8, max: 0.83, marks: [
+  /* the team's report, Table 1: mean return over the last 10,000 of 300k episodes, 10 seeds */
+  NS.sepsis = { unit: 'final return', min: 0.77, max: 0.83, marks: [
     { v: 0.8238, label: 'Dueling DQN', hi: true }, { v: 0.8135, label: 'Prioritized DQN' },
-    { v: 0.8089, label: 'DQN' }, { v: 0.8056, label: 'Double DQN' } ] };
+    { v: 0.8089, label: 'DQN' }, { v: 0.8056, label: 'Double DQN' }, { v: 0.8005, label: 'Noisy DQN' },
+    { v: 0.7868, label: 'Multi-step DQN', dim: true }, { v: 0.7813, label: 'Distributional DQN', dim: true },
+    { v: 0.7782, label: 'Rainbow DQN', dim: true } ] };
 
   /* ---------- supply chain episode (illustrative) ---------- */
   const N = {
@@ -260,7 +263,7 @@
     }
     el('text', { x: x1, y: H - 1, 'text-anchor': 'end', 'font-size': 10.5, 'font-family': o.font, fill: o.dim }, svg).textContent = d.unit;
     d.marks.slice().sort((a, b) => a.v - b.v).forEach((m, i) => {
-      const x = X(m.v), y = 16 + i * 24, c = m.hi ? o.hi : o.ink, right = x < W * 0.62;
+      const x = X(m.v), y = 16 + i * 24, c = m.hi ? o.hi : m.dim ? o.dim : o.ink, right = x < W * 0.62;
       el('line', { x1: x, x2: x, y1: y + 4, y2: base, stroke: c, 'stroke-width': m.hi ? 2 : 1 }, svg);
       el('circle', { cx: x, cy: y, r: m.hi ? 5 : 3.5, fill: c }, svg);
       const t = el('text', { x: x + (right ? 10 : -10), y: y + 4, 'text-anchor': right ? 'start' : 'end', 'font-size': 12.5, 'font-family': o.font, 'font-weight': m.hi ? 700 : 500, fill: c }, svg);
