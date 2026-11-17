@@ -33,6 +33,10 @@ Project material lives in sibling directories (`../rl-sc-design`, `../CMU/SiNDAE
 3. Copy real assets into `content/assets/<id>/`. Anything illustrative is labelled as illustrative on the page until a real export replaces it.
 4. One line of prose, then the visual, then at most four facts. A sentence that restates the visual or another page gets deleted.
 
+## Writing
+
+Headings are short noun phrases that name their topic, such as Motivation, Formulation, Method, Comparison or Results. A heading is never a clause, a question or a sentence fragment ("Why the operating rule matters", "What was compared", "How it was measured"), and it never opens with an article ("Two-tank example", not "The two-tank example").
+
 ## Design work
 
 Use `/impeccable` for any interface change, and hold every change to `DESIGN.md`. Every animation needs a reduced-motion still that shows the result. Book of Shapes patterns may appear as generated output on the site; their node graphs and source are not licensed, so flow fields here are drawn by our own implementation (`NS.streamlines`).

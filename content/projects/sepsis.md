@@ -7,8 +7,8 @@ period: 2025-01 to 2025-04
 methods: [Reinforcement learning]
 tools: [PyTorch, Gymnasium]
 source: https://github.com/nicksmits1/COMP-579-Reinforcement-Learning (final project); report "A Survey of Reinforcement Models Applied to a Model of ICU Sepsis Treatment" (local, OneDrive McGill/COMP 579/Final Project)
-links: [GitHub -> https://github.com/nicksmits1/COMP-579-Reinforcement-Learning]
-disclosure: public. Hosting the report PDF is not yet approved; until it is, the page links only the repo.
+links: [Report (PDF) -> content/assets/sepsis/report.pdf, GitHub -> https://github.com/nicksmits1/COMP-579-Reinforcement-Learning]
+disclosure: public. The report PDF may be hosted (Nicolas, 2026-11-17).
 ---
 Which DQN extensions help on a clinical benchmark with 716 health states and 25 treatments?
 
@@ -19,10 +19,10 @@ Which DQN extensions help on a clinical benchmark with 716 health states and 25 
 
 ## Sections
 
-### What was compared
+### Comparison
 Treatment is an episodic decision process with a sparse reward: survival scores 1, death 0, with no discounting. Starting from a two-layer DQN, the team added one extension at a time (prioritized replay, double Q-learning, a dueling head, n-step returns, noisy layers, a distributional head) and then all of them together as Rainbow.
 
-### What helped
+### Results
 The dueling head reached the best return, at the cost of noisier learning; prioritized replay came second and converged about 100,000 episodes sooner. The combined methods failed to learn on grids of about four settings each, which says more about tuning budgets than about the methods.
 
 ## Visual

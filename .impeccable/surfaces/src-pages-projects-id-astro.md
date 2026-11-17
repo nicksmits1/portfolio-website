@@ -32,6 +32,4 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
 - Seventh project: `mmrag` joins the six, so home needs a seventh row and a seventh minimum in both landscapes (the home contract says six).
 - Recommender: the Grafana dashboards need a login; waiting on screenshots or a public snapshot, cropped of anything course-managed.
-- Sepsis: hosting the report PDF is not yet approved; the page links the repo only until it is.
 - Thesis: the two poster figures ship as poster crops until they are redrawn in the site palette from the thesis repo's result files; the episode stays labelled illustrative until a real trace is exported.
-- AIChE 2026 talk (SiNDAE, Victor Alves): session title not on file; the line reads without it.

@@ -64,9 +64,9 @@ Each project is shown through a visual made from the project's own mathematics, 
 - RL course project: public repo `nicksmits1/COMP-579-Reinforcement-Learning` (final project with James Randolph and Abdullah Paraha). ICU-Sepsis-v2, 716 states, 25 actions; Dueling DQN best at about 0.824 return.
 - Headshot: `content/assets/profile/`.
 - Thesis, added 2026-11-17: problem statement `../rl-sc-design/paper/optimisation-problem/problem.tex` (use sections 1 to 5, nothing on the mixed-integer encoding); ESCAPE 37 abstract accepted (Trondheim, 7 to 10 June 2027), logo in `content/assets/thesis/`.
-- SiNDAE, added 2026-11-17: docs at alves-research-group.github.io/SiNDAE (written by Nicolas); JOSS drafts in the repo's `paper/` (latest Draft 03); two-tank figures from the paper; featured in Victor Alves's talk at AIChE 2026 (Minneapolis, 8 to 12 November).
+- SiNDAE, added 2026-11-17: docs at alves-research-group.github.io/SiNDAE (written by Nicolas); JOSS drafts in the repo's `paper/` (latest Draft 03); two-tank figures from the paper; shown by Victor Alves in AIChE 2026 session 542, Software Tools and Implementations for Process Systems Engineering (Minneapolis, 11 November, 12:30 to 15:00), which he chaired.
 - wayfinder-sidebar: r/claudeskills post with 14k views and 36 upvotes; 10 GitHub stars (Nicolas, 2026-11-17).
-- Sepsis: the team's report (local OneDrive, McGill/COMP 579/Final Project) compares eight variants; hosting the PDF needs Nicolas's approval.
+- Sepsis: the team's report (local OneDrive, McGill/COMP 579/Final Project) compares eight variants; hosted at `content/assets/sepsis/report.pdf`.
 - Multimodal RAG: report from johnspeaks.com/gen_ai_final.pdf (`content/assets/mmrag/report.pdf`); code github.com/JTSIV1/multimodal-rag.
 - Recommender: Grafana dashboards exist but need a login; screenshots pending.
 - Absent, do not fabricate: publication list beyond the above, testimonials, a real exported episode trace from a trained thesis policy (the animation needs one exported from the thesis repo), FIFA and sepsis figures as image files (they live inside notebooks and GitHub-hosted README images).

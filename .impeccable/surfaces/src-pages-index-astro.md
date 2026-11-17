@@ -31,6 +31,6 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 ## Unresolved
 
 - Seven projects, not six: `mmrag` (multimodal RAG, with John Speaks and Darren Chen) needs a row and a minimum in both landscapes. Project pages have their own contract, `.impeccable/surfaces/src-pages-projects-id-astro.md`.
-- Latest: the ESCAPE 37 abstract is now accepted, and SiNDAE featured in Victor Alves's AIChE 2026 talk (Minneapolis, 8 to 12 November).
+- Latest: the ESCAPE 37 abstract is now accepted, and SiNDAE was shown in AIChE 2026 session 542, Software Tools and Implementations for Process Systems Engineering, chaired by Victor Alves (Minneapolis, 11 November).
 - Latest needs an owner and a cadence, or it goes stale; its entries come from one content collection.
 - Phone: skills chips scroll in one row per group; Latest scrolls sideways.

@@ -370,6 +370,33 @@
     };
   };
 
+  /* Two-tank cascade, the JOSS paper's example with its parameters (paper/example.ipynb).
+     A1 h1' = Fin - q1,  A2 h2' = q1 - q2,  q2 = c2 sqrt(h2); the true q1 = c1 sqrt(h1) is what the network learns.
+     Returns the field in pixel space plus the paper's three training trajectories, integrated with RK4 over t in [0, 40]. */
+  NS.twoTank = function (W, H, pad) {
+    const A1 = 1, A2 = 1.5, Fin = 0.5, c1 = 0.5, c2 = 0.4, X1 = 3.2, Y1 = 3.0; pad = pad || 0;
+    const sx = (W - 2 * pad) / X1, sy = (H - 2 * pad) / Y1;
+    const toX = px => (px - pad) / sx, toY = py => Y1 - (py - pad) / sy, fromX = h => pad + h * sx, fromY = h => pad + (Y1 - h) * sy;
+    const rate = (h1, h2) => { const q1 = c1 * Math.sqrt(Math.max(h1, 0)), q2 = c2 * Math.sqrt(Math.max(h2, 0)); return [(Fin - q1) / A1, (q1 - q2) / A2]; };
+    const eq = [fromX((Fin / c1) ** 2), fromY((Fin / c2) ** 2)];
+    function trajectory(h) {
+      const pts = [[fromX(h[0]), fromY(h[1])]], dt = 0.05; let [a, b] = h;
+      for (let t = 0; t < 40; t += dt) {
+        const k1 = rate(a, b), k2 = rate(a + dt / 2 * k1[0], b + dt / 2 * k1[1]), k3 = rate(a + dt / 2 * k2[0], b + dt / 2 * k2[1]), k4 = rate(a + dt * k3[0], b + dt * k3[1]);
+        a += dt / 6 * (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0]); b += dt / 6 * (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1]);
+        pts.push([fromX(a), fromY(b)]);
+      }
+      return pts;
+    }
+    return {
+      f(px, py) { const d = rate(toX(px), toY(py)); return [d[0] * sx, -d[1] * sy]; },
+      seeds: [[W * 0.5, H * 0.5], [W * 0.15, H * 0.2], [W * 0.85, H * 0.8], [W * 0.8, H * 0.15], [W * 0.2, H * 0.85]],
+      mask: (px, py) => Math.hypot(px - eq[0], py - eq[1]) < 7,
+      eq,
+      trajectories: [[3.0, 0.5], [0.5, 2.5], [2.0, 1.0]].map(trajectory),
+    };
+  };
+
   /* ---------- skills alignment chart ---------- */
   NS.alignment = function (svg, o) {
     o = Object.assign({ ink: '#111', dim: '#777', hi: '#c00', font: 'inherit', fill: '#fff' }, o);

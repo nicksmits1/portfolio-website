@@ -21,10 +21,10 @@ Retrieve document pages as images, not OCR text, and a vision-language model ans
 
 ## Sections
 
-### Why images
+### Approach
 Lecture slides and technical reports keep much of their meaning in tables, figures and layout, and OCR flattens it. The pipeline indexes whole pages with a late-interaction visual retriever (ColQwen3.5, per-patch embeddings in Qdrant) and hands the retrieved page images to Qwen3-VL, against a baseline that OCRs pages, embeds text chunks and retrieves from ChromaDB.
 
-### How it was measured
+### Evaluation
 Each setup was scored with BLEU, ROUGE, BERTScore and four LLM-as-judge rubrics (accuracy, relevance, groundedness, faithfulness). Ideal-context runs, which hand the model the right page, bound what retrieval can reach. A hand-curated set of about 650 course slides, with questions written by a larger Qwen3-VL, tested whether fine-tuning on reports transfers to lecture material.
 
 ## Visual

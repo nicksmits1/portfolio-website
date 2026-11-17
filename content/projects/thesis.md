@@ -23,24 +23,24 @@ A policy learns which transport arcs to add so demand still arrives when plants,
 
 ## Sections
 
-### Why the operating rule matters
+### Motivation
 Supply chains survive the loss of a plant, a warehouse or a lane mostly through redundant transport links, and what a link is worth depends on what the network does after the failure. Design models usually assume a planner who re-optimises every flow once the failure is known. Real networks follow fixed rules for reordering and allocating stock, so a link that looks redundant under perfect re-planning can matter a great deal under those rules, and the reverse.
 
-### The design problem
+### Formulation
 A network of plants, warehouses and customers may gain at most K candidate arcs. Plants, warehouses and arcs fail independently for the whole horizon; warehouses reorder by an (s, S) policy and stock is allocated by lane priority. The backlog B(x, ω) of design x in failure scenario ω is the demand still unmet at the end. A design is scored by the share of baseline backlog it removes, net of a weighted arc cost:
 
 $$V(x) = \frac{B_0 - \mathbb{E}_\omega[B(x,\omega)]}{B_0} - \lambda \frac{C_{\mathrm{ref}}}{|\mathcal{C}|} \sum_{a \in \bar{\mathcal{A}}} c_a x_a, \qquad \max_{x \in \mathcal{X}} V(x)$$
 
 Every value is a sample average over a fixed set of failure scenarios, so the designs of one network are compared on common random numbers.
 
-### An upper bound that values arcs differently
+### Upper bound
 Re-planning every flow optimally turns each scenario into a linear programme whose backlog is never higher than the rule's, so it bounds every design's value from above. On small generated networks it clears all backlog in more than 90% of scenarios, while the rule leaves backlog even when nothing fails. The bound is valid but it is not a stand-in for the real problem.
 
-### A policy instead of a search
+### Learned policy
 Each design needs a simulation over many scenarios, and the number of designs grows combinatorially, so even greedy search takes hours at 70 nodes. The policy builds a design one arc at a time, with an explicit stop, and is rewarded by each arc's change in value, so an episode's return is the design's value. Trained once on small networks, it is applied without retraining to networks four times larger.
 
 ## Visual
 Lead: the policy designing one network, arc by arc. The drafts use an illustrative 9-node episode.
 TODO: export a real `EpisodeTrace` (`src/environment/trace.py`) from a trained policy on a held-out network and replace the illustration.
-Order on the page: episode; "Why the operating rule matters"; "The design problem" with the equation; design value by size (`design-value-by-size.webp`, poster crop); "An upper bound"; CPU time by size (`cpu-time-by-size.webp`, poster crop); "A policy instead of a search".
+Order on the page: episode; "Motivation"; "Formulation" with the equation; design value by size (`design-value-by-size.webp`, poster crop); "Upper bound"; CPU time by size (`cpu-time-by-size.webp`, poster crop); "Learned policy".
 TODO: redraw both poster figures in the site palette from the thesis repo's result files.

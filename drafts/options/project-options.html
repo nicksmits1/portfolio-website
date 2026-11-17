@@ -259,9 +259,9 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
       <div><p class="cap">Phone, 390 px</p><div class="frame"><div class="screen ph" data-opt="c" data-kind="phone" data-w="390"></div></div></div>
     </div>
     <div class="notes">
-      <div><h3>Good at</h3><p>Ties every page back to home: you arrive where the solver converged. Handles the most figures, which suits PhD chapters later.</p></div>
+      <div><h3>Strengths</h3><p>Ties every page back to home: you arrive where the solver converged. Handles the most figures, which suits PhD chapters later.</p></div>
       <div><h3>Costs</h3><p>A second landscape to render per page, and the lead figure starts about 300 px lower than in A or B.</p></div>
-      <div><h3>On a phone</h3><p>A shorter landscape with the title on it. The rail stops being sticky and sits above the figures.</p></div>
+      <div><h3>Phone</h3><p>A shorter landscape with the title on it. The rail stops being sticky and sits above the figures.</p></div>
     </div>
   </article>
 </section>
@@ -274,9 +274,9 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
       <div><p class="cap">Phone, 390 px</p><div class="frame"><div class="screen ph" data-opt="a" data-kind="phone" data-w="390"></div></div></div>
     </div>
     <div class="notes">
-      <div><h3>Good at</h3><p>The one you already liked. Facts stay beside the figure, so you can read a number while watching the episode.</p></div>
+      <div><h3>Strengths</h3><p>The one you already liked. Facts stay beside the figure, so you can read a number while watching the episode.</p></div>
       <div><h3>Costs</h3><p>The figure gets seven of twelve columns, so the network and the architecture read smaller than in B. Extra figures sit below the fold.</p></div>
-      <div><h3>On a phone</h3><p>Title and line first, then the figure, then the facts.</p></div>
+      <div><h3>Phone</h3><p>Title and line first, then the figure, then the facts.</p></div>
     </div>
   </article>
 </section>
@@ -289,9 +289,9 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
       <div><p class="cap">Phone, 390 px</p><div class="frame"><div class="screen ph" data-opt="b" data-kind="phone" data-w="390"></div></div></div>
     </div>
     <div class="notes">
-      <div><h3>Good at</h3><p>The biggest figure. Best for the recommender's architecture and the phase portrait, which have detail worth the room.</p></div>
+      <div><h3>Strengths</h3><p>The biggest figure. Best for the recommender's architecture and the phase portrait, which have detail worth the room.</p></div>
       <div><h3>Costs</h3><p>On a short laptop screen the title lands near the fold. The FIFA and sepsis scales look thin at full width.</p></div>
-      <div><h3>On a phone</h3><p>The figure runs edge to edge; the title follows it.</p></div>
+      <div><h3>Phone</h3><p>The figure runs edge to edge; the title follows it.</p></div>
     </div>
   </article>
 </section>
@@ -299,16 +299,14 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
 
 
 <section class="after" id="same">
-  <h2>Open items, and what every page shares</h2>
-  <div><h3>On every project page</h3><ul>
+  <h2>Open items</h2>
+  <div><h3>Shared elements</h3><ul>
     <li><b>Your name</b> top left goes home; the nav matches home, with Research marked.</li>
     <li><b>Skills chips</b> open the skills landscape on home with that skill picked, so the skills only live in one place.</li>
     <li><b>Previous and next</b> project at the bottom, in the order of the home list.</li>
     <li><b>Reduced motion</b> shows results as stills: the episode's final step, the streamlines fully drawn, the solver path already converged, the video paused on its first frame.</li></ul></div>
-  <div><h3>Still open</h3><ul>
+  <div><h3>Open</h3><ul>
     <li><b>Recommender:</b> the Grafana dashboards need a login, so I could not see them. Send screenshots or a public snapshot link and I will crop out anything the course hosts.</li>
-    <li><b>Sepsis:</b> the report settles the labels (DQN 0.8089, Double DQN 0.8056) and adds four more variants. Say if the report PDF may be linked from the page.</li>
-    <li><b>SiNDAE:</b> the AIChE line reads without a session title; send it if you want it.</li>
     <li><b>Thesis:</b> the results figures are poster crops until redrawn from the repo's result files; the episode stays labelled illustrative until a real trace is exported.</li></ul></div>
 </section>
 </main>
@@ -342,15 +340,15 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
         img('thesis-value.webp', 1100, 602, 'Held-out design value by network size for the learned policy, greedy search and random baselines', 'Held-out design value by network size, mean and 95% interval: the policy in red, greedy search in black. Shaded sizes are larger than any training network.', 'Crop of the thesis poster; the build redraws it in the site palette.'),
         img('thesis-cpu.webp', 1100, 396, 'Median CPU time to design one network, greedy search against the learned policy, log scale', 'Median CPU time to design one network, on a log scale.', 'Crop of the thesis poster; the build redraws it in the site palette.')],
       seq: [fig(0),
-        sec('Why the operating rule matters', 'Supply chains survive the loss of a plant, a warehouse or a lane mostly through redundant transport links, and what a link is worth depends on what the network does after the failure. Design models usually assume a planner who re-optimises every flow once the failure is known. Real networks follow fixed rules for reordering and allocating stock, so a link that looks redundant under perfect re-planning can matter a great deal under those rules, and the reverse.'),
-        sec('The design problem', 'A network of plants, warehouses and customers may gain at most <i>K</i> candidate arcs. Plants, warehouses and arcs fail independently for the whole horizon; warehouses reorder by an (<i>s</i>, <i>S</i>) policy and stock is allocated by lane priority. The backlog <i>B</i>(<i>x</i>, <i>ω</i>) is the demand still unmet at the end. A design is scored by the share of baseline backlog it removes, net of a weighted arc cost:' + M.value + 'Every value is a sample average over a fixed set of failure scenarios, so the designs of one network are compared on common random numbers.'),
+        sec('Motivation', 'Supply chains survive the loss of a plant, a warehouse or a lane mostly through redundant transport links, and what a link is worth depends on what the network does after the failure. Design models usually assume a planner who re-optimises every flow once the failure is known. Real networks follow fixed rules for reordering and allocating stock, so a link that looks redundant under perfect re-planning can matter a great deal under those rules, and the reverse.'),
+        sec('Formulation', 'A network of plants, warehouses and customers may gain at most <i>K</i> candidate arcs. Plants, warehouses and arcs fail independently for the whole horizon; warehouses reorder by an (<i>s</i>, <i>S</i>) policy and stock is allocated by lane priority. The backlog <i>B</i>(<i>x</i>, <i>ω</i>) is the demand still unmet at the end. A design is scored by the share of baseline backlog it removes, net of a weighted arc cost:' + M.value + 'Every value is a sample average over a fixed set of failure scenarios, so the designs of one network are compared on common random numbers.'),
         fig(1),
-        sec('An upper bound that values arcs differently', 'Re-planning every flow optimally turns each scenario into a linear programme whose backlog is never higher than the rule’s, so it bounds every design’s value from above. On small generated networks it clears all backlog in more than 90% of scenarios, while the rule leaves backlog even when nothing fails. The bound is valid, but it is not a stand-in for the real problem.'),
+        sec('Upper bound', 'Re-planning every flow optimally turns each scenario into a linear programme whose backlog is never higher than the rule’s, so it bounds every design’s value from above. On small generated networks it clears all backlog in more than 90% of scenarios, while the rule leaves backlog even when nothing fails. The bound is valid, but it is not a stand-in for the real problem.'),
         fig(2),
-        sec('A policy instead of a search', 'Each design needs a simulation over many scenarios and the number of designs grows combinatorially, so even greedy search takes hours at 70 nodes. The policy builds a design one arc at a time, with an explicit stop, and is rewarded by each arc’s change in value, so an episode’s return is the design’s value. Trained once on small networks, it is applied without retraining to networks four times larger.')] },
+        sec('Learned policy', 'Each design needs a simulation over many scenarios and the number of designs grows combinatorially, so even greedy search takes hours at 70 nodes. The policy builds a design one arc at a time, with an explicit stop, and is rewarded by each arc’s change in value, so an episode’s return is the design’s value. Trained once on small networks, it is applied without retraining to networks four times larger.')] },
     sindae: { short: 'SiNDAE', name: 'SiNDAE', where: 'CAPD, Carnegie Mellon', with: 'with Laurens Lueg and Victor Alves', when: 'Jun – Aug 2026',
       line: 'Neural networks embedded in differential-algebraic process models and trained as one nonlinear program.',
-      facts: [['index-2', 'DAEs as well as ODEs'], ['2', 'training backends, simultaneous and decomposition'], ['JOSS', 'first-author software paper, pending'], ['AIChE', 'in Victor Alves’s talk, Minneapolis 2026']],
+      facts: [['index-2', 'DAEs as well as ODEs'], ['2', 'training backends, simultaneous and decomposition'], ['JOSS', 'first-author software paper, pending'], ['AIChE', 'shown in session 542, Minneapolis 2026']],
       links: [['gh', 'GitHub'], ['paper', 'Docs'], ['file', 'JOSS draft (PDF)'], ['paper', 'Method paper, Lueg et al.']],
       skills: ['Nonlinear optimisation', 'Hybrid modelling', 'JAX', 'Pyomo'],
       figs: [{ t: 'flow' },
@@ -358,11 +356,11 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
         Object.assign(img('sindae-law.webp', 1000, 791, 'Learned discharge against tank 1 level, lying on the true square-root law', 'The learned network against the true law <i>c</i>₁√<i>h</i>₁, from noisy level data alone.', 'Figure from the JOSS paper.'), { narrow: true }),
         img('sindae-fit.webp', 1200, 895, 'Tank levels and discharge over time for three trajectories: ground truth, a smoother and the hybrid fit', 'The hybrid fit against ground truth and a smoother, on three trajectories.', 'Figure from the JOSS paper.')],
       seq: [fig(0),
-        sec('The missing term', 'Mechanistic models of process systems are often incomplete: a reaction rate, a growth term or a transfer coefficient depends on the states in a way nobody has written down. A hybrid model keeps the known balances and learns the missing term from data, so it stays physically consistent where the data run out. Open-source tools for this mostly target ODEs and train by integrating and backpropagating; few handle differential-algebraic systems, where algebraic constraints must hold exactly alongside the dynamics.'),
-        sec('One nonlinear program', 'The network enters the model as one more algebraic equation, and the whole system is discretised by Lagrange–Radau collocation:' + M.dae + 'The weights and the trajectories are solved for together, so the constraints hold at every collocation point by construction, index-2 systems included. The decomposition backend instead updates the weights in an outer Adam loop around per-trajectory solves, with gradients from the KKT system, and spreads across trajectories with MPI.'),
-        sec('The two-tank example', 'Two tanks in series under a constant feed. The outlet valve law of the second tank is known; the discharge between the tanks is not, and is learned from noisy level measurements alone.' + M.tanks + 'The network is given no structure, yet its response falls onto the true law, and predictions from unseen initial levels track the reference.'),
+        sec('Motivation', 'Mechanistic models of process systems are often incomplete: a reaction rate, a growth term or a transfer coefficient depends on the states in a way nobody has written down. A hybrid model keeps the known balances and learns the missing term from data, so it stays physically consistent where the data run out. Open-source tools for this mostly target ODEs and train by integrating and backpropagating; few handle differential-algebraic systems, where algebraic constraints must hold exactly alongside the dynamics.'),
+        sec('Method', 'The network enters the model as one more algebraic equation, and the whole system is discretised by Lagrange–Radau collocation:' + M.dae + 'The weights and the trajectories are solved for together, so the constraints hold at every collocation point by construction, index-2 systems included. The decomposition backend instead updates the weights in an outer Adam loop around per-trajectory solves, with gradients from the KKT system, and spreads across trajectories with MPI.'),
+        sec('Two-tank example', 'Two tanks in series under a constant feed, the system in the figure at the top of the page. The outlet valve law of the second tank is known; the discharge between the tanks is not, and is learned from noisy level measurements alone. The network is given no structure, yet its response falls onto the true law, and predictions from unseen initial levels track the reference.'),
         fig(1), fig(2), fig(3),
-        sec('A package people can install', 'A scikit-learn-style <code>HybridDAE</code> runs smoothing, pre-training, training and prediction behind <code>fit</code> and <code>predict</code>. The default install is pure pip wheels, with the POUNCE and FERAL solvers replacing licensed HSL binaries, and trained networks export to ONNX, Equinox, OMLT and JSON. A skills bundle lets Claude Code draft and check a hybrid model with the user before any code runs.')] },
+        sec('Package', 'A scikit-learn-style <code>HybridDAE</code> runs smoothing, pre-training, training and prediction behind <code>fit</code> and <code>predict</code>. The default install is pure pip wheels, with the POUNCE and FERAL solvers replacing licensed HSL binaries, and trained networks export to ONNX, Equinox, OMLT and JSON. A skills bundle lets Claude Code draft and check a hybrid model with the user before any code runs.')] },
     recsys: { short: 'Recommender', name: 'Movie recommender with LLM cold start', where: 'Team project, CMU', with: '', when: 'Sep 2026 – present',
       line: 'A live recommendation service. An LLM turns a new user’s free-text tastes into a profile before their first request.',
       facts: [['500k+', 'live requests inside a 600 ms limit'], ['1.4 ms', 'cold-start ranker'], ['2.2×', 'NDCG@20 over SVD'], ['$1/day', 'LLM cost']],
@@ -375,8 +373,8 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
       skills: ['Retrieval-augmented generation', 'Vision-language models', 'Parameter-efficient fine-tuning', 'PyTorch', 'AWS'],
       figs: [{ t: 'ladder' }],
       seq: [fig(0),
-        sec('Why images', 'Lecture slides and technical reports keep much of their meaning in tables, figures and layout, and OCR flattens it. The pipeline indexes whole pages with a late-interaction visual retriever (ColQwen3.5, per-patch embeddings in Qdrant) and hands the retrieved page images to Qwen3-VL, against a baseline that OCRs pages, embeds text chunks and retrieves from ChromaDB.'),
-        sec('How it was measured', 'Each setup was scored with BLEU, ROUGE, BERTScore and four LLM-as-judge rubrics. Ideal-context runs, which hand the model the right page, bound what retrieval can reach. Fine-tuning with QLoRA lifted the n-gram scores but not the judged ones, and a hand-curated set of about 650 course slides tested whether training on reports carries over to lecture material.')] },
+        sec('Approach', 'Lecture slides and technical reports keep much of their meaning in tables, figures and layout, and OCR flattens it. The pipeline indexes whole pages with a late-interaction visual retriever (ColQwen3.5, per-patch embeddings in Qdrant) and hands the retrieved page images to Qwen3-VL, against a baseline that OCRs pages, embeds text chunks and retrieves from ChromaDB.'),
+        sec('Evaluation', 'Each setup was scored with BLEU, ROUGE, BERTScore and four LLM-as-judge rubrics. Ideal-context runs, which hand the model the right page, bound what retrieval can reach. Fine-tuning with QLoRA lifted the n-gram scores but not the judged ones, and a hand-curated set of about 650 course slides tested whether training on reports carries over to lecture material.')] },
     wayfinder: { short: 'wayfinder-sidebar', name: 'wayfinder-sidebar', where: 'Open source', with: '', when: 'Nov 2026',
       line: 'A Claude Code plugin. Your ticket map sits beside the chat, and one click starts a new agent session with a handoff.',
       facts: [['14k', 'views on r/claudeskills'], ['36', 'upvotes'], ['10', 'GitHub stars']], links: [['gh', 'GitHub'], ['paper', 'Reddit post']], skills: ['Agent tooling', 'TypeScript'], figs: [{ t: 'video' }] },
@@ -390,12 +388,12 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
       seq: [fig(0), fig(1), fig(2)] },
     sepsis: { short: 'Sepsis DQN', name: 'DQN variants for ICU sepsis treatment', where: 'McGill, COMP 579', with: 'with James Randolph and Abdullah Paracha', when: 'Jan – Apr 2025',
       line: 'Which DQN extensions help on a clinical benchmark with 716 health states and 25 treatments?',
-      facts: [['8', 'variants, 10 seeds each'], ['300k', 'episodes per run'], ['MIMIC-III', 'real ICU records behind the MDP']], links: [['gh', 'GitHub']], skills: ['Reinforcement learning', 'PyTorch', 'Gymnasium'],
+      facts: [['8', 'variants, 10 seeds each'], ['300k', 'episodes per run'], ['MIMIC-III', 'real ICU records behind the MDP']], links: [['file', 'Report (PDF)'], ['gh', 'GitHub']], skills: ['Reinforcement learning', 'PyTorch', 'Gymnasium'],
       figs: [{ t: 'scale', d: 'sepsis', cap: 'Mean return over the last 10,000 episodes. The three dim variants stayed near a random policy.' },
         img('sepsis-returns.webp', 585, 348, 'Return over training for the eight DQN variants', 'Survival rate over training for the best settings of each variant.', 'Figure 1a of the team’s report.')],
       seq: [fig(0),
-        sec('What was compared', 'Treatment is an episodic decision process with a sparse reward: survival scores 1, death 0, with no discounting. Starting from a two-layer DQN, the team added one extension at a time (prioritized replay, double Q-learning, a dueling head, n-step returns, noisy layers, a distributional head) and then all of them together as Rainbow.'),
-        sec('What helped', 'The dueling head reached the best return, at the cost of noisier learning; prioritized replay came second and converged about 100,000 episodes sooner. The combined methods failed to learn on grids of about four settings each, which says more about tuning budgets than about the methods.'),
+        sec('Comparison', 'Treatment is an episodic decision process with a sparse reward: survival scores 1, death 0, with no discounting. Starting from a two-layer DQN, the team added one extension at a time (prioritized replay, double Q-learning, a dueling head, n-step returns, noisy layers, a distributional head) and then all of them together as Rainbow.'),
+        sec('Results', 'The dueling head reached the best return, at the cost of noisier learning; prioritized replay came second and converged about 100,000 episodes sooner. The combined methods failed to learn on grids of about four settings each, which says more about tuning budgets than about the methods.'),
         fig(1)] }
   };
   const ORDER = ['thesis', 'sindae', 'recsys', 'mmrag', 'wayfinder', 'fifa', 'sepsis'], NP = ORDER.length;
@@ -413,7 +411,7 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
 
   function thumb(id) {
     const s = { thesis: '<g stroke="#7C6BB8" stroke-width="1.4"><path d="M30 30L70 22L110 34L140 60M30 30L46 70L92 76L140 60M70 22L92 76"/></g><path d="M46 70L110 34" stroke="#FF7C6B" stroke-width="2.2"/><g fill="#F3EDFF"><circle cx="30" cy="30" r="5"/><circle cx="70" cy="22" r="5"/><circle cx="110" cy="34" r="5"/><circle cx="140" cy="60" r="5"/><circle cx="46" cy="70" r="5"/><circle cx="92" cy="76" r="5"/></g>',
-      sindae: '<path d="M18 84C40 20 140 14 150 52S70 92 64 58S118 34 112 52S86 64 88 54" fill="none" stroke="#F3EDFF" stroke-width="1.3"/><path d="M150 86C120 60 30 72 40 40" fill="none" stroke="#7C6BB8" stroke-width="1.1"/><circle cx="92" cy="54" r="4.5" fill="#FF7C6B"/>',
+      sindae: '<g fill="none" stroke="#7C6BB8" stroke-width="1.1"><path d="M14 20C40 30 70 44 92 50"/><path d="M14 80C46 72 72 60 92 52"/><path d="M154 14C130 30 108 44 94 50"/><path d="M154 86C128 72 108 60 94 53"/></g><path d="M150 84C120 80 100 66 93 52" fill="none" stroke="#FFD9C2" stroke-width="1.8"/><path d="M24 22C52 30 78 44 91 50" fill="none" stroke="#FFD9C2" stroke-width="1.8"/><circle cx="92" cy="51" r="4.5" fill="#FF7C6B"/>',
       recsys: '<g fill="#2A1670" stroke="#B9AAE8"><rect x="12" y="38" width="30" height="20" rx="4"/><rect x="62" y="16" width="38" height="20" rx="4"/><rect x="62" y="60" width="38" height="20" rx="4"/><rect x="122" y="38" width="34" height="20" rx="4"/></g><path d="M42 48H52L62 26M52 48L62 70M100 26L122 48M100 70L122 48" fill="none" stroke="#7C6BB8"/><circle cx="62" cy="26" r="4" fill="#FF7C6B"/>',
       wayfinder: '<rect x="14" y="12" width="140" height="72" rx="5" fill="#0D0722" stroke="#7C6BB8"/><rect x="104" y="12" width="50" height="72" fill="#2A1670"/><g fill="#B9AAE8"><rect x="110" y="22" width="36" height="5" rx="2"/><rect x="110" y="34" width="30" height="5" rx="2"/><rect x="110" y="46" width="34" height="5" rx="2"/></g><rect x="110" y="58" width="26" height="5" rx="2" fill="#FF7C6B"/><g fill="#7C6BB8"><rect x="24" y="24" width="60" height="4" rx="2"/><rect x="24" y="34" width="70" height="4" rx="2"/><rect x="24" y="44" width="50" height="4" rx="2"/></g>',
       fifa: '<path d="M16 60H152" stroke="#B9AAE8"/><g stroke="#7C6BB8"><path d="M16 54V66M50 56V64M84 56V64M118 56V64M152 54V66"/></g><g fill="#F3EDFF"><circle cx="128" cy="60" r="4"/><circle cx="100" cy="60" r="4"/><circle cx="74" cy="60" r="4"/></g><circle cx="40" cy="60" r="6" fill="#FF7C6B"/>',
@@ -446,7 +444,7 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
     if (f.t === 'pipe') return `<div class="fg" data-fig="pipe"><div class="tabs" data-tabs role="group" aria-label="Pipeline path"></div><div class="scroll"><svg data-pipe></svg></div><div class="figbar"><p data-cap></p></div></div>`;
     if (f.t === 'ladder') return `<div class="fg" data-fig="ladder"><div class="tabs" data-tabs role="group" aria-label="Metric"></div><div class="scroll"><svg data-ladder></svg></div><div class="key"><span><i style="background:var(--coral)"></i>page images</span><span><i style="border:1.5px solid var(--fg);box-sizing:border-box"></i>OCR text</span><span><i style="background:var(--dim)"></i>no context</span><span>Lines: 95% interval. Report, Table 1.</span></div></div>`;
     if (f.t === 'scale') return `<div class="fg" data-fig="scale" data-d="${f.d}"><svg></svg>${capP(f)}</div>`;
-    if (f.t === 'flow') return `<div class="fg" data-fig="flow"><div class="flowbox"><canvas role="img" aria-label="Phase portrait of the Leslie-Gower predator-prey system: every trajectory spirals into one equilibrium"></canvas><img class="logo" src="${A}sindae-logo-dark.webp" alt="SiNDAE logo" width="800" height="195"><span class="ax" style="left:0;bottom:0">prey x&#8320;</span><span class="ax" style="left:0;top:0">predator x&#8321;</span></div><p class="fine eq">x&#8320;&#8242; = x&#8320;(r&#8321; &minus; a&#8321;x&#8321; &minus; b&#8321;x&#8320;) &nbsp;&nbsp; x&#8321;&#8242; = x&#8321; &middot; NN(x&#8320;, x&#8321;) &nbsp; <span>The network learns the second bracket; the first stays a hard constraint.</span></p></div>`;
+    if (f.t === 'flow') return `<div class="fg" data-fig="flow"><div class="flowbox"><canvas role="img" aria-label="Phase portrait of the two-tank cascade: every pair of levels flows to one steady state; the three training trajectories are highlighted"></canvas><img class="logo" src="${A}sindae-logo-dark.webp" alt="SiNDAE logo" width="800" height="195"><span class="ax" style="right:0;bottom:0">h&#8321;, tank 1 level</span><span class="ax" style="left:0;top:0">h&#8322;, tank 2 level</span></div><p class="fine eq">A&#8321;h&#775;&#8321; = F&#7522;&#8345; &minus; q&#8321; &nbsp;&nbsp; A&#8322;h&#775;&#8322; = q&#8321; &minus; c&#8322;&radic;h&#8322; &nbsp;&nbsp; q&#8321; = NN(h&#8321;, h&#8322;) &nbsp; <span>The network learns the discharge q&#8321;; the valve law of tank 2 stays a hard constraint. Peach: the three training trajectories, from the paper's example.</span></p></div>`;
     if (f.t === 'video') return `<div class="fg" data-fig="video"><video class="shot" src="${A}wayfinder-demo.mp4" poster="${A}wayfinder-sidebar.webp" muted loop playsinline${reduce ? ' controls' : ' autoplay'} aria-label="Pressing play on a ticket in the sidebar opens a new Claude Code tab working that ticket"></video><p class="fine">Pressing play on a ticket opens a new tab that works it.</p></div>`;
     if (f.t === 'img') return `<figure class="sup${f.narrow ? ' narrow' : ''}"><div class="plate"><img src="${f.src}" alt="${f.alt}" width="${f.w}" height="${f.h}" loading="lazy"></div><figcaption class="fig-cap">${f.cap}<span class="src">${f.from}</span></figcaption></figure>`;
     if (f.t === 'grid') return `<figure class="sup"><div class="grid2">${f.items.map(it => `<div class="plate"><img src="${it.src}" alt="${it.alt}" width="${it.w}" height="${it.h}" loading="lazy"></div>`).join('')}</div><figcaption class="fig-cap">${f.cap}<span class="src">${f.from}</span></figcaption></figure>`;
@@ -549,14 +547,16 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
   /* drawn at roughly display size, so the streamline spacing reads the same in the desktop and phone mocks */
   function flow(cv, ph) {
     const W = ph ? 560 : 1000, H = W * .625, ctx = cv.getContext('2d'); cv.width = W; cv.height = H;
-    const fld = NS.leslieGower(W, H, 0);
+    const fld = NS.twoTank(W, H, 0);
     if (!flowLines[W]) flowLines[W] = NS.streamlines(Object.assign({ w: W, h: H, dsep: ph ? 13 : 15 }, fld));
     const L = flowLines[W], n = L.length; let raf = 0, t0 = 0;
     function paint(k) {
       ctx.clearRect(0, 0, W, H); ctx.lineWidth = ph ? 1.1 : 1.3; ctx.strokeStyle = FG; ctx.globalAlpha = .85; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
       for (let i = 0; i < n; i++) { const s = (i / n) * .62, q = Math.max(0, Math.min(1, (k - s) / .38)); if (q <= 0) continue;
         const p = L[i], m = Math.max(2, Math.floor(p.length * (1 - Math.pow(1 - q, 3)))); ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]); for (let j = 1; j < m; j++) ctx.lineTo(p[j][0], p[j][1]); ctx.stroke(); }
-      ctx.globalAlpha = 1; ctx.fillStyle = CORAL; ctx.beginPath(); ctx.arc(fld.eq[0], fld.eq[1], 8, 0, 7); ctx.fill();
+      ctx.globalAlpha = 1; ctx.strokeStyle = '#FFD9C2'; ctx.lineWidth = ph ? 2 : 2.6;
+      fld.trajectories.forEach(tr => { const m = Math.max(2, Math.floor(tr.length * Math.min(1, Math.max(0, (k - .45) / .55)))); if (k < .45) return; ctx.beginPath(); ctx.moveTo(tr[0][0], tr[0][1]); for (let j = 1; j < m; j++) ctx.lineTo(tr[j][0], tr[j][1]); ctx.stroke(); ctx.fillStyle = '#FFD9C2'; ctx.beginPath(); ctx.arc(tr[0][0], tr[0][1], ph ? 4 : 5, 0, 7); ctx.fill(); });
+      ctx.fillStyle = CORAL; ctx.beginPath(); ctx.arc(fld.eq[0], fld.eq[1], 8, 0, 7); ctx.fill();
     }
     if (reduce) paint(1); else { const tick = now => { if (!t0) t0 = now; const k = Math.min(1, (now - t0) / 2600); paint(k); if (k < 1) raf = requestAnimationFrame(tick); }; raf = requestAnimationFrame(tick); }
     stops.push(() => cancelAnimationFrame(raf));
