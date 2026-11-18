@@ -187,7 +187,7 @@
     % \small{\textbf{Involvement:} Chemical Engineering Masters Student Association (ChEMSA) Treasurer} 
     
     \vspace{-3pt}
-    \small{\textbf{GPA: } 3.99/4.00}
+    \small{\textbf{GPA: } 3.99/4.00 $|$ \textbf{Teaching Assistant:} Systems and Toolchains for AI in Engineering (06-763), Fall 2026}
 
     \vspace{-3pt}
     
@@ -252,7 +252,7 @@
     \resumeItemListStart
         \resumeItem{Developed and deployed the open source Simultaneous Neural Differential Algebraic Equation (SiNDAE) Python package based on novel Hybrid Differential Algebraic Equations training methods developed at CAPD, allowing data-driven neural network surrogates to be embedded in process models and trained using Non-Linear Program (NLP) solvers.}
         \resumeItem{Wrote detailed technical documentation of package functionality and application examples spanning process control, bioprocess kinetics, and dynamical systems, deploying automated docs via Jupyter Book and CI/CD github workflows.}
-        \resumeItem{Integrated and tested additional NLP solvers using Test-Driven-Development (TDD) and Agentic development workflows, shortening development time while ensuring codebase robustness, maintainability. Publication in JOSS pending.}
+        \resumeItem{Integrated and tested additional NLP solvers using Test-Driven-Development (TDD) and Agentic development workflows, shortening development time while ensuring codebase robustness, maintainability. AIChE 2026; JOSS pending.}
     \resumeItemListEnd
 %-------------------------------
 
@@ -306,14 +306,14 @@
     \resumeItem{Designed a graph RL agent (GATv2 encoder with Double DQN, PyTorch Geometric) that learns which transport links to add to a supply chain network so that customer demand is still met when plants, warehouses, or routes fail.}
     \resumeItem{Developed a size-independent Q-network that scores each candidate link from its endpoint embeddings, allowing a policy trained on small networks to design networks 4$\times$larger without retraining.}
     \resumeItem{Built the multi-echelon inventory simulator, failure-scenario evaluation, and a parallel, resumable experiment pipeline on a 32-core server, with held-out test networks and statistical acceptance criteria fixed before any results were examined.}
-    \resumeItem{First-author abstract prepared for ESCAPE 37 (Trondheim, 2027); codebase developed test-first with agentic workflows.}
+    \resumeItem{First-author abstract accepted at ESCAPE 37 (Trondheim, 2027); codebase developed test-first with agentic workflows.}
   \resumeItemListEnd
 
 
 \resumeProjectHeading
   {\textbf{Production Movie Recommendation Service with LLM Cold Start}}{\emph{CMU} $|$ \textit{Sep 2026 - Present}}
   \resumeItemListStart
-    \resumeItem{Developed and deployed a containerized recommendation service (Flask, Gunicorn, Docker Compose) on a Linux AWS VM for a simulated streaming platform of 1M users, serving 500k+ live requests within a 600 ms latency requirement.}
+    \resumeItem{Developed and deployed a containerized recommendation service (Flask, Gunicorn, Docker Compose) on a Linux AWS VM for a movie-streaming platform, serving 5.2M requests in its first monitored week, 99.98\% within 500 ms.}
     \resumeItem{Designed an asynchronous LLM cold-start pipeline in which a Kafka consumer submits each new user's free-text preferences to TypeSafe's Jev model to extract a structured taste profile, before a vectorized NumPy ranker converts into recommendations in 1.4 ms, personalizing results before the median user's first request at an LLM cost of \$1/day.}
     \resumeItem{Benchmarked content-based filtering, SVD collaborative filtering, and LightGBM LambdaMART on a chronological split, deploying LightGBM for a 2.2x NDCG@20 improvement over SVD at 139 ms P95 latency.}
     % ---- M2 (Oct): uncomment once shipped ----
