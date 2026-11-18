@@ -274,3 +274,27 @@ dialog.pdf iframe { display: block; width: 100%; height: calc(100% - 53px); bord
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
 .fg[data-fig="scale"] > svg { max-width: 660px; }
+
+/* ---- animated figures: step names, legends, extension tags, the amortised-cost schematic ---- */
+.step { margin: 12px 0 0; min-height: 1.4em; font: 500 .95rem/1.4 var(--text); color: var(--fg); }
+.legend { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 16px; margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--hair); font-size: .875rem; color: var(--fg2); }
+.legend dt { color: var(--fg); font-size: 1rem; line-height: 1.4; }
+.legend dd { margin: 0; line-height: 1.5; }
+.ext { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+.ext button { font: 500 .875rem/1 var(--text); padding: 8px 12px; border: 1px solid var(--hair); border-radius: 999px; background: none; cursor: pointer; }
+.ext button:hover { border-color: var(--fg); }
+.ext button[aria-pressed="true"] { background: var(--coral); border-color: var(--coral); color: var(--bg); }
+.formula { margin-top: 12px; min-height: 1.8em; }
+.formula p { margin: 0; font-size: 1rem; }
+.formula b { font-weight: 600; margin-right: .7em; }
+.fg[data-fig="amort"] text { font: 400 11px var(--text); fill: var(--fg2); }
+.fg[data-fig="amort"] .ax path { fill: none; stroke: var(--fg2); stroke-width: 1.3; }
+.fg[data-fig="amort"] .ax .hd { fill: var(--fg2); stroke: none; }
+.fg[data-fig="amort"] .tr path { fill: none; stroke: var(--coral); stroke-width: 1.3; }
+.fg[data-fig="amort"] .tr text { fill: var(--coral); }
+.fg[data-fig="amort"] .se { fill: none; stroke: var(--fg); stroke-width: 2; }
+.fg[data-fig="amort"] .po { fill: none; stroke: var(--coral); stroke-width: 2.4; }
+.fg[data-fig="amort"] .se-d { fill: var(--fg); }
+.fg[data-fig="amort"] .po-d { fill: var(--coral); }
+.fg[data-fig="amort"] .se-l { font: 600 12px var(--text); fill: var(--fg); }
+.fg[data-fig="amort"] .po-l { font: 600 12px var(--text); fill: var(--coral); }

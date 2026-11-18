@@ -19,7 +19,7 @@ rail:
 badges:
   Jev: { mark: typesafe-mark.svg, label: "by TypeSafe", href: "https://typesafe.ai" }
 figures:
-  system: { kind: rec }
+  system: { kind: system, data: recsys }
   backlog: { kind: img, plate: dash, src: grafana-cold-start.webp, alt: "Grafana panel: profiles waiting for the cold-start worker fall from about 80,000 to zero overnight", caption: "The cold-start worker clearing a backlog of about 80,000 profiles overnight, 10 to 11 November (UTC).", source: "Team Grafana dashboard, Platform Health." }
   versions: { kind: img, plate: dash, src: grafana-model-versions.webp, alt: "Grafana state timeline: one control model per day, each preceded by a short candidate period", caption: "One week of serving models. Each day’s LightGBM model runs first as a candidate beside the champion, then takes over.", source: "Team Grafana dashboard, Model Quality." }
   latency: { kind: img, plate: dash, src: grafana-latency.webp, alt: "Grafana time series: p50, p95 and p99 HTTP latency over one week, p99 near 500 ms", caption: "HTTP latency over the same week. p99 stays under 500 ms apart from two brief spikes; percentiles come from histogram buckets, so read them as bounds.", source: "Team Grafana dashboard, Service Availability." }
@@ -46,7 +46,7 @@ Jev is TypeSafe's first System One model, released in September 2026. It doesn't
 LightGBM LambdaMART ranks the users the model knows. A new model is retrained each day, served first as a canary candidate beside the champion, and promoted without downtime. Grafana dashboards track availability, latency, model versions, drift and the cold-start backlog.
 
 ## Visual
-Lead: the system diagram with a request travelling through it, restyled after Proschi's own rendering (grouped nodes, labelled edges, request token, sequence player) in the site palette.
+Lead: the system diagram with a request travelling through it (`src/scripts/system.ts`, spec `recsys`), in Proschi's grammar in the site palette with JetBrains Mono kind and edge labels; scenario names are the tabs, step names the caption.
 Model: `content/diagrams/recommender.proschi` (passes `proschi check` and `proschi test`). Rendered SVGs and the interactive player are in `content/diagrams/rendered/`. Marked guesses in the file need the team's confirmation.
 Badge: TypeSafe mark (`content/assets/recsys/typesafe-mark.svg`, currentColor) beside the Jev section heading, with "Jev by TypeSafe" and a link to typesafe.ai.
 

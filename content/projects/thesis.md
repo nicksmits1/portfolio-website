@@ -23,9 +23,18 @@ rail:
   - ["28,481", "parameters at every network size"]
 figures:
   episode: { kind: net, fine: "Illustrative 9-node episode. A trace exported from the trained policy replaces it." }
+  policy:
+    kind: policy
+    legend:
+      - ['$h_i, h_j$', 'embeddings of the arc’s two endpoints, from two GATv2 rounds']
+      - ['$\rho_k$', 'share of the arc budget left at step $k$']
+      - ['$e_{ij}$', 'arc features: lead time, priority, cost']
+      - ['$g_\psi$', 'one MLP, shared by every candidate arc']
+      - ['$Q(s_k, a_{ij})$', 'predicted gain in design value $V$ from adding arc $i \to j$']
+  amort: { kind: amort, caption: "Cumulative compute against networks designed, schematic." }
   value: { kind: img, src: design-value-by-size.webp, alt: "Held-out design value by network size for the learned policy, greedy search and random baselines", caption: "Held-out design value by network size, mean and 95% interval: the policy in red, greedy search in black. Shaded sizes are larger than any training network.", source: "Crop of the thesis poster; to be redrawn in the site palette." }
   cpu: { kind: img, src: cpu-time-by-size.webp, alt: "Median CPU time to design one network, greedy search against the learned policy, log scale", caption: "Median CPU time to design one network, on a log scale.", source: "Crop of the thesis poster; to be redrawn in the site palette." }
-order: [episode, Motivation, Formulation, value, Upper bound, cpu, Learned policy, Architecture]
+order: [episode, policy, Motivation, Formulation, value, Upper bound, cpu, Learned policy, Amortised cost, amort, Architecture]
 reading:
   - { title: "Graph RL for resilient supply chain network design", what: "Poster, preliminary results", href: poster.pdf, preview: poster-p1.webp, wide: true }
 ---
@@ -37,6 +46,7 @@ A policy learns which transport arcs to add so demand still arrives when plants,
 - About 21,000x faster: one CPU-second against six CPU-hours for greedy search on a 70-node network.
 - 28,481 parameters at every network size. GATv2 encoder, Double DQN.
 - First-author abstract accepted at ESCAPE 37 (Trondheim, 2027).
+- Training costs about six to seven hours of wall-clock time per seed on a shared 32-core server, paid once (thesis repo `presentations/EWO/qa_crib.md`). CPU-hours per seed are not measured, so no break-even count is published.
 
 ## Sections
 
@@ -56,6 +66,9 @@ Re-planning every flow optimally turns each scenario into a linear programme who
 ### Learned policy
 Each design needs a simulation over many scenarios, and the number of designs grows combinatorially, so even greedy search takes hours at 70 nodes. The policy builds a design one arc at a time, with an explicit stop, and is rewarded by each arc's change in value, so an episode's return is the design's value. Trained once on small networks, it is applied without retraining to networks four times larger.
 
+### Amortised cost
+Greedy search pays its full cost again for every network, about six CPU-hours at 70 nodes. The policy pays once, six to seven hours of training per seed, and then about one CPU-second per network, including networks four times larger than any it trained on.
+
 ### Architecture
 The policy reads the network as a graph: seven features per node (tier, safety stock, storage and production capacity, throughput) and three per arc (lead time, priority, cost). Two GATv2 rounds give every node an embedding. For each candidate arc, one shared network reads both endpoint embeddings, the remaining budget and the arc's own features, and returns that arc's Q-value. The best arc is added only if its value is positive; otherwise the design stops:
 $$h = f_\theta(X, E), \qquad Q(s_k, a_{ij}) = g_\psi\big(h_i \,\|\, h_j \,\|\, \rho_k \,\|\, e_{ij}\big), \qquad a_k = \begin{cases} \arg\max_{a} Q(s_k, a) & \text{if } \max_a Q(s_k, a) > 0 \\ \text{stop} & \text{otherwise} \end{cases}$$
@@ -64,7 +77,8 @@ No weight depends on the number of nodes or arcs, so the same 28,481 parameters 
 ## Visual
 Lead: the policy designing one network, arc by arc. The drafts use an illustrative 9-node episode.
 TODO: export a real `EpisodeTrace` (`src/environment/trace.py`) from a trained policy on a held-out network and replace the illustration.
-Order on the page: episode; "Motivation"; "Formulation" with the equation; design value by size (`design-value-by-size.webp`, poster crop); "Upper bound"; CPU time by size (`cpu-time-by-size.webp`, poster crop); "Learned policy"; architecture diagram; "Architecture" with its equation; further reading (poster, previewable).
-Architecture diagram (animated, own drawer): a small candidate network on the left; two message-passing rounds run as pulses along its arcs (GATv2 ×2, θ shared by all nodes) and leave one embedding bar per node; each candidate arc then gathers [h_i ‖ h_j ‖ ρ_k ‖ e_ij] into the shared MLP g_ψ, and its Q-value grows as a bar beside it; the largest positive bar turns coral, that arc is drawn into the network, ρ_k steps down, and the loop repeats until every Q is at or below zero and "stop" lights. Labels follow the poster's "Design Policy" panel. Reduced motion: the last step, with all Q bars, the chosen arc and the stop rule visible.
+Order on the page: episode; design policy (directly under the episode, Nicolas 2026-11-18); "Motivation"; "Formulation" with the equation; design value by size (`design-value-by-size.webp`, poster crop); "Upper bound"; CPU time by size (`cpu-time-by-size.webp`, poster crop); "Learned policy"; "Amortised cost" with the cumulative-compute schematic; "Architecture" with its equation; further reading (poster, previewable).
+Design policy (`src/scripts/policy.ts`, approved in `drafts/options/figure-options.html`): environment and agent as two dashed regions, state across and action back; plant, warehouse and customer icons; two GATv2 rounds as pulses leave an embedding strip per node; for each candidate arc the endpoint strips and arc features fly into [h_i, h_j, ρ_k, e_ij], light the MLP g_ψ layer by layer, and grow that arc's Q bar (gain in design value); the best positive arc is added, and the loop stops when every Q is at or below zero. Step names only under the figure; the variables are named in the legend. Q-values are an example on the episode's network. Reduced motion: the final step.
+Amortised cost schematic (`src/components/figures/Amort.astro`, static): no axis numbers and no break-even count, since training time per seed is wall-clock and its CPU-hours are not measured (thesis repo `presentations/EWO/HANDOFF.md`).
 Further reading: `poster.pdf` with first-page preview `poster-p1.webp` (landscape, 1400 px).
 TODO: redraw both poster figures in the site palette from the thesis repo's result files.

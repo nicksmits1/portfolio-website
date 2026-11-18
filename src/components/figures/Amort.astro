@@ -1,0 +1,32 @@
+---
+/* Amortised cost, schematic and static: greedy search pays its cost again for every network; the learned policy pays
+   training once and then almost nothing per network. No numbers on the axes: CPU-hours per training seed are not
+   measured (training time is wall-clock), so the chart claims shape only. */
+interface Props { caption?: string }
+const { caption } = Astro.props;
+const X0 = 100, Y0 = 244, DX = 38, NMAX = 13, S = 16, TR = 64, P = 0.5;
+const ns = Array.from({ length: NMAX + 1 }, (_, i) => i);
+const x = (n: number) => X0 + n * DX, ys = (n: number) => Y0 - n * S, yp = (n: number) => Y0 - TR - n * P;
+const search = ns.map(i => `${x(i)},${ys(i)}`).join(' '), policy = ns.map(i => `${x(i)},${yp(i)}`).join(' ');
+---
+<figure class="fg" data-fig="amort">
+  <svg viewBox="0 0 640 290" role="img" aria-label="Schematic: cumulative compute grows steeply with every network for greedy search, while the learned policy starts at its one-off training cost and stays almost flat.">
+    <g class="ax">
+      <path d={`M${X0} 22 V${Y0} H612`} />
+      <path class="hd" d={`M${X0} 16 l-4 8 h8 z`} /><path class="hd" d={`M618 ${Y0} l-8 -4 v8 z`} />
+      <text x={X0 + 10} y="26">Cumulative compute</text>
+      <text x="610" y={Y0 + 22} text-anchor="end">Networks designed</text>
+    </g>
+    <g class="tr">
+      <path d={`M${X0 - 10} ${Y0} V${Y0 - TR} M${X0 - 14} ${Y0} H${X0 - 6} M${X0 - 14} ${Y0 - TR} H${X0 - 6}`} />
+      <text x={X0 - 20} y={Y0 - TR / 2 - 2} text-anchor="end">training,</text>
+      <text x={X0 - 20} y={Y0 - TR / 2 + 12} text-anchor="end">paid once</text>
+    </g>
+    <polyline class="se" points={search} />
+    <polyline class="po" points={policy} />
+    {ns.slice(1).map(i => <><circle class="se-d" cx={x(i)} cy={ys(i)} r="2.6" /><circle class="po-d" cx={x(i)} cy={yp(i)} r="2.6" /></>)}
+    <text class="se-l" x={x(NMAX - 1) - 8} y={ys(NMAX - 1) - 2} text-anchor="end">Greedy search</text>
+    <text class="po-l" x={x(NMAX)} y={yp(NMAX) - 10} text-anchor="end">Learned policy</text>
+  </svg>
+  {caption && <figcaption class="fig-cap">{caption}</figcaption>}
+</figure>

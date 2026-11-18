@@ -1,0 +1,9 @@
+---
+interface Props { data: string }
+---
+<figure class="fg" data-fig="system" data-d={Astro.props.data}>
+  <div class="tabs" data-tabs role="group" aria-label="Scenario"></div>
+  <div class="scroll"><svg></svg></div>
+  <p class="step" data-step aria-live="polite"></p>
+</figure>
+<script>import '../../scripts/system';</script>

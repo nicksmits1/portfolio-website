@@ -6,9 +6,11 @@ import Section from '../../components/Section.astro';
 import Reading from '../../components/Reading.astro';
 import PrevNext from '../../components/PrevNext.astro';
 import Net from '../../components/figures/Net.astro';
-import Rec from '../../components/figures/Rec.astro';
+import Policy from '../../components/figures/Policy.astro';
+import Amort from '../../components/figures/Amort.astro';
+import Dqn from '../../components/figures/Dqn.astro';
+import System from '../../components/figures/System.astro';
 import Flow from '../../components/figures/Flow.astro';
-import Pipe from '../../components/figures/Pipe.astro';
 import Ladder from '../../components/figures/Ladder.astro';
 import Scale from '../../components/figures/Scale.astro';
 import Img from '../../components/figures/Img.astro';
@@ -48,9 +50,11 @@ const banner = d.banner ? image(p.id, d.banner.src) : null;
           <>
             {it.type === 'sec' && <Section owner={p.id} heading={it.key} md={it.md} badge={d.badges?.[it.key]} />}
             {it.type === 'fig' && it.f.kind === 'net' && <Net fine={it.f.fine} />}
-            {it.type === 'fig' && it.f.kind === 'rec' && <Rec />}
+            {it.type === 'fig' && it.f.kind === 'policy' && <Policy legend={it.f.legend} />}
+            {it.type === 'fig' && it.f.kind === 'amort' && <Amort caption={it.f.caption} />}
+            {it.type === 'fig' && it.f.kind === 'dqn' && <Dqn ext={it.f.ext!} />}
+            {it.type === 'fig' && it.f.kind === 'system' && <System data={it.f.data!} />}
             {it.type === 'fig' && it.f.kind === 'flow' && <Flow />}
-            {it.type === 'fig' && it.f.kind === 'pipe' && <Pipe />}
             {it.type === 'fig' && it.f.kind === 'ladder' && <Ladder />}
             {it.type === 'fig' && it.f.kind === 'scale' && <Scale data={it.f.data!} caption={it.f.caption} />}
             {it.type === 'fig' && it.f.kind === 'img' && <Img owner={p.id} src={it.f.src!} alt={it.f.alt!} caption={it.f.caption} source={it.f.source} plate={it.f.plate} narrow={it.f.narrow} />}

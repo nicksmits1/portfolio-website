@@ -1,0 +1,16 @@
+---
+import { renderInline } from '../../lib/markdown';
+interface Props { ext: { id: string; name: string; on: string; tex: string }[] }
+const { ext } = Astro.props;
+---
+<figure class="fg" data-fig="dqn">
+  <div class="scroll"><svg role="img" aria-label="DQN loop: the ICU-Sepsis environment, replay buffer, loss, target network and online network, with the Rainbow extensions tagged where they act."></svg></div>
+  <p class="step" data-step aria-live="polite">Store transition</p>
+  <div class="ext" role="group" aria-label="Extensions">
+    {ext.map(x => <button type="button" data-ext={x.id} data-on={x.on} aria-pressed="false">{x.name}</button>)}
+  </div>
+  <div class="formula" aria-live="polite">
+    {ext.map(x => <p data-f={x.id} hidden><b>{x.name}</b><span set:html={renderInline(x.tex)} /></p>)}
+  </div>
+</figure>
+<script>import '../../scripts/dqn';</script>

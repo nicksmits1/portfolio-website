@@ -20,8 +20,17 @@ rail:
   - ["MIMIC-III", "real ICU records behind the MDP"]
 figures:
   scale: { kind: scale, data: sepsis, caption: "Mean return over the last 10,000 episodes. The three dim variants stayed near a random policy." }
+  loop:
+    kind: dqn
+    ext:
+      - { id: per, name: Prioritized replay, on: buf, tex: '$P(i) \propto |\delta_i|^\alpha, \quad w_i = (N P(i))^{-\beta}$' }
+      - { id: nstep, name: n-step, on: buf, tex: '$\sum_{k<n} \gamma^k r_{t+k} + \gamma^n \max_{a''} Q(s_{t+n}, a'')$' }
+      - { id: double, name: Double, on: tgt, tex: '$r + \gamma\, Q_{\bar\theta}\big(s'', \arg\max_{a''} Q_\theta(s'', a'')\big)$' }
+      - { id: duel, name: Dueling, on: onl, tex: '$Q(s,a) = V(s) + A(s,a) - \tfrac{1}{|\mathcal{A}|}\sum_{a''} A(s,a'')$' }
+      - { id: dist, name: Distributional, on: onl, tex: '$Q(s,a) = \mathbb{E}[Z(s,a)]$' }
+      - { id: noisy, name: Noisy layers, on: onl, tex: '$w = \mu + \sigma \odot \varepsilon$' }
   returns: { kind: img, src: returns-over-training.webp, alt: "Return over training for the eight DQN variants", caption: "Survival rate over training for the best settings of each variant.", source: "Figure 1a of the team’s report." }
-order: [scale, Formulation, Deep Q-learning, Extensions, Comparison, Results, returns]
+order: [scale, Formulation, Deep Q-learning, loop, Extensions, Comparison, Results, returns]
 reading:
   - { title: "A survey of reinforcement models applied to a model of ICU sepsis treatment", what: "Final report, Smits, Randolph and Paracha, McGill COMP 579", href: report.pdf, preview: report-p1.webp }
 ---
@@ -60,5 +69,5 @@ The dueling head reached the best return, at the cost of noisier learning; prior
 ## Visual
 Lead: the eight variants on one return scale, the three that failed to learn shown dim near the random-policy level.
 Order on the page: return scale; "Formulation"; "Deep Q-learning" with the loss; DQN loop diagram; "Extensions"; "Comparison"; "Results"; `returns-over-training.webp`; further reading (report, previewable, first page `report-p1.webp`).
-DQN loop diagram (animated, own drawer): environment, replay buffer, online network and target network in a loop, with one transition (s, a, r, s′) travelling env → buffer → sampled batch → loss, the target network feeding the loss, the gradient returning to the online network and its greedy action going back to the environment. The six extensions sit as tags where they act: prioritized replay and n-step on the buffer, double on the target, dueling, distributional and noisy layers on the online network's head. Hovering or tapping a tag lights the part it changes. Reduced motion: the whole loop drawn with every tag in place.
+DQN loop (`src/scripts/dqn.ts`, figure `loop`, approved in `drafts/options/figure-options.html`): one transition travels env → buffer → batch → loss, the target network feeds the loss, the gradient returns to the online network and its greedy action goes back to the patient; every other loop the target copies θ. The six extensions are tags where they act (the `ext` list above: id, name, part, formula); hovering or tapping a tag, or its button, lights the part and shows the formula. Step names only under the figure. Reduced motion: the whole loop with every tag in place.
 Supporting: `returns-over-training.webp` (report Figure 1a, survival rate over training). Low resolution (585 px) with heavy confidence shading; redraw from the run logs if they turn up.

@@ -6,11 +6,13 @@ import { z } from 'astro/zod';
    the body holds the line, ## Facts (evidence notes), ## Sections (the prose) and ## Visual (notes for agents). */
 const link = z.object({ label: z.string(), href: z.string(), icon: z.enum(['gh', 'paper', 'file']), lead: z.boolean().optional() });
 const figure = z.object({
-  kind: z.enum(['net', 'rec', 'flow', 'pipe', 'ladder', 'scale', 'img', 'grid', 'video']),
+  kind: z.enum(['net', 'policy', 'amort', 'dqn', 'system', 'flow', 'ladder', 'scale', 'img', 'grid', 'video']),
   src: z.string().optional(), poster: z.string().optional(), alt: z.string().optional(),
   caption: z.string().optional(), source: z.string().optional(), fine: z.string().optional(),
   plate: z.enum(['white', 'dash', 'shot']).optional(), narrow: z.boolean().optional(), data: z.string().optional(),
   items: z.array(z.object({ src: z.string(), alt: z.string() })).optional(),
+  legend: z.array(z.tuple([z.string(), z.string()])).optional(),
+  ext: z.array(z.object({ id: z.string(), name: z.string(), on: z.enum(['env', 'buf', 'loss', 'tgt', 'onl']), tex: z.string() })).optional(),
 });
 const projects = defineCollection({
   loader: glob({ pattern: '*.md', base: './content/projects', generateId: ({ data }) => String(data.id) }),

@@ -1,14 +1,7 @@
 import { el, reduce, theme, whileVisible, mountAll } from './dom';
+import { N, BASE, ADDED } from './scnet';
 
 /* Supply chain episode. Illustrative until a trace exported from the trained policy replaces it. */
-type Kind = 'p' | 'w' | 'c';
-const N: Record<string, [number, number, Kind]> = {
-  P1: [80, 130, 'p'], P2: [80, 250, 'p'],
-  W1: [320, 70, 'w'], W2: [320, 190, 'w'], W3: [320, 310, 'w'],
-  C1: [560, 50, 'c'], C2: [560, 140, 'c'], C3: [560, 230, 'c'], C4: [560, 320, 'c'],
-};
-const BASE = [['P1', 'W1'], ['P1', 'W2'], ['P2', 'W2'], ['P2', 'W3'], ['W1', 'C1'], ['W1', 'C2'], ['W2', 'C2'], ['W2', 'C3'], ['W3', 'C4']];
-const ADDED = [['W1', 'C3'], ['P1', 'W3']];
 const STATES = [
   { cap: 'The network', added: 0, fail: false },
   { cap: 'Warehouse W2 fails. Customer C3 has no supply.', added: 0, fail: true },

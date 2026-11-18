@@ -1,0 +1,15 @@
+---
+import { renderInline } from '../../lib/markdown';
+interface Props { legend?: [string, string][] }
+const { legend = [] } = Astro.props;
+---
+<figure class="fg" data-fig="policy">
+  <div class="scroll"><svg role="img" aria-label="The environment holds the network. The agent embeds its nodes, scores every candidate arc with one shared MLP, and adds the arc with the largest positive Q until none is positive."></svg></div>
+  <p class="step" data-step aria-live="polite">Node and arc embedding</p>
+  {legend.length > 0 && (
+    <dl class="legend">
+      {legend.map(([sym, what]) => (<><dt set:html={renderInline(sym)} /><dd set:html={renderInline(what)} /></>))}
+    </dl>
+  )}
+</figure>
+<script>import '../../scripts/policy';</script>
