@@ -1,0 +1,18 @@
+---
+import { url, image } from '../../lib/assets';
+interface Props { owner: string; src: string; poster?: string; alt: string; fine?: string }
+const { owner, src, poster, alt, fine } = Astro.props;
+---
+<figure class="fg" data-fig="video">
+  <video class="shot" src={url(owner, src)} poster={poster ? image(owner, poster).src : undefined} muted loop playsinline preload="metadata" aria-label={alt}></video>
+  {fine && <figcaption class="fine">{fine}</figcaption>}
+</figure>
+<script>
+  import { reduce, whileVisible, mountAll } from '../../scripts/dom';
+  /* Plays while on screen; under reduced motion it stays on its first frame with controls. */
+  mountAll('[data-fig="video"]', root => {
+    const v = root.querySelector('video')!;
+    if (reduce) { v.controls = true; return; }
+    whileVisible(root, () => { v.play().catch(() => { v.controls = true; }); }, () => v.pause());
+  });
+</script>

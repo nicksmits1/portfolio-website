@@ -1,0 +1,5 @@
+# Latest: the four newest items show on home. Newest first. Add an entry when something ships, is accepted or is shown.
+- { id: escape37-accepted, date: 2026-11-15, label: "Nov 2026", kind: Abstract, title: "ESCAPE 37 abstract accepted", detail: "Graph RL for supply chain design, first author", href: /projects/thesis }
+- { id: aiche-542, date: 2026-11-11, label: "Nov 2026", kind: Conference, title: "SiNDAE shown at AIChE 2026", detail: "Session 542, Software Tools for Process Systems Engineering", href: /projects/sindae }
+- { id: wayfinder-release, date: 2026-11-05, label: "Nov 2026", kind: Open source, title: "wayfinder-sidebar released", detail: "Claude Code plugin, 15k views on Reddit", href: /projects/wayfinder }
+- { id: ta-06763, date: 2026-09-01, label: "Sep 2026", kind: Teaching, title: "TA for Systems and Toolchains for AI in Engineering", detail: "06-763, Carnegie Mellon" }

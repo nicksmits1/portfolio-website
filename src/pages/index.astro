@@ -1,0 +1,97 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import { ICON } from '../lib/icons';
+import { thumb } from '../lib/thumbs';
+import { image, cvUrl } from '../lib/assets';
+import { projects, body, skillsOf, profile } from '../lib/site';
+
+const list = await projects();
+const refs = JSON.stringify(list.map(p => ({ id: p.id, short: p.data.short })));
+const latest = (await getCollection('latest')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 4);
+const pubs = await getCollection('publications');
+const timeline = await getCollection('timeline');
+const groups = (await getCollection('skills')).map(g => ({
+  name: g.data.name,
+  skills: g.data.skills.map(s => ({ s, uses: list.filter(p => skillsOf(p).includes(s)).map(p => p.id) })).filter(x => x.uses.length),
+})).filter(g => g.skills.length);
+const head = image('profile', 'headshot-square.webp');
+const [first, ...rest] = profile.name.split(' ');
+---
+<Base title="Nicolas Smits" description={`${profile.name}: ${profile.focus}`}>
+  <header class="hero" id="top">
+    <div class="land" data-land="hero" data-projects={refs}>
+      <canvas role="img" aria-label="Contour landscape of an objective function with one local minimum per project; a gradient-descent solver converges on one of them"></canvas>
+      <svg aria-hidden="true"></svg><div class="labs"></div>
+    </div>
+    <Nav page="home" />
+    <div class="who">
+      <div class="id"><img src={head.src} width={head.width} height={head.height} alt={profile.name} /><h1>{first}<br />{rest.join(' ')}</h1></div>
+      <p class="focus">{profile.focus}</p>
+      <div class="links">
+        <a href={`mailto:${profile.email}`} aria-label="Email"><Fragment set:html={ICON.mail} /><span class="nm">Email</span></a>
+        <a href={profile.linkedin} aria-label="LinkedIn"><Fragment set:html={ICON.li} /><span class="nm">LinkedIn</span></a>
+        <a href={profile.github} aria-label="GitHub"><Fragment set:html={ICON.gh} /><span class="nm">GitHub</span></a>
+        {profile.orcid
+          ? <a href={profile.orcid} aria-label="ORCID"><Fragment set:html={ICON.orcid} /><span class="nm">ORCID</span></a>
+          : <span class="tbd" aria-label="ORCID, coming soon" title="ORCID, coming soon"><Fragment set:html={ICON.orcid} /><span class="nm">ORCID</span></span>}
+        <a class="cv" href={cvUrl}><Fragment set:html={ICON.file} />CV</a>
+      </div>
+      <p class="read" data-read aria-live="polite">Click anywhere to start a solver there.</p>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <section class="latest" aria-labelledby="latest-h">
+      <p class="eyebrow" id="latest-h">Latest</p>
+      <ol>{latest.map(n => (
+        <li>{n.data.href
+          ? <a href={n.data.href}><em>{n.data.label} · {n.data.kind}</em><b>{n.data.title}</b><span>{n.data.detail}</span></a>
+          : <><em>{n.data.label} · {n.data.kind}</em><b>{n.data.title}</b><span>{n.data.detail}</span></>}</li>
+      ))}</ol>
+    </section>
+
+    <section class="block" id="research" aria-labelledby="research-h">
+      <h2 class="sec-h" id="research-h">Research and projects</h2>
+      <ul class="rows">{list.map(p => (
+        <li><a class="row" href={`/projects/${p.id}`}><Fragment set:html={thumb(p.id)} /><div><b>{p.data.name}</b><small>{p.data.where}</small></div><p>{body(p).line}</p><em>{p.data.year}</em></a></li>
+      ))}</ul>
+    </section>
+
+    <section class="block two">
+      <div id="publications">
+        <h2 class="sec-h">Publications</h2>
+        <ul class="items">{pubs.map(x => (
+          <li class="item"><em>{x.data.year}</em><div>{x.data.href ? <a href={x.data.href}><b>{x.data.title}{x.data.status && <span class="status">{x.data.status}</span>}</b></a> : <b>{x.data.title}</b>}<span>{x.data.detail}</span></div></li>
+        ))}</ul>
+      </div>
+      <div id="experience">
+        <h2 class="sec-h">Experience and education</h2>
+        {(['Experience', 'Teaching', 'Education'] as const).map(g => (
+          <>
+            <p class="subh">{g}</p>
+            <ul class="items">{timeline.filter(x => x.data.group === g).map(x => <li class="item"><em>{x.data.years}</em><div><b>{x.data.title}</b><span>{x.data.detail}</span></div></li>)}</ul>
+          </>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <section class="skills" id="skills" aria-labelledby="skills-h">
+    <div class="skills-l">
+      <h2 id="skills-h">Skills</h2>
+      <p class="read" data-read aria-live="polite">Pick a skill. The projects that use it stay deep; the rest flatten out.</p>
+      {groups.map(g => (
+        <div class="grp"><p class="eyebrow">{g.name}</p><div class="chips">{g.skills.map(x => <button type="button" data-skill={x.s} data-uses={x.uses.join(',')} aria-pressed="false">{x.s}</button>)}</div></div>
+      ))}
+    </div>
+    <div class="skills-r">
+      <div class="land" data-land="skills" data-projects={refs}>
+        <canvas role="img" aria-label="The same landscape laid out on a grid; picking a skill flattens the projects that do not use it"></canvas>
+        <svg aria-hidden="true"></svg><div class="labs"></div>
+      </div>
+    </div>
+  </section>
+  <script>import '../scripts/home';</script>
+</Base>

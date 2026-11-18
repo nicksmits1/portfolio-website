@@ -1,16 +1,33 @@
 ---
 id: thesis
-name: Graph RL for resilient supply chains
-where: Master's thesis, CMU
-with: Arsh Bhatia, Carl D. Laird
-period: 2026-01 to present
+name: 'Graph RL for resilient supply chains'
+where: 'Master’s thesis, CMU'
+with: 'Arsh Bhatia, Carl D. Laird'
+period: '2026-01 to present'
 methods: [Reinforcement learning, Graph neural networks, Simulation]
 tools: [PyTorch, PyG, Gymnasium]
-source: ../rl-sc-design (private repo, read-only); problem statement ../rl-sc-design/paper/optimisation-problem/problem.tex (draft, November 2026)
-links: [Poster (PDF) -> content/assets/thesis/poster.pdf]
-publication: "Graph RL for resilient supply chain network design", first-author abstract, accepted at ESCAPE 37 (Trondheim, Norway, 7 to 10 June 2027)
-badge: ESCAPE 37 logo, content/assets/thesis/escape37-logo-light.webp, shown beside the publication line
-disclosure: everything may be shown; label numbers "Preliminary results". From the problem statement use sections 1 to 5 only, and nothing about the mixed-integer encoding (section 6 onward, and the stochastic MIP named at the end of section 5).
+source: '../rl-sc-design (private repo, read-only); problem statement ../rl-sc-design/paper/optimisation-problem/problem.tex (draft, November 2026)'
+publication_note: '"Graph RL for resilient supply chain network design", first-author abstract, accepted at ESCAPE 37 (Trondheim, Norway, 7 to 10 June 2027)'
+disclosure: 'everything may be shown; label numbers "Preliminary results". From the problem statement use sections 1 to 5 only, and nothing about the mixed-integer encoding (section 6 onward, and the stochastic MIP named at the end of section 5).'
+short: Supply chain RL
+when: 2026 – present
+year: 2026
+links:
+  - { label: "Poster (PDF)", href: poster.pdf, icon: file }
+note: Preliminary results
+badge: { logo: escape37-logo-light.webp, alt: "ESCAPE 37, Trondheim, Norway", title: "Abstract accepted at ESCAPE 37", text: "First author. Trondheim, 7–10 June 2027." }
+rail:
+  - ["21,000×", "faster than greedy search"]
+  - ["19 → 70", "nodes, trained on → designed"]
+  - ["64–80%", "of greedy search’s value at training sizes"]
+  - ["28,481", "parameters at every network size"]
+figures:
+  episode: { kind: net, fine: "Illustrative 9-node episode. A trace exported from the trained policy replaces it." }
+  value: { kind: img, src: design-value-by-size.webp, alt: "Held-out design value by network size for the learned policy, greedy search and random baselines", caption: "Held-out design value by network size, mean and 95% interval: the policy in red, greedy search in black. Shaded sizes are larger than any training network.", source: "Crop of the thesis poster; to be redrawn in the site palette." }
+  cpu: { kind: img, src: cpu-time-by-size.webp, alt: "Median CPU time to design one network, greedy search against the learned policy, log scale", caption: "Median CPU time to design one network, on a log scale.", source: "Crop of the thesis poster; to be redrawn in the site palette." }
+order: [episode, Motivation, Formulation, value, Upper bound, cpu, Learned policy, Architecture]
+reading:
+  - { title: "Graph RL for resilient supply chain network design", what: "Poster, preliminary results", href: poster.pdf, preview: poster-p1.webp, wide: true }
 ---
 A policy learns which transport arcs to add so demand still arrives when plants, warehouses or routes fail.
 

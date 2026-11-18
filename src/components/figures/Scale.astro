@@ -1,0 +1,9 @@
+---
+interface Props { data: string; caption?: string }
+const { data, caption } = Astro.props;
+---
+<figure class="fg" data-fig="scale" data-d={data}>
+  <svg></svg>
+  {caption && <figcaption class="fig-cap">{caption}</figcaption>}
+</figure>
+<script>import '../../scripts/scale';</script>

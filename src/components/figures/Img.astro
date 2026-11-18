@@ -1,0 +1,10 @@
+---
+import { image } from '../../lib/assets';
+interface Props { owner: string; src: string; alt: string; caption?: string; source?: string; plate?: 'white' | 'dash' | 'shot'; narrow?: boolean }
+const { owner, src, alt, caption, source, plate = 'white', narrow } = Astro.props;
+const img = image(owner, src);
+---
+<figure class:list={['fg sup', { narrow }]}>
+  <div class:list={['plate', plate !== 'white' && plate]}><img src={img.src} width={img.width} height={img.height} alt={alt} loading="lazy" decoding="async" /></div>
+  {caption && <figcaption class="fig-cap"><Fragment set:html={caption} />{source && <span class="src">{source}</span>}</figcaption>}
+</figure>

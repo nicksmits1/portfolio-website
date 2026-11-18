@@ -1,0 +1,27 @@
+---
+import { ICON } from '../lib/icons';
+import { cvUrl } from '../lib/assets';
+import { profile } from '../lib/site';
+---
+<footer class="foot" id="contact">
+  <div class="wrap">
+    <h2>Contact</h2>
+    <p class="mail">{profile.email}</p>
+    <div class="ic">
+      <button type="button" class="cp" data-copy={profile.email}>Copy address</button>
+      <a href={profile.linkedin} aria-label="LinkedIn" title="LinkedIn" set:html={ICON.li} />
+      <a href={profile.github} aria-label="GitHub" title="GitHub" set:html={ICON.gh} />
+      {profile.orcid
+        ? <a href={profile.orcid} aria-label="ORCID" title="ORCID" set:html={ICON.orcid} />
+        : <span class="tbd" aria-label="ORCID, coming soon" title="ORCID, coming soon" set:html={ICON.orcid} />}
+      <a class="lb" href={cvUrl}><Fragment set:html={ICON.file} />CV (PDF)</a>
+    </div>
+  </div>
+</footer>
+<script>
+  /* Copy the address; the button says so for a moment. If the clipboard is refused, the address stays selectable. */
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach(b => b.addEventListener('click', () => {
+    const label = b.textContent;
+    navigator.clipboard?.writeText(b.dataset.copy!).then(() => { b.textContent = 'Copied'; setTimeout(() => (b.textContent = label), 1400); }, () => {});
+  }));
+</script>

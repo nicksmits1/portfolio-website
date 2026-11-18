@@ -38,6 +38,6 @@ ADDITIONS (Nicolas, 2026-11-17, second round):
 
 ## Unresolved
 
-- Seventh project: `mmrag` joins the six, so home needs a seventh row and a seventh minimum in both landscapes (the home contract says six).
-- Wayfinder: first-person copy is drafted from the README; match it to Nicolas's Reddit post once he pastes the text (reddit.com blocks fetching).
+- Not built yet: the thesis architecture diagram and the sepsis DQN loop (specs in each project's `## Visual`), and the Proschi-style redraw of the recommender and FIFA diagrams (see Additions). The pages ship without them until they exist.
+
 - Thesis: the two poster figures ship as poster crops until they are redrawn in the site palette from the thesis repo's result files; the episode stays labelled illustrative until a real trace is exported.

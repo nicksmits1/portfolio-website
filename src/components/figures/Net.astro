@@ -1,0 +1,9 @@
+---
+interface Props { fine?: string }
+---
+<div class="fg" data-fig="net">
+  <svg></svg>
+  <div class="figbar"><p data-netcap aria-live="polite"></p><div class="steps" data-netsteps role="group" aria-label="Episode step"></div></div>
+  {Astro.props.fine && <p class="fine">{Astro.props.fine}</p>}
+</div>
+<script>import '../../scripts/net';</script>

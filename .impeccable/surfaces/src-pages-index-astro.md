@@ -30,8 +30,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
 ## Unresolved
 
-- Seven projects, not six: `mmrag` (multimodal RAG, with John Speaks and Darren Chen) needs a row and a minimum in both landscapes. Project pages have their own contract, `.impeccable/surfaces/src-pages-projects-id-astro.md`.
 - Latest: the ESCAPE 37 abstract is now accepted, and SiNDAE was shown in AIChE 2026 session 542, Software Tools and Implementations for Process Systems Engineering, chaired by Victor Alves (Minneapolis, 11 November).
 - Latest needs an owner and a cadence, or it goes stale; its entries come from one content collection.
 - Phone: skills chips scroll in one row per group; Latest scrolls sideways.
-- Landscape hover cue: four options and a scroll-tilt study in `drafts/options/cursor-options.html` (artifact "Landscape Cursor Options", https://claude.ai/artifact/8aHAM4nHs3Fg6agwSoQkpG); recommended B, ghost descent with the start ring as pointer. Awaiting a pick, and a yes or no on the tilt.
+- Landscape hover cue: four options and a scroll-tilt study in `drafts/options/cursor-options.html` (artifact "Landscape Cursor Options", https://claude.ai/artifact/8aHAM4nHs3Fg6agwSoQkpG); Picked (2026-11-17): A + C combined. Over the landscape the pointer becomes the solver's start ring labelled x0 ("x0 click to descend", shortening to x0 after the first descent) with the −∇f needle from it, lengthening on slopes and shrinking to a dot in a basin. Touch: one pulse at the opening start and "Tap the map to start another descent". Tilt: deferred until the Astro build stands; ideate several tilt treatments then.

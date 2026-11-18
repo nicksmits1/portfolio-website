@@ -1,14 +1,29 @@
 ---
 id: sepsis
-name: DQN variants for ICU sepsis treatment
-where: McGill, COMP 579
-with: James Randolph, Abdullah Paracha
-period: 2025-01 to 2025-04
+name: 'DQN variants for ICU sepsis treatment'
+where: 'McGill, COMP 579'
+with: 'James Randolph, Abdullah Paracha'
+period: '2025-01 to 2025-04'
 methods: [Reinforcement learning]
 tools: [PyTorch, Gymnasium]
-source: https://github.com/nicksmits1/COMP-579-Reinforcement-Learning (final project); report "A Survey of Reinforcement Models Applied to a Model of ICU Sepsis Treatment" (local, OneDrive McGill/COMP 579/Final Project)
-links: [Report (PDF) -> content/assets/sepsis/report.pdf, GitHub -> https://github.com/nicksmits1/COMP-579-Reinforcement-Learning]
-disclosure: public. The report PDF may be hosted (Nicolas, 2026-11-17).
+source: 'https://github.com/nicksmits1/COMP-579-Reinforcement-Learning (final project); report "A Survey of Reinforcement Models Applied to a Model of ICU Sepsis Treatment" (local, OneDrive McGill/COMP 579/Final Project)'
+disclosure: 'public. The report PDF may be hosted (Nicolas, 2026-11-17).'
+short: Sepsis DQN
+when: Jan – Apr 2025
+year: 2025
+links:
+  - { label: "Report (PDF)", href: report.pdf, icon: file }
+  - { label: GitHub, href: "https://github.com/nicksmits1/COMP-579-Reinforcement-Learning", icon: gh }
+rail:
+  - ["8", "variants, 10 seeds each"]
+  - ["300k", "episodes per run"]
+  - ["MIMIC-III", "real ICU records behind the MDP"]
+figures:
+  scale: { kind: scale, data: sepsis, caption: "Mean return over the last 10,000 episodes. The three dim variants stayed near a random policy." }
+  returns: { kind: img, src: returns-over-training.webp, alt: "Return over training for the eight DQN variants", caption: "Survival rate over training for the best settings of each variant.", source: "Figure 1a of the team’s report." }
+order: [scale, Formulation, Deep Q-learning, Extensions, Comparison, Results, returns]
+reading:
+  - { title: "A survey of reinforcement models applied to a model of ICU sepsis treatment", what: "Final report, Smits, Randolph and Paracha, McGill COMP 579", href: report.pdf, preview: report-p1.webp }
 ---
 Which DQN extensions help on a clinical benchmark with 716 health states and 25 treatments?
 
@@ -24,7 +39,7 @@ ICU-Sepsis-v2 models a patient's stay in intensive care as a Markov decision pro
 ### Deep Q-learning
 DQN learns $Q(s,a)$, the expected return of giving treatment $a$ in state $s$ and acting well afterwards, with a neural network. Transitions go into a replay buffer $\mathcal{D}$, and the network regresses on targets computed by a slowly updated copy of itself, $\bar\theta$:
 $$\mathcal{L}(\theta) = \mathbb{E}_{(s,a,r,s') \sim \mathcal{D}}\Big[\big(r + \gamma \max_{a'} Q_{\bar\theta}(s', a') - Q_\theta(s, a)\big)^2\Big]$$
-Each extension changes one part of this loop, as the figure shows.
+Each extension below changes one part of this loop.
 
 ### Extensions
 - **Double**: the online network picks the next action and the target network scores it, $r + \gamma\, Q_{\bar\theta}\big(s', \arg\max_{a'} Q_\theta(s', a')\big)$, which curbs overestimation.

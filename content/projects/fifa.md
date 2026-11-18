@@ -1,14 +1,26 @@
 ---
 id: fifa
-name: FIFA player analytics pipeline
-where: CMU
-with: Amogh Balaji
-period: 2025-09 to 2025-12
+name: 'FIFA player analytics pipeline'
+where: 'CMU'
+with: 'Amogh Balaji'
+period: '2025-09 to 2025-12'
 methods: [Data engineering, Supervised learning]
 tools: [Spark, PostgreSQL, Kafka, PyTorch, GCP, Docker]
-source: https://github.com/nicksmits1/FIFA-player-analytics-ml-pipeline (read from a clone in the scratchpad)
-links: [GitHub -> https://github.com/nicksmits1/FIFA-player-analytics-ml-pipeline]
-disclosure: public. Do not reproduce the repo's bucket names, cluster names or example credentials on the site.
+source: 'https://github.com/nicksmits1/FIFA-player-analytics-ml-pipeline (read from a clone in the scratchpad)'
+disclosure: 'public. Do not reproduce the repo''s bucket names, cluster names or example credentials on the site.'
+short: FIFA pipeline
+when: Sep – Dec 2025
+year: 2025
+links:
+  - { label: GitHub, href: "https://github.com/nicksmits1/FIFA-player-analytics-ml-pipeline", icon: gh }
+rail:
+  - ["R² 0.964", "gradient-boosted trees"]
+  - ["8", "seasons, 2015–2022"]
+figures:
+  pipeline: { kind: pipe }
+  rmse: { kind: scale, data: fifa, caption: "Test RMSE of the four models, in overall-rating points." }
+  parity: { kind: grid, caption: "Predicted against true overall rating on the test set: gradient-boosted trees, random forest, deep MLP, shallow MLP.", source: "Notebook outputs from the repo.", items: [{ src: parity-gbt.webp, alt: "Parity plot, gradient-boosted trees" }, { src: parity-rf.webp, alt: "Parity plot, random forest" }, { src: parity-deep-ml.webp, alt: "Parity plot, deep MLP" }, { src: parity-shallow-mlp.webp, alt: "Parity plot, shallow MLP" }] }
+order: [pipeline, rmse, parity]
 ---
 Spark to Postgres ETL, a live Kafka comment stream, and rating models trained locally and on GCP.
 

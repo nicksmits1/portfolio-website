@@ -1,0 +1,10 @@
+---
+import { thumb } from '../lib/thumbs';
+import type { Project } from '../lib/site';
+interface Props { prev: Project; next: Project }
+const { prev, next } = Astro.props;
+---
+<nav class="pn" aria-label="More projects">
+  <a class="prev" href={`/projects/${prev.id}`}><Fragment set:html={thumb(prev.id)} /><span><small>Previous</small><b>{prev.data.name}</b></span></a>
+  <a class="next" href={`/projects/${next.id}`}><span><small>Next</small><b>{next.data.name}</b></span><Fragment set:html={thumb(next.id)} /></a>
+</nav>

@@ -1,15 +1,30 @@
 ---
 id: mmrag
-name: Multimodal RAG over slides and reports
-where: CMU, 10-423/623 Generative AI
-with: John Speaks, Darren Chen
-period: Spring 2026 (report April 2026)
+name: 'Multimodal RAG over slides and reports'
+where: 'CMU, 10-423/623 Generative AI'
+with: 'John Speaks, Darren Chen'
+period: 'Spring 2026 (report April 2026)'
 methods: [Retrieval-augmented generation, Vision-language models, Parameter-efficient fine-tuning]
 tools: [PyTorch, Qwen3-VL, ColQwen, Qdrant, AWS]
-source: https://github.com/JTSIV1/multimodal-rag; report https://johnspeaks.com/gen_ai_final.pdf (copied to content/assets/mmrag/report.pdf); John's page https://johnspeaks.com/multimodal_rag.html
-links: [Report (PDF) -> content/assets/mmrag/report.pdf, GitHub -> https://github.com/JTSIV1/multimodal-rag]
-role: Nicolas owned REAL-MM-RAG data preparation, the ColQwen retriever integration and indexing, the ideal-context inference notebooks for base and fine-tuned models, and the lecture-slide curation and QA generation pipeline (shared with Darren). John owned fine-tuning and evaluation; Darren the QA generation pipeline (report, Table 3).
-disclosure: public. Credit as a team project with John Speaks and Darren Chen.
+source: 'https://github.com/JTSIV1/multimodal-rag; report https://johnspeaks.com/gen_ai_final.pdf (copied to content/assets/mmrag/report.pdf); John''s page https://johnspeaks.com/multimodal_rag.html'
+role: 'Nicolas owned REAL-MM-RAG data preparation, the ColQwen retriever integration and indexing, the ideal-context inference notebooks for base and fine-tuned models, and the lecture-slide curation and QA generation pipeline (shared with Darren). John owned fine-tuning and evaluation; Darren the QA generation pipeline (report, Table 3).'
+disclosure: 'public. Credit as a team project with John Speaks and Darren Chen.'
+short: Multimodal RAG
+when: Spring 2026
+year: 2026
+links:
+  - { label: "Report (PDF)", href: report.pdf, icon: file }
+  - { label: GitHub, href: "https://github.com/JTSIV1/multimodal-rag", icon: gh }
+rail:
+  - ["11", "setups, from no context to fine-tuned RAG"]
+  - ["8,000+", "pages and 5,000 queries, REAL-MM-RAG"]
+  - ["650", "course slides curated to test transfer"]
+  - ["$200", "of compute in total"]
+figures:
+  ladder: { kind: ladder }
+order: [ladder, Approach, Evaluation]
+reading:
+  - { title: "Multimodal RAG over slides and reports", what: "Final report, Smits, Speaks and Chen, CMU 10-423/623", href: report.pdf, preview: report-p1.webp }
 ---
 Retrieve document pages as images, not OCR text, and a vision-language model answers questions about slides and reports more accurately.
 

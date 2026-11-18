@@ -1,0 +1,26 @@
+---
+import { ICON } from '../lib/icons';
+import { href, image } from '../lib/assets';
+import { skillsOf, type Project } from '../lib/site';
+interface Props { project: Project; line: string }
+const { project: p, line } = Astro.props;
+const d = p.data;
+const links = d.links.filter(l => !l.lead);
+---
+<aside class="rail" aria-label="Summary">
+  <p class="line">{line}</p>
+  <ul class="run">{d.rail.map(([v, l]) => <li><b>{v}</b><span>{l}</span></li>)}</ul>
+  {d.badge && (() => { const img = image(p.id, d.badge.logo); return (
+    <div class="pub"><img src={img.src} width={img.width} height={img.height} alt={d.badge.alt} /><p><b>{d.badge.title}</b>{d.badge.text}</p></div>
+  ); })()}
+  {(d.note || links.length > 0) && (
+    <div class="meta">
+      {d.note && <span class="note">{d.note}</span>}
+      {links.map(l => <a class="pill" href={href(p.id, l.href)}><Fragment set:html={ICON[l.icon]} />{l.label}</a>)}
+    </div>
+  )}
+  <div class="skl">
+    <p class="eyebrow">Skills</p>
+    <div class="chips">{skillsOf(p).map(s => <a href={`/?skill=${encodeURIComponent(s)}#skills`}>{s}</a>)}</div>
+  </div>
+</aside>

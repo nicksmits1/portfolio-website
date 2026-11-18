@@ -1,0 +1,9 @@
+---
+import { image } from '../../lib/assets';
+interface Props { owner: string; items: { src: string; alt: string }[]; caption?: string; source?: string }
+const { owner, items, caption, source } = Astro.props;
+---
+<figure class="fg sup">
+  <div class="grid2">{items.map(it => { const img = image(owner, it.src); return <div class="plate"><img src={img.src} width={img.width} height={img.height} alt={it.alt} loading="lazy" decoding="async" /></div>; })}</div>
+  {caption && <figcaption class="fig-cap">{caption}{source && <span class="src">{source}</span>}</figcaption>}
+</figure>

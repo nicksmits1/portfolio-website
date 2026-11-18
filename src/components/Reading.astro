@@ -1,0 +1,43 @@
+---
+import { href, image, url } from '../lib/assets';
+interface Item { title: string; what: string; href: string; preview?: string; logo?: string; wide?: boolean }
+interface Props { owner: string; items: Item[] }
+const { owner, items } = Astro.props;
+const logo = (name: string) => (name.endsWith('.svg') ? { src: url(owner, name), width: undefined, height: undefined } : image(owner, name));
+---
+<section class="reading" aria-labelledby="reading-h">
+  <h2 id="reading-h">Further reading</h2>
+  <ul>
+    {items.map(it => {
+      const target = href(owner, it.href), pdf = target.endsWith('.pdf') || /\.pdf$/.test(it.href);
+      const pv = it.preview ? image(owner, it.preview) : null, lg = it.logo ? logo(it.logo) : null;
+      return (
+        <li class:list={{ wide: it.wide }}>
+          <a href={target} data-pdf={pdf ? it.title : undefined} target={pdf ? undefined : '_blank'} rel={pdf ? undefined : 'noopener'}>
+            {pv
+              ? <span class="pv"><img src={pv.src} width={pv.width} height={pv.height} alt="" loading="lazy" decoding="async" /></span>
+              : lg && <span class="pv logo"><img src={lg.src} width={lg.width} height={lg.height} alt="" loading="lazy" /></span>}
+            <span class="mk">{pv && lg && <img src={lg.src} alt="" />}<b>{it.title}</b></span>
+            <span>{it.what}</span>
+            <span class="act">{pdf ? 'Preview PDF' : 'Open ↗'}</span>
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</section>
+<script>
+  /* On a desktop a PDF opens in a dialog with the browser's own viewer; phones and touch devices follow the link. */
+  const wide = matchMedia('(min-width: 900px) and (hover: hover)');
+  document.querySelectorAll<HTMLAnchorElement>('a[data-pdf]').forEach(a => a.addEventListener('click', e => {
+    if (!wide.matches) return;
+    e.preventDefault();
+    const d = document.createElement('dialog'); d.className = 'pdf';
+    d.innerHTML = `<header><b></b><span><a href="${a.href}" target="_blank" rel="noopener">Open in a new tab</a> <button type="button">Close</button></span></header><iframe src="${a.href}" title=""></iframe>`;
+    d.querySelector('b')!.textContent = a.dataset.pdf!; d.querySelector('iframe')!.title = a.dataset.pdf!;
+    d.querySelector('button')!.addEventListener('click', () => d.close());
+    d.addEventListener('close', () => d.remove());
+    d.addEventListener('click', ev => { if (ev.target === d) d.close(); });
+    document.body.appendChild(d); d.showModal();
+  }));
+</script>

@@ -1,0 +1,69 @@
+---
+import Base from '../../layouts/Base.astro';
+import Strip from '../../components/Strip.astro';
+import Rail from '../../components/Rail.astro';
+import Section from '../../components/Section.astro';
+import Reading from '../../components/Reading.astro';
+import PrevNext from '../../components/PrevNext.astro';
+import Net from '../../components/figures/Net.astro';
+import Rec from '../../components/figures/Rec.astro';
+import Flow from '../../components/figures/Flow.astro';
+import Pipe from '../../components/figures/Pipe.astro';
+import Ladder from '../../components/figures/Ladder.astro';
+import Scale from '../../components/figures/Scale.astro';
+import Img from '../../components/figures/Img.astro';
+import Grid from '../../components/figures/Grid.astro';
+import Video from '../../components/figures/Video.astro';
+import { ICON } from '../../lib/icons';
+import { href, image } from '../../lib/assets';
+import { projects, neighbours, body, type Project } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const list = await projects();
+  return list.map(p => ({ params: { id: p.id }, props: { project: p, ...neighbours(list, p.id) } }));
+}
+interface Props { project: Project; prev: Project; next: Project }
+const { project: p, prev, next } = Astro.props;
+const d = p.data, { line, sections } = body(p);
+
+/* The column follows the file's `order`: figure ids and ### section headings. Anything named there must exist. */
+const items = d.order.map(key => {
+  if (d.figures[key]) return { type: 'fig' as const, key, f: d.figures[key] };
+  if (sections.has(key)) return { type: 'sec' as const, key, md: sections.get(key)! };
+  throw new Error(`${p.id}: "${key}" in order is neither a figure nor a ### section`);
+});
+const unused = [...sections.keys()].filter(k => !d.order.includes(k));
+if (unused.length) throw new Error(`${p.id}: sections not placed in order: ${unused.join(', ')}`);
+const leadLinks = d.links.filter(l => l.lead);
+const banner = d.banner ? image(p.id, d.banner.src) : null;
+---
+<Base title={`${d.name} · Nicolas Smits`} description={line}>
+  <Strip project={p} prev={prev} next={next} />
+  <main id="main" class="wrap">
+    <div class="cols">
+      <Rail project={p} line={line} />
+      <div class="figs">
+        {banner && <div class="banner"><img src={banner.src} width={banner.width} height={banner.height} alt={d.banner!.alt} /></div>}
+        {items.map((it, i) => (
+          <>
+            {it.type === 'sec' && <Section owner={p.id} heading={it.key} md={it.md} badge={d.badges?.[it.key]} />}
+            {it.type === 'fig' && it.f.kind === 'net' && <Net fine={it.f.fine} />}
+            {it.type === 'fig' && it.f.kind === 'rec' && <Rec />}
+            {it.type === 'fig' && it.f.kind === 'flow' && <Flow />}
+            {it.type === 'fig' && it.f.kind === 'pipe' && <Pipe />}
+            {it.type === 'fig' && it.f.kind === 'ladder' && <Ladder />}
+            {it.type === 'fig' && it.f.kind === 'scale' && <Scale data={it.f.data!} caption={it.f.caption} />}
+            {it.type === 'fig' && it.f.kind === 'img' && <Img owner={p.id} src={it.f.src!} alt={it.f.alt!} caption={it.f.caption} source={it.f.source} plate={it.f.plate} narrow={it.f.narrow} />}
+            {it.type === 'fig' && it.f.kind === 'grid' && <Grid owner={p.id} items={it.f.items!} caption={it.f.caption} source={it.f.source} />}
+            {it.type === 'fig' && it.f.kind === 'video' && <Video owner={p.id} src={it.f.src!} poster={it.f.poster} alt={it.f.alt!} fine={it.f.fine} />}
+            {i === 0 && leadLinks.length > 0 && (
+              <div class="lead-links">{leadLinks.map(l => <a href={href(p.id, l.href)}><Fragment set:html={ICON[l.icon]} />{l.label}</a>)}</div>
+            )}
+          </>
+        ))}
+        {d.reading && <Reading owner={p.id} items={d.reading} />}
+      </div>
+    </div>
+    <PrevNext prev={prev} next={next} />
+  </main>
+</Base>

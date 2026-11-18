@@ -1,0 +1,21 @@
+---
+import Nav from './Nav.astro';
+import { whereLine, type Project } from '../lib/site';
+interface Props { project: Project; prev: Project; next: Project }
+const { project: p, prev, next } = Astro.props;
+const ref = (x: Project) => JSON.stringify({ id: x.id, short: x.data.short, href: `/projects/${x.id}` });
+---
+<header class="strip">
+  <div class="land" data-land="strip" data-current={ref(p)} data-prev={ref(prev)} data-next={ref(next)}>
+    <canvas role="img" aria-label={`Contour landscape with the solver arriving on ${p.data.short}; ${prev.data.short} and ${next.data.short} are the neighbouring minima`}></canvas>
+    <svg aria-hidden="true"></svg><div class="labs"></div>
+  </div>
+  <a class="tab-name" href="/">Nicolas Smits</a>
+  <Nav page="project" />
+  <div class="title">
+    <h1>{p.data.name}</h1>
+    <p class="where">{whereLine(p)}</p>
+    <p class="read" data-read aria-live="polite"></p>
+  </div>
+</header>
+<script>import '../scripts/strip';</script>
