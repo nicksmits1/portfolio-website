@@ -48,6 +48,10 @@ Use `/impeccable` for any interface change, and hold every change to `DESIGN.md`
 
 `npm run build` then `npx astro preview --port 4321`. Desktop: headless Chrome with `--force-prefers-reduced-motion` for the converged stills. Phone: `tools/shoot/phone.sh <url> <out.png>` renders a true 390 px width (headless Chrome cannot go below 500 px). Drafts are artifact fragments; `drafts/_preview/wrap.sh <name>` makes one openable.
 
+## Deploy
+
+Cloudflare Pages builds every push (`main` is production; other branches get preview URLs) with `npm ci` on npm 10. A lockfile written by npm 11 fails there, so change dependencies with `npx npm@10.9.2 install <pkg>` and commit the lockfile it writes.
+
 ## Paper mockups
 
 Drafts B and E also exist as artboards in the Paper file "Portfolio mockups" (Projects folder, file id in `tools/paper/lib.mjs`). If the Paper MCP tools are not loaded in a session, `tools/paper/` drives the relay directly: `node pc.mjs list` shows the tools, `node pc.mjs call <tool> '<json>'` calls one. `gen.mjs` regenerates the vector assets in `drafts/paper-assets/`, `land.html` renders E's landscapes (screenshot it with headless Chrome), and `b.mjs B` / `e.mjs E` rebuild an artboard from scratch. Paper renders SVG `<text>` in a fallback serif, so figure labels are HTML text nodes positioned over the SVG.
