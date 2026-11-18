@@ -6,7 +6,7 @@ You are the owner and long term maintainer of this codebase, and its design is u
 
 ## State
 
-Direction chosen: **draft E, descent** (`drafts/e-descent.html`). The site is built in Astro (`src/`), from two contracts: home, `.impeccable/surfaces/src-pages-index-astro.md`, and project pages ("Arrival"), `.impeccable/surfaces/src-pages-projects-id-astro.md`. Reload the matching contract before any page work; its Unresolved list holds the open choices. The mocks in `drafts/options/` are the visual reference the build was ported from; change the site, not the mocks. Layout and page changes get an options artifact for Nicolas to pick from before they are built. Hosting is Cloudflare Pages, deploying from the public GitHub repo `nicksmits1/portfolio-website`. `DESIGN.md` is written at the end, from the built site.
+Direction chosen: **draft E, descent** (`drafts/e-descent.html`). The site is built in Astro (`src/`), from two contracts: home, `.impeccable/surfaces/src-pages-index-astro.md`, and project pages ("Arrival"), `.impeccable/surfaces/src-pages-projects-id-astro.md`. Reload the matching contract before any page work; its Unresolved list holds the open choices. The mocks in `drafts/options/` are the visual reference the build was ported from; change the site, not the mocks. Layout and page changes get an options artifact for Nicolas to pick from before they are built. Hosting is Cloudflare (Workers static assets), deploying from the public GitHub repo `nicksmits1/portfolio-website`. `DESIGN.md` is written at the end, from the built site.
 
 ## The repo is public
 
@@ -50,7 +50,7 @@ Use `/impeccable` for any interface change, and hold every change to `DESIGN.md`
 
 ## Deploy
 
-Cloudflare Pages builds every push (`main` is production; other branches get preview URLs) with `npm ci` on npm 10. A lockfile written by npm 11 fails there, so change dependencies with `npx npm@10.9.2 install <pkg>` and commit the lockfile it writes.
+Cloudflare Workers Builds runs `npm ci` (npm 10), `npm run build`, then `npx wrangler deploy`, which uploads `dist/` as static assets per `wrangler.jsonc`. Keep that file: without it Wrangler auto-configures an SSR adapter and the build fails. `main` deploys to production; other branches upload preview versions. A lockfile written by npm 11 fails `npm ci` there, so change dependencies with `npx npm@10.9.2 install <pkg>` and commit the lockfile it writes.
 
 ## Paper mockups
 

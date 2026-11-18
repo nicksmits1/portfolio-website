@@ -13,3 +13,5 @@ Nicolas_Smits_Resume_*.md
 /assets/
 # CV build intermediate; the PDF is committed
 content/cv/cv.html
+# Wrangler local state
+.wrangler/
