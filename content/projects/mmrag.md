@@ -43,3 +43,4 @@ Table 1 means (BLEU, R-1, R-2, R-L, BERTScore, LLM accuracy, relevance, grounded
 - J slides, RAG, base: 0.2982, 0.6688, 0.4751, 0.5848, 0.9297, 4.7406, 4.9993, 4.8343, 4.9278
 - K slides, RAG, fine-tuned: 0.3228, 0.6811, 0.4924, 0.6064, 0.9336, 4.6359, 4.9891, 4.8044, 4.9516
 95% intervals are in the report's Table 1.
+End of the page: further reading, the report (`report.pdf`, previewable, first page `report-p1.webp`).

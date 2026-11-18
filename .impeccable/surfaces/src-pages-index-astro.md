@@ -34,3 +34,4 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 - Latest: the ESCAPE 37 abstract is now accepted, and SiNDAE was shown in AIChE 2026 session 542, Software Tools and Implementations for Process Systems Engineering, chaired by Victor Alves (Minneapolis, 11 November).
 - Latest needs an owner and a cadence, or it goes stale; its entries come from one content collection.
 - Phone: skills chips scroll in one row per group; Latest scrolls sideways.
+- Landscape hover cue: four options and a scroll-tilt study in `drafts/options/cursor-options.html` (artifact "Landscape Cursor Options", https://claude.ai/artifact/8aHAM4nHs3Fg6agwSoQkpG); recommended B, ghost descent with the start ring as pointer. Awaiting a pick, and a yes or no on the tilt.

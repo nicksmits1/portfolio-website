@@ -10,7 +10,7 @@ source: ../CMU/SiNDAE (read-only); https://github.com/Alves-research-group/SiNDA
 links: [GitHub -> https://github.com/Alves-research-group/SiNDAE, Docs -> https://alves-research-group.github.io/SiNDAE/, JOSS draft (PDF) -> https://github.com/Alves-research-group/SiNDAE/blob/main/paper/SiNDAE_JOSS_Draft_03.pdf]
 method_paper: https://arxiv.org/abs/2504.04665 (Lueg, Alves, Schicksnus, Kitchin, Laird, Biegler; Nicolas is not an author, cite it as the method the package implements)
 publication: "SiNDAE: The Simultaneous Neural Differential-Algebraic systems of equations training Python package", Smits, Lueg, Alves, Laird, Kitchin, Biegler, Journal of Open Source Software, pending. Latest draft: paper/SiNDAE_JOSS_Draft_03.pdf (2026-09-28).
-talk: SiNDAE shown by Victor Alves in session 542, "Software Tools and Implementations for Process Systems Engineering" (CAST Division), 2026 AIChE Annual Meeting, Minneapolis, 11 November 2026, 12:30 to 15:00, Room M100E. The program lists Victor as session chair (co-chairs Joshua Pulsipher, Davood Pourkargar), not as a listed speaker, so say "shown in", not "talk by". Program: https://studio.m-anage.com/aiche/2026/meetingapp.cgi/Program/3760
+talk: SiNDAE was shown in session 542, "Software Tools and Implementations for Process Systems Engineering" (CAST Division), 2026 AIChE Annual Meeting, Minneapolis, 11 November 2026, 12:30 to 15:00, Room M100E. Victor Alves chaired the session (co-chairs Joshua Pulsipher, Davood Pourkargar); he is not a listed speaker, so always say "shown in session 542", never "talk by" or "shown by". Program: https://studio.m-anage.com/aiche/2026/meetingapp.cgi/Program/3760
 disclosure: public, open source
 ---
 Neural networks embedded in differential-algebraic process models and trained as one nonlinear program.
@@ -19,7 +19,7 @@ Neural networks embedded in differential-algebraic process models and trained as
 - ODEs and high-index DAEs (index-2 four-tank example), discretised with Pyomo collocation.
 - Two training backends: simultaneous and decomposition.
 - First-author JOSS software paper pending.
-- Shown by Victor Alves in AIChE 2026 session 542, Software Tools and Implementations for Process Systems Engineering.
+- Shown in AIChE 2026 session 542, Software Tools and Implementations for Process Systems Engineering (chaired by Victor Alves).
 
 ## Sections
 
@@ -42,5 +42,10 @@ A scikit-learn-style `HybridDAE` runs smoothing, pre-training, training and pred
 ## Visual
 Lead: phase portrait of the two-tank cascade (h1 against h2) drawn as evenly spaced streamlines, with the paper's three training trajectories in peach and the steady state in coral, from the paper's example and its parameters (`paper/example.ipynb`: A1 1, A2 1.5, Fin 0.5, c1 0.5, c2 0.4). Caption carries the model: A1 h1' = Fin − q1, A2 h2' = q1 − c2√h2, q1 = NN(h1, h2). The Leslie-Gower portrait used in the drafts is retired, so the lead figure and the example section show the same system.
 Required: the SiNDAE logo, which Nicolas designed (`content/assets/sindae/`). Both PNGs are opaque (white and black grounds), so they sit on a plate.
-Order on the page: phase portrait with logo; "Motivation"; "Method"; "Two-tank example" with `two-tank-diagram.webp` (the system), then `learned-law.webp` (learned discharge against c1√h1) and `fit.webp` (hybrid fit on three trajectories); "Package".
+Top of the column: the SiNDAE logo as a banner across the full width of the main column (`SiNDAE_logo_dark.png`, own plate), the phase portrait directly below it, then a link row under the portrait: GitHub (Alves-research-group/SiNDAE) and Docs, as the two largest links on the page, since the package and its documentation hold most of the work.
+Order on the page: logo banner; phase portrait; GitHub and Docs links; "Motivation"; "Method"; "Two-tank example" with `two-tank-diagram.webp` (the system), then `learned-law.webp` (learned discharge against c1√h1) and `fit.webp` (hybrid fit on three trajectories); "Package"; further reading.
+Further reading, each a card with its venue's logo:
+- JOSS software paper (pending), first author: `joss-draft.pdf`, previewable, first page `joss-draft-p1.webp`; logo `joss-logo.webp`.
+- Method paper, Lueg et al. 2025 (arXiv:2504.04665), labelled as the method SiNDAE implements, not Nicolas's paper; links to arXiv, not rehosted; logo `arxiv-logo.svg`.
+- AIChE 2026, session 542, Software Tools and Implementations for Process Systems Engineering: links to the program page; logo `aiche-logo.svg`.
 Figures are from the JOSS paper (`../CMU/SiNDAE/paper/images/`).

@@ -1,0 +1,240 @@
+<title>Landscape Cursor Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Onest:wght@400;500;600&family=STIX+Two+Text:ital@1&display=swap">
+<style>
+/* Layout: one column of live landscape strips, each a hover cue for "click to run the descent", then a scroll-driven tilt study. Draft E's world, single dark theme by choice. */
+:root{
+  --bg:#120A2A; --panel:#1A1038; --ink:#0D0722; --fg:#F3EDFF; --fg2:#B9AAE8; --dim:#7C6BB8;
+  --coral:#FF7C6B; --peach:#FFD9C2; --hair:rgba(243,237,255,.22); --hair2:rgba(243,237,255,.1);
+  --disp:"Unbounded",system-ui,sans-serif; --text:"Onest",system-ui,sans-serif; --math:"STIX Two Text","Times New Roman",serif;
+  color-scheme:dark;
+}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--text);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.intro{padding-block:56px 24px}
+h1{font:300 clamp(30px,5vw,48px)/1.05 var(--disp);letter-spacing:-.04em;margin:0 0 18px;text-wrap:balance}
+.intro p{max-width:64ch;color:var(--fg2);margin:0 0 10px}
+.intro p b{color:var(--fg);font-weight:600}
+.opt{padding-block:34px;border-top:1px solid var(--hair2)}
+.opt-h{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.tag{font:600 13px/1 var(--text);letter-spacing:.04em;padding:6px 10px;border-radius:999px;background:var(--ink);box-shadow:0 0 0 1px var(--hair)}
+.tag.rec{background:var(--coral);color:var(--bg);box-shadow:none}
+h2{font:400 24px/1.15 var(--disp);letter-spacing:-.03em;margin:0;text-wrap:balance}
+.opt p.how{max-width:70ch;color:var(--fg2);margin:6px 0 16px}
+.land{position:relative;height:300px;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--hair);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.land canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.labs{position:absolute;inset:0;pointer-events:none}
+.lab{position:absolute;transform:translate(-50%,14px);font-weight:600;font-size:14px;line-height:1.1;white-space:nowrap;padding:3px 8px;border-radius:999px;background:rgba(13,7,34,.72);color:var(--fg);transition:background .25s,color .25s,box-shadow .25s}
+.lab i{font:italic .95em/1 var(--math);margin-right:.3em;font-weight:400}
+.lab.aim{box-shadow:0 0 0 1.5px var(--fg)}
+.lab.hit{background:var(--coral);color:var(--bg)}
+.hint{position:absolute;left:0;top:0;pointer-events:none;font:500 13px/1 var(--text);white-space:nowrap;padding:6px 10px;border-radius:999px;background:rgba(13,7,34,.82);color:var(--fg);box-shadow:0 0 0 1px var(--hair);opacity:0;transition:opacity .2s}
+.hint i{font:italic 1.05em/1 var(--math);color:var(--coral);margin-right:.25em}
+.read{margin:10px 0 0;font-size:15px;color:var(--fg2);min-height:1.6em;font-variant-numeric:tabular-nums}
+.read b{color:var(--fg);font-weight:600}
+.read em{font-style:normal;color:var(--coral);font-weight:600}
+.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:14px}
+.notes div{min-width:0;font-size:14px;color:var(--fg2)}
+.notes b{display:block;color:var(--fg);font:600 11px/1.2 var(--text);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.verdict{padding-block:34px;border-top:1px solid var(--hair2)}
+.verdict p{max-width:70ch;margin:0 0 10px}
+.tilt{height:260vh;position:relative;border-top:1px solid var(--hair2)}
+.tilt-in{position:sticky;top:env(safe-area-inset-top,0px);padding-block:28px 20px}
+.tilt .land{height:min(56vh,460px)}
+.tilt .meter{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:14px;color:var(--fg2);font-variant-numeric:tabular-nums}
+.tilt .meter b{color:var(--fg)}
+.after{padding-block:34px 80px}
+.after p{max-width:70ch;color:var(--fg2);margin:0 0 10px}
+.after p b{color:var(--fg)}
+code{font:13px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--peach)}
+@media (max-width:720px){.notes{grid-template-columns:1fr;gap:10px}.land{height:240px}}
+</style>
+
+<header class="wrap intro">
+  <h1>Landscape hover cue</h1>
+  <p>Clicking the home landscape starts a new descent, but nothing on screen says so. Each strip below is the real home surface with one way of signalling that the map can be clicked. <b>Hover, then click</b> in each one.</p>
+  <p>Phones have no hover, so every option shares one touch fallback: on first view, a single ring pulses where the opening descent starts and the readout says “Tap the map to start another descent”. It shows once and disappears after the first tap.</p>
+</header>
+
+<section class="wrap opt" id="opt-a">
+  <div class="opt-h"><span class="tag">A</span><h2>Start marker</h2></div>
+  <p class="how">Over the map the pointer becomes the solver’s own start ring, labelled <i style="font-family:var(--math)">x</i>₀ with “click to descend” beside it. The label shortens to <i style="font-family:var(--math)">x</i>₀ after the first descent.</p>
+  <div class="land" data-cue="a"><canvas role="img" aria-label="Optimisation landscape, option A: the pointer becomes a start ring labelled x0"></canvas><div class="labs"></div><div class="hint"></div></div>
+  <p class="read" aria-live="polite"></p>
+  <div class="notes"><div><b>Says</b>“Put a start point here.”</div><div><b>Reduced motion</b>Unchanged: the ring follows the pointer and nothing animates on its own.</div><div><b>Cost</b>Smallest. A custom cursor and one label.</div></div>
+</section>
+
+<section class="wrap opt" id="opt-b">
+  <div class="opt-h"><span class="tag rec">B · recommended</span><h2>Ghost descent</h2></div>
+  <p class="how">While you hover, the path the solver would take from the pointer is drawn faintly to the minimum it would reach, and that project’s label is outlined. Clicking runs that same path for real, with the iteration readout.</p>
+  <div class="land" data-cue="b"><canvas role="img" aria-label="Optimisation landscape, option B: a faint preview of the descent from the pointer to the nearest minimum"></canvas><div class="labs"></div><div class="hint"></div></div>
+  <p class="read" aria-live="polite"></p>
+  <div class="notes"><div><b>Says</b>“Click and this is what happens.” It also shows which project you will land on.</div><div><b>Reduced motion</b>The preview still follows the pointer, which is direct manipulation. A click draws the finished path at once.</div><div><b>Cost</b>Runs the solver once per frame while hovering, about 200 gradient steps. Cheap on any laptop.</div></div>
+</section>
+
+<section class="wrap opt" id="opt-c">
+  <div class="opt-h"><span class="tag">C</span><h2>Gradient needle</h2></div>
+  <p class="how">A short arrow at the pointer shows <span style="font-family:var(--math);font-style:italic">−∇f</span>, the direction a descent would head first. It lengthens on steep slopes and shrinks to a dot at the bottom of a basin.</p>
+  <div class="land" data-cue="c"><canvas role="img" aria-label="Optimisation landscape, option C: an arrow at the pointer shows the downhill direction"></canvas><div class="labs"></div><div class="hint"></div></div>
+  <p class="read" aria-live="polite"></p>
+  <div class="notes"><div><b>Says</b>“This is a surface things roll down.” The most mathematical of the four.</div><div><b>Reduced motion</b>Unchanged: the needle only moves with the pointer.</div><div><b>Cost</b>Small. It reads as a surface, but says less about clicking than A or B.</div></div>
+</section>
+
+<section class="wrap opt" id="opt-d">
+  <div class="opt-h"><span class="tag">D</span><h2>Ripple invitation</h2></div>
+  <p class="how">When the pointer rests on the map, a ring spreads from it every second and a half, like a drop on water, with a “Click to start a descent” pill. The pill retires after the first click.</p>
+  <div class="land" data-cue="d"><canvas role="img" aria-label="Optimisation landscape, option D: rings ripple out from a resting pointer with a click prompt"></canvas><div class="labs"></div><div class="hint"></div></div>
+  <p class="read" aria-live="polite"></p>
+  <div class="notes"><div><b>Says</b>“Click here,” in the most familiar way.</div><div><b>Reduced motion</b>No ripple. The pill appears on rest.</div><div><b>Cost</b>Small, but the most generic and the least tied to the solver.</div></div>
+</section>
+
+<section class="wrap verdict">
+  <div class="opt-h"><span class="tag rec">Pick</span><h2>Recommendation</h2></div>
+  <p><b>B, with A’s ring as the pointer.</b> The cue is drawn by the same solver the click runs, so the hover shows exactly what will happen and where you will land. That follows the site’s rule that every visual comes from the work’s own mathematics. A alone is the fallback if B feels busy over the name and links.</p>
+</section>
+
+<section class="tilt" id="tilt">
+  <div class="tilt-in wrap">
+    <div class="opt-h"><span class="tag">Study</span><h2>Scroll tilt</h2></div>
+    <p class="how" style="max-width:70ch;color:var(--fg2);margin:6px 0 14px">Your side note, as a working prototype. The same surface is drawn as a height field, and scrolling through this section tips it from the flat contour map into 3D. Minima become pits and the descent path lies on the terrain. Click the map to run a descent at any angle.</p>
+    <div class="land" data-cue="tilt"><canvas role="img" aria-label="The landscape as a height field, tilting from a flat contour map to a 3D view as the page scrolls"></canvas><div class="labs"></div><div class="hint"></div></div>
+    <div class="meter"><span>Pitch <b data-pitch>0°</b></span><span data-tilt-note>Scroll to tilt</span></div>
+  </div>
+</section>
+
+<section class="wrap after">
+  <p><b>How it is built.</b> The tilt is a canvas projection of the same function the solver uses, painted back to front, with no WebGL and no library. Scroll position maps straight to pitch. anime.js v4’s <code>onScroll</code> observer could drive the same value with easing and snap points. It would be the site’s first dependency, so I’d add it only if we want those extras.</p>
+  <p><b>Where it would go.</b> The home hero, as you scroll from the landscape into the Latest strip. The tilt ends before the strip takes over, and scrolling back up flattens it again. Under reduced motion the map stays flat.</p>
+  <p><b>Open question.</b> At a steep pitch the project labels lose their alignment with the minima they name. The prototype keeps them pinned to the projected pits. If that reads poorly on the real hero, the labels can fade out above about 40°.</p>
+</section>
+
+<script>
+(function () {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const STOPS = [[0, [13, 7, 34]], [.3, [42, 22, 112]], [.56, [112, 68, 232]], [.8, [238, 107, 96]], [1, [255, 214, 191]]];
+  const ramp = v => { for (let i = 1; i < STOPS.length; i++) if (v <= STOPS[i][0]) { const [a, A] = STOPS[i - 1], [b, B] = STOPS[i], k = (v - a) / (b - a); return A.map((q, j) => q + (B[j] - q) * k); } return STOPS[4][1]; };
+  const band = f => Math.min(12, Math.floor(Math.max(0, Math.min(1, (f + 0.95) / 1.2)) * 13));
+  const bandRGB = Array.from({ length: 13 }, (_, i) => ramp(i / 12));
+  const MIN = { thesis: ['Supply chain RL', .61, .3], sindae: ['SiNDAE', .36, .19], recsys: ['Recommender', .86, .2], mmrag: ['Multimodal RAG', .3, .68], wayfinder: ['wayfinder-sidebar', .85, .66], fifa: ['FIFA pipeline', .58, .72], sepsis: ['Sepsis DQN', .12, .25] };
+  const FG = '#F3EDFF', CORAL = '#FF7C6B';
+
+  function surface(W, H) {
+    const s = W < 600 ? .1 : .125;
+    const pts = Object.entries(MIN).map(([id, [lab, fx, fy]]) => ({ id, lab, x: fx * W / H, y: fy, c: .82, s }));
+    const F = (x, y) => { let f = .12 * Math.sin(2.1 * x + .6) * Math.cos(1.7 * y - .4) + .08 * Math.sin(3.3 * y + 1.2 * x + 1);
+      for (const p of pts) { const dx = x - p.x, dy = y - p.y; f -= p.c * Math.exp(-(dx * dx + dy * dy) / (2 * p.s * p.s)); } return f; };
+    const grad = (x, y) => { const h = 1e-3; return [(F(x + h, y) - F(x - h, y)) / (2 * h), (F(x, y + h) - F(x, y - h)) / (2 * h)]; };
+    const solve = (x, y) => { const path = [[x, y]]; let vx = 0, vy = 0;
+      for (let k = 0; k < 220; k++) { const [gx, gy] = grad(x, y); vx = .8 * vx - .011 * gx; vy = .8 * vy - .011 * gy; x += vx; y += vy; path.push([x, y]); if (Math.hypot(gx, gy) < .02 && Math.hypot(vx, vy) < 4e-4) break; }
+      return path; };
+    const nearest = ([x, y]) => { let best = null, bd = 1e9; for (const p of pts) { const d = Math.hypot(p.x - x, p.y - y); if (d < bd) { bd = d; best = p; } } return bd < .16 ? best : null; };
+    return { pts, F, grad, solve, nearest };
+  }
+
+  function strip(root) {
+    const cue = root.dataset.cue, cv = root.querySelector('canvas'), ctx = cv.getContext('2d'), labs = root.querySelector('.labs'), hint = root.querySelector('.hint');
+    const read = root.parentElement.querySelector('.read');
+    const pitchOut = document.querySelector('[data-pitch]'), tiltNote = document.querySelector('[data-tilt-note]');
+    let W = 1, H = 1, S, bg = null, mouse = null, run = null, ghost = null, clicked = false, rest = 0, ripples = [], pitch = 0, vis = false;
+    const isTilt = cue === 'tilt';
+    if (cue === 'a' || cue === 'c') cv.style.cursor = 'none';
+    if (cue === 'b') cv.style.cursor = 'none';
+
+    function size() {
+      const r = root.getBoundingClientRect(); W = Math.max(1, r.width); H = Math.max(1, r.height);
+      const d = Math.min(devicePixelRatio || 1, 2); cv.width = Math.round(W * d); cv.height = Math.round(H * d); ctx.setTransform(d, 0, 0, d, 0, 0);
+      S = surface(W, H); run = null; ghost = null;
+      if (!isTilt) { const k = .5, w = Math.round(W * k), h = Math.round(H * k), off = document.createElement('canvas'); off.width = w; off.height = h;
+        const oc = off.getContext('2d'), im = oc.createImageData(w, h);
+        for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { const c = bandRGB[band(S.F(i / h, j / h))], q = (j * w + i) * 4; im.data[q] = c[0]; im.data[q + 1] = c[1]; im.data[q + 2] = c[2]; im.data[q + 3] = 255; }
+        oc.putImageData(im, 0, 0); bg = off; }
+      labs.textContent = '';
+      S.pts.forEach(p => { const a = document.createElement('span'); a.className = 'lab'; a.dataset.id = p.id; a.innerHTML = `<i>x*</i>${p.lab}`; labs.appendChild(a); p.el = a; });
+      place(); draw();
+      if (read && !read.textContent) read.innerHTML = isTilt ? '' : 'Hover the map, then click.';
+    }
+
+    /* tilt projection: map (x in H units, y in 0..1, height) to screen */
+    const P = (x, y, f) => { if (!isTilt || pitch === 0) return [x * H, y * H];
+      const th = pitch * Math.PI / 180, cx = W / 2, cy = H * .5, z = -f * .55;
+      const sc = 1 - .12 * Math.sin(th);
+      return [cx + (x * H - cx) * sc, cy + (y * H - cy) * Math.cos(th) * sc + z * H * Math.sin(th) * sc * .9 + H * .08 * Math.sin(th)]; };
+    function place() { S.pts.forEach(p => { const [sx, sy] = P(p.x, p.y, S.F(p.x, p.y)); p.el.style.left = sx + 'px'; p.el.style.top = sy + 'px'; }); }
+
+    function terrain() {
+      const NX = W < 600 ? 90 : 150, NY = W < 600 ? 50 : 70, xm = W / H, th = pitch * Math.PI / 180;
+      const grid = []; for (let j = 0; j <= NY; j++) { const row = []; for (let i = 0; i <= NX; i++) { const x = i / NX * xm, y = j / NY, f = S.F(x, y); row.push([x, y, f, P(x, y, f)]); } grid.push(row); }
+      for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) {
+        const a = grid[j][i], b = grid[j][i + 1], c = grid[j + 1][i + 1], d = grid[j + 1][i], fm = (a[2] + b[2] + c[2] + d[2]) / 4;
+        let col = bandRGB[band(fm)];
+        if (th > 0) { const sx = (b[2] - a[2]) * NX / xm, sy = (d[2] - a[2]) * NY, shade = Math.max(.55, Math.min(1.25, 1 + (-sx * .35 - sy * .55) * Math.sin(th))); col = col.map(v => Math.min(255, v * shade)); }
+        ctx.fillStyle = `rgb(${col[0] | 0},${col[1] | 0},${col[2] | 0})`;
+        ctx.beginPath(); ctx.moveTo(a[3][0], a[3][1]); ctx.lineTo(b[3][0], b[3][1]); ctx.lineTo(c[3][0], c[3][1]); ctx.lineTo(d[3][0], d[3][1]); ctx.closePath(); ctx.fill(); ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = .6; ctx.stroke();
+      }
+    }
+
+    function path(pts, n, style) { if (n < 2) return; ctx.beginPath(); for (let i = 0; i < n; i++) { const [x, y] = P(pts[i][0], pts[i][1], S.F(pts[i][0], pts[i][1])); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } Object.assign(ctx, style); ctx.stroke(); ctx.setLineDash([]); }
+    function ring(x, y, r, color, w, dash) { const [sx, sy] = P(x, y, S.F(x, y)); ctx.beginPath(); ctx.arc(sx, sy, r, 0, 7); ctx.strokeStyle = color; ctx.lineWidth = w; if (dash) ctx.setLineDash(dash); ctx.stroke(); ctx.setLineDash([]); }
+
+    function draw(now) {
+      ctx.fillStyle = '#0D0722'; ctx.fillRect(0, 0, W, H);
+      if (isTilt) terrain(); else ctx.drawImage(bg, 0, 0, W, H);
+      S.pts.forEach(p => p.el.classList.remove('aim'));
+      if (ghost && !run) { ctx.setLineDash([5, 5]); path(ghost, ghost.length, { strokeStyle: 'rgba(243,237,255,.75)', lineWidth: 1.5, lineJoin: 'round' });
+        const e = ghost[ghost.length - 1]; ring(e[0], e[1], 8, 'rgba(255,124,107,.8)', 1.6, [3, 3]); const t = S.nearest(e); if (t) t.el.classList.add('aim'); }
+      if (run) { const n = run.i; path(run.path, n, { strokeStyle: FG, lineWidth: 1.6, lineJoin: 'round' });
+        ctx.fillStyle = FG; for (let i = 0; i < n; i++) { const [x, y] = P(run.path[i][0], run.path[i][1], S.F(run.path[i][0], run.path[i][1])); ctx.beginPath(); ctx.arc(x, y, 2, 0, 7); ctx.fill(); }
+        ring(run.path[0][0], run.path[0][1], 5, FG, 1.6); if (run.done) { const e = run.path[run.path.length - 1]; ring(e[0], e[1], 9, CORAL, 2.4); } }
+      if (mouse && !isTilt) cueDraw(now || performance.now());
+    }
+
+    function cueDraw(now) {
+      const [mx, my] = mouse, x = mx / H, y = my / H;
+      if (cue === 'a' || cue === 'b') { ctx.beginPath(); ctx.arc(mx, my, 6, 0, 7); ctx.strokeStyle = cue === 'a' ? CORAL : FG; ctx.lineWidth = 1.8; ctx.stroke(); ctx.beginPath(); ctx.arc(mx, my, 1.6, 0, 7); ctx.fillStyle = ctx.strokeStyle; ctx.fill(); }
+      if (cue === 'c') { const [gx, gy] = S.grad(x, y), g = Math.hypot(gx, gy), L = Math.min(48, g * 55);
+        ctx.beginPath(); ctx.arc(mx, my, 3, 0, 7); ctx.fillStyle = FG; ctx.fill();
+        if (L > 5) { const ux = -gx / g, uy = -gy / g, tx = mx + ux * L, ty = my + uy * L; ctx.beginPath(); ctx.moveTo(mx, my); ctx.lineTo(tx, ty); ctx.strokeStyle = FG; ctx.lineWidth = 1.8; ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(tx - ux * 8 - uy * 4.5, ty - uy * 8 + ux * 4.5); ctx.lineTo(tx - ux * 8 + uy * 4.5, ty - uy * 8 - ux * 4.5); ctx.closePath(); ctx.fillStyle = FG; ctx.fill();
+          ctx.font = 'italic 15px "STIX Two Text", serif'; ctx.fillStyle = FG; ctx.fillText('−∇f', tx + ux * 8 - 10, ty + uy * 8 + 5); } }
+      if (cue === 'd' && !reduce && rest && now - rest > 500) { if (!ripples.length || now - ripples[ripples.length - 1].t > 1500) ripples.push({ t: now, x: mx, y: my }); }
+      if (cue === 'd') { ripples = ripples.filter(r => now - r.t < 1400); ripples.forEach(r => { const k = (now - r.t) / 1400; ctx.beginPath(); ctx.arc(r.x, r.y, 6 + k * 38, 0, 7); ctx.strokeStyle = `rgba(243,237,255,${(1 - k) * .7})`; ctx.lineWidth = 1.5; ctx.stroke(); }); }
+    }
+
+    function showHint(text, mx, my) { if (!text) { hint.style.opacity = 0; return; } hint.innerHTML = text; hint.style.opacity = 1; const w = hint.offsetWidth; const left = mx + 14 + w > W ? mx - 14 - w : mx + 14; hint.style.transform = `translate(${left}px,${my - 30}px)`; }
+
+    function hintFor(mx, my, now) {
+      if (cue === 'a') return showHint(clicked ? '<i>x</i>₀' : '<i>x</i>₀ click to descend', mx, my);
+      if (cue === 'd') return showHint(!clicked && rest && now - rest > 500 ? 'Click to start a descent' : '', mx, my);
+      showHint('');
+    }
+
+    let raf = 0;
+    function tick(now) { raf = 0; if (run && !run.done) { run.i = reduce ? run.path.length : Math.min(run.path.length, run.i + 2); const e = run.path[run.i - 1];
+        if (read) read.innerHTML = `Iteration <b>${run.i - 1}</b>, f = <b>${S.F(e[0], e[1]).toFixed(3)}</b>`;
+        if (run.i >= run.path.length) { run.done = true; const t = S.nearest(run.path[run.path.length - 1]); S.pts.forEach(p => p.el.classList.toggle('hit', p === t));
+          if (read) read.innerHTML = t ? `Converged in <b>${run.path.length - 1}</b> iterations on <em>${t.lab}</em>.` : `Stopped after <b>${run.path.length - 1}</b> iterations on a saddle. Try another start.`; } }
+      if (mouse && !isTilt) hintFor(mouse[0], mouse[1], now);
+      draw(now);
+      if ((run && !run.done) || (cue === 'd' && mouse) || ripples.length) raf = requestAnimationFrame(tick); }
+    const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
+
+    root.addEventListener('pointermove', e => { if (e.pointerType === 'touch') return; const r = cv.getBoundingClientRect(); mouse = [e.clientX - r.left, e.clientY - r.top]; rest = performance.now();
+      if (cue === 'b' && !isTilt) ghost = S.solve(mouse[0] / H, mouse[1] / H); kick(); });
+    root.addEventListener('pointerleave', () => { mouse = null; ghost = null; rest = 0; showHint(''); kick(); });
+    root.addEventListener('click', e => { const r = cv.getBoundingClientRect(); let x = (e.clientX - r.left) / H, y = (e.clientY - r.top) / H;
+      if (isTilt && pitch > 0) { /* invert the projection by searching the grid */ let best = [x, y], bd = 1e9; const xm = W / H; for (let j = 0; j <= 60; j++) for (let i = 0; i <= 120; i++) { const gx = i / 120 * xm, gy = j / 60, [sx, sy] = P(gx, gy, S.F(gx, gy)), d = (sx - e.clientX + r.left) ** 2 + (sy - e.clientY + r.top) ** 2; if (d < bd) { bd = d; best = [gx, gy]; } } [x, y] = best; }
+      clicked = true; ghost = null; S.pts.forEach(p => p.el.classList.remove('hit')); run = { path: S.solve(x, y), i: 1, done: false }; kick(); });
+
+    if (isTilt) {
+      const sec = root.closest('.tilt');
+      const onScroll = () => { if (!vis) return; const r = sec.getBoundingClientRect(), span = r.height - innerHeight; const p = reduce ? 0 : Math.max(0, Math.min(1, -r.top / Math.max(1, span)));
+        const np = Math.round(p * 62); if (np === pitch) return; pitch = np; if (pitchOut) pitchOut.textContent = pitch + '°'; if (tiltNote) tiltNote.textContent = pitch === 0 ? 'Flat: the contour map' : pitch > 55 ? 'Height map' : 'Tilting'; place(); kick(); };
+      addEventListener('scroll', onScroll, { passive: true });
+      if (reduce && tiltNote) tiltNote.textContent = 'Reduced motion: the map stays flat';
+      new IntersectionObserver(es => es.forEach(e => { vis = e.isIntersecting; if (vis) onScroll(); })).observe(sec);
+    }
+    let lw = 0; new ResizeObserver(() => { const w = Math.round(root.getBoundingClientRect().width), h = Math.round(root.getBoundingClientRect().height); if (w + h * 1e4 === lw) return; lw = w + h * 1e4; size(); }).observe(root);
+  }
+  document.querySelectorAll('.land').forEach(strip);
+})();
+</script>

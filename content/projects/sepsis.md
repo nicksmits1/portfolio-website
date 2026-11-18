@@ -18,13 +18,32 @@ Which DQN extensions help on a clinical benchmark with 716 health states and 25 
 - Rainbow, multi-step and distributional DQN stayed near a random policy (about 0.78) on small hyperparameter grids.
 
 ## Sections
+### Formulation
+ICU-Sepsis-v2 models a patient's stay in intensive care as a Markov decision process built from MIMIC-III records: 716 discrete health states and 25 treatments, each a combination of intravenous-fluid and vasopressor doses. The reward is 1 if the patient survives and 0 otherwise, with no discounting, so a policy's expected return is its survival rate.
+
+### Deep Q-learning
+DQN learns $Q(s,a)$, the expected return of giving treatment $a$ in state $s$ and acting well afterwards, with a neural network. Transitions go into a replay buffer $\mathcal{D}$, and the network regresses on targets computed by a slowly updated copy of itself, $\bar\theta$:
+$$\mathcal{L}(\theta) = \mathbb{E}_{(s,a,r,s') \sim \mathcal{D}}\Big[\big(r + \gamma \max_{a'} Q_{\bar\theta}(s', a') - Q_\theta(s, a)\big)^2\Big]$$
+Each extension changes one part of this loop, as the figure shows.
+
+### Extensions
+- **Double**: the online network picks the next action and the target network scores it, $r + \gamma\, Q_{\bar\theta}\big(s', \arg\max_{a'} Q_\theta(s', a')\big)$, which curbs overestimation.
+- **Prioritized replay**: transitions with large TD error $\delta$ are replayed more often, $P(i) \propto |\delta_i|^\alpha$, with importance weights $w_i = (N P(i))^{-\beta}$ removing the bias.
+- **Dueling**: $Q(s,a) = V(s) + A(s,a) - \tfrac{1}{|\mathcal{A}|}\sum_{a'} A(s,a')$ separates how good a state is from how much the treatment matters.
+- **n-step**: the target sums $n$ rewards before bootstrapping, $\sum_{k<n} \gamma^k r_{t+k} + \gamma^n \max_{a'} Q(s_{t+n}, a')$, so the terminal reward travels back faster.
+- **Noisy layers**: weights $\mu + \sigma \odot \varepsilon$ with learned $\sigma$ replace ε-greedy with exploration that depends on the state.
+- **Distributional**: the network predicts the whole return distribution $Z(s,a)$ on fixed atoms, with $Q = \mathbb{E}[Z]$, trained against the projected Bellman target.
+
+Rainbow combines all six.
 
 ### Comparison
-Treatment is an episodic decision process with a sparse reward: survival scores 1, death 0, with no discounting. Starting from a two-layer DQN, the team added one extension at a time (prioritized replay, double Q-learning, a dueling head, n-step returns, noisy layers, a distributional head) and then all of them together as Rainbow.
+Starting from a two-layer DQN with 128 hidden units, the team added one extension at a time and then all six together as Rainbow. Each variant was tuned on a grid of about four settings and run for 10 seeds of 300,000 episodes.
 
 ### Results
 The dueling head reached the best return, at the cost of noisier learning; prioritized replay came second and converged about 100,000 episodes sooner. The combined methods failed to learn on grids of about four settings each, which says more about tuning budgets than about the methods.
 
 ## Visual
 Lead: the eight variants on one return scale, the three that failed to learn shown dim near the random-policy level.
+Order on the page: return scale; "Formulation"; "Deep Q-learning" with the loss; DQN loop diagram; "Extensions"; "Comparison"; "Results"; `returns-over-training.webp`; further reading (report, previewable, first page `report-p1.webp`).
+DQN loop diagram (animated, own drawer): environment, replay buffer, online network and target network in a loop, with one transition (s, a, r, s′) travelling env → buffer → sampled batch → loss, the target network feeding the loss, the gradient returning to the online network and its greedy action going back to the environment. The six extensions sit as tags where they act: prioritized replay and n-step on the buffer, double on the target, dueling, distributional and noisy layers on the online network's head. Hovering or tapping a tag lights the part it changes. Reduced motion: the whole loop drawn with every tag in place.
 Supporting: `returns-over-training.webp` (report Figure 1a, survival rate over training). Low resolution (585 px) with heavy confidence shading; redraw from the run logs if they turn up.

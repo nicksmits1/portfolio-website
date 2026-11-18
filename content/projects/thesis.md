@@ -39,8 +39,15 @@ Re-planning every flow optimally turns each scenario into a linear programme who
 ### Learned policy
 Each design needs a simulation over many scenarios, and the number of designs grows combinatorially, so even greedy search takes hours at 70 nodes. The policy builds a design one arc at a time, with an explicit stop, and is rewarded by each arc's change in value, so an episode's return is the design's value. Trained once on small networks, it is applied without retraining to networks four times larger.
 
+### Architecture
+The policy reads the network as a graph: seven features per node (tier, safety stock, storage and production capacity, throughput) and three per arc (lead time, priority, cost). Two GATv2 rounds give every node an embedding. For each candidate arc, one shared network reads both endpoint embeddings, the remaining budget and the arc's own features, and returns that arc's Q-value. The best arc is added only if its value is positive; otherwise the design stops:
+$$h = f_\theta(X, E), \qquad Q(s_k, a_{ij}) = g_\psi\big(h_i \,\|\, h_j \,\|\, \rho_k \,\|\, e_{ij}\big), \qquad a_k = \begin{cases} \arg\max_{a} Q(s_k, a) & \text{if } \max_a Q(s_k, a) > 0 \\ \text{stop} & \text{otherwise} \end{cases}$$
+No weight depends on the number of nodes or arcs, so the same 28,481 parameters design networks of 19 and 70 nodes. Training is Double DQN with experience replay.
+
 ## Visual
 Lead: the policy designing one network, arc by arc. The drafts use an illustrative 9-node episode.
 TODO: export a real `EpisodeTrace` (`src/environment/trace.py`) from a trained policy on a held-out network and replace the illustration.
-Order on the page: episode; "Motivation"; "Formulation" with the equation; design value by size (`design-value-by-size.webp`, poster crop); "Upper bound"; CPU time by size (`cpu-time-by-size.webp`, poster crop); "Learned policy".
+Order on the page: episode; "Motivation"; "Formulation" with the equation; design value by size (`design-value-by-size.webp`, poster crop); "Upper bound"; CPU time by size (`cpu-time-by-size.webp`, poster crop); "Learned policy"; architecture diagram; "Architecture" with its equation; further reading (poster, previewable).
+Architecture diagram (animated, own drawer): a small candidate network on the left; two message-passing rounds run as pulses along its arcs (GATv2 ×2, θ shared by all nodes) and leave one embedding bar per node; each candidate arc then gathers [h_i ‖ h_j ‖ ρ_k ‖ e_ij] into the shared MLP g_ψ, and its Q-value grows as a bar beside it; the largest positive bar turns coral, that arc is drawn into the network, ρ_k steps down, and the loop repeats until every Q is at or below zero and "stop" lights. Labels follow the poster's "Design Policy" panel. Reduced motion: the last step, with all Q bars, the chosen arc and the stop rule visible.
+Further reading: `poster.pdf` with first-page preview `poster-p1.webp` (landscape, 1400 px).
 TODO: redraw both poster figures in the site palette from the thesis repo's result files.

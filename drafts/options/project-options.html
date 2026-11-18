@@ -104,6 +104,10 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
 .sup{margin:0;min-width:0}
 .plate{background:#fff;border-radius:10px;padding:12px;box-shadow:0 0 0 1px var(--hair)}
 .plate img{display:block;width:100%;height:auto}
+.plate.dash{background:#111217;padding:0;overflow:hidden}
+.sec h2 .ts{display:inline-flex;align-items:center;gap:7px;margin-left:12px;vertical-align:4px;font:500 12px/1 var(--text);letter-spacing:.02em;color:var(--fg2);text-decoration:none;padding:5px 9px 5px 7px;border-radius:999px;box-shadow:0 0 0 1px var(--hair)}
+.sec h2 .ts svg{width:16px;height:16px}
+.sec h2 .ts:hover{color:var(--peach)}
 .fig-cap{font-size:14px;line-height:1.45;color:var(--fg);margin:12px 0 0;max-width:60ch}
 .fig-cap .src{display:block;color:var(--fg2);font-size:13px;margin-top:4px}
 .pn{display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:30px 0 44px;border-top:1px solid var(--hair)}
@@ -243,7 +247,7 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
 
 <header class="wrap intro">
   <h1>Project page options</h1>
-  <p><b>Chosen: C, Arrival.</b> Its mock now carries the material you sent: short sections between the figures (motivation, formulation, method), the equations, the two-tank system and learned law for SiNDAE, the accepted ESCAPE 37 abstract with its logo, the FIFA pipeline and parity plots, all eight sepsis variants, wayfinder's numbers, and a seventh project, multimodal RAG.</p>
+  <p><b>Chosen: C, Arrival.</b> New in this version: the recommender page now has context, cold start, Jev (credited to TypeSafe) and operations sections, with three panels from the team’s Grafana dashboards: the cold-start backlog clearing overnight, a week of daily model promotions, and latency. Each is a single panel with its title and any course-managed detail cropped out.</p>
   <p>A and B stay below for the record and show only the figures. Use the switcher to load any project; the figures are live (step the episode, pick a scenario or a metric).</p>
   <nav class="toc" aria-label="Sections"><a href="#opt-c">C, Arrival (chosen)</a><a href="#same">Open items</a><a href="#opt-a">A, Split</a><a href="#opt-b">B, Wall</a></nav>
 </header>
@@ -365,7 +369,17 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
       line: 'A live recommendation service. An LLM turns a new user’s free-text tastes into a profile before their first request.',
       facts: [['500k+', 'live requests inside a 600 ms limit'], ['1.4 ms', 'cold-start ranker'], ['2.2×', 'NDCG@20 over SVD'], ['$1/day', 'LLM cost']],
       links: [], skills: ['Ranking & recommenders', 'LLM pipelines', 'MLOps', 'LightGBM', 'Kafka', 'Flask', 'Docker', 'PostgreSQL', 'AWS'],
-      figs: [{ t: 'rec' }] },
+      figs: [{ t: 'rec' },
+        Object.assign(img('recsys-grafana-cold-start.webp', 1200, 454, 'Grafana panel: profiles waiting for the cold-start worker fall from about 80,000 to zero between 21:10 and 04:45', 'The cold-start worker clearing a backlog of about 80,000 profiles overnight, 10 to 11 November (UTC).', 'Team Grafana dashboard, Platform Health.'), { dash: true }),
+        Object.assign(img('recsys-grafana-model-versions.webp', 1600, 420, 'Grafana state timeline: one control model per day, each preceded by a short candidate period', 'One week of serving models. Each day’s LightGBM model runs first as a candidate beside the champion, then takes over.', 'Team Grafana dashboard, Model Quality.'), { dash: true }),
+        Object.assign(img('recsys-grafana-latency.webp', 1200, 454, 'Grafana time series: p50, p95 and p99 HTTP latency over one week, p99 near 500 ms', 'HTTP latency over the same week. p99 stays under 500 ms apart from two brief spikes; percentiles come from histogram buckets, so read them as bounds.', 'Team Grafana dashboard, Service Availability.'), { dash: true })],
+      seq: [fig(0),
+        sec('Context', 'A team project for CMU’s Machine Learning in Production course: run a recommendation service for a movie-streaming platform with live users for a whole semester. Every request must get 20 films inside 600 ms, and the service has to stay up while it is monitored, retrained and A/B tested. My parts were the cold start and the deployment.'),
+        sec('Cold start', 'A ranking model only knows users who were in its training data, and new users arrive all the time. At signup each user writes a sentence or two about the films they like and dislike. A background worker sends that text to Jev once, stores the answers as a taste profile, and a ranker scores the catalogue from it in code. A new user’s first request comes about five minutes after signup, so the profile is almost always ready, and no request ever waits on the model.'),
+        fig(1),
+        sec('Jev <a class="ts" href="https://typesafe.ai" target="_blank" rel="noopener"><svg viewBox="0 0 51 51" fill="none" stroke="currentColor" aria-hidden="true"><g transform="translate(.5 .5)"><path d="M0 0h50v50H0zM16.67 0v50M33.33 0v50M0 16.67h50M0 33.33h50"/><g fill="currentColor" stroke="none"><circle cx="25" cy="8.33" r="6.25"/><circle cx="41.67" cy="25" r="6.25"/><circle cx="8.33" cy="41.67" r="6.25"/><circle cx="25" cy="41.67" r="6.25"/><circle cx="41.67" cy="41.67" r="6.25"/></g></g></svg> by TypeSafe</a>', 'Jev is TypeSafe’s first System One model, released in September 2026. It doesn’t write text. It answers typed questions with probabilities, such as whether this person wants or avoids horror films, with “not stated” as an explicit option so silence never counts as dislike. The answer always fits the schema, so the ranker never meets a malformed profile, and the probabilities go straight into a scoring formula. Twenty-four questions cost about 2,400 input tokens and return in a median 169 ms, which comes to about $1 a day for every new user. A usability question screens out descriptions like “idk”.'),
+        sec('Operations', 'LightGBM LambdaMART ranks the users the model knows. A new model is retrained each day, served first as a canary candidate beside the champion, and promoted without downtime. Grafana dashboards track availability, latency, model versions, drift and the cold-start backlog.'),
+        fig(2), fig(3)] },
     mmrag: { short: 'Multimodal RAG', name: 'Multimodal RAG over slides and reports', where: 'CMU, Generative AI', with: 'with John Speaks and Darren Chen', when: 'Spring 2026',
       line: 'Retrieve document pages as images, not OCR text, and a vision-language model answers questions about slides and reports more accurately.',
       facts: [['11', 'setups, from no context to fine-tuned RAG'], ['8,000+', 'pages and 5,000 queries, REAL-MM-RAG'], ['650', 'course slides curated to test transfer'], ['$200', 'of compute in total']],
@@ -446,7 +460,7 @@ a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
     if (f.t === 'scale') return `<div class="fg" data-fig="scale" data-d="${f.d}"><svg></svg>${capP(f)}</div>`;
     if (f.t === 'flow') return `<div class="fg" data-fig="flow"><div class="flowbox"><canvas role="img" aria-label="Phase portrait of the two-tank cascade: every pair of levels flows to one steady state; the three training trajectories are highlighted"></canvas><img class="logo" src="${A}sindae-logo-dark.webp" alt="SiNDAE logo" width="800" height="195"><span class="ax" style="right:0;bottom:0">h&#8321;, tank 1 level</span><span class="ax" style="left:0;top:0">h&#8322;, tank 2 level</span></div><p class="fine eq">A&#8321;h&#775;&#8321; = F&#7522;&#8345; &minus; q&#8321; &nbsp;&nbsp; A&#8322;h&#775;&#8322; = q&#8321; &minus; c&#8322;&radic;h&#8322; &nbsp;&nbsp; q&#8321; = NN(h&#8321;, h&#8322;) &nbsp; <span>The network learns the discharge q&#8321;; the valve law of tank 2 stays a hard constraint. Peach: the three training trajectories, from the paper's example.</span></p></div>`;
     if (f.t === 'video') return `<div class="fg" data-fig="video"><video class="shot" src="${A}wayfinder-demo.mp4" poster="${A}wayfinder-sidebar.webp" muted loop playsinline${reduce ? ' controls' : ' autoplay'} aria-label="Pressing play on a ticket in the sidebar opens a new Claude Code tab working that ticket"></video><p class="fine">Pressing play on a ticket opens a new tab that works it.</p></div>`;
-    if (f.t === 'img') return `<figure class="sup${f.narrow ? ' narrow' : ''}"><div class="plate"><img src="${f.src}" alt="${f.alt}" width="${f.w}" height="${f.h}" loading="lazy"></div><figcaption class="fig-cap">${f.cap}<span class="src">${f.from}</span></figcaption></figure>`;
+    if (f.t === 'img') return `<figure class="sup${f.narrow ? ' narrow' : ''}"><div class="plate${f.dash ? ' dash' : ''}"><img src="${f.src}" alt="${f.alt}" width="${f.w}" height="${f.h}" loading="lazy"></div><figcaption class="fig-cap">${f.cap}<span class="src">${f.from}</span></figcaption></figure>`;
     if (f.t === 'grid') return `<figure class="sup"><div class="grid2">${f.items.map(it => `<div class="plate"><img src="${it.src}" alt="${it.alt}" width="${it.w}" height="${it.h}" loading="lazy"></div>`).join('')}</div><figcaption class="fig-cap">${f.cap}<span class="src">${f.from}</span></figcaption></figure>`;
     return '';
   }

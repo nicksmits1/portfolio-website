@@ -28,8 +28,16 @@ FORM: User-picked option C from a three-option round (A Split, B Wall, C Arrival
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
+
+ADDITIONS (Nicolas, 2026-11-17, second round):
+- Further reading: a closing block before the previous / next row on any page with documents. Each entry is a card: first-page preview on a white plate (from `content/assets/<id>/*-p1.webp`), the venue's logo where there is one, title, one line naming what it is. Clicking opens the PDF in an inline viewer on desktop (native PDF in a dialog) and in a new tab on phones. External papers (the SiNDAE method paper on arXiv) link out with their logo and are never rehosted. Pages: thesis (poster), SiNDAE (JOSS draft, method paper, AIChE session), mmrag (report), sepsis (report).
+- SiNDAE page head: the SiNDAE logo as a full-width banner at the top of the main column, the phase portrait directly below it, and GitHub and Docs as large links directly under the portrait.
+- Architecture diagrams (recommender, FIFA): drawn by the site's own engine in Proschi's visual grammar, recoloured to this world. Nodes are cards with a 2 px outline coloured by kind, a hard offset shadow (3 px, near-black #07031A, no blur), a square icon tile on the left, the name in Onest 600 and the kind beneath it in small mono-style uppercase; square port handles where edges attach; edges routed orthogonally with rounded corners, labels in small pills on the ground; groups as dashed rounded rectangles with an uppercase, letter-spaced label. Kind colours from the contour ramp: services indigo, stores violet, streams and queues coral, third-party services (Jev, YouTube) peach, actors lavender-grey. The travelling request keeps coral. Open: whether the kind label uses a real monospace (a new face) or Onest uppercase.
+- Recommender: TypeSafe's mark beside the Jev section, crediting the model.
+- Thesis: an animated architecture diagram (GATv2 encoder, per-arc Q scorer, argmax or stop) after "Learned policy". Sepsis: an animated DQN loop with the six extensions tagged where they act.
+
 ## Unresolved
 
 - Seventh project: `mmrag` joins the six, so home needs a seventh row and a seventh minimum in both landscapes (the home contract says six).
-- Recommender: the Grafana dashboards need a login; waiting on screenshots or a public snapshot, cropped of anything course-managed.
+- Wayfinder: first-person copy is drafted from the README; match it to Nicolas's Reddit post once he pastes the text (reddit.com blocks fetching).
 - Thesis: the two poster figures ship as poster crops until they are redrawn in the site palette from the thesis repo's result files; the episode stays labelled illustrative until a real trace is exported.

@@ -1,3 +1,5 @@
 Multimodal RAG assets.
 
 - `report.pdf`: the team's final report (Smits, Speaks, Chen; CMU 10-423/623), downloaded from johnspeaks.com/gen_ai_final.pdf on 2026-11-17 at Nicolas's request (checked identical to John's current copy), rebuilt with qpdf to drop document metadata.
+
+- `report-p1.webp`: first page of the PDF, rendered with pdftoppm on 2026-11-17 for the further-reading preview.
