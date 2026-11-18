@@ -54,7 +54,7 @@ Use `/impeccable` for any interface change, and hold every change to `DESIGN.md`
 
 ## Deploy
 
-Cloudflare Workers Builds runs `npm ci` (npm 10), `npm run build`, then `npx wrangler deploy`, which uploads `dist/` as static assets per `wrangler.jsonc`. Keep that file: without it Wrangler auto-configures an SSR adapter and the build fails. `main` deploys to production; other branches upload preview versions. A lockfile written by npm 11 fails `npm ci` there, so change dependencies with `npx npm@10.9.2 install <pkg>` and commit the lockfile it writes.
+Cloudflare Workers Builds runs `npm ci` (npm 10), `npm run build`, then `npx wrangler deploy`, which uploads `dist/` as static assets per `wrangler.jsonc`. Keep that file: without it Wrangler auto-configures an SSR adapter and the build fails. `main` deploys to production; other branches run `npx wrangler preview`, which needs the (empty) `previews` block in `wrangler.jsonc`. A lockfile written by npm 11 fails `npm ci` there, so change dependencies with `npx npm@10.9.2 install <pkg>` and commit the lockfile it writes.
 
 ## Paper mockups
 
