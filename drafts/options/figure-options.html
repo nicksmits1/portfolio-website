@@ -1,0 +1,576 @@
+<title>Project Figure Mockups</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400&family=Onest:wght@400;500;600&family=STIX+Two+Text:ital@1&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column of figure mocks at the width they will ship in (the project page's figure column, ~680 px),
+   each in the site's own figure frame with its caption, so they read exactly as they would on /projects/<id>. */
+:root{
+  color-scheme:dark;
+  --bg:#120A2A; --panel:#1A1038; --ink:#0D0722; --fg:#F3EDFF; --fg2:#B9AAE8; --dim:#7C6BB8;
+  --coral:#FF7C6B; --violet:#8B5CF6; --peach:#FFD9C2; --hair:rgba(243,237,255,.22); --hair2:rgba(243,237,255,.1);
+  --disp:"Unbounded",system-ui,sans-serif; --text:"Onest",system-ui,sans-serif; --math:"STIX Two Text","Times New Roman",serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --kindfont:var(--mono); --kindcase:none; --kindtrack:0;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 1rem/1.6 var(--text);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+::selection{background:var(--coral);color:var(--bg)}
+a{color:inherit;text-underline-offset:.22em}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px}
+.wrap{max-width:820px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.intro{padding-block:clamp(2rem,5vw,3.4rem) 1.4rem}
+.intro h1{font:300 clamp(2rem,5vw,3rem)/1.02 var(--disp);letter-spacing:-.04em;margin:0 0 1rem;text-wrap:balance}
+.intro p{margin:0 0 .7rem;color:var(--fg2);max-width:64ch}
+.intro p b{color:var(--fg);font-weight:600}
+.toc{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.1rem}
+.toc a{font:500 .9rem/1 var(--text);padding:.5rem .8rem;border:1px solid var(--hair);border-radius:999px;text-decoration:none}
+.toc a:hover{border-color:var(--coral);color:var(--coral)}
+.block{border-top:1px solid var(--hair);padding-block:clamp(2rem,5vw,3rem)}
+.eyebrow{font:600 .75rem/1 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:0 0 .7rem}
+.block h2{font:400 clamp(1.4rem,3vw,1.9rem)/1.1 var(--disp);letter-spacing:-.03em;margin:0 0 .8rem;text-wrap:balance}
+.block > p{color:var(--fg2);margin:0 0 1rem;max-width:64ch}
+.block h3{font:400 1.25rem/1.15 var(--disp);letter-spacing:-.025em;margin:2rem 0 .6rem}
+.prose{max-width:62ch}
+.prose p{margin:0 0 .9rem}
+.order{list-style:none;margin:0 0 1.6rem;padding:0;display:flex;flex-wrap:wrap;gap:.4rem}
+.order li{font:500 .82rem/1 var(--text);padding:.45rem .7rem;border:1px solid var(--hair2);border-radius:999px;color:var(--fg2)}
+.order li.new{border-color:var(--coral);color:var(--fg);background:rgba(255,124,107,.12)}
+.order li.fig{border-style:dashed}
+.fg{margin:0 0 1.4rem;border:1px solid var(--hair);border-radius:14px;background:var(--ink);padding:18px 18px 14px}
+.scroll{overflow-x:auto;scrollbar-width:thin}
+.fg svg{display:block;width:100%;height:auto}
+.scroll > svg{min-width:600px}
+.fg figcaption{font-size:.88rem;color:var(--fg2);margin-top:10px;min-height:2.9em}
+.fg .src{display:block;color:var(--dim);font-size:.8rem;margin-top:4px}
+.live{color:var(--fg)}
+.m{font-family:var(--math);font-style:italic}
+.tabs{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 12px}
+.tabs button,.toggle button{font:500 .85rem/1 var(--text);padding:.5rem .8rem;border:1px solid var(--hair);border-radius:999px;background:none;color:var(--fg);cursor:pointer}
+.tabs button:hover,.toggle button:hover{border-color:var(--fg)}
+.tabs button[aria-pressed="true"],.toggle button[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:var(--bg)}
+.toggle{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:0 0 1.4rem;padding:12px 14px;border:1px solid var(--hair2);border-radius:12px}
+.toggle span{font:600 .75rem/1 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-right:.3rem}
+.toggle small{flex-basis:100%;color:var(--fg2);font-size:.85rem}
+.ext{display:flex;flex-wrap:wrap;gap:.4rem;margin:12px 0 0}
+.ext button{font:500 .82rem/1 var(--text);padding:.45rem .7rem;border:1px solid var(--hair);border-radius:999px;background:none;color:var(--fg);cursor:pointer}
+.ext button:hover,.ext button[aria-pressed="true"]{border-color:var(--coral);color:var(--coral)}
+.formula{margin-top:10px;padding:10px 12px;border-left:2px solid var(--coral);font-size:.92rem;color:var(--fg);min-height:3.2em}
+.kind{font-family:var(--kindfont);text-transform:var(--kindcase);letter-spacing:var(--kindtrack)}
+.after{border-top:1px solid var(--hair);padding-block:2rem 4rem}
+.after h2{font:400 1.3rem/1.15 var(--disp);letter-spacing:-.03em;margin:0 0 .8rem}
+.after ol{margin:0;padding-left:1.2rem;color:var(--fg2)}
+.after li{margin-bottom:.5rem}.after li b{color:var(--fg);font-weight:600}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="intro">
+    <p class="eyebrow">Arrival, new figures</p>
+    <h1>Thesis, sepsis and system diagrams</h1>
+    <p>Each figure is drawn at the width it ships in, inside the page's figure frame, and animates the way it would on the site. With reduced motion on, each one shows its final state.</p>
+    <p><b>Approve or mark up each block.</b> Nothing here is on the site yet.</p>
+    <nav class="toc" aria-label="Figures"><a href="#thesis">Thesis</a><a href="#sepsis">Sepsis</a><a href="#proschi">Recommender and FIFA</a></nav>
+  </header>
+
+  <!-- ============ THESIS ============ -->
+  <section class="block" id="thesis">
+    <p class="eyebrow">Graph RL for resilient supply chains</p>
+    <h2>Design policy and amortised cost</h2>
+    <p>The architecture diagram moves up to sit directly under the episode figure, so the page shows what the agent does and then how it decides. A new section on amortised cost follows "Learned policy", with a schematic chart.</p>
+    <ul class="order" aria-label="Page order">
+      <li class="fig">Episode figure</li><li class="fig new">Architecture diagram</li><li>Motivation</li><li>Formulation</li><li class="fig">Design value by size</li><li>Upper bound</li><li class="fig">CPU time by size</li><li>Learned policy</li><li class="new">Amortised cost</li><li class="fig new">Cumulative compute</li><li>Architecture</li><li>Further reading</li>
+    </ul>
+
+    <figure class="fg">
+      <div class="scroll"><svg id="arch" aria-label="Design policy: two GATv2 rounds embed each node, a shared network scores every candidate arc, and the best positive arc is added until every Q-value is at or below zero."></svg></div>
+      <figcaption><span class="live" id="arch-cap">GATv2, round 1 of 2: each node attends to its neighbours.</span><span class="src">Illustrative Q-values on the same 9-node network as the episode above.</span></figcaption>
+    </figure>
+
+    <h3>Amortised cost</h3>
+    <div class="prose">
+      <p>Greedy search pays its whole cost again for every network: each added arc means simulating every candidate over every failure scenario, about six CPU-hours for one 70-node network. The policy pays once, in training, about six to seven hours per seed on a shared 32-core server. After that, a new network costs one forward pass per added arc, about one CPU-second, including networks four times larger than any it trained on.</p>
+    </div>
+    <figure class="fg">
+      <svg id="amort" aria-label="Schematic: cumulative compute grows steeply with every network for greedy search, while the learned policy starts at its one-off training cost and stays almost flat."></svg>
+      <figcaption>Cumulative compute against networks designed. Schematic, not to scale.<span class="src">Training time is wall-clock per seed; no break-even count until CPU-hours per seed are measured.</span></figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ SEPSIS ============ -->
+  <section class="block" id="sepsis">
+    <p class="eyebrow">DQN variants for ICU sepsis treatment</p>
+    <h2>DQN loop</h2>
+    <p>Placed after "Deep Q-learning" and its loss, before "Extensions". One transition travels the loop. The six extensions sit as tags on the part they change; hover or tap one to light that part and see its formula.</p>
+    <figure class="fg">
+      <div class="scroll"><svg id="dqn" aria-label="DQN loop: the ICU-Sepsis environment, replay buffer, loss, target network and online network, with the six Rainbow extensions tagged where they act."></svg></div>
+      <div class="ext" id="dqn-ext" aria-label="Extensions"></div>
+      <div class="formula" id="dqn-f">Pick an extension to see where it acts.</div>
+      <figcaption><span class="live" id="dqn-cap">A transition goes into the replay buffer.</span></figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ PROSCHI ============ -->
+  <section class="block" id="proschi">
+    <p class="eyebrow">Movie recommender and FIFA pipeline</p>
+    <h2>Proschi-style system diagrams</h2>
+    <p>Proschi's visual grammar in the site palette: cards outlined by kind with a hard offset shadow, an icon tile, square ports, orthogonal edges with labels in pills, and dashed groups. Kinds take colours from the contour ramp. Services are indigo, stores violet, streams coral, third-party services peach and people lavender-grey. The travelling request stays coral.</p>
+    <div class="toggle" role="group" aria-label="Kind label face">
+      <span>Kind labels</span>
+      <button type="button" data-face="mono" aria-pressed="true">Monospace</button>
+      <button type="button" data-face="onest" aria-pressed="false">Onest uppercase</button>
+      <small>Monospace adds JetBrains Mono as a fourth face and stays closest to Proschi. Onest uppercase keeps the site at three faces.</small>
+    </div>
+
+    <h3>Recommender</h3>
+    <figure class="fg">
+      <div class="tabs" id="rec-tabs"></div>
+      <div class="scroll"><svg id="rec" aria-label="Recommender architecture: viewer, router, ranking model, cold-start ranker, inference log, taste profiles, event stream, profile worker and Jev."></svg></div>
+      <figcaption><span class="live" id="rec-cap"></span></figcaption>
+    </figure>
+
+    <h3>FIFA pipeline</h3>
+    <figure class="fg">
+      <div class="tabs" id="fifa-tabs"></div>
+      <div class="scroll"><svg id="fifa" aria-label="FIFA pipeline: player CSVs to the Spark loader and Postgres, YouTube comments through Kafka to a leaderboard, and Postgres to the feature pipeline, MLlib and PyTorch."></svg></div>
+      <figcaption><span class="live" id="fifa-cap"></span></figcaption>
+    </figure>
+  </section>
+
+  <section class="after">
+    <h2>To approve</h2>
+    <ol>
+      <li><b>Thesis.</b> The diagram's place under the episode figure, the Amortised cost copy, and the schematic chart.</li>
+      <li><b>Sepsis.</b> The DQN loop, its place after the loss, and the tags with formulas.</li>
+      <li><b>Recommender and FIFA.</b> The Proschi grammar, and monospace or Onest for the kind labels.</li>
+    </ol>
+  </section>
+</div>
+
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const el = (t, a = {}, p) => { const n = document.createElementNS(NS, t); for (const k in a) n.setAttribute(k, a[k]); if (p) p.appendChild(n); return n; };
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const C = { bg: '#120A2A', panel: '#1A1038', ink: '#0D0722', fg: '#F3EDFF', fg2: '#B9AAE8', dim: '#7C6BB8', coral: '#FF7C6B', peach: '#FFD9C2', violet: '#8B5CF6', shadow: '#07031A' };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+/* each figure runs only while on screen */
+function gate(node) {
+  let vis = false, waiters = [];
+  new IntersectionObserver(es => { vis = es[0].isIntersecting; if (vis) { waiters.forEach(f => f()); waiters = []; } }, { threshold: .25 }).observe(node);
+  const ready = () => vis ? Promise.resolve() : new Promise(r => waiters.push(r));
+  return async ms => { await sleep(ms); await ready(); };
+}
+function tween(ms, fn) { return new Promise(res => { const t0 = performance.now(); const f = now => { const k = Math.min(1, (now - t0) / ms); fn(1 - Math.pow(1 - k, 3), k); k < 1 ? requestAnimationFrame(f) : res(); }; requestAnimationFrame(f); }); }
+const txt = (p, x, y, s, a = {}) => { const t = el('text', { x, y, fill: C.fg, 'font-family': 'Onest, system-ui, sans-serif', ...a }, p); t.textContent = s; return t; };
+/* italic maths label with an optional subscript */
+const mth = (p, x, y, base, sub, a = {}) => { const t = el('text', { x, y, fill: C.fg, 'font-family': '"STIX Two Text", serif', 'font-style': 'italic', 'font-size': 15, ...a }, p); t.textContent = base; if (sub) { const s = el('tspan', { 'font-size': '0.72em', dy: 4 }, t); s.textContent = sub; } return t; };
+
+/* ===================== Thesis: design policy ===================== */
+(function arch() {
+  const svg = document.getElementById('arch'), cap = document.getElementById('arch-cap'), wait = gate(svg);
+  svg.setAttribute('viewBox', '0 0 820 360');
+  const N = { P1: [34, 127, 'p'], P2: [34, 235, 'p'], W1: [146, 73, 'w'], W2: [146, 181, 'w'], W3: [146, 289, 'w'], C1: [258, 55, 'c'], C2: [258, 136, 'c'], C3: [258, 217, 'c'], C4: [258, 298, 'c'] };
+  const BASE = [['P1', 'W1'], ['P1', 'W2'], ['P2', 'W2'], ['P2', 'W3'], ['W1', 'C1'], ['W1', 'C2'], ['W2', 'C2'], ['W2', 'C3'], ['W3', 'C4']];
+  const CAND = [['W1', 'C3'], ['P1', 'W3'], ['W3', 'C3'], ['P2', 'W1'], ['W2', 'C4']];
+  const Q = [[.31, .22, .18, -.04, .09], [null, .19, .05, -.07, .02], [null, null, -.02, -.09, -.05]];
+  const RAMP = ['#2A1670', '#7044E8', '#EE6B60', '#FFD6BF', '#4B2CA8', '#9B7BFF'];
+  const gA = el('g', { fill: 'none', 'stroke-linecap': 'round' }, svg), gP = el('g', {}, svg), gN = el('g', {}, svg), gH = el('g', {}, svg), gM = el('g', {}, svg);
+  const seg = (a, b, r = 14) => { const [x1, y1] = N[a], [x2, y2] = N[b], d = Math.hypot(x2 - x1, y2 - y1); return [x1 + (x2 - x1) * r / d, y1 + (y2 - y1) * r / d, x2 - (x2 - x1) * (r + 3) / d, y2 - (y2 - y1) * (r + 3) / d]; };
+  const arc = (a, b, style) => {
+    const [x1, y1, x2, y2] = seg(a, b), g = el('g', {}, gA), ang = Math.atan2(y2 - y1, x2 - x1), h = 6;
+    const line = el('line', { x1, y1, x2, y2, 'stroke-width': 1.4 }, g);
+    const head = el('path', { d: `M${x2 + 3 * Math.cos(ang)} ${y2 + 3 * Math.sin(ang)} L${x2 - h * Math.cos(ang - .45)} ${y2 - h * Math.sin(ang - .45)} L${x2 - h * Math.cos(ang + .45)} ${y2 - h * Math.sin(ang + .45)} Z`, stroke: 'none' }, g);
+    const set = s => { const col = s === 'cand' ? C.dim : s === 'hot' ? C.fg : s === 'added' ? C.coral : C.fg2; line.setAttribute('stroke', col); head.setAttribute('fill', col); line.setAttribute('stroke-dasharray', s === 'cand' || s === 'hot' ? '4 4' : 'none'); line.setAttribute('stroke-width', s === 'added' || s === 'hot' ? 2.2 : 1.4); };
+    set(style); return { set };
+  };
+  BASE.forEach(([a, b]) => arc(a, b, 'base'));
+  const cand = CAND.map(([a, b]) => arc(a, b, 'cand'));
+  for (const k in N) {
+    const [x, y, kind] = N[k], g = el('g', { fill: C.bg, stroke: C.fg, 'stroke-width': 1.6 }, gN);
+    if (kind === 'p') el('rect', { x: x - 12, y: y - 12, width: 24, height: 24 }, g);
+    else if (kind === 'w') el('path', { d: `M${x - 13} ${y + 11} V${y - 3} L${x} ${y - 13} L${x + 13} ${y - 3} V${y + 11} Z` }, g);
+    else el('circle', { cx: x, cy: y, r: 12 }, g);
+    txt(g, x, y + (kind === 'w' ? 6 : 3.5), k, { 'text-anchor': 'middle', 'font-size': 8.5, 'font-weight': 600, stroke: 'none' });
+  }
+  /* one embedding strip per node */
+  const strips = {};
+  Object.entries(N).forEach(([k, [x, y]], i) => {
+    const g = el('g', { opacity: 0 }, gH);
+    for (let j = 0; j < 4; j++) el('rect', { x: x + 16 + j * 5.5, y: y - 18, width: 5, height: 5, rx: 1, fill: RAMP[(i * 3 + j * 2) % RAMP.length] }, g);
+    strips[k] = g;
+  });
+  txt(gM, 20, 345, 'GATv2 × 2, θ shared by every node', { 'font-size': 11, fill: C.fg2 });
+  /* the concatenated input and the shared scorer */
+  const segs = [['h', 'i'], ['h', 'j'], ['ρ', 'k'], ['e', 'ij']].map(([b, s], i) => {
+    const y = 122 + i * 30, r = el('rect', { x: 318, y, width: 56, height: 26, rx: 5, fill: C.panel, stroke: C.dim, 'stroke-width': 1.2 }, gM);
+    mth(gM, 334, y + 18, b, s, { 'font-size': 14 }); return r;
+  });
+  txt(gM, 346, 112, 'concatenate', { 'text-anchor': 'middle', 'font-size': 10, fill: C.dim });
+  el('path', { d: 'M378 181 H396', stroke: C.fg2, 'stroke-width': 1.4 }, gM); el('path', { d: 'M400 181 l-7 -4 v8 z', fill: C.fg2 }, gM);
+  const box = el('rect', { x: 402, y: 141, width: 82, height: 80, rx: 12, fill: C.panel, stroke: C.fg, 'stroke-width': 1.6 }, gM);
+  mth(gM, 432, 186, 'g', 'ψ', { 'font-size': 22 });
+  txt(gM, 443, 238, 'one network, every arc', { 'text-anchor': 'middle', 'font-size': 10, fill: C.dim });
+  const rho = txt(gM, 443, 128, '', { 'text-anchor': 'middle', 'font-size': 12, fill: C.peach });
+  const setRho = v => { rho.textContent = ''; const a = el('tspan', { 'font-family': '"STIX Two Text", serif', 'font-style': 'italic' }, rho); a.textContent = 'ρ'; const s = el('tspan', { 'font-size': 9, dy: 3, 'font-family': '"STIX Two Text", serif', 'font-style': 'italic' }, rho); s.textContent = 'k'; const b = el('tspan', { dy: -3 }, rho); b.textContent = ` = ${v.toFixed(1)}`; };
+  /* Q rows */
+  const ZX = 676, SC = 330, rows = CAND.map(([a, b], i) => {
+    const y = 66 + i * 50;
+    const lab = txt(gM, 520, y + 4, `${a} → ${b}`, { 'font-size': 12, 'font-weight': 600 });
+    const bar = el('rect', { x: ZX, y: y - 7, width: 0, height: 14, rx: 2, fill: C.fg }, gM);
+    const val = txt(gM, ZX, y + 4, '', { 'font-size': 10.5, fill: C.fg2 });
+    return { y, lab, bar, val };
+  });
+  el('line', { x1: ZX, y1: 40, x2: ZX, y2: 300, stroke: C.dim, 'stroke-width': 1 }, gM);
+  const q0 = mth(gM, ZX - 4, 32, 'Q', '', { 'font-size': 13, fill: C.dim }); q0.textContent = 'Q = 0'; q0.setAttribute('text-anchor', 'middle');
+  const stopG = el('g', {}, gM), stopR = el('rect', { x: 640, y: 318, width: 72, height: 26, rx: 13, fill: 'none', stroke: C.dim, 'stroke-width': 1.3 }, stopG);
+  const stopT = txt(stopG, 676, 335, 'stop', { 'text-anchor': 'middle', 'font-size': 12, 'font-weight': 600, fill: C.dim });
+  const flow = el('circle', { r: 4.5, fill: C.coral, opacity: 0 }, gM);
+  const setBar = (r, q, chosen) => {
+    if (q === null) return;
+    const w = Math.abs(q) * SC; r.bar.setAttribute('x', q >= 0 ? ZX : ZX - w); r.bar.setAttribute('width', w);
+    r.bar.setAttribute('fill', chosen ? C.coral : q >= 0 ? C.fg : C.dim);
+    r.val.textContent = q.toFixed(2); r.val.setAttribute('x', q >= 0 ? ZX + w + 6 : ZX + 6);
+  };
+  const clearRow = r => { r.bar.setAttribute('width', 0); r.val.textContent = ''; };
+  const markAdded = (r, k) => { r.bar.setAttribute('width', 0); r.val.textContent = `added, step ${k}`; r.val.setAttribute('x', ZX + 6); r.val.setAttribute('fill', C.coral); r.lab.setAttribute('fill', C.coral); };
+  const lit = on => { stopR.setAttribute('fill', on ? C.coral : 'none'); stopR.setAttribute('stroke', on ? C.coral : C.dim); stopT.setAttribute('fill', on ? C.bg : C.dim); };
+  const say = h => cap.innerHTML = h;
+  const M = (b, s) => `<span class="m">${b}</span>${s ? `<sub class="m">${s}</sub>` : ''}`;
+
+  async function rounds(edges, fast) {
+    for (let r = 1; r <= 2; r++) {
+      say(r === 1 ? `GATv2, round 1 of 2: each node attends to its neighbours.` : `Round 2. Every node now has an embedding ${M('h', 'i')}.`);
+      const dots = edges.flatMap(([a, b]) => [[a, b], [b, a]].map(([u, v]) => ({ u, v, c: el('circle', { r: 2.6, fill: C.peach }, gP) })));
+      await tween(fast ? 420 : 700, e => dots.forEach(({ u, v, c }) => { const [x1, y1] = N[u], [x2, y2] = N[v]; c.setAttribute('cx', x1 + (x2 - x1) * e); c.setAttribute('cy', y1 + (y2 - y1) * e); }));
+      dots.forEach(d => d.c.remove());
+      if (r === 2) Object.values(strips).forEach(s => s.setAttribute('opacity', 1));
+      await wait(fast ? 150 : 350);
+    }
+  }
+  async function score(step, open) {
+    say(`One shared network reads ${M('h', 'i')}, ${M('h', 'j')}, the budget left ${M('ρ', 'k')} and the arc's features ${M('e', 'ij')}, and returns its Q-value.`);
+    for (const i of open) {
+      cand[i].set('hot'); segs.forEach(s => s.setAttribute('stroke', C.fg)); box.setAttribute('stroke', C.coral);
+      flow.setAttribute('opacity', 1);
+      await tween(300, e => { flow.setAttribute('cx', 484 + (515 - 484) * e); flow.setAttribute('cy', 181 + (rows[i].y - 181) * e); });
+      flow.setAttribute('opacity', 0);
+      const q = Q[step][i]; await tween(260, e => setBar(rows[i], q * e, false));
+      cand[i].set('cand'); segs.forEach(s => s.setAttribute('stroke', C.dim)); box.setAttribute('stroke', C.fg);
+      await wait(120);
+    }
+  }
+  function finalState() {
+    cand[0].set('added'); cand[1].set('added'); markAdded(rows[0], 1); markAdded(rows[1], 2);
+    [2, 3, 4].forEach(i => setBar(rows[i], Q[2][i], false)); Object.values(strips).forEach(s => s.setAttribute('opacity', 1));
+    setRho(.6); lit(true); say('Every remaining Q-value is at or below zero, so the design stops after two arcs.');
+  }
+  async function play() {
+    for (;;) {
+      cand.forEach(c => c.set('cand')); rows.forEach(r => { clearRow(r); r.lab.setAttribute('fill', C.fg); r.val.setAttribute('fill', C.fg2); });
+      Object.values(strips).forEach(s => s.setAttribute('opacity', 0)); lit(false); setRho(1);
+      let added = [];
+      for (let step = 0; step < 3; step++) {
+        const edges = BASE.concat(added.map(i => CAND[i]));
+        await rounds(edges, step > 0);
+        const open = [0, 1, 2, 3, 4].filter(i => !added.includes(i));
+        open.forEach(i => clearRow(rows[i]));
+        await score(step, open);
+        const best = open.reduce((m, i) => Q[step][i] > Q[step][m] ? i : m, open[0]);
+        if (Q[step][best] <= 0) { lit(true); say('Every remaining Q-value is at or below zero, so the design stops after two arcs.'); await wait(3200); break; }
+        setBar(rows[best], Q[step][best], true); await wait(500);
+        cand[best].set('added'); added.push(best); markAdded(rows[best], added.length); setRho(1 - added.length * .2);
+        say(`${CAND[best][0]} → ${CAND[best][1]} has the largest positive Q, so it is added. ${M('ρ', 'k')} drops to ${(1 - added.length * .2).toFixed(1)}.`);
+        await wait(1700);
+      }
+      await wait(600);
+    }
+  }
+  if (reduce) finalState(); else { setRho(1); play(); }
+})();
+
+/* ===================== Thesis: amortised cost (schematic) ===================== */
+(function amort() {
+  const svg = document.getElementById('amort'), wait = gate(svg);
+  svg.setAttribute('viewBox', '0 0 640 300');
+  const X0 = 96, Y0 = 250, DX = 38, NMAX = 13, S = 16.5, TR = 64, P = .5;
+  el('path', { d: `M${X0} 26 V${Y0} H612`, stroke: C.fg2, 'stroke-width': 1.3, fill: 'none' }, svg);
+  el('path', { d: `M${X0} 20 l-4 8 h8 z`, fill: C.fg2 }, svg); el('path', { d: `M618 ${Y0} l-8 -4 v8 z`, fill: C.fg2 }, svg);
+  txt(svg, X0 + 10, 30, 'Cumulative compute', { 'font-size': 11, fill: C.dim });
+  txt(svg, 610, Y0 + 22, 'Networks designed', { 'font-size': 11, fill: C.dim, 'text-anchor': 'end' });
+  /* training bracket */
+  el('path', { d: `M${X0 - 10} ${Y0} V${Y0 - TR} M${X0 - 14} ${Y0} H${X0 - 6} M${X0 - 14} ${Y0 - TR} H${X0 - 6}`, stroke: C.coral, 'stroke-width': 1.3 }, svg);
+  const tr1 = txt(svg, X0 - 18, Y0 - TR / 2 - 2, 'training,', { 'font-size': 10.5, fill: C.coral, 'text-anchor': 'end' });
+  const tr2 = txt(svg, X0 - 18, Y0 - TR / 2 + 11, 'paid once', { 'font-size': 10.5, fill: C.coral, 'text-anchor': 'end' });
+  const search = el('polyline', { fill: 'none', stroke: C.fg, 'stroke-width': 2 }, svg);
+  const policy = el('polyline', { fill: 'none', stroke: C.coral, 'stroke-width': 2.4 }, svg);
+  const dS = el('g', { fill: C.fg }, svg), dP = el('g', { fill: C.coral }, svg);
+  const lS = txt(svg, 0, 0, 'Greedy search, every network', { 'font-size': 12, 'font-weight': 600, opacity: 0 });
+  const lP = txt(svg, 0, 0, 'Learned policy', { 'font-size': 12, 'font-weight': 600, fill: C.coral, opacity: 0 });
+  const ys = n => Y0 - n * S, yp = n => Y0 - TR - n * P, x = n => X0 + n * DX;
+  function draw(n) {
+    search.setAttribute('points', Array.from({ length: n + 1 }, (_, i) => `${x(i)},${ys(i)}`).join(' '));
+    policy.setAttribute('points', Array.from({ length: n + 1 }, (_, i) => `${x(i)},${yp(i)}`).join(' '));
+    dS.textContent = ''; dP.textContent = '';
+    for (let i = 1; i <= n; i++) { el('circle', { cx: x(i), cy: ys(i), r: 2.6 }, dS); el('circle', { cx: x(i), cy: yp(i), r: 2.6 }, dP); }
+    const k = Math.min(n, NMAX - 1);
+    lS.setAttribute('x', x(k) - 8); lS.setAttribute('y', ys(k) - 2); lS.setAttribute('text-anchor', 'end'); lS.setAttribute('opacity', n > 2 ? 1 : 0);
+    lP.setAttribute('x', x(n) + 0); lP.setAttribute('y', yp(n) - 10); lP.setAttribute('text-anchor', 'end'); lP.setAttribute('opacity', n > 2 ? 1 : 0);
+  }
+  if (reduce) { draw(NMAX); return; }
+  (async () => { for (;;) { for (let n = 0; n <= NMAX; n++) { draw(n); await wait(n === 0 ? 700 : 380); } await wait(2600); } })();
+})();
+
+/* ===================== Shared: orthogonal rounded paths ===================== */
+function rpath(p, r = 8) {
+  let d = `M${p[0][0]} ${p[0][1]}`;
+  for (let i = 1; i < p.length - 1; i++) {
+    const [x0, y0] = p[i - 1], [x1, y1] = p[i], [x2, y2] = p[i + 1], d1 = Math.hypot(x1 - x0, y1 - y0), d2 = Math.hypot(x2 - x1, y2 - y1), rr = Math.min(r, d1 / 2, d2 / 2);
+    d += ` L${x1 - (x1 - x0) / d1 * rr} ${y1 - (y1 - y0) / d1 * rr} Q${x1} ${y1} ${x1 + (x2 - x1) / d2 * rr} ${y1 + (y2 - y1) / d2 * rr}`;
+  }
+  const l = p[p.length - 1]; return d + ` L${l[0]} ${l[1]}`;
+}
+const trimEnd = (p, by) => { const q = p.map(a => a.slice()), n = q.length, [x0, y0] = q[n - 2], [x1, y1] = q[n - 1], d = Math.hypot(x1 - x0, y1 - y0); q[n - 1] = [x1 - (x1 - x0) / d * by, y1 - (y1 - y0) / d * by]; return q; };
+function markers(svg, id) {
+  const defs = el('defs', {}, svg);
+  [['n', C.fg2], ['a', C.fg]].forEach(([k, col]) => { const m = el('marker', { id: `${id}-${k}`, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' }, defs); el('path', { d: 'M0 1 L10 5 L0 9 z', fill: col }, m); });
+}
+
+/* ===================== Sepsis: DQN loop ===================== */
+(function dqn() {
+  const svg = document.getElementById('dqn'), cap = document.getElementById('dqn-cap'), fbox = document.getElementById('dqn-f'), ext = document.getElementById('dqn-ext'), wait = gate(svg);
+  svg.setAttribute('viewBox', '0 0 760 392'); markers(svg, 'dq');
+  const B = { env: [110, 200, 'ICU-Sepsis', '716 states, 25 treatments'], buf: [360, 76, 'Replay buffer', 'transitions (s, a, r, s′)'], loss: [640, 76, 'Loss', 'squared TD error'], tgt: [640, 316, 'Target network', 'slow copy of θ'], onl: [360, 316, 'Online network', 'two layers, 128 units'] };
+  const W = 176, H = 62;
+  const E = {
+    e1: { p: [[110, 169], [110, 76], [272, 76]], lab: '(s, a, r, s′)', at: [110, 122] },
+    e2: { p: [[448, 76], [552, 76]], lab: 'sampled batch', at: [500, 76] },
+    e3: { p: [[640, 285], [640, 107]], lab: 'r + γ max Q̄(s′, ·)', at: [640, 196] },
+    e4: { p: [[592, 107], [592, 196], [400, 196], [400, 285]], lab: '∇θ ℒ', at: [496, 196] },
+    e5: { p: [[272, 316], [110, 316], [110, 231]], lab: 'greedy action a', at: [190, 316] },
+    e6: { p: [[448, 316], [552, 316]], lab: 'copy θ', at: [500, 316], dash: true },
+  };
+  const gE = el('g', {}, svg), gB = el('g', {}, svg), gL = el('g', {}, svg), gT = el('g', {}, svg);
+  const edges = {};
+  for (const k in E) {
+    const e = E[k], path = el('path', { d: rpath(trimEnd(e.p, 2)), fill: 'none', stroke: C.fg2, 'stroke-width': 1.4, 'marker-end': 'url(#dq-n)', 'stroke-dasharray': e.dash ? '5 4' : 'none' }, gE);
+    const full = el('path', { d: rpath(e.p), fill: 'none', stroke: 'none' }, gE);
+    const t = txt(gL, e.at[0], e.at[1] + 3.5, e.lab, { 'font-size': 10.5, 'text-anchor': 'middle', fill: C.fg2, 'font-family': '"STIX Two Text", serif', 'font-style': 'italic' });
+    const bb = { w: e.lab.length * 5.6 + 12 };
+    gL.insertBefore(el('rect', { x: e.at[0] - bb.w / 2, y: e.at[1] - 9, width: bb.w, height: 18, rx: 9, fill: C.ink }), t);
+    edges[k] = { path, full };
+  }
+  const boxes = {};
+  for (const k in B) {
+    const [x, y, t1, t2] = B[k], g = el('g', {}, gB);
+    const r = el('rect', { x: x - W / 2, y: y - H / 2, width: W, height: H, rx: 12, fill: C.panel, stroke: C.fg, 'stroke-width': 1.5 }, g);
+    txt(g, x, y - 3, t1, { 'text-anchor': 'middle', 'font-size': 13, 'font-weight': 600 });
+    txt(g, x, y + 15, t2, { 'text-anchor': 'middle', 'font-size': 10.5, fill: C.fg2 });
+    boxes[k] = { g, r };
+  }
+  /* the symbols each box carries */
+  mth(gB, B.onl[0] + 62, B.onl[1] - 1, 'Q', 'θ', { 'font-size': 14, fill: C.peach });
+  mth(gB, B.tgt[0] + 62, B.tgt[1] - 1, 'Q', 'θ̄', { 'font-size': 14, fill: C.peach });
+  mth(gB, B.loss[0] + 50, B.loss[1] - 1, 'ℒ(θ)', '', { 'font-size': 14, fill: C.peach });
+  mth(gB, B.buf[0] + 66, B.buf[1] - 1, '𝒟', '', { 'font-size': 15, fill: C.peach });
+  const TAGS = [
+    { id: 'per', name: 'Prioritized replay', on: 'buf', at: [312, 24], f: 'Transitions with a large TD error are replayed more often, <span class="m">P</span>(<span class="m">i</span>) ∝ |<span class="m">δ<sub>i</sub></span>|<sup class="m">α</sup>, with importance weights <span class="m">w<sub>i</sub></span> = (<span class="m">N P</span>(<span class="m">i</span>))<sup>−<span class="m">β</span></sup> removing the bias.' },
+    { id: 'nstep', name: 'n-step', on: 'buf', at: [420, 24], f: 'The target sums <span class="m">n</span> rewards before bootstrapping, Σ<sub><span class="m">k</span>&lt;<span class="m">n</span></sub> <span class="m">γ<sup>k</sup> r<sub>t+k</sub></span> + <span class="m">γ<sup>n</sup></span> max <span class="m">Q</span>(<span class="m">s<sub>t+n</sub></span>, <span class="m">a′</span>), so the terminal reward travels back faster.' },
+    { id: 'double', name: 'Double', on: 'tgt', at: [640, 372], f: 'The online network picks the next action and the target network scores it, <span class="m">r</span> + <span class="m">γ Q</span><sub class="m">θ̄</sub>(<span class="m">s′</span>, argmax <span class="m">Q<sub>θ</sub></span>(<span class="m">s′</span>, <span class="m">a′</span>)), which curbs overestimation.' },
+    { id: 'duel', name: 'Dueling', on: 'onl', at: [272, 372], f: '<span class="m">Q</span>(<span class="m">s</span>, <span class="m">a</span>) = <span class="m">V</span>(<span class="m">s</span>) + <span class="m">A</span>(<span class="m">s</span>, <span class="m">a</span>) − mean <span class="m">A</span>(<span class="m">s</span>, <span class="m">a′</span>) separates how good a state is from how much the treatment matters.' },
+    { id: 'dist', name: 'Distributional', on: 'onl', at: [364, 372], f: 'The network predicts the whole return distribution <span class="m">Z</span>(<span class="m">s</span>, <span class="m">a</span>) on fixed atoms, with <span class="m">Q</span> = 𝔼[<span class="m">Z</span>], trained against the projected Bellman target.' },
+    { id: 'noisy', name: 'Noisy layers', on: 'onl', at: [462, 372], f: 'Weights <span class="m">μ</span> + <span class="m">σ</span> ⊙ <span class="m">ε</span> with a learned <span class="m">σ</span> replace ε-greedy with exploration that depends on the state.' },
+  ];
+  const tagEls = TAGS.map(t => {
+    const w = t.name.length * 6.4 + 18, g = el('g', { style: 'cursor:pointer' }, gT);
+    const [bx, by] = B[t.on], top = t.at[1] < by;
+    el('line', { x1: t.at[0], y1: t.at[1] + (top ? 10 : -10), x2: t.at[0], y2: by + (top ? -H / 2 : H / 2), stroke: C.dim, 'stroke-width': 1, 'stroke-dasharray': '2 3' }, g);
+    const r = el('rect', { x: t.at[0] - w / 2, y: t.at[1] - 10, width: w, height: 20, rx: 10, fill: C.ink, stroke: C.coral, 'stroke-width': 1.2 }, g);
+    const tx = txt(g, t.at[0], t.at[1] + 4, t.name, { 'text-anchor': 'middle', 'font-size': 10.5, 'font-weight': 500, fill: C.coral });
+    return { t, g, r, tx };
+  });
+  let sel = null;
+  function pick(id) {
+    sel = sel === id ? null : id;
+    const t = TAGS.find(x => x.id === sel);
+    Object.entries(boxes).forEach(([k, b]) => { b.r.setAttribute('stroke', t && t.on === k ? C.coral : C.fg); b.r.setAttribute('stroke-width', t && t.on === k ? 2.4 : 1.5); b.g.style.opacity = !t || t.on === k ? 1 : .45; });
+    tagEls.forEach(e => { const on = e.t.id === sel; e.r.setAttribute('fill', on ? C.coral : C.ink); e.tx.setAttribute('fill', on ? C.bg : C.coral); });
+    [...ext.children].forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id === sel)));
+    fbox.innerHTML = t ? `<b>${t.name}.</b> ${t.f}` : 'Pick an extension to see where it acts.';
+  }
+  TAGS.forEach(t => { const b = document.createElement('button'); b.type = 'button'; b.dataset.id = t.id; b.textContent = t.name; b.setAttribute('aria-pressed', 'false'); b.onclick = () => pick(t.id); ext.appendChild(b); });
+  tagEls.forEach(e => { e.g.addEventListener('click', () => pick(e.t.id)); e.g.addEventListener('mouseenter', () => { if (matchMedia('(hover: hover)').matches && sel !== e.t.id) pick(e.t.id); }); });
+  const dot = el('circle', { r: 6, fill: C.coral, stroke: C.ink, 'stroke-width': 2, opacity: 0 }, svg);
+  const STEPS = [
+    ['e1', 'The patient’s transition (<span class="m">s</span>, <span class="m">a</span>, <span class="m">r</span>, <span class="m">s′</span>) goes into the replay buffer.'],
+    ['e2', 'A sampled batch reaches the loss.'],
+    ['e3', 'The target network supplies <span class="m">r</span> + <span class="m">γ</span> max <span class="m">Q</span><sub class="m">θ̄</sub>(<span class="m">s′</span>, ·).'],
+    ['e4', 'The gradient of the loss updates the online network.'],
+    ['e5', 'Its greedy action is the next treatment.'],
+  ];
+  async function hop(k) {
+    const { path, full } = edges[k], L = full.getTotalLength();
+    path.setAttribute('stroke', C.fg); path.setAttribute('stroke-width', 2.2); path.setAttribute('marker-end', 'url(#dq-a)');
+    dot.setAttribute('opacity', 1);
+    await tween(900, e => { const p = full.getPointAtLength(L * e); dot.setAttribute('cx', p.x); dot.setAttribute('cy', p.y); });
+    path.setAttribute('stroke', C.fg2); path.setAttribute('stroke-width', 1.4); path.setAttribute('marker-end', 'url(#dq-n)');
+  }
+  if (reduce) { cap.innerHTML = 'One transition per step: into the buffer, a sampled batch to the loss with the target network’s value, the gradient to the online network, and its greedy action back to the patient.'; return; }
+  (async () => {
+    for (let loop = 0; ; loop++) {
+      for (const [k, h] of STEPS) { cap.innerHTML = h; await hop(k); await wait(350); }
+      if (loop % 2 === 1) { cap.innerHTML = 'Every <span class="m">C</span> steps the target network copies θ.'; await hop('e6'); await wait(500); }
+      dot.setAttribute('opacity', 0); await wait(600);
+    }
+  })();
+})();
+
+/* ===================== Proschi-style diagrams ===================== */
+const KIND = { service: '#9A8CFF', store: '#C590FF', stream: '#FF7C6B', third: '#FFD9C2', actor: '#B9AAE8' };
+const ICON = {
+  actor: 'M8 7.2a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2zM2.6 14.5c.7-3 2.8-4.8 5.4-4.8s4.7 1.8 5.4 4.8',
+  service: 'M2.5 2.5h11v4.5h-11zM2.5 9h11v4.5h-11zM5 4.75h.01M5 11.25h.01',
+  db: 'M2.5 3.8c0 1 2.5 1.8 5.5 1.8s5.5-.8 5.5-1.8S11 2 8 2 2.5 2.8 2.5 3.8v8.4c0 1 2.5 1.8 5.5 1.8s5.5-.8 5.5-1.8V3.8M2.5 8c0 1 2.5 1.8 5.5 1.8s5.5-.8 5.5-1.8',
+  stream: 'M4 3.5a1.5 1.5 0 1 0 0 .01M4 12.5a1.5 1.5 0 1 0 0 .01M12 8a1.5 1.5 0 1 0 0 .01M5.4 4.3l5.2 3M5.4 11.7l5.2-3',
+  ext: 'M9.5 2.5h4v4M13.5 2.5 7.5 8.5M12 9.5v4H2.5V4h4',
+  files: 'M2.5 4.5h11v8.5h-11zM2.5 8.5h11M5.5 2.5h5',
+};
+function proschi(svg, spec, tabsEl, capEl) {
+  const id = svg.id, wait = gate(svg), CW = 168, CH = 52;
+  svg.setAttribute('viewBox', spec.vb); markers(svg, id);
+  const gG = el('g', {}, svg), gE = el('g', {}, svg), gN = el('g', {}, svg), gPo = el('g', {}, svg), gL = el('g', {}, svg), gT = el('g', {}, svg);
+  spec.groups.forEach(g => {
+    el('rect', { x: g.x, y: g.y, width: g.w, height: g.h, rx: 10, fill: 'rgba(243,237,255,.03)', stroke: 'rgba(243,237,255,.32)', 'stroke-width': 1.2, 'stroke-dasharray': '5 4' }, gG);
+    const lx = g.lx ?? g.x + 14, ly = g.y + 18;
+    el('path', { d: `M${lx} ${ly - 7} h4 l1.5 1.5 h5.5 v6.5 h-11 z`, fill: 'none', stroke: C.fg2, 'stroke-width': 1.1 }, gG);
+    txt(gG, lx + 16, ly, g.label, { 'font-size': 10, 'font-weight': 600, fill: C.fg2, 'letter-spacing': '.12em' });
+  });
+  const nodes = {};
+  for (const k in spec.nodes) {
+    const n = spec.nodes[k], col = KIND[n.kind], g = el('g', {}, gN);
+    el('rect', { x: n.x + 3, y: n.y + 3, width: CW, height: CH, rx: 4, fill: C.shadow }, g);
+    el('rect', { x: n.x, y: n.y, width: CW, height: CH, rx: 4, fill: C.panel, stroke: col, 'stroke-width': 2 }, g);
+    el('rect', { x: n.x + 1, y: n.y + 1, width: CW - 2, height: CH - 2, rx: 3, fill: col, opacity: .07 }, g);
+    el('rect', { x: n.x + 12, y: n.y + 12, width: 28, height: 28, rx: 4, fill: C.ink, stroke: col, 'stroke-width': 1.3 }, g);
+    el('path', { d: ICON[n.icon], transform: `translate(${n.x + 18} ${n.y + 18})`, fill: 'none', stroke: col, 'stroke-width': 1.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, g);
+    txt(g, n.x + 50, n.y + 23, n.name, { 'font-size': 13, 'font-weight': 600 });
+    const kd = txt(g, n.x + 50, n.y + 39, n.type, { 'font-size': 10, fill: C.fg2, class: 'kind' });
+    nodes[k] = g;
+  }
+  const edges = {};
+  spec.edges.forEach(e => {
+    const path = el('path', { d: rpath(trimEnd(e.p, 6)), fill: 'none', stroke: C.fg2, 'stroke-width': 1.3, 'marker-end': `url(#${id}-n)`, 'stroke-dasharray': e.dash ? '5 4' : 'none' }, gE);
+    const fwd = el('path', { d: rpath(e.p), fill: 'none', stroke: 'none' }, gE), rev = el('path', { d: rpath(e.p.slice().reverse()), fill: 'none', stroke: 'none' }, gE);
+    [e.p[0], e.p[e.p.length - 1]].forEach(([x, y]) => el('rect', { x: x - 3.5, y: y - 3.5, width: 7, height: 7, fill: C.ink, stroke: C.fg2, 'stroke-width': 1.2 }, gPo));
+    if (e.lab) {
+      const w = e.lab.length * 6.1 + 12, t = txt(gL, e.at[0], e.at[1] + 3.5, e.lab, { 'font-size': 10, 'text-anchor': 'middle', fill: C.fg2, class: 'kind' });
+      gL.insertBefore(el('rect', { x: e.at[0] - w / 2, y: e.at[1] - 8.5, width: w, height: 17, rx: 8.5, fill: C.bg }), t);
+    }
+    edges[e.a + '>' + e.b] = { path, fwd, rev };
+  });
+  const dot = el('circle', { r: 6.5, fill: C.coral, stroke: C.ink, 'stroke-width': 2, opacity: 0 }, gT);
+  const xm = el('path', { d: 'M-7 -7 L7 7 M7 -7 L-7 7', stroke: C.coral, 'stroke-width': 3.2, 'stroke-linecap': 'round', fill: 'none', opacity: 0 }, gT);
+  const resolve = h => { const [a, b] = h.replace('!', '').split('>'); return edges[a + '>' + b] ? { e: edges[a + '>' + b], p: 'fwd', k: a + '>' + b } : { e: edges[b + '>' + a], p: 'rev', k: b + '>' + a }; };
+  let token = 0;
+  function show(i) {
+    const sc = spec.scenarios[i], my = ++token;
+    [...tabsEl.children].forEach((b, j) => b.setAttribute('aria-pressed', String(j === i)));
+    capEl.textContent = sc.cap; xm.setAttribute('opacity', 0);
+    const used = new Set(sc.hops.map(h => resolve(h).k)), touched = new Set(sc.hops.flatMap(h => h.replace('!', '').split('>')));
+    Object.entries(edges).forEach(([k, e]) => { const on = used.has(k); e.path.style.opacity = on ? 1 : .22; e.path.setAttribute('stroke', on ? C.fg : C.fg2); e.path.setAttribute('stroke-width', on ? 2 : 1.3); e.path.setAttribute('marker-end', `url(#${id}-${on ? 'a' : 'n'})`); });
+    Object.entries(nodes).forEach(([k, g]) => g.style.opacity = touched.has(k) ? 1 : .35);
+    if (reduce) return;
+    (async () => {
+      for (;;) {
+        for (const h of sc.hops) {
+          if (my !== token) return;
+          const r = resolve(h), path = r.e[r.p], L = path.getTotalLength(), bad = h.endsWith('!');
+          dot.setAttribute('opacity', 1);
+          await tween(700, e => { const p = path.getPointAtLength(L * e * (bad ? .5 : 1)); dot.setAttribute('cx', p.x); dot.setAttribute('cy', p.y); });
+          if (my !== token) return;
+          if (bad) { const p = path.getPointAtLength(L * .5); xm.setAttribute('transform', `translate(${p.x} ${p.y})`); xm.setAttribute('opacity', 1); dot.setAttribute('opacity', 0); await wait(900); }
+          await wait(160);
+        }
+        dot.setAttribute('opacity', 0); await wait(1100); xm.setAttribute('opacity', 0);
+      }
+    })();
+  }
+  spec.scenarios.forEach((s, i) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = s.name; b.onclick = () => show(i); tabsEl.appendChild(b); });
+  show(spec.start ?? 0);
+}
+
+proschi(document.getElementById('rec'), {
+  vb: '0 0 890 460', start: 1,
+  groups: [{ x: 232, y: 46, w: 446, h: 278, label: 'RECOMMENDATION SERVICE' }, { x: 232, y: 342, w: 446, h: 108, label: 'COLD-START PROFILING' }],
+  nodes: {
+    client: { x: 20, y: 160, name: 'Viewer', type: 'Actor', kind: 'actor', icon: 'actor' },
+    api: { x: 250, y: 160, name: 'Router', type: 'Flask × 2', kind: 'service', icon: 'service' },
+    model: { x: 490, y: 70, name: 'Ranking model', type: 'LightGBM', kind: 'service', icon: 'service' },
+    cold: { x: 490, y: 250, name: 'Cold-start ranker', type: 'NumPy, 1.4 ms', kind: 'service', icon: 'service' },
+    log: { x: 710, y: 70, name: 'Inference log', type: 'PostgreSQL', kind: 'store', icon: 'db' },
+    profiles: { x: 710, y: 250, name: 'Taste profiles', type: 'SQLite', kind: 'store', icon: 'db' },
+    stream: { x: 250, y: 380, name: 'Event stream', type: 'Kafka', kind: 'stream', icon: 'stream' },
+    worker: { x: 490, y: 380, name: 'Profile worker', type: 'Python, async', kind: 'service', icon: 'service' },
+    llm: { x: 710, y: 380, name: 'Jev', type: 'TypeSafe', kind: 'third', icon: 'ext' },
+  },
+  edges: [
+    { a: 'client', b: 'api', p: [[188, 186], [250, 186]], lab: 'HTTP', at: [219, 186] },
+    { a: 'api', b: 'model', p: [[418, 176], [454, 176], [454, 96], [490, 96]], lab: 'in-process', at: [454, 136] },
+    { a: 'api', b: 'cold', p: [[418, 196], [454, 196], [454, 276], [490, 276]], lab: 'in-process', at: [454, 236] },
+    { a: 'cold', b: 'profiles', p: [[658, 276], [710, 276]], lab: 'SQL', at: [684, 276] },
+    { a: 'api', b: 'log', p: [[334, 160], [334, 24], [794, 24], [794, 70]], lab: 'background thread', at: [560, 24], dash: true },
+    { a: 'stream', b: 'worker', p: [[418, 406], [490, 406]], lab: 'consume', at: [454, 406] },
+    { a: 'worker', b: 'llm', p: [[658, 406], [710, 406]], lab: 'ask', at: [684, 406] },
+    { a: 'worker', b: 'profiles', p: [[600, 380], [600, 333], [794, 333], [794, 302]], lab: 'SQL write', at: [700, 333] },
+  ],
+  scenarios: [
+    { name: 'Known user', cap: 'The model answers with 20 films inside the latency budget.', hops: ['client>api', 'api>model', 'model>api', 'api>client', 'api>log'] },
+    { name: 'New user', cap: 'No history, so the cold-start ranker reads the taste profile Jev already wrote.', hops: ['client>api', 'api>model', 'model>api', 'api>cold', 'cold>profiles', 'profiles>cold', 'cold>api', 'api>client'] },
+    { name: 'Off the request path', cap: 'A sign-up event reaches the worker, Jev turns the description into a taste profile, and it is stored before the first request.', hops: ['stream>worker', 'worker>llm', 'llm>worker', 'worker>profiles'] },
+    { name: 'Model fails', cap: 'The router answers anyway from a fallback list. Requests never wait on Jev or the logger.', hops: ['client>api', 'api>model!', 'api>client'] },
+  ],
+}, document.getElementById('rec-tabs'), document.getElementById('rec-cap'));
+
+proschi(document.getElementById('fifa'), {
+  vb: '0 0 880 540',
+  groups: [{ x: 232, y: 106, w: 206, h: 102, label: 'INGESTION', lx: 342 }, { x: 12, y: 340, w: 636, h: 188, label: 'RATING MODELS', lx: 100 }, { x: 674, y: 12, w: 198, h: 374, label: 'COMMENT STREAMING' }],
+  nodes: {
+    analyst: { x: 30, y: 30, name: 'Analyst', type: 'Actor', kind: 'actor', icon: 'actor' },
+    csvs: { x: 250, y: 30, name: 'Player tables', type: 'CSV, 8 seasons', kind: 'store', icon: 'files' },
+    loader: { x: 250, y: 140, name: 'Spark loader', type: 'PySpark', kind: 'service', icon: 'service' },
+    players: { x: 250, y: 250, name: 'fifa.players', type: 'PostgreSQL', kind: 'store', icon: 'db' },
+    features: { x: 250, y: 370, name: 'Feature pipeline', type: 'Spark ML', kind: 'service', icon: 'service' },
+    mllib: { x: 30, y: 460, name: 'Spark MLlib', type: 'RF and GBT', kind: 'service', icon: 'service' },
+    shards: { x: 470, y: 460, name: 'Training shards', type: 'MosaicML', kind: 'store', icon: 'files' },
+    torch: { x: 470, y: 370, name: 'PyTorch MLPs', type: 'Python', kind: 'service', icon: 'service' },
+    youtube: { x: 690, y: 48, name: 'YouTube Data API', type: 'Third party', kind: 'third', icon: 'ext' },
+    producer: { x: 690, y: 138, name: 'Producer', type: 'Python', kind: 'service', icon: 'service' },
+    topic: { x: 690, y: 228, name: 'Comment topic', type: 'Kafka', kind: 'stream', icon: 'stream' },
+    consumer: { x: 690, y: 318, name: 'Consumer', type: 'Leaderboard', kind: 'service', icon: 'service' },
+  },
+  edges: [
+    { a: 'analyst', b: 'loader', p: [[140, 82], [140, 166], [250, 166]], lab: 'run ingestion', at: [195, 166] },
+    { a: 'csvs', b: 'loader', p: [[334, 82], [334, 140]], lab: 'read CSV', at: [334, 111] },
+    { a: 'loader', b: 'players', p: [[334, 192], [334, 250]], lab: 'JDBC write', at: [334, 229] },
+    { a: 'analyst', b: 'features', p: [[80, 82], [80, 396], [250, 396]], lab: 'run modelling', at: [80, 250] },
+    { a: 'features', b: 'players', p: [[334, 370], [334, 302]], lab: 'JDBC read', at: [334, 330] },
+    { a: 'features', b: 'mllib', p: [[300, 422], [300, 486], [198, 486]], lab: 'in-process', at: [249, 486] },
+    { a: 'features', b: 'shards', p: [[418, 406], [444, 406], [444, 486], [470, 486]], lab: 'write shards', at: [444, 446] },
+    { a: 'torch', b: 'shards', p: [[554, 422], [554, 460]], lab: 'stream batches', at: [554, 441] },
+    { a: 'producer', b: 'youtube', p: [[774, 138], [774, 100]], lab: 'HTTPS', at: [774, 119] },
+    { a: 'producer', b: 'topic', p: [[774, 190], [774, 228]], lab: 'publish', at: [774, 209] },
+    { a: 'topic', b: 'consumer', p: [[774, 280], [774, 318]], lab: 'consume', at: [774, 299] },
+  ],
+  scenarios: [
+    { name: 'Load the player tables', cap: 'Eight seasons of player CSVs, male and female, unioned into one Postgres table.', hops: ['analyst>loader', 'loader>csvs', 'csvs>loader', 'loader>players', 'players>loader', 'loader>analyst'] },
+    { name: 'Count player mentions', cap: 'Video comments stream through Kafka to a live mention leaderboard, off the modelling path.', hops: ['producer>youtube', 'youtube>producer', 'producer>topic', 'topic>consumer'] },
+    { name: 'Train the rating models', cap: 'Spark ML builds the features, MLlib fits the trees in process, and the PyTorch MLPs stream MosaicML shards.', hops: ['analyst>features', 'features>players', 'players>features', 'features>mllib', 'mllib>features', 'features>shards', 'torch>shards', 'shards>torch', 'features>analyst'] },
+  ],
+}, document.getElementById('fifa-tabs'), document.getElementById('fifa-cap'));
+
+/* kind-label face */
+document.querySelectorAll('.toggle button').forEach(b => b.addEventListener('click', () => {
+  const mono = b.dataset.face === 'mono', r = document.documentElement.style;
+  r.setProperty('--kindfont', mono ? 'var(--mono)' : 'var(--text)'); r.setProperty('--kindcase', mono ? 'none' : 'uppercase'); r.setProperty('--kindtrack', mono ? '0' : '.08em');
+  document.querySelectorAll('.toggle button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+}));
+</script>
