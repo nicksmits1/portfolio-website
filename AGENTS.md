@@ -10,7 +10,7 @@ Direction chosen: **draft E, descent** (`drafts/e-descent.html`). The site is bu
 
 ## The repo is public
 
-Commit only what may appear on the public site. The private CV (`Nicolas_Smits_Resume_Oct_2026_ML.md`) holds a personal phone number, so it stays local and gitignored. Read it for facts; never commit it. The public CV is `content/cv/cv.md`; `tools/cv/build.sh` renders it to the downloadable `content/cv/Nicolas_Smits_CV.pdf` (rebuild and commit both after any edit).
+Commit only what may appear on the public site. The private CV (`Nicolas_Smits_Resume_Oct_2026_ML.md`) holds a personal phone number, so it stays local and gitignored. Read it for facts; never commit it. The public CV is `content/cv/cv.tex`: Nicolas's own LaTeX CV with the phone number line removed, and nothing else changed. Keep his template's formatting exactly (no colour, no restyling); when entries are added, style them like his latest uncommented entries. `tools/cv/build.sh` compiles it to the downloadable `content/cv/Nicolas_Smits_CV.pdf` and refuses a file that still holds a phone number; commit both after any edit.
 
 `/assets/` at the repo root is Nicolas's upload inbox and is gitignored. Process what he drops there (resize, strip metadata) into `content/assets/<project or profile>/` and commit only the processed copy.
 
@@ -42,9 +42,11 @@ Headings are short noun phrases that name their topic, such as Motivation, Formu
 
 Separate items in meta lines, eyebrows and citations with spacing (each item its own span) or plain punctuation (a comma or full stop); page titles use `Name | Nicolas Smits`. A middle dot (`·`) never appears between items: it reads as machine-made. The `·` in maths (`\cdot`) is multiplication and stays.
 
+A caption that changes as a figure animates names the step in two to four words ("Node and arc embedding", "Candidate arc scoring", "Stop"), never a sentence. Explanation belongs in the section prose or a variable legend under the figure, not inside the drawing.
+
 ## Design work
 
-Use `/impeccable` for any interface change, and hold every change to `DESIGN.md`. Every animation needs a reduced-motion still that shows the result. Book of Shapes patterns may appear as generated output on the site; their node graphs and source are not licensed, so flow fields here are drawn by our own implementation (`streamlines` in `src/scripts/flow.ts`).
+Use `/impeccable` for any interface change, and hold every change to `DESIGN.md`. Every animation needs a reduced-motion still that shows the result. Callouts, quotes, captions and formula boxes are set apart by spacing and type alone: no coloured side rule (`border-left`/`border-right` accent bar) and no tinted side highlight. Book of Shapes patterns may appear as generated output on the site; their node graphs and source are not licensed, so flow fields here are drawn by our own implementation (`streamlines` in `src/scripts/flow.ts`).
 
 ## Previewing
 

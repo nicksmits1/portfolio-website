@@ -1,14 +1,12 @@
 #!/bin/sh
-# Builds the public CV: content/cv/cv.md -> content/cv/Nicolas_Smits_CV.pdf (needs pandoc and Google Chrome).
-# The private CV (Nicolas_Smits_Resume_*.md, holds a phone number) is never an input here.
+# Builds the public CV: content/cv/cv.tex -> content/cv/Nicolas_Smits_CV.pdf (needs pdflatex with fontawesome5).
+# cv.tex is Nicolas's own LaTeX CV with the phone number removed; keep his formatting exactly.
 set -e
 cd "$(dirname "$0")/../.."
-OUT=content/cv
+if grep -q 'faPhone' content/cv/cv.tex; then echo "cv.tex holds a phone number; the repo is public" >&2; exit 1; fi
 TMP=$(mktemp -d)
-pandoc "$OUT/cv.md" --from markdown --to html5 --template tools/cv/template.html -o "$TMP/cv.html"
-CH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-"$CH" --headless=new --disable-gpu --no-pdf-header-footer --virtual-time-budget=8000 \
-  --print-to-pdf="$PWD/$OUT/Nicolas_Smits_CV.pdf" "file://$TMP/cv.html" >/dev/null 2>&1
-cp "$TMP/cv.html" "$OUT/cv.html"
+cp content/cv/cv.tex "$TMP/"
+(cd "$TMP" && pdflatex -interaction=nonstopmode -halt-on-error cv.tex >/dev/null && pdflatex -interaction=nonstopmode -halt-on-error cv.tex >/dev/null)
+cp "$TMP/cv.pdf" content/cv/Nicolas_Smits_CV.pdf
 rm -rf "$TMP"
-ls -la "$OUT/Nicolas_Smits_CV.pdf"
+ls -la content/cv/Nicolas_Smits_CV.pdf

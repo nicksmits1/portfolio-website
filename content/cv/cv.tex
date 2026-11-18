@@ -1,0 +1,465 @@
+%-------------------------
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+\usepackage{fontawesome5}
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+\renewcommand{\familydefault}{\sfdefault}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\sffamily\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+
+% One place to control heading font size (choose \small or \normalsize)
+\newcommand{\headingfontsize}{\normalsize}
+
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item\small
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\renewcommand{\resumeSubheading}[4]{%
+  \vspace{-2pt}\item
+  \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    {\headingfontsize\textbf{#1}} & {\headingfontsize #2} \\
+    {\small\textit{#3}} & {\small\textit{#4}} \\
+  \end{tabular*}\vspace{-2pt}%
+}
+
+\newcommand{\courseworkSubheading}[2]{
+    \item
+    \vspace{-15pt}\item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-15pt}
+}
+
+\newcommand{\gpaSubheading}[2]{
+    \item
+    \vspace{-15pt}\item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-15pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item\small
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+% Company-only header (one line: company | location)
+\newcommand{\companyHeading}[2]{%
+  \vspace{-2pt}\item\small
+  \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{#1} & #2 \\
+  \end{tabular*}\vspace{-4pt}
+}
+
+% Role line (title | dates) with tighter spacing
+\newcommand{\positionHeading}[2]{%
+  \vspace{-2pt}
+  \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+    \textit{\small #1} & \textit{\small #2} \\
+  \end{tabular*}\vspace{-6pt}
+}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%----------HEADING----------
+\vspace{1pt}
+
+\begin{center}
+    \textbf{\Huge \scshape Nicolas Smits} \\ \vspace{1pt}
+    \small \href{mailto:nsmits@andrew.cmu.edu}{\faEnvelope \space \underline{nsmits@andrew.cmu.edu}} $|$ 
+    \href{https://linkedin.com/in/nicolas-smits}{\faLinkedin \space \underline{linkedin.com/in/nicolas-smits}} $|$
+    \href{https://github.com/nicksmits1}{\faGithub \space \underline{github.com/nicksmits1}}
+\end{center}
+\vspace{-20pt}
+
+%-----------Summary-----------
+% \begin{center}
+%     \footnotesize
+%     AI/ML engineer with a chemical and process-engineering background, building ML tools, data pipelines, and scientific software for industrial R\&D and operations. Experienced translating domain requirements into tested Python systems, cloud deployments, and decision-support tools across process modeling, manufacturing, energy, biotech, and supply chains.
+% \end{center}
+
+% \vspace{-20pt}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {\small{Carnegie Mellon University}}{\small{Pittsburgh, PA}}
+      {Master of Science in Artificial Intelligence Engineering - Chemical Engineering}{Dec 2026}
+
+    % \vspace{-1pt}
+    % \small{\textbf{Thesis:} Reinforcement Learning for Supply Chain Network Design}
+
+    % \newline
+    % \small{\textbf{Coursework:} \href{https://www.andrew.cmu.edu/user/mfarag/763/Lecture_1_Introduction.pdf}{Systems and Toolchains for AI \faExternalLink*} Engineers, \href{https://18-786.github.io/}{Deep Learning for Engineers \faExternalLink*},  \href{https://www.cs.cmu.edu/~mgormley/courses/10423/schedule.html}{Generative AI \faExternalLink*}} \quad\quad\quad\quad\quad\quad\quad\quad\quad
+    % % \newline 
+    % \vspace{-5pt}
+    % \small{\textbf{Involvement:} Chemical Engineering Masters Student Association (ChEMSA) Treasurer} 
+    
+    \vspace{-3pt}
+    \small{\textbf{GPA: } 3.99/4.00}
+
+    \vspace{-3pt}
+    
+    \resumeSubheading
+      {\small{McGill University}}{\small{Montreal, Canada}}
+      {Bachelor of Chemical Engineering, Minor in Applied Artificial Intelligence}{May 2025}
+    \vspace{-2pt}
+
+    % \small{\textbf{Relevant Coursework:} Machine Learning, Deep Learning, Reinforcement Learning, Engineering Systems Optimization}
+    % \vspace{-5pt}
+    
+    % \small{\textbf{Achievements / Involvement:} Capstone Plant Design project ranked 1\textsuperscript{st} in 2025 Cohort. McGill Rocket Team (2023-2024)}
+    % \vspace{-5pt}
+    
+    % -----------
+    % \small{\textbf{Capstone Project:} Design of a container-sized biogas upgrading plant (in collaboration with IVYS Adsorption). Ranked 1st out of 2025 cohort and nominated to represent McGill at CSChE Conference Plant Design Competition}
+    %------------
+
+    % -----------
+    % \small \textbf{Achievements: }Capstone Plant Design ranked 1\textsuperscript{st} in 2025 Cohort. Selected by faculty as top project; nominated to represent McGill at the CSChE Plant Design Competition.
+    % % \vspace{-2pt}
+    % \newline
+    % -----------
+    \small{\textbf{GPA: } 3.73/4.00}
+    
+  \resumeSubHeadingListEnd
+
+\vspace{-17pt}
+
+%
+%-----------SKILLS AI/ML-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+        % \textbf{Process Engineering}{: Mass \& Energy Balances, Unit Operations, Thermodynamics, Heat \& Mass Transfer, Reaction Engineering, PFDs/P\&IDs, Equipment Sizing, Process Control (PID, Cascade, Feed-Forward), HAZOP}/safety\\
+        % \textbf{Simulation \& Analysis}{: Aspen HYSYS/Plus, IDAES, AutoCAD, Excel, MATLAB, OpenLCA, Ansys Granta, Altair Embed} \\
+        % \textbf{Product/Process Development}{: Techno-Economic Analysis (TEA), Life-Cycle Assessment (introductory), Data Analysis} \\
+        % \textbf{Chemical Engineering:}{ Aspen HYSYS, Ansys Granta EduPak, Altair Embed, Excel}\\
+        % \textbf{Developer Tools}{: Git, Github, Docker, CI/CD, Apache Spark, SQL, Agents, MCP, Agent CLI, Agent Harnesses, Postgres, Neo4j, Apache Kafka, HuggingFace, Confluent, AWS, Google Cloud Platform (Cloud SQL, DataProc, Hadoop), JAX, Wandb, MLFlow, Accelerate} \\
+        
+     \textbf{Programming Languages}{: Python, Java, MATLAB} \\
+     \textbf{Machine Learning}: PyTorch, scikit-learn, TensorFlow/Keras, JAX, Hugging Face, Ray/RLlib \\
+     \textbf{Data \& Systems}: Flask, PostgreSQL, SQL, Apache Spark, Kafka, Gunicorn, Neo4j, Hadoop, REST APIs, pytest, \\
+     \textbf{Libraries}{: PyTorch, TensorFlow, Scikit-Learn, Keras, Gymnasium, Numpy, Pandas, Matplotlib, MosaicML, Seaborn, Ray, RLlib}\\
+     \textbf{Agentic AI Engineering}: Agent harness design, tool calling, MCP, agent skills, CLI automation, agent orchestration \\
+     \textbf{Cloud \& MLOps}: Docker (Compose), Git, GitHub Actions, MLflow, Weights \& Biases, Prometheus, Grafana, AWS, GCP \\
+     % \textbf{Engineering \& Optimization}: ODE/DAE modeling, nonlinear optimization, process modeling and control, Aspen HYSYS \\
+     \textbf{Languages}{: English (Native), French (Fluent), Dutch (Fluent), German (Intermediate)}}}
+ \end{itemize}
+  
+\vspace{-18pt}
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+%-----------ROLE 1---------------
+    \companyHeading
+      {Center for Advanced Process Decision Making (CAPD)}{Pittsburgh, PA}
+    \positionHeading
+    {Graduate Research Assistant}{Jun 2026 - Aug 2026}
+    \resumeItemListStart
+        \resumeItem{Developed and deployed the open source Simultaneous Neural Differential Algebraic Equation (SiNDAE) Python package based on novel Hybrid Differential Algebraic Equations training methods developed at CAPD, allowing data-driven neural network surrogates to be embedded in process models and trained using Non-Linear Program (NLP) solvers.}
+        \resumeItem{Wrote detailed technical documentation of package functionality and application examples spanning process control, bioprocess kinetics, and dynamical systems, deploying automated docs via Jupyter Book and CI/CD github workflows.}
+        \resumeItem{Integrated and tested additional NLP solvers using Test-Driven-Development (TDD) and Agentic development workflows, shortening development time while ensuring codebase robustness, maintainability. Publication in JOSS pending.}
+    \resumeItemListEnd
+%-------------------------------
+
+%-----------ROLE 2---------------
+    \companyHeading
+      {HydrateTech Laboratory}{Montreal, Canada}
+    \positionHeading
+    {Computational Research Assistant}{May 2024 - Jul 2024}
+    \resumeItemListStart
+
+        \resumeItem{Implemented a Python tool and adapted GRADE hydrate cage identification algorithm with custom Depth-First Search (DFS), allowing partially formed molecular cage recognition, enabling entropy analysis for CO2 sequestration studies.}
+        % \resumeItem{Implemented a Python tool using an object-oriented framework based on researcher design requirements and Molecular Dynamics (MD), enabling accurate structure and entropy analysis for CO2 sequestration studies.}
+        
+        % \resumeItem{Designed an adaptation of the GRADE hydrate cage identification algorithm using custom Depth-First Search (DFS), enabling ring and partially formed cage recognition, informing heuristic hydrate entropy metrics.}
+        % \resumeItem{Implemented a Python tool using an object-oriented framework based on researcher design requirements and Molecular Dynamics (MD), enabling accurate structure and entropy analysis for CO2 sequestration studies.}
+        % \vspace{-10pt}
+        \resumeItem{Optimized geometric validation routines across diverse hydrate-host systems, achieving a 97\% detection accuracy.}
+        % \resumeItem{Supported future research reproducibility through detailed documentation and reports.}
+    \resumeItemListEnd
+%-------------------------------
+
+%-----------ROLE 3---------------
+    \companyHeading
+      {Lhoist Group}{Nivelles, Belgium}
+
+    \positionHeading
+    {R\&D Engineer Intern (Flue Gas Treatment)}{Jun 2022 - Jul 2022 \& Jun 2023 - Aug 2023}
+    \resumeItemListStart
+      \resumeItem{Developed a FGT kinetic process model using Python (scipy) for Lhoist's Sorbacal\textregistered sorbents for a scrubbing pilot reactor, capturing previously not modeled second order reaction dynamics and stoichiometric ratio vs conversion relationship.}
+      \resumeItem{Improved upon simple legacy process model to include HCl, SO2, and CO2 secondary reactions, and temperature dependence, improving model robustness, enabling 50\% MSE reduction, validated against pilot reactor data.}
+      \resumeItem{Tuned stiff ODE solvers and built an Excel (openpyxl) front-end for a Python back-end, facilitating real-time simulations and rate constant estimation for engineers and experimentalists.}
+      % \resumeItem{Performed parameter estimation combining numerical methods, optimization, and statistical validation to derive robust reaction constants, increasing confidence in model reliability while providing physical insights for engineers.}
+      % \resumeItem{Validated model against pilot reactor data, refining understanding of sorbent reactions, informing product development.}
+      % \resumeItem{Investigated Physics Informed Neural Networks (PINNs) as an alternative parameter estimation approach.}
+    \resumeItemListEnd
+%-------------------------------
+
+  \resumeSubHeadingListEnd % Ends company list
+
+\vspace{-15pt}
+
+%-----------PROJECTS-----------
+\section{Projects}
+
+\resumeSubHeadingListStart
+
+% --------- RL for SC Design with GNNs -------------
+  \resumeProjectHeading
+  {\textbf{Graph Reinforcement Learning for Resilient Supply Chain Network Design} $|$ \emph{Thesis}}{\emph{CMU} $|$ \textit{Jan 2026 - Present}}
+  \resumeItemListStart
+    \resumeItem{Designed a graph RL agent (GATv2 encoder with Double DQN, PyTorch Geometric) that learns which transport links to add to a supply chain network so that customer demand is still met when plants, warehouses, or routes fail.}
+    \resumeItem{Developed a size-independent Q-network that scores each candidate link from its endpoint embeddings, allowing a policy trained on small networks to design networks 4$\times$larger without retraining.}
+    \resumeItem{Built the multi-echelon inventory simulator, failure-scenario evaluation, and a parallel, resumable experiment pipeline on a 32-core server, with held-out test networks and statistical acceptance criteria fixed before any results were examined.}
+    \resumeItem{First-author abstract prepared for ESCAPE 37 (Trondheim, 2027); codebase developed test-first with agentic workflows.}
+  \resumeItemListEnd
+
+
+\resumeProjectHeading
+  {\textbf{Production Movie Recommendation Service with LLM Cold Start}}{\emph{CMU} $|$ \textit{Sep 2026 - Present}}
+  \resumeItemListStart
+    \resumeItem{Developed and deployed a containerized recommendation service (Flask, Gunicorn, Docker Compose) on a Linux AWS VM for a simulated streaming platform of 1M users, serving 500k+ live requests within a 600 ms latency requirement.}
+    \resumeItem{Designed an asynchronous LLM cold-start pipeline in which a Kafka consumer submits each new user's free-text preferences to TypeSafe's Jev model to extract a structured taste profile, before a vectorized NumPy ranker converts into recommendations in 1.4 ms, personalizing results before the median user's first request at an LLM cost of \$1/day.}
+    \resumeItem{Benchmarked content-based filtering, SVD collaborative filtering, and LightGBM LambdaMART on a chronological split, deploying LightGBM for a 2.2x NDCG@20 improvement over SVD at 139 ms P95 latency.}
+    % ---- M2 (Oct): uncomment once shipped ----
+    % \resumeItem{Automated model retraining and deployment, integrated pytest suites with coverage reporting into GitHub Actions CI, and implemented schema validation and drift detection across the Kafka stream and external APIs.}
+    % \resumeItem{Implemented online evaluation of recommendation accuracy alongside per-request licensing and LLM costs, comparing production results against offline NDCG@20 estimates.}
+    % ---- M3 (Nov) ----
+    % \resumeItem{Built Prometheus and Grafana monitoring with alerting for availability, online accuracy, cost, and data drift, maintaining [X]\% availability over 7 days across [N] zero-downtime model updates.}
+    % \resumeItem{Developed an A/B testing framework with hash-based user assignment and [TEST] significance testing, evaluating the Jev cold-start pipeline ([RESULT]) and cost-aware ranking ([RESULT]).}
+    % \resumeItem{Implemented provenance tracking linking each recommendation to its model version, pipeline commit, and training data, and authored an incident response plan validated through a live failure drill.}
+    % ---- M4 (Dec) ----
+    % \resumeItem{Audited fairness, security, safety, and feedback-loop risks using production telemetry, deploying and evaluating a mitigation for each, and authored a blameless postmortem following a production incident.}
+  \resumeItemListEnd
+
+    
+% ------- GenAI Multi Modal RAG QA---------
+% \resumeProjectHeading
+%     {\textbf{Multimodal RAG Pipeline for Grounded Document QA}}{\emph{CMU} $|$ \textit{Jan 2026 - Present}}
+%     \resumeItemListStart
+%       \resumeItem{Built a multimodal RAG pipeline using a frozen ColQwen3 retriever for page-image retrieval and a Qwen3-VL generator fine-tuned with LoRA on teacher-distilled, evidence-conditioned supervision.}
+%       \resumeItem{Evaluated 3 configurations (vanilla VLM, VLM+RAG, VLM+RAG+LoRA fine-tuning) on the REAL-MM-RAG benchmark (8k pages, 5k queries) across answer quality (BERTScore, LLM-as-a-Judge), and groundedness metrics.}
+%       \resumeItem{Designed ablations on training signal quality and input modality (OCR text vs. page images) to isolate the effects of supervision and visual grounding on generation performance.}
+%     \resumeItemListEnd
+
+
+% ------- GenAI PEFT Assignment ---------
+% \resumeProjectHeading
+%     {\textbf{LLM Fine-Tuning, Alignment \& Generative AI Coursework}}{\emph{CMU} $|$ \textit{Jan 2026 - Present}}
+%     \resumeItemListStart
+%       \resumeItem{Implemented LoRA from scratch for GPT-2 Medium, applying low-rank adaptation to attention layers (Q, K, V) and conducting ablation studies across rank, alpha scaling, and prompt design with WandB experiment tracking.}
+%       \resumeItem{Derived and analyzed the full DPO objective (KL-regularized reward reparameterization, Bradley-Terry preference model, gradient analysis), connecting RLHF policy optimization to supervised preference learning.}
+%       \resumeItem{Designed instruction fine-tuning pipelines with custom prompt templates, achieving 88.67\% sentiment classification accuracy on Rotten Tomatoes with LoRA (r=196) versus 85.08\% with full fine-tuning.}
+%     \resumeItemListEnd
+
+
+% \resumeProjectHeading {\textbf{FIFA Player ETL Platform, Streaming Analytics \& Cloud ML Pipeline \faGithub}}{\emph{CMU} $|$ \textit{Sep 2025 - Dec 2025}}
+%   \resumeItemListStart
+%     % \resumeItem{Developed an end-to-end pipeline on the Sofifa Kaggle dataset (2015–2022) integrating PySpark ETL with PostgreSQL for unified analytics; performed preprocessing and feature engineering for downstream ML modeling and evaluation.}
+%     \resumeItem{Developed an end-to-end pipeline on the Sofifa Kaggle dataset (2015–2022) integrating PySpark ETL with PostgreSQL.}
+%     % \resumeItem{Streamed real-time YouTube comments via the YouTube API using a Kafka producer–consumer model to assess player popularity, applying lightweight NLP to aggregate mentions and sentiment trends.}
+%     \resumeItem{Implemented ML models including Random Forest Regressor and Gradient Boosting Tree (SparkML), as well as both deep and shallow MLPs (PyTorch) to predict player overall rating from player skills, achieving $R^2\ge$ 96\%.}
+%     % \resumeItem{Conducted preprocessing and feature engineering (numeric scaling, categorical encoding, outlier filtering) and performed model comparison using RMSE and $R^2$ metrics on held-out data.}
+%     \resumeItem{Containerized services and deployed inference on Google Cloud Platform, connecting a containerized PostgreSQL instance on a cloud VM to a Dataproc Hadoop Cluster, ensuring reproducibility, version control, and modular pipeline structure.}
+%   \resumeItemListEnd
+
+  % -------- Biogas Upgrading Plant Capstone VERSION 1 --------
+    % \resumeProjectHeading
+    %   {\textbf{Biogas Upgrading Plant Capstone (IVYS Adsorption)} $|$ \emph{Capstone}}{\textit{Fall 2024 -- Winter 2025}}
+    %   \resumeItemListStart
+    %     \resumeItem{Collaborated in a team with industry partner IVYS Adsorption for 8 months to design a 1000 Nm$^3$/h biogas upgrading plant, integrating adsorption, membranes, and PSA in a container sized plant, meeting RNG purity \>97\% pipeline purity.}
+    %     \resumeItem{Completed mass and energy balances in Aspen HYSYS, detailed equipment sizing, 3D plant layout, and full control strategy, establishing operational parameters for contaminant removal and CO$_2$ separation.}
+    %     \resumeItem{Created industry-level PFDs, P\&IDs (AutoCAD), and control narratives, as well as a membrane modeling framework.}
+        
+    %     \resumeItem{Performed techno-economic analysis (CAPEX, OPEX, IRR, NPV, PP), demonstrating project viability.}
+    %     % \resumeItem{Conducted Life Cycle Assessment (LCA) benchmarking against amine scrubbing, showing 8,000 tons CO$_2$/yr captured and clear environmental benefits of adsorption-based upgrading.}
+    %   \resumeItemListEnd
+
+  
+  % -------- Biogas Upgrading Plant Capstone VERSION 2 --------
+  % \resumeProjectHeading
+  % {\textbf{Biogas Upgrading Plant (IVYS Adsorption)} $|$ \emph{Aspen HYSYS, AutoCAD}}{\textit{Sep 2024 -- Apr 2025}}
+  %   \resumeItemListStart
+  %     \resumeItem{Designed a 700--1000~Nm$^3$/h upgrading train (adsorption + membranes + PSA) in a 4-person team with industry partner, targeting \>97\% CH$_4$ RNG.}
+  %     \resumeItem{Delivered PFDs/P\&IDs, M\&EB in Aspen HYSYS, equipment sizing, and control narratives; completed TEA (NPV/IRR) to demonstrate viability.}
+  %     \resumeItem{Coordinated 8-month schedule and design reviews, meeting all stage-gate deliverables on time.}
+  % \resumeItemListEnd
+
+% -------- ICU-Sepsis RL Project --------
+  % \resumeProjectHeading {\href{https://github.com/nicksmits1/COMP-579-Reinforcement-Learning}{\textbf{Deep Reinforcement Learning for Sepsis Treatment in the ICU \faGithub}}}{\emph{McGill} $|$ \textit{Jan 2025 - Apr 2025}}
+  %     \resumeItemListStart
+  %       \resumeItem{Implemented multiple DQN variants (Double, Dueling, Prioritized, Multi-Step, Rainbow) in the ICU-Sepsis-v2 environment, modeling patient treatment as an MDP to improve treatment decision making.}
+  %       \resumeItem{Benchmarked DQN algorithms across 300k training episodes and 10 random seeds, revealing that Dueling DQN achieved the highest final return with improved convergence speeds over alternatives.}
+  %       \resumeItem{Analyzed learning dynamics, showing that prioritized replay accelerated convergence by 100k episodes, and other DQN variants' sensitivity to hyperparameters}
+  %     \resumeItemListEnd
+
+  % -------- Day-Ahead Electricity Price Forecasting --------
+  % \resumeProjectHeading
+  %     % {\textbf{Energy-Efficient Day-Ahead Electricity Forecasting} $|$ \emph{LSTM, Transformer, SARIMA}}{\textit{Jan 2025 - Apr 2025}}
+  %     {\textbf{Energy-Efficient Day-Ahead Electricity Price Forecasting}}{\emph{McGill} $|$ \textit{Jan 2025 - Apr 2025}}
+  %     \resumeItemListStart
+  %       \resumeItem{Developed (in a team of 4) SARIMA, RNN, LSTM, hybrid CNN-LSTM, and Transformer models trained on 4 years of ERCOT market and NOAA weather data to forecast day-ahead electricity prices, documented in NeurIPS-style report.}
+  %       \resumeItem{Demonstrated tuned CNN-LSTM outperformed baselines SARIMA model by 2$\times$ in RMSE and MAE, capturing volatile price spikes and improving generalization capacity while using few input features.}
+  %       \resumeItem{Applied compound scaling to CNN, reducing training energy consumption by 12\%/epoch with accuracy maintained.}
+  %     \resumeItemListEnd
+
+ % -------- Emotion Classification with LLMs Project --------
+  % \resumeProjectHeading
+  % {\href{https://github.com/nicksmits1/COMP-551-ml-projects}{\textbf{Emotion Classification with LLM Finetuning (SFT)} \faGithub}}{\emph{McGill} $|$ \textit{Sep 2024 - Dec 2024}}
+  %   \resumeItemListStart
+  %     \resumeItem{Benchmarked classical models (Softmax Regression, Random Forest, XGBoost) against a fine-tuned BERT using PyTorch/Hugging Face on the 58k-sample GoEmotions dataset, showing transformers outperform baselines.}
+  %     \resumeItem{Fine-tuned and optimized BERT (preprocessing, class balancing, hyperparameter tuning) to a 30\% accuracy improvement; analyzed attention heads to interpret decisions, revealing rare-class gaps informing augmentation strategy.}
+  %     \resumeItem{Trained model on SLURM compute cluster, scheduling jobs via bash files, leveraging large scale distributed resources.}
+  %   \resumeItemListEnd
+
+
+  % -------- Stem Cell Bioprocess Project --------
+  % \resumeProjectHeading
+  %     {\textbf{Stem Cell Bioprocess Engineering for Myocardial Infarction Therapy}}{McGill $|$ \textit{Jan 2024 - Apr 2024}}
+  %     \resumeItemListStart
+  %       \resumeItem{Lead a team of 4 to design upstream bioprocess for adipose-derived mesenchymal stem cells (AT-MSCs), including medium selection, sterilization protocol, and control strategies, to support large-scale autologous therapy production.}
+  %       % \resumeItem{Modelled MSC growth kinetics using exponential regression fits to microcarrier-based STBR data, deriving specific growth rates to size bioreactor cultures and predict cells per batch yields.}
+  %       \resumeItem{Modeled MSC growth kinetics from microcarrier STBR data to derive growth rates, size bioreactors, and predict yield.}
+        
+  %       \resumeItem{Developed process flow diagram (BFD) and defined culture transition stages (isolation → monolayer → microcarrier → bioreactor expansion), establishing a scalable 14-day upstream process.}
+  %       % \resumeItem{Integrated plans for  PID and cascade control strategies for temperature, pH, and dissolved oxygen regulation in 5L Biostat STBRs, ensuring compliance with cGMP bioprocess standards.}
+  %     \resumeItemListEnd
+
+  % % -------- McGill Rocket Team --------
+%   \resumeProjectHeading
+%         % {\textbf{McGill Rocket Team – Propulsion Sub-team Member} $|$ \emph{Excel, Siemens NX}}{\textit{Sep 2023 - Apr 2024}}
+%         {\textbf{McGill Rocket Team – Propulsion Sub-team Member}}{\emph{McGill University} $|$
+%         \textit{Sep 2023 - Apr 2024}}
+%         \resumeItemListStart
+%             \resumeItem{Contributed to a 50+ member interdisciplinary team designing a liquid-fueled rocket for the Spaceport America Cup, gaining experience in large-scale collaborative engineering design.}
+%           \resumeItem{Completed preliminary oxidizer tank design using ASME pressure vessel guidelines, performing stress calculations and Siemens NX FEA to validate structural integrity.}
+%         \resumeItemListEnd
+          
+\resumeSubHeadingListEnd
+
+\vspace{-15pt}
+
+%  \section{Certifications}
+% \begin{itemize}[leftmargin=0.15in, label={}]
+%     \small{\item{
+%     \textbf{\href{https://www.linkedin.com/in/nicolas-smits/overlay/1763432923515/single-media-viewer/?profileId=ACoAACcSV-wBq7UrHHiRsubh7awaHwBxatPAYbc}{NVIDIA Fundamentals of Accelerated Data Science \faExternalLink*}}{: CuPy, CuML, CuGraph, RAPIDS framework.}
+%     }}
+% \end {itemize}
+
+
+%----------- SKILLS Chem Eng-----------
+ % \section{Skills}
+ %    \begin{itemize}[leftmargin=0.15in, label={}]
+ %    \small{\item{
+ %        \textbf{Process Engineering}{: Mass \& Energy Balances, Unit Operations, Thermodynamics, Heat \& Mass Transfer, Reaction Engineering, PFDs/P\&IDs, Equipment Sizing, Process Control (PID), HAZOP}/safety\\
+ %        \textbf{Simulation \& Analysis}{: Aspen HYSYS/Plus, Excel/VBA, MATLAB, COMSOL (intro), Ansys Granta, Altair Embed} \\
+ %        \textbf{Product/Process Development}{: Techno-Economic Analysis (TEA), Life-Cycle Assessment (LCA), Data Reporting} \\
+ %        \textbf{Data \& Modeling}{: Parameter Estimation, ODE/PDE solvers, Optimization (Interior-Point, Newton-Raphson)} \\
+ %        \textbf{ML / AI Models}{: Linear \& Logistic Regression, Decision Trees, Naïve Bayes, CNNs, RNNs, LSTMs, Autoencoders} \\
+ %        \textbf{Libraries}{: PyTorch, TensorFlow, scikit-learn, Keras, Gymnasium, NumPy, pandas, Matplotlib, LmFit, seaborn, tqdm} \\
+ %        \textbf{Languages}{: English (Native), French (Fluent), Dutch (Fluent), German (Intermediate)}
+ %     }}
+% \end{itemize}
+
+\vspace{-12pt}
+
+
+% ----------INVOLVEMENT---------------------
+
+%-------------------------------------------
+\end{document}
