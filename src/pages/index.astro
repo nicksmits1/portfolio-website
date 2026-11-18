@@ -47,8 +47,8 @@ const [first, ...rest] = profile.name.split(' ');
       <p class="eyebrow" id="latest-h">Latest</p>
       <ol>{latest.map(n => (
         <li>{n.data.href
-          ? <a href={n.data.href}><em>{n.data.label} · {n.data.kind}</em><b>{n.data.title}</b><span>{n.data.detail}</span></a>
-          : <><em>{n.data.label} · {n.data.kind}</em><b>{n.data.title}</b><span>{n.data.detail}</span></>}</li>
+          ? <a href={n.data.href}><em><i>{n.data.label}</i><i>{n.data.kind}</i></em><b>{n.data.title}</b><span>{n.data.detail}</span></a>
+          : <><em><i>{n.data.label}</i><i>{n.data.kind}</i></em><b>{n.data.title}</b><span>{n.data.detail}</span></>}</li>
       ))}</ol>
     </section>
 

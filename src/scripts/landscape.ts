@@ -40,6 +40,7 @@ export function landscape(root: HTMLElement, o: Opts) {
   const cv = root.querySelector('canvas')!, svg = root.querySelector('svg')!, labs = root.querySelector<HTMLElement>('.labs')!;
   const t = theme(), off = o.offset ?? 0;
   let W = 1, H = 1, pts: Pt[] = [], T = 0, vis = false, raf = 0, tok = 0, dirty = true, clicked = false;
+  let last: [number, number] | null = null; // the latest descent's start, redrawn after a resize
   let gl: WebGL2RenderingContext | null = null; const loc: Record<string, WebGLUniformLocation | null> = {};
   try { gl = cv.getContext('webgl2', { antialias: false }); } catch { gl = null; }
   if (gl) {
@@ -53,6 +54,8 @@ export function landscape(root: HTMLElement, o: Opts) {
     }
   }
   const ctx2 = gl ? null : cv.getContext('2d');
+  /* the descent trail and the hover cue live in their own groups; resizing clears the trail, never the svg */
+  const trail = el('g', {}, svg);
 
   const F = (x: number, y: number) => {
     let f = off + 0.12 * Math.sin(2.1 * x + 0.6 + T) * Math.cos(1.7 * y - 0.4) + 0.08 * Math.sin(3.3 * y + 1.2 * x + 1.0 - T * 0.7);
@@ -83,7 +86,8 @@ export function landscape(root: HTMLElement, o: Opts) {
       const w = p.el.offsetWidth, x = Math.max(w / 2 + 6, Math.min(W - w / 2 - 6, p.x * H));
       p.el.style.left = x + 'px';
     }));
-    svg.textContent = ''; dirty = true; draw();
+    trail.textContent = ''; dirty = true; draw();
+    if (last) run(last[0], last[1], true);
   }
   function draw() {
     if (gl) {
@@ -120,9 +124,9 @@ export function landscape(root: HTMLElement, o: Opts) {
     return path;
   }
   const nearest = ([x, y]: [number, number]) => { let best: Pt | null = null, bd = 1e9; for (const p of pts) { const d = Math.hypot(p.x - x, p.y - y); if (d < bd) { bd = d; best = p; } } return best && bd < 0.16 ? best : null; };
-  const trail = el('g', {}, svg);
   function run(ux: number, uy: number, instant: boolean) {
     const my = ++tok, path = solve(ux, uy), lw = W < 600 ? 1.4 : 1.8;
+    last = [ux, uy];
     trail.textContent = '';
     const line = el('polyline', { fill: 'none', stroke: t.fg, 'stroke-width': lw, 'stroke-linejoin': 'round' }, trail), dots = el('g', { fill: t.fg }, trail);
     el('circle', { cx: ux * H, cy: uy * H, r: 5, fill: 'none', stroke: t.fg, 'stroke-width': lw }, trail);
@@ -206,7 +210,7 @@ export function landscape(root: HTMLElement, o: Opts) {
     run,
     setWeights(w: Record<string, number> | null) {
       pts.forEach(p => { p.t = !w || p.hidden ? 1 : (w[p.id] ?? 1); p.el?.classList.toggle('off', (p.t ?? 1) < 0.5); });
-      trail.textContent = '';
+      trail.textContent = ''; last = null;
       if (!raf && vis) raf = requestAnimationFrame(loop);
     },
     get touch() { return !fine; },

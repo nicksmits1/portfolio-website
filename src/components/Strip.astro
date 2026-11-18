@@ -14,7 +14,7 @@ const ref = (x: Project) => JSON.stringify({ id: x.id, short: x.data.short, href
   <Nav page="project" />
   <div class="title">
     <h1>{p.data.name}</h1>
-    <p class="where">{whereLine(p)}</p>
+    <p class="where">{whereLine(p).map(x => <span>{x}</span>)}</p>
     <p class="read" data-read aria-live="polite"></p>
   </div>
 </header>

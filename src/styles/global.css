@@ -58,12 +58,12 @@ a.lab:hover { background: var(--fg); color: var(--ink); }
 .hero { position: relative; height: clamp(600px, 82vh, 700px); border-bottom: 1px solid var(--hair); }
 .who { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 40px; z-index: 1; max-width: 640px; pointer-events: none; }
 .who .id { display: flex; gap: 22px; align-items: flex-end; }
-.who img { flex: none; width: 118px; height: 118px; border-radius: 14px; object-fit: cover; box-shadow: 0 0 0 1px rgba(243, 237, 255, .3); }
+.who img { flex: none; width: 136px; height: 136px; border-radius: 14px; object-fit: cover; box-shadow: 0 0 0 1px rgba(243, 237, 255, .3); }
 .who h1 { font: 300 clamp(2.5rem, 6.4vw, 4.75rem)/.96 var(--disp); letter-spacing: -.04em; margin: 0; }
 .focus { margin: 16px 0 0; font: 500 1.12rem/1.4 var(--text); max-width: 34ch; }
 .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; pointer-events: auto; align-items: center; }
-.links a, .links span { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px 0 12px; border: 1px solid var(--hair); border-radius: 999px; background: rgba(13, 7, 34, .6); font: 500 .875rem/1 var(--text); text-decoration: none; }
-.links a:hover { border-color: var(--fg); }
+.links > a, .links > span { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px 0 12px; border: 1px solid var(--hair); border-radius: 999px; background: rgba(13, 7, 34, .6); font: 500 .875rem/1 var(--text); text-decoration: none; }
+.links > a:hover { border-color: var(--fg); }
 .links svg { width: 18px; height: 18px; flex: none; }
 .links .tbd { border-style: dashed; color: var(--fg2); }
 .links .cv { background: var(--peach); color: var(--ink); border-color: var(--peach); }
@@ -71,10 +71,10 @@ a.lab:hover { background: var(--fg); color: var(--ink); }
 @media (max-width: 699px) {
   .hero { height: 600px; }
   .who { bottom: 22px; }
-  .who img { width: 64px; height: 64px; border-radius: 10px; }
+  .who img { width: 76px; height: 76px; border-radius: 10px; }
   .focus { display: none; }
-  .links a:not(.cv) .nm, .links span .nm { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-  .links a:not(.cv), .links span { padding: 0; width: 36px; height: 36px; justify-content: center; }
+  .links > a:not(.cv) .nm, .links > span .nm { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .links > a:not(.cv), .links > span { padding: 0; width: 36px; height: 36px; justify-content: center; }
   .links .cv { height: 36px; }
   .read { font-size: .82rem; }
 }
@@ -85,7 +85,7 @@ a.lab:hover { background: var(--fg); color: var(--ink); }
 .latest li { border-top: 2px solid var(--coral); padding-top: 12px; min-width: 0; }
 .latest a { text-decoration: none; display: block; }
 .latest a:hover b { color: var(--coral); }
-.latest em { font-style: normal; display: block; font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); }
+.latest em { font-style: normal; display: flex; flex-wrap: wrap; column-gap: 1.1em; font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); }
 .latest b { display: block; font: 400 1rem/1.25 var(--disp); letter-spacing: -.025em; margin-top: 8px; }
 .latest span { display: block; font-size: .82rem; color: var(--fg2); margin-top: 6px; }
 @media (max-width: 860px) { .latest ol { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; } .latest li { flex: 0 0 min(70vw, 230px); scroll-snap-align: start; } }
@@ -154,7 +154,8 @@ a.lab:hover { background: var(--fg); color: var(--ink); }
 .strip { position: relative; height: 300px; border-bottom: 1px solid var(--hair); }
 .strip .title { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 26px; z-index: 1; max-width: 680px; pointer-events: none; }
 .strip h1 { font: 300 clamp(1.75rem, 4.2vw, 3.1rem)/1 var(--disp); letter-spacing: -.04em; margin: 0 0 12px; text-wrap: balance; }
-.strip .where { color: var(--fg2); font-size: .95rem; margin: 0; }
+.strip .where { color: var(--fg2); font-size: .95rem; margin: 0; display: flex; flex-wrap: wrap; column-gap: 1.25em; }
+.latest em i { font-style: normal; }
 .strip .read { pointer-events: auto; font-size: .875rem; margin-top: 8px; }
 .cols { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 28px; align-items: start; padding-block: 48px 56px; }
 .rail { grid-column: 1 / 5; position: sticky; top: 24px; min-width: 0; padding-right: 8px; }

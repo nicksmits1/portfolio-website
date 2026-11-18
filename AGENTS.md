@@ -40,6 +40,8 @@ Project material lives in sibling directories (`../rl-sc-design`, `../CMU/SiNDAE
 
 Headings are short noun phrases that name their topic, such as Motivation, Formulation, Method, Comparison or Results. A heading is never a clause, a question or a sentence fragment ("Why the operating rule matters", "What was compared", "How it was measured"), and it never opens with an article ("Two-tank example", not "The two-tank example").
 
+Separate items in meta lines, eyebrows and citations with spacing (each item its own span) or plain punctuation (a comma or full stop); page titles use `Name | Nicolas Smits`. A middle dot (`·`) never appears between items: it reads as machine-made. The `·` in maths (`\cdot`) is multiplication and stays.
+
 ## Design work
 
 Use `/impeccable` for any interface change, and hold every change to `DESIGN.md`. Every animation needs a reduced-motion still that shows the result. Book of Shapes patterns may appear as generated output on the site; their node graphs and source are not licensed, so flow fields here are drawn by our own implementation (`streamlines` in `src/scripts/flow.ts`).

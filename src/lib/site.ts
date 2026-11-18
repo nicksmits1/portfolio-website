@@ -21,7 +21,7 @@ export function neighbours(list: Project[], id: string) {
 }
 
 export const whereLine = (p: Project) =>
-  [p.data.where, p.data.with ? `with ${p.data.with.replace(/, ([^,]+)$/, ' and $1')}` : '', p.data.when].filter(Boolean).join(' · ');
+  [p.data.where, p.data.with ? `with ${p.data.with.replace(/, ([^,]+)$/, ' and $1')}` : '', p.data.when].filter(Boolean) as string[];
 
 /** The body: the one-line summary before the first heading, and each ### section under ## Sections. */
 export function body(p: Project) {

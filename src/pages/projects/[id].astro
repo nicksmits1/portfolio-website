@@ -37,7 +37,7 @@ if (unused.length) throw new Error(`${p.id}: sections not placed in order: ${unu
 const leadLinks = d.links.filter(l => l.lead);
 const banner = d.banner ? image(p.id, d.banner.src) : null;
 ---
-<Base title={`${d.name} · Nicolas Smits`} description={line}>
+<Base title={`${d.name} | Nicolas Smits`} description={line}>
   <Strip project={p} prev={prev} next={next} />
   <main id="main" class="wrap">
     <div class="cols">
