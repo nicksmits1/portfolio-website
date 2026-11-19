@@ -4,3 +4,4 @@ Sepsis DQN assets.
 - `report.pdf`: the team's report (Smits, Randolph, Paracha), hosted with Nicolas's approval (2026-11-17), rebuilt with qpdf to drop document metadata.
 
 - `report-p1.webp`: first page of the PDF, rendered with pdftoppm on 2026-11-17 for the further-reading preview.
+- `thumb.webp`: the home row and previous / next thumbnail, cropped from `returns-over-training.webp` (scaled to cover, centre crop), 336 by 192 px, WebP q72.

@@ -5,3 +5,4 @@ Thesis assets.
 - `escape37-logo-light.webp`: the ESCAPE 37 conference logo, white on transparent, from the official site escape37.com (Wix media `af65a5_a835b678c7e44a2297caec6abfc1cb44`, fetched 2026-11-17), WebP at 900 px. Shown only beside the accepted-abstract line.
 
 - `poster-p1.webp`: first page of the PDF, rendered with pdftoppm on 2026-11-17 for the further-reading preview.
+- `thumb.webp`: the home row and previous / next thumbnail, cropped from `design-value-by-size.webp` (scaled to cover, centre crop), 336 by 192 px, WebP q72.

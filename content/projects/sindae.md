@@ -4,6 +4,7 @@ name: 'SiNDAE'
 where: 'CAPD, Carnegie Mellon'
 with: 'Laurens Lueg, Victor Alves'
 period: '2026-06 to 2026-08'
+topics: [sciml]
 methods: [Nonlinear optimisation, Hybrid modelling]
 tools: [JAX, Pyomo]
 source: '../CMU/SiNDAE (read-only); https://github.com/Alves-research-group/SiNDAE; docs https://alves-research-group.github.io/SiNDAE/'

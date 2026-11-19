@@ -4,6 +4,7 @@ name: 'DQN variants for ICU sepsis treatment'
 where: 'McGill, COMP 579'
 with: 'James Randolph, Abdullah Paracha'
 period: '2025-01 to 2025-04'
+topics: [rl]
 methods: [Reinforcement learning]
 tools: [PyTorch, Gymnasium]
 source: 'https://github.com/nicksmits1/COMP-579-Reinforcement-Learning (final project); report "A Survey of Reinforcement Models Applied to a Model of ICU Sepsis Treatment" (local, OneDrive McGill/COMP 579/Final Project)'

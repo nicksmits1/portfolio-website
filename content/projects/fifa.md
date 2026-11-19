@@ -4,6 +4,7 @@ name: 'FIFA player analytics pipeline'
 where: 'CMU'
 with: 'Amogh Balaji'
 period: '2025-09 to 2025-12'
+topics: [swe]
 methods: [Data engineering, Supervised learning]
 tools: [Spark, PostgreSQL, Kafka, PyTorch, GCP, Docker]
 source: 'https://github.com/nicksmits1/FIFA-player-analytics-ml-pipeline (read from a clone in the scratchpad)'

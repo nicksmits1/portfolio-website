@@ -68,13 +68,14 @@ export function landscape(root: HTMLElement, o: Opts) {
     const r = cv.getBoundingClientRect(); W = Math.max(1, r.width); H = Math.max(1, r.height);
     const d = gl ? Math.min(devicePixelRatio || 1, 1.5) : 0.5; cv.width = Math.round(W * d); cv.height = Math.round(H * d);
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    const old = Object.fromEntries(pts.map(p => [p.id, p.c]));
-    pts = o.points(W, H).map(p => ({ ...p, c: old[p.id] ?? p.d * (p.t ?? 1) }));
+    /* a resize keeps each minimum's current depth and its skill weight; the readout reflowing must not reset a pick */
+    const old = Object.fromEntries(pts.map(p => [p.id, p]));
+    pts = o.points(W, H).map(p => { const t = old[p.id]?.t ?? p.t; return { ...p, t, c: old[p.id]?.c ?? p.d * (t ?? 1) }; });
     labs.textContent = '';
     pts.forEach(p => {
       if (p.hidden || !p.label) return;
       const a = document.createElement(p.href ? 'a' : 'span');
-      a.className = 'lab' + (p.current ? ' hit' : '');
+      a.className = 'lab' + (p.current ? ' hit' : '') + ((p.t ?? 1) < 0.5 ? ' off' : '');
       if (p.href) (a as HTMLAnchorElement).href = p.href;
       a.innerHTML = `<i>x*</i>${p.label}${p.tag ? `<small>${p.tag}</small>` : ''}`;
       a.style.left = p.x * H + 'px'; a.style.top = p.y * H + 'px';

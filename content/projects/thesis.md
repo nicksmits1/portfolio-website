@@ -4,6 +4,7 @@ name: 'Graph RL for resilient supply chains'
 where: 'Master’s thesis, CMU'
 with: 'Arsh Bhatia, Carl D. Laird'
 period: '2026-01 to present'
+topics: [rl]
 methods: [Reinforcement learning, Graph neural networks, Simulation]
 tools: [PyTorch, PyG, Gymnasium]
 source: '../rl-sc-design (private repo, read-only); problem statement ../rl-sc-design/paper/optimisation-problem/problem.tex (draft, November 2026)'
@@ -34,7 +35,7 @@ figures:
   amort: { kind: amort, caption: "Cumulative compute against networks designed, schematic." }
   value: { kind: img, src: design-value-by-size.webp, alt: "Held-out design value by network size for the learned policy, greedy search and random baselines", caption: "Held-out design value by network size, mean and 95% interval: the policy in red, greedy search in black. Shaded sizes are larger than any training network.", source: "Crop of the thesis poster; to be redrawn in the site palette." }
   cpu: { kind: img, src: cpu-time-by-size.webp, alt: "Median CPU time to design one network, greedy search against the learned policy, log scale", caption: "Median CPU time to design one network, on a log scale.", source: "Crop of the thesis poster; to be redrawn in the site palette." }
-order: [episode, policy, Motivation, Formulation, value, Upper bound, cpu, Learned policy, Amortised cost, amort, Architecture]
+order: [Disrupted supply chain, episode, Network design agent, policy, Motivation, Formulation, value, Upper bound, cpu, Learned policy, Amortised cost, amort, Architecture]
 reading:
   - { title: "Graph RL for resilient supply chain network design", what: "Poster, preliminary results", href: poster.pdf, preview: poster-p1.webp, wide: true }
 ---
@@ -49,6 +50,10 @@ A policy learns which transport arcs to add so demand still arrives when plants,
 - Training costs about six to seven hours of wall-clock time per seed on a shared 32-core server, paid once (thesis repo `presentations/EWO/qa_crib.md`). CPU-hours per seed are not measured, so no break-even count is published.
 
 ## Sections
+
+### Disrupted supply chain
+
+### Network design agent
 
 ### Motivation
 Supply chains survive the loss of a plant, a warehouse or a lane mostly through redundant transport links, and what a link is worth depends on what the network does after the failure. Design models usually assume a planner who re-optimises every flow once the failure is known. Real networks follow fixed rules for reordering and allocating stock, so a link that looks redundant under perfect re-planning can matter a great deal under those rules, and the reverse.
@@ -77,7 +82,7 @@ No weight depends on the number of nodes or arcs, so the same 28,481 parameters 
 ## Visual
 Lead: the policy designing one network, arc by arc. The drafts use an illustrative 9-node episode.
 TODO: export a real `EpisodeTrace` (`src/environment/trace.py`) from a trained policy on a held-out network and replace the illustration.
-Order on the page: episode; design policy (directly under the episode, Nicolas 2026-11-18); "Motivation"; "Formulation" with the equation; design value by size (`design-value-by-size.webp`, poster crop); "Upper bound"; CPU time by size (`cpu-time-by-size.webp`, poster crop); "Learned policy"; "Amortised cost" with the cumulative-compute schematic; "Architecture" with its equation; further reading (poster, previewable).
+Order on the page: heading "Disrupted supply chain" then the episode; heading "Network design agent" then the design policy (both headings at Nicolas's request, 2026-11-18; heading only, no prose; the policy sits directly under the episode); "Motivation"; "Formulation" with the equation; design value by size (`design-value-by-size.webp`, poster crop); "Upper bound"; CPU time by size (`cpu-time-by-size.webp`, poster crop); "Learned policy"; "Amortised cost" with the cumulative-compute schematic; "Architecture" with its equation; further reading (poster, previewable).
 Design policy (`src/scripts/policy.ts`, approved in `drafts/options/figure-options.html`): environment and agent as two dashed regions, state across and action back; plant, warehouse and customer icons; two GATv2 rounds as pulses leave an embedding strip per node; for each candidate arc the endpoint strips and arc features fly into [h_i, h_j, ρ_k, e_ij], light the MLP g_ψ layer by layer, and grow that arc's Q bar (gain in design value); the best positive arc is added, and the loop stops when every Q is at or below zero. Step names only under the figure; the variables are named in the legend. Q-values are an example on the episode's network. Reduced motion: the final step.
 Amortised cost schematic (`src/components/figures/Amort.astro`, static): no axis numbers and no break-even count, since training time per seed is wall-clock and its CPU-hours are not measured (thesis repo `presentations/EWO/HANDOFF.md`).
 Further reading: `poster.pdf` with first-page preview `poster-p1.webp` (landscape, 1400 px).

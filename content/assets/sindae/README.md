@@ -8,3 +8,4 @@ SiNDAE assets. Logos were designed by Nicolas.
 - `joss-logo.webp`: the Journal of Open Source Software logo (joss.theoj.org/logo_large.jpg, 2026-11-17), 700 px. Venue mark for the pending paper.
 - `arxiv-logo.svg`: arXiv's logo from static.arxiv.org (2026-11-17). Marks the link to the method paper.
 - `aiche-logo.svg`: AIChE logo, Wikimedia Commons "American Institute of Chemical Engineers logo.svg" (public domain there, 2026-11-17). Marks the AIChE 2026 session.
+- `thumb.webp`: the home row and previous / next thumbnail, from `SiNDAE_logo_dark.png`, scaled to 300 px wide and centred on black, 336 by 192 px, WebP q72.

@@ -6,3 +6,4 @@ Recommender assets.
   - `grafana-requests.webp`: Service Availability, "Requests/s by HTTP status", same week.
   - `grafana-cold-start.webp`: Platform Health, "Profiles by state", 2026-11-10 18:00 to 2026-11-11 12:00 UTC.
 - `typesafe-mark.svg`: TypeSafe's glider mark, redrawn as a static currentColor SVG from the mark on typesafe.ai (2026-11-17). Used to credit Jev, the model the cold start runs on.
+- `thumb.webp`: the home row and previous / next thumbnail, cropped from `grafana-requests.webp` (scaled to cover, centre crop), 336 by 192 px, WebP q72.

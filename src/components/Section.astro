@@ -5,7 +5,7 @@ interface Props { owner: string; heading: string; md: string; badge?: { mark: st
 const { owner, heading, md, badge } = Astro.props;
 const html = renderMarkdown(md);
 ---
-<section class="sec">
+<section class:list={["sec", { head: !md.trim() }]}>
   <h2>{heading}{badge && <a class="badge" href={badge.href}><Fragment set:html={svgRaw(owner, badge.mark)} />{badge.label}</a>}</h2>
   <Fragment set:html={html} />
 </section>

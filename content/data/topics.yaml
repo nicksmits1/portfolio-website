@@ -1,0 +1,7 @@
+# Research topics: the minima of the home landscape. Each project lists its topics in its own frontmatter (`topics`,
+# home topic first); a topic's minimum filters the project rows to it, and /#<id> links to that filtered list.
+# wide and tall: the minimum's place on the desktop and phone hero, as fractions of its width and height.
+- { id: rl, name: Reinforcement learning, wide: [.13, .26], tall: [.3, .08] }
+- { id: sciml, name: Scientific ML, wide: [.39, .17], tall: [.72, .18] }
+- { id: genai, name: GenAI, wide: [.64, .3], tall: [.3, .3] }
+- { id: swe, name: Software engineering, wide: [.84, .58], tall: [.7, .41] }

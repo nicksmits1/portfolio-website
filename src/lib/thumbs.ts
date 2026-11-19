@@ -1,14 +1,9 @@
-/* Small drawings of each project's own figure, for the home rows and previous / next. A new project gets one. */
-const S: Record<string, string> = {
-  thesis: '<g stroke="#7C6BB8" stroke-width="1.4"><path d="M30 30L70 22L110 34L140 60M30 30L46 70L92 76L140 60M70 22L92 76"/></g><path d="M46 70L110 34" stroke="#FF7C6B" stroke-width="2.2"/><g fill="#F3EDFF"><circle cx="30" cy="30" r="5"/><circle cx="70" cy="22" r="5"/><circle cx="110" cy="34" r="5"/><circle cx="140" cy="60" r="5"/><circle cx="46" cy="70" r="5"/><circle cx="92" cy="76" r="5"/></g>',
-  sindae: '<g fill="none" stroke="#7C6BB8" stroke-width="1.1"><path d="M14 20C40 30 70 44 92 50"/><path d="M14 80C46 72 72 60 92 52"/><path d="M154 14C130 30 108 44 94 50"/><path d="M154 86C128 72 108 60 94 53"/></g><path d="M150 84C120 80 100 66 93 52" fill="none" stroke="#FFD9C2" stroke-width="1.8"/><path d="M24 22C52 30 78 44 91 50" fill="none" stroke="#FFD9C2" stroke-width="1.8"/><circle cx="92" cy="51" r="4.5" fill="#FF7C6B"/>',
-  recsys: '<g fill="#2A1670" stroke="#B9AAE8"><rect x="12" y="38" width="30" height="20" rx="4"/><rect x="62" y="16" width="38" height="20" rx="4"/><rect x="62" y="60" width="38" height="20" rx="4"/><rect x="122" y="38" width="34" height="20" rx="4"/></g><path d="M42 48H52L62 26M52 48L62 70M100 26L122 48M100 70L122 48" fill="none" stroke="#7C6BB8"/><circle cx="62" cy="26" r="4" fill="#FF7C6B"/>',
-  mmrag: '<g fill="#2A1670" stroke="#7C6BB8"><rect x="18" y="18" width="34" height="46" rx="3"/><rect x="60" y="18" width="34" height="46" rx="3"/><rect x="102" y="18" width="34" height="46" rx="3"/></g><rect x="60" y="18" width="34" height="46" rx="3" fill="none" stroke="#FF7C6B" stroke-width="2"/><g fill="#B9AAE8"><rect x="66" y="26" width="22" height="4" rx="2"/><rect x="66" y="36" width="14" height="14" rx="2"/></g><path d="M77 70V82H140" fill="none" stroke="#FF7C6B" stroke-width="1.6"/><circle cx="146" cy="82" r="4" fill="#FF7C6B"/>',
-  wayfinder: '<rect x="14" y="12" width="140" height="72" rx="5" fill="#0D0722" stroke="#7C6BB8"/><rect x="104" y="12" width="50" height="72" fill="#2A1670"/><g fill="#B9AAE8"><rect x="110" y="22" width="36" height="5" rx="2"/><rect x="110" y="34" width="30" height="5" rx="2"/><rect x="110" y="46" width="34" height="5" rx="2"/></g><rect x="110" y="58" width="26" height="5" rx="2" fill="#FF7C6B"/><g fill="#7C6BB8"><rect x="24" y="24" width="60" height="4" rx="2"/><rect x="24" y="34" width="70" height="4" rx="2"/><rect x="24" y="44" width="50" height="4" rx="2"/></g>',
-  fifa: '<path d="M16 60H152" stroke="#B9AAE8"/><g stroke="#7C6BB8"><path d="M16 54V66M50 56V64M84 56V64M118 56V64M152 54V66"/></g><g fill="#F3EDFF"><circle cx="128" cy="60" r="4"/><circle cx="100" cy="60" r="4"/><circle cx="74" cy="60" r="4"/></g><circle cx="40" cy="60" r="6" fill="#FF7C6B"/>',
-  sepsis: '<path d="M16 60H152" stroke="#B9AAE8"/><g stroke="#7C6BB8"><path d="M16 54V66M43 56V64M70 56V64M97 56V64M124 56V64M152 54V66"/></g><g fill="#F3EDFF"><circle cx="52" cy="60" r="4"/><circle cx="78" cy="60" r="4"/><circle cx="104" cy="60" r="4"/></g><circle cx="132" cy="60" r="6" fill="#FF7C6B"/>',
-};
+import { image } from './assets';
+
+/* Each project's thumbnail is a crop of its own real material (content/assets/<id>/thumb.webp, 336 by 192), for the
+   home rows and previous / next. A new project gets one; its folder's README records what it was cropped from. */
 export const thumb = (id: string) => {
-  if (!S[id]) throw new Error(`No thumbnail for ${id} in src/lib/thumbs.ts`);
-  return `<svg viewBox="0 0 168 96" aria-hidden="true">${S[id]}</svg>`;
+  let img;
+  try { img = image(id, 'thumb.webp'); } catch { throw new Error(`No thumbnail for ${id}: add content/assets/${id}/thumb.webp`); }
+  return `<img class="th" src="${img.src}" width="${img.width}" height="${img.height}" alt="" loading="lazy" decoding="async">`;
 };

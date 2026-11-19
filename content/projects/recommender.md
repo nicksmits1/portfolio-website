@@ -3,6 +3,7 @@ id: recsys
 name: 'Movie recommender with LLM cold start'
 where: 'Team project, CMU'
 period: '2026-09 to present'
+topics: [genai, swe]
 methods: [Ranking & recommenders, LLM pipelines, MLOps]
 tools: [LightGBM, Kafka, Flask, Docker, PostgreSQL, AWS]
 source: '"../CMU/ML in Production/f26-project-32-no-country-for-cold-users" (private course repo, read-only)'

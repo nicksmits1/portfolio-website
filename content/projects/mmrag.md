@@ -4,6 +4,7 @@ name: 'Multimodal RAG over slides and reports'
 where: 'CMU, 10-423/623 Generative AI'
 with: 'John Speaks, Darren Chen'
 period: 'Spring 2026 (report April 2026)'
+topics: [genai]
 methods: [Retrieval-augmented generation, Vision-language models, Parameter-efficient fine-tuning]
 tools: [PyTorch, Qwen3-VL, ColQwen, Qdrant, AWS]
 source: 'https://github.com/JTSIV1/multimodal-rag; report https://johnspeaks.com/gen_ai_final.pdf (copied to content/assets/mmrag/report.pdf); John''s page https://johnspeaks.com/multimodal_rag.html'

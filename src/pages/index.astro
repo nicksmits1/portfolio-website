@@ -5,10 +5,15 @@ import Nav from '../components/Nav.astro';
 import { ICON } from '../lib/icons';
 import { thumb } from '../lib/thumbs';
 import { image, cvUrl } from '../lib/assets';
-import { projects, body, skillsOf, profile } from '../lib/site';
+import { projects, body, skillsOf, profile, TOPICS } from '../lib/site';
 
 const list = await projects();
 const refs = JSON.stringify(list.map(p => ({ id: p.id, short: p.data.short })));
+/* the hero's minima are research topics; each project names its topics, home topic first */
+const topics = TOPICS.map(t => ({ ...t, n: list.filter(p => p.data.topics.includes(t.id)).length }));
+const topicName = Object.fromEntries(topics.map(t => [t.id, t.name]));
+for (const p of list) for (const t of p.data.topics) if (!topicName[t]) throw new Error(`${p.id} lists topic "${t}", which is not in content/data/topics.yaml`);
+for (const t of topics) if (!t.n) throw new Error(`Topic ${t.id} has no projects; give one a topics entry or remove it from content/data/topics.yaml`);
 const latest = (await getCollection('latest')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 4);
 const pubs = await getCollection('publications');
 const timeline = await getCollection('timeline');
@@ -21,8 +26,8 @@ const [first, ...rest] = profile.name.split(' ');
 ---
 <Base title="Nicolas Smits" description={`${profile.name}: ${profile.focus}`}>
   <header class="hero" id="top">
-    <div class="land" data-land="hero" data-projects={refs}>
-      <canvas role="img" aria-label="Contour landscape of an objective function with one local minimum per project; a gradient-descent solver converges on one of them"></canvas>
+    <div class="land" data-land="hero" data-topics={JSON.stringify(topics)}>
+      <canvas role="img" aria-label="Contour landscape of an objective function with one local minimum per research topic; a gradient-descent solver converges on one of them"></canvas>
       <svg aria-hidden="true"></svg><div class="labs"></div>
     </div>
     <Nav page="home" />
@@ -40,22 +45,31 @@ const [first, ...rest] = profile.name.split(' ');
       </div>
       <p class="read" data-read aria-live="polite">Click anywhere to start a solver there.</p>
     </div>
+    {/* Latest runs as a slow reel across the hero's lower edge; the second set is the loop's seam, hidden from assistive tech */}
+    <section class="reel" aria-labelledby="latest-h" data-reel>
+      <h2 class="reel-label" id="latest-h">Latest</h2>
+      <div class="win"><div class="track">{[false, true].map(copy => (
+        <ol class="set" aria-hidden={copy ? 'true' : undefined}>{latest.map(n => (
+          <li>
+            {n.data.href
+              ? <a class="card" href={n.data.href} tabindex={copy ? -1 : undefined}><em><i>{n.data.label}</i><i>{n.data.kind}</i></em><b>{n.data.title}</b><span>{n.data.detail}</span></a>
+              : <div class="card"><em><i>{n.data.label}</i><i>{n.data.kind}</i></em><b>{n.data.title}</b><span>{n.data.detail}</span></div>}
+            <svg class="mk" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8" /><circle cx="9" cy="9" r="5" /><circle cx="9" cy="9" r="2" /></svg>
+          </li>
+        ))}</ol>
+      ))}</div></div>
+    </section>
   </header>
 
   <main id="main" class="wrap">
-    <section class="latest" aria-labelledby="latest-h">
-      <p class="eyebrow" id="latest-h">Latest</p>
-      <ol>{latest.map(n => (
-        <li>{n.data.href
-          ? <a href={n.data.href}><em><i>{n.data.label}</i><i>{n.data.kind}</i></em><b>{n.data.title}</b><span>{n.data.detail}</span></a>
-          : <><em><i>{n.data.label}</i><i>{n.data.kind}</i></em><b>{n.data.title}</b><span>{n.data.detail}</span></>}</li>
-      ))}</ol>
-    </section>
-
     <section class="block" id="research" aria-labelledby="research-h">
       <h2 class="sec-h" id="research-h">Research and projects</h2>
+      <div class="chips topics" role="group" aria-label="Show one topic" data-topic-chips>
+        <button type="button" data-topic="" aria-pressed="true">All<small>{list.length}</small></button>
+        {topics.map(t => <button type="button" data-topic={t.id} aria-pressed="false">{t.name}<small>{t.n}</small></button>)}
+      </div>
       <ul class="rows">{list.map(p => (
-        <li><a class="row" href={`/projects/${p.id}`}><Fragment set:html={thumb(p.id)} /><div><b>{p.data.name}</b><small>{p.data.where}</small></div><p>{body(p).line}</p><em>{p.data.year}</em></a></li>
+        <li data-topics={p.data.topics.join(' ')}><a class="row" href={`/projects/${p.id}`}><Fragment set:html={thumb(p.id)} /><div><b>{p.data.name}</b><small>{p.data.where}</small><span class="tps">{p.data.topics.map(t => <span>{topicName[t]}</span>)}</span></div><p>{body(p).line}</p><em>{p.data.year}</em></a></li>
       ))}</ul>
     </section>
 

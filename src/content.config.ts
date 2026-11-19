@@ -18,7 +18,7 @@ const projects = defineCollection({
   loader: glob({ pattern: '*.md', base: './content/projects', generateId: ({ data }) => String(data.id) }),
   schema: z.object({
     id: z.string(), name: z.string(), short: z.string(), where: z.string(), with: z.string().optional(),
-    when: z.string(), year: z.number(), methods: z.array(z.string()), tools: z.array(z.string()),
+    when: z.string(), year: z.number(), topics: z.array(z.string()).min(1), methods: z.array(z.string()), tools: z.array(z.string()),
     disclosure: z.string(),
     links: z.array(link).default([]),
     note: z.string().optional(),

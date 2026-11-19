@@ -3,6 +3,7 @@ id: wayfinder
 name: 'wayfinder-sidebar'
 where: 'Open source'
 period: '2026-11'
+topics: [genai, swe]
 methods: [Agent tooling]
 tools: [TypeScript]
 source: '../wayfinder-sidebar (read-only); https://github.com/nicksmits1/wayfinder-sidebar'
