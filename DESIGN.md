@@ -227,7 +227,7 @@ Home order: hero with the Latest reel across its lower edge, project rows (168 �
 
 ## Elevation & Depth
 
-Flat. Depth comes from the landscape itself and from translucent ink laid over it, not from shadows. Outlines are drawn as hairline box-shadows (`0 0 0 1px`), which keep layout stable. The one real shadow is the system diagrams' hard offset (3 px, #07031A, no blur), part of Proschi's grammar; the reel and hover cue add a 3 px backdrop blur over the map.
+Flat. Depth comes from the landscape itself and from translucent ink laid over it, not from shadows. Outlines are drawn as hairline box-shadows (`0 0 0 1px`), which keep layout stable. The one real shadow is the system diagrams' hard offset (3 px, #07031A, no blur), part of Proschi's grammar; there is no backdrop blur anywhere. The reel is plain translucent ink (84%); it had a 3 px blur until the pinned hero's dive made it flicker.
 
 ### Named Rules
 **The Ink Over Map Rule.** Anything that sits on a landscape (nav, name tab, labels, reel, cue) sits on translucent ink so the bands show through. Anything off the map sits directly on Night with a hairline.
@@ -276,7 +276,7 @@ Precise and warm: hairline restraint everywhere, with coral and peach doing the 
 - **Style:** full-width Peach band closing every page, Ink text, the email in Unbounded at display scale (selectable as a whole), outline pills in ink at 25%, the copy button filled Ink on Peach.
 
 ### Landscape (signature)
-The banded contour map with a click-to-descend solver and a live iteration readout ("Converged in 38 iterations on GenAI"). Over the map the pointer becomes the start ring x0 with a −∇f needle. On home the name block rests on a calm basin: a flat floor in the darkest band, measured from the block, with the contours ringing it rather than crossing it; a descent that ends there lands on Contact. The opening descent starts top right and never runs through the text. Reduced motion draws the converged path at once.
+The banded contour map with a click-to-descend solver and a live iteration readout ("Converged in 38 iterations on GenAI"). Over the map the pointer becomes the start ring x0 with a −∇f needle. On home the name block rests on a calm basin: a flat floor in the darkest band, measured from the block, with the contours ringing it rather than crossing it; a descent that ends there lands on Contact. The opening descent starts top right and never runs through the text. Reduced motion draws the converged path at once. On scroll the hero pins for one screen and dives: scroll progress sets the solver's iteration along the latest descent, and a camera follows the iterate from straight above the map down into its basin, the surface turning into a wire mesh in the band colours with depth fade. The name block fades out over the first fifth, and the basin under it fills back in unless the descent ended there. Reduced motion has no pin and no dive.
 
 **The Calm Basin Rule.** Text that sits on a landscape gets a flat floor of the darkest band under it, never an overlay card. Labels and tabs (ink pills) are the only things laid over the map.
 

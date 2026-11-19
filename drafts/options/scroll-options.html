@@ -1,0 +1,521 @@
+<title>Scroll Landscape Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400&family=Onest:wght@400;500;600&family=STIX+Two+Text:ital@1&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Round: the home hero on scroll. Five transformations of the hero's own landscape, each a working prototype that pins
+   while the page scrolls through it, so scroll position drives it as it would on the site. Every stage computes the
+   hero's real function (four topic bowls, the flat basin under the name) and runs the site's heavy-ball solver on it. */
+:root{
+  color-scheme:dark;
+  --bg:#120A2A; --panel:#1A1038; --ink:#0D0722; --fg:#F3EDFF; --fg2:#B9AAE8; --dim:#7C6BB8;
+  --coral:#FF7C6B; --violet:#8B5CF6; --peach:#FFD9C2; --hair:rgba(243,237,255,.22); --hair2:rgba(243,237,255,.1); --tab:rgba(13,7,34,.72);
+  --disp:"Unbounded",system-ui,sans-serif; --text:"Onest",system-ui,sans-serif; --math:"STIX Two Text","Times New Roman",serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--violet) var(--bg)}
+body{background:var(--bg);color:var(--fg);font:400 1rem/1.55 var(--text);margin:0}
+::selection{background:var(--coral);color:var(--bg)}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px}
+i.m{font:italic 1.06em/1 var(--math)}
+.wrap{max-width:1320px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.intro{padding-block:clamp(2rem,5vw,3.6rem) 1.4rem}
+.intro h1{font:300 clamp(2rem,5vw,3.4rem)/1 var(--disp);letter-spacing:-.04em;margin:0 0 1rem;text-wrap:balance}
+.intro p{margin:0 0 .7rem;max-width:70ch;color:var(--fg2)}
+.intro p b{color:var(--fg);font-weight:600}
+.toc{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.2rem}
+.toc a{font:500 .9rem/1 var(--text);padding:.5rem .8rem;border:1px solid var(--hair);border-radius:999px;text-decoration:none;transition:border-color .2s,color .2s}
+.toc a:hover{border-color:var(--coral);color:var(--coral)}
+
+.opt-head{border-top:1px solid var(--hair);padding-top:clamp(2rem,5vw,3.2rem)}
+.opt-head header{display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap}
+.tag{font:600 .85rem/1 var(--disp);color:var(--bg);background:var(--coral);border-radius:999px;padding:.4rem .7rem;letter-spacing:.02em}
+.opt-head h2{font:400 clamp(1.4rem,3vw,2rem)/1.1 var(--disp);letter-spacing:-.035em;margin:0}
+.opt-head p{margin:.7rem 0 0;color:var(--fg2);max-width:72ch}
+.opt-head p b{color:var(--fg);font-weight:600}
+
+/* the scrub: a tall section whose sticky child holds the stage; scroll progress through it drives the transformation */
+.scrub{height:290vh;position:relative}
+.pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center}
+.pin>.wrap{width:100%}
+.stage{position:relative;height:min(64vh,600px);border:1px solid var(--hair);border-radius:10px;overflow:hidden;background:var(--bg);cursor:default}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.labs{position:absolute;inset:0;pointer-events:none}
+.lab{position:absolute;left:0;top:0;font:600 13px/1.1 var(--text);white-space:nowrap;padding:3px 8px;border-radius:999px;background:var(--tab);transition:background .3s,color .3s,opacity .25s;will-change:transform}
+.lab i{font:italic 1.05em/1 var(--math);margin-right:4px;font-weight:400}
+.lab small{font:500 10px/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--fg2);margin-left:6px}
+.lab.hit{background:var(--coral);color:var(--bg)}
+.lab.hit small{color:var(--ink)}
+.who{position:absolute;left:clamp(16px,3.4vw,40px);bottom:clamp(18px,5%,40px);max-width:520px;pointer-events:none;will-change:opacity,transform}
+.who .id{display:flex;gap:16px;align-items:flex-end}
+.who img{flex:none;width:clamp(56px,8vw,96px);height:clamp(56px,8vw,96px);border-radius:12px;object-fit:cover;box-shadow:0 0 0 1px rgba(243,237,255,.3)}
+.who h3{font:300 clamp(1.7rem,4.2vw,3.2rem)/.96 var(--disp);letter-spacing:-.04em;margin:0}
+.who p{margin:12px 0 0;font:500 clamp(.85rem,1.3vw,1rem)/1.4 var(--text);max-width:34ch;color:var(--fg)}
+.meter{display:flex;align-items:center;gap:14px;margin-top:12px;font-size:.92rem;color:var(--fg2);font-variant-numeric:tabular-nums;min-height:1.6em}
+.meter .nm{font:600 .78rem/1 var(--disp);color:var(--bg);background:var(--coral);border-radius:999px;padding:.32rem .55rem;flex:none}
+.meter .step{color:var(--fg);font-weight:500;min-width:9.5em}
+.meter .bar{flex:1;height:2px;background:var(--hair2);position:relative;border-radius:2px;overflow:hidden}
+.meter .bar i{position:absolute;inset:0;background:var(--fg2);transform-origin:0 50%;transform:scaleX(0)}
+.meter .rd{min-width:13em;text-align:right}
+.meter .rd b{color:var(--fg);font-weight:600}
+
+.notes-row{padding-block:1.4rem clamp(2.4rem,6vw,3.6rem)}
+.notes{display:grid;gap:.9rem 2.4rem;font-size:.95rem;margin:0;padding:0;list-style:none}
+@media(min-width:860px){.notes{grid-template-columns:repeat(3,1fr)}}
+.notes b{display:block;font:600 .78rem/1.2 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-bottom:.3rem}
+.notes span{color:var(--fg2)}
+
+.decision{border-top:1px solid var(--hair);padding-block:clamp(2rem,5vw,3.2rem)}
+.decision>h2{font:400 clamp(1.4rem,3vw,2rem)/1.1 var(--disp);letter-spacing:-.035em;margin:0 0 .5rem}
+.decision>p{margin:0 0 .6rem;color:var(--fg2);max-width:72ch}
+.places{list-style:none;margin:1.8rem 0 0;padding:0;display:grid;gap:1.8rem 3rem}
+@media(min-width:900px){.places{grid-template-columns:repeat(3,1fr)}}
+.places li{display:grid;grid-template-columns:64px 1fr;gap:1rem;align-items:start}
+.places svg{width:64px;height:96px}
+.places h3{font:400 1.1rem/1.2 var(--disp);letter-spacing:-.03em;margin:0 0 .4rem;display:flex;gap:.6rem;align-items:baseline}
+.places h3 .tag{font-size:.75rem;padding:.3rem .55rem}
+.places p{margin:0;color:var(--fg2);font-size:.95rem}
+.end{padding-block:clamp(2rem,5vw,3rem) clamp(3rem,7vw,5rem);border-top:1px solid var(--hair);color:var(--fg2)}
+.end h2{font:400 1.3rem/1.15 var(--disp);letter-spacing:-.03em;margin:0 0 .6rem;color:var(--fg)}
+.end p{margin:0 0 .7rem;max-width:74ch}
+.end p b{color:var(--fg);font-weight:600}
+
+@media(max-width:700px){
+  .stage{height:min(62vh,540px)}
+  .meter .rd{display:none}
+  .meter .step{min-width:0}
+  .who p{display:none}
+  .lab{font-size:11.5px;padding:2px 6px}
+  .lab small{display:none}
+}
+</style>
+
+<div class="wrap intro">
+  <h1>Landscape on scroll</h1>
+  <p>Five ways the home hero's landscape could transform as a visitor scrolls from the name down into Research and projects. <b>Scroll through each stage:</b> it holds in place while you scroll, so your scrolling drives it exactly as it would on the site. Scroll back up to run it in reverse.</p>
+  <p>All five draw the hero's own function, not a picture of one: the four topic bowls, the flat basin under the name and the opening descent, computed per pixel and solved with the site's heavy-ball solver. A and D are wireframes, B is ASCII, C and E are two other readings of the same surface. The flat basin under the name only exists to hold the name, so once the name has scrolled off it fills back in.</p>
+  <nav class="toc" aria-label="Options"><a href="#a">A Mesh lift</a><a href="#b">B ASCII gradient</a><a href="#c">C Terraces</a><a href="#d">D Dive</a><a href="#e">E Scanlines</a><a href="#placement">Placement</a></nav>
+</div>
+
+<div class="wrap opt-head" id="a"><header><span class="tag">A</span><h2>Mesh lift</h2></header>
+  <p>The contour bands thin out into a wire mesh of constant-<i class="m">x</i> and constant-<i class="m">y</i> lines, then the mesh tips back and lifts into a height field. The topic minima sink into pits and the descent lies on the terrain. The most literal "wireframe".</p></div>
+<section class="scrub" data-opt="mesh" aria-label="Option A prototype"><div class="pin"><div class="wrap">
+  <div class="stage"><canvas role="img" aria-label="The hero landscape turning into a wire mesh and tilting into 3D as the page scrolls"></canvas><div class="labs"></div></div>
+  <div class="meter"><span class="nm">A</span><span class="step" data-step></span><span class="bar"><i></i></span><span class="rd" data-rd></span></div>
+</div></div></section>
+<div class="wrap notes-row"><ul class="notes">
+  <li><b>On the site</b><span>Runs as the hero leaves the viewport and ends as a tilted mesh behind the Latest reel. Labels stay pinned to the projected pits; clicking the mesh still starts a descent.</span></li>
+  <li><b>Reduced motion</b><span>The flat contour map, unchanged. Nothing about the page depends on the tilt.</span></li>
+  <li><b>Cost</b><span>About 4,000 projected points per frame on a 2D canvas, redrawn only while the scroll position changes.</span></li>
+</ul></div>
+
+<div class="wrap opt-head" id="b"><header><span class="tag">B</span><h2>ASCII gradient</h2></header>
+  <p>The map pixelates into character cells and becomes text in three readings of the same function, the order a solver needs them: <b>height</b> as glyph density, then the <b>gradient</b> as a field of arrows pointing downhill, then the <b>descent</b> written cell by cell into the nearest minimum. Each stage shows a real quantity.</p></div>
+<section class="scrub" data-opt="ascii" aria-label="Option B prototype"><div class="pin"><div class="wrap">
+  <div class="stage"><canvas role="img" aria-label="The hero landscape turning into ASCII characters: height glyphs, then gradient arrows, then the descent written in characters"></canvas><div class="labs"></div></div>
+  <div class="meter"><span class="nm">B</span><span class="step" data-step></span><span class="bar"><i></i></span><span class="rd" data-rd></span></div>
+</div></div></section>
+<div class="wrap notes-row"><ul class="notes">
+  <li><b>On the site</b><span>Each stage gets about a third of the hero's scroll. Set in JetBrains Mono, already the site's face for data labels. Topic labels stay as pills over the glyphs.</span></li>
+  <li><b>Reduced motion</b><span>The contour map. A static ASCII still could replace it, but the bands carry the topics better.</span></li>
+  <li><b>Cost</b><span>About 5,000 glyphs per frame at desktop width, fewer on phones (larger cells). Cheap enough for a 2D canvas; a glyph atlas in WebGL if it ever stutters.</span></li>
+</ul></div>
+
+<div class="wrap opt-head" id="c"><header><span class="tag">C</span><h2>Terraces</h2></header>
+  <p>Each of the 13 bands is a level set, so the map is already a stack. Scrolling tips it back and pulls the levels apart into a terraced model, like a laser-cut topographic relief: the topic minima become wells cut down through the layers. Not wireframe, but the closest to how the map is actually drawn.</p></div>
+<section class="scrub" data-opt="terrace" aria-label="Option C prototype"><div class="pin"><div class="wrap">
+  <div class="stage"><canvas role="img" aria-label="The hero landscape separating into stacked terraces, one per contour band, as the page scrolls"></canvas><div class="labs"></div></div>
+  <div class="meter"><span class="nm">C</span><span class="step" data-step></span><span class="bar"><i></i></span><span class="rd" data-rd></span></div>
+</div></div></section>
+<div class="wrap notes-row"><ul class="notes">
+  <li><b>On the site</b><span>Same placement as A. The terraces keep the bands' colours exactly, so the hero never changes palette.</span></li>
+  <li><b>Reduced motion</b><span>The flat map, which is the stack seen from directly above.</span></li>
+  <li><b>Cost</b><span>Thirteen pre-drawn layer images, stacked by offset each frame. In the build it moves into the existing shader.</span></li>
+</ul></div>
+
+<div class="wrap opt-head" id="d"><header><span class="tag">D</span><h2>Dive</h2></header>
+  <p>Scrolling is the descent. Scroll position sets the solver's iteration, and the camera follows the iterate down: from straight above the map, tilting into a wire mesh and closing in until it converges in a basin. Scrolling down the page means descending into the work.</p></div>
+<section class="scrub" data-opt="dive" aria-label="Option D prototype"><div class="pin"><div class="wrap">
+  <div class="stage"><canvas role="img" aria-label="A camera following the gradient-descent solver down the landscape as the page scrolls, ending in a topic basin"></canvas><div class="labs"></div></div>
+  <div class="meter"><span class="nm">D</span><span class="step" data-step></span><span class="bar"><i></i></span><span class="rd" data-rd></span></div>
+</div></div></section>
+<div class="wrap notes-row"><ul class="notes">
+  <li><b>On the site</b><span>Needs a pinned hero to have room for the dive. Open: whether the basin it lands in should filter the project list below (today only a descent the visitor starts filters it).</span></li>
+  <li><b>Reduced motion</b><span>No camera move: the flat map with the converged path, as today.</span></li>
+  <li><b>Cost</b><span>A perspective mesh with depth fade. The strongest idea and the most motion; the camera move is what reduced motion must remove.</span></li>
+</ul></div>
+
+<div class="wrap opt-head" id="e"><header><span class="tag">E</span><h2>Scanlines</h2></header>
+  <p>A coral scan line sweeps down the map, slicing it. Above the line every row becomes its cross-section <i class="m">f</i>(<i class="m">x</i>, <i class="m">y</i><sub>0</sub>), drawn as a ridgeline that dips at each minimum. When it reaches the bottom, the whole landscape is a stack of slices.</p></div>
+<section class="scrub" data-opt="scan" aria-label="Option E prototype"><div class="pin"><div class="wrap">
+  <div class="stage"><canvas role="img" aria-label="A scan line sweeping down the hero landscape, turning each row into a cross-section ridgeline"></canvas><div class="labs"></div></div>
+  <div class="meter"><span class="nm">E</span><span class="step" data-step></span><span class="bar"><i></i></span><span class="rd" data-rd></span></div>
+</div></div></section>
+<div class="wrap notes-row"><ul class="notes">
+  <li><b>On the site</b><span>Works without a pin: the scan line can track the viewport's top edge as the hero scrolls away, so the part still on screen is always being sliced.</span></li>
+  <li><b>Reduced motion</b><span>The contour map, or the finished ridgelines as a still; both show the topics.</span></li>
+  <li><b>Cost</b><span>About 45 polylines per frame. The cheapest of the five.</span></li>
+</ul></div>
+
+<section class="wrap decision" id="placement">
+  <h2>Placement</h2>
+  <p>Separate from the look: how much scrolling the transformation takes and whether the hero holds still for it. The prototypes above are pinned so you can study them; the site need not be.</p>
+  <ul class="places">
+    <li><svg viewBox="0 0 64 96" aria-hidden="true"><rect x="1" y="1" width="62" height="94" rx="6" fill="none" stroke="var(--hair)"/><rect x="8" y="10" width="48" height="34" rx="3" fill="var(--violet)" opacity=".55"/><path d="M8 52h48M8 60h36M8 68h44M8 76h30" stroke="var(--hair)" stroke-width="3" stroke-linecap="round"/><path d="M58 12v28" stroke="var(--coral)" stroke-width="2" stroke-linecap="round"/></svg>
+      <div><h3><span class="tag">1</span>Scroll away</h3><p>No pin. The transformation runs while the hero leaves the viewport and finishes as its lower edge passes. Nothing holds the visitor; they may see only half of it. Suits A, C and E.</p></div></li>
+    <li><svg viewBox="0 0 64 96" aria-hidden="true"><rect x="1" y="1" width="62" height="94" rx="6" fill="none" stroke="var(--hair)"/><rect x="8" y="10" width="48" height="50" rx="3" fill="var(--violet)" opacity=".55"/><path d="M8 70h48M8 78h36" stroke="var(--hair)" stroke-width="3" stroke-linecap="round"/><path d="M58 12v46" stroke="var(--coral)" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 4"/></svg>
+      <div><h3><span class="tag">2</span>Short pin</h3><p>The hero holds for about 70% of a screen of scrolling, transforms, then releases into Research. Enough room for B's three stages and D's dive; a visitor who flicks past barely feels it.</p></div></li>
+    <li><svg viewBox="0 0 64 96" aria-hidden="true"><rect x="1" y="1" width="62" height="94" rx="6" fill="none" stroke="var(--hair)"/><rect x="2" y="2" width="60" height="92" rx="5" fill="var(--violet)" opacity=".22"/><path d="M8 18h48M8 30h36M8 42h44M8 54h30M8 66h40M8 78h28" stroke="var(--hair)" stroke-width="3" stroke-linecap="round"/></svg>
+      <div><h3><span class="tag">3</span>Backdrop</h3><p>The landscape stays fixed behind the whole page at low contrast and keeps transforming as sections pass. The most ambient, but it competes with project thumbnails and text, so it fights the site's legibility.</p></div></li>
+  </ul>
+</section>
+
+<section class="wrap end">
+  <h2>Recommendation</h2>
+  <p><b>B with a short pin (2).</b> It is the option you asked about, and it is the only one where every stage is a quantity the solver uses: height, then gradient, then the path. It teaches the hero's idea as you scroll rather than only decorating it, and it lands on the same converged minimum the readout names.</p>
+  <p>Runner-up: <b>E with scroll away (1)</b>, if you would rather nothing pins. It is the quietest, costs least and never holds the page.</p>
+  <p>Whichever you pick, the build keeps today's hero as the reduced-motion still, keeps clicking the map working in every state, and stops drawing once the hero is off screen. Reply with a letter and a placement number, or a mix (for example B's glyphs on A's mesh).</p>
+</section>
+
+<script>
+(() => {
+  const HEADSHOT = 'data:image/webp;base64,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';
+  const C = { bg: '#120A2A', ink: '#0D0722', fg: '#F3EDFF', fg2: '#B9AAE8', coral: '#FF7C6B', peach: '#FFD9C2' };
+  const STOPS = [[0, [13, 7, 34]], [.3, [42, 22, 112]], [.56, [112, 68, 232]], [.8, [238, 107, 96]], [1, [255, 214, 191]]];
+  const ramp = v => { for (let i = 1; i < STOPS.length; i++) if (v <= STOPS[i][0]) { const [a, A] = STOPS[i - 1], [b, B] = STOPS[i], k = (v - a) / (b - a); return A.map((q, j) => q + (B[j] - q) * k); } return STOPS[4][1]; };
+  const NB = 13, BAND = [...Array(NB)].map((_, k) => ramp(k / (NB - 1)));
+  const rgb = (c, a = 1) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
+  const mixc = (a, b, k) => a.map((q, i) => q + (b[i] - q) * k);
+  const FG2 = [185, 170, 232], FG = [243, 237, 255];
+  const clamp01 = v => Math.max(0, Math.min(1, v));
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const seg = (p, a, b) => clamp01((p - a) / (b - a));
+  const smooth = (a, b, x) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+  const g2 = (dx, dy, s) => Math.exp(-(dx * dx + dy * dy) / (2 * s * s));
+  const TOPICS = [
+    { id: 'rl', name: 'Reinforcement learning', n: 2, wide: [.2, .13], tall: [.3, .08] },
+    { id: 'sciml', name: 'Scientific ML', n: 2, wide: [.39, .17], tall: [.72, .18] },
+    { id: 'genai', name: 'GenAI', n: 3, wide: [.64, .3], tall: [.3, .3] },
+    { id: 'swe', name: 'Software engineering', n: 3, wide: [.84, .58], tall: [.7, .41] },
+  ];
+
+  /* ---- the hero's surface: four Gaussian bowls on a rolling field, with a flat floor under the name block ---- */
+  function surface(W, H, box) {
+    const R = W / H, phone = W < 700, s = phone ? .085 : .125;
+    const pts = TOPICS.map(t => { const [x, y] = phone ? t.tall : t.wide; return { ...t, x: x * R, y, d: .82, s }; });
+    const pad = phone ? .02 : .035;
+    const fl = box ? { cx: (box.l + box.r) / 2 / H, cy: (box.t + box.b) / 2 / H, rx: (box.r - box.l) / 2 / H + pad, ry: (box.b - box.t) / 2 / H + pad } : null;
+    const mask = (x, y) => { if (!fl) return 0; const d = Math.pow(Math.abs((x - fl.cx) / fl.rx) ** 4 + Math.abs((y - fl.cy) / fl.ry) ** 4, .25); return 1 - smooth(.9, 1.4, d); };
+    const F = (x, y, w = 1) => {
+      let f = .12 * Math.sin(2.1 * x + .6) * Math.cos(1.7 * y - .4) + .08 * Math.sin(3.3 * y + 1.2 * x + 1);
+      for (const q of pts) f -= q.d * g2(x - q.x, y - q.y, q.s);
+      const v = (f + .95) / 1.2, m = mask(x, y) * w;
+      return clamp01(m ? v * (1 - m) + .015 * m : v);
+    };
+    const grad = (x, y) => { const h = 1e-3; return [(F(x + h, y) - F(x - h, y)) / (2 * h), (F(x, y + h) - F(x, y - h)) / (2 * h)]; };
+    function solve(x, y) {
+      const path = [[x, y]], cap = phone ? .018 : .025; let vx = 0, vy = 0;
+      const curv = (x, y, dx, dy) => { const h = 2e-3, [ax, ay] = grad(x + dx * h, y + dy * h), [bx, by] = grad(x - dx * h, y - dy * h); return Math.abs(((ax - bx) * dx + (ay - by) * dy) / (2 * h)); };
+      for (let k = 0; k < 600; k++) {
+        const [gx, gy] = grad(x, y), g = Math.hypot(gx, gy); let lr = .011;
+        if (g > 1e-9) { const ux = gx / g, uy = gy / g, kap = Math.max(curv(x, y, ux, uy), curv(x, y, -uy, ux)); if (kap > 0) lr = Math.min(lr, .45 / kap); }
+        vx = .8 * vx - lr * gx; vy = .8 * vy - lr * gy;
+        const sp = Math.hypot(vx, vy); if (sp > cap) { vx *= cap / sp; vy *= cap / sp; }
+        x = Math.max(0, Math.min(R, x + vx)); y = Math.max(0, Math.min(1, y + vy)); path.push([x, y]);
+        if (g < .02 && Math.hypot(vx, vy) < 4e-4) break;
+        if (k > 40 && g < .1) { const q = path[path.length - 12]; if (Math.hypot(x - q[0], y - q[1]) < .0015) break; }
+      }
+      return path;
+    }
+    const nearest = ([x, y]) => { let best = null, bd = 1e9; for (const p of pts) { const d = Math.hypot(p.x - x, p.y - y); if (d < bd) { bd = d; best = p; } } return bd < .16 ? best : null; };
+    const crosses = path => !!box && path.some(([x, y]) => x * H > box.l - 12 && x * H < box.r + 12 && y * H > box.t - 12 && y * H < box.b + 12);
+    /* the opening descent: the site's starts, top right first; the first that lands on a topic without crossing the name */
+    const starts = phone ? [[.62, .06], [.9, .1], [.5, .2], [.85, .3]] : [[.6, .08], [.74, .1], [.88, .12], [.52, .14], [.8, .36]];
+    let path = null, hit = null;
+    for (const [a, b] of starts) { const pa = solve(a * R, b), h = nearest(pa[pa.length - 1]); if (h && !crosses(pa)) { path = pa; hit = h; break; } }
+    if (!path) { path = solve(starts[0][0] * R, starts[0][1]); hit = nearest(path[path.length - 1]); }
+    return { R, pts, F, grad, path, hit };
+  }
+
+  /* the flat contour map at half resolution, as the site's canvas fallback draws it: 13 bands with darkened edges */
+  function bandMap(S, W, H, k = .5) {
+    const w = Math.max(2, Math.round(W * k)), h = Math.max(2, Math.round(H * k)), c = document.createElement('canvas'); c.width = w; c.height = h;
+    const x = c.getContext('2d'), im = x.createImageData(w, h), band = new Int8Array(w * h), sx = W / H / w;
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) band[j * w + i] = Math.min(NB - 1, Math.floor(S.F((i + .5) * sx, (j + .5) / h) * NB));
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const q = j * w + i, b = band[q], cc = BAND[b], e = (i < w - 1 && band[q + 1] !== b) || (j < h - 1 && band[q + w] !== b) ? .72 : 1;
+      im.data[q * 4] = cc[0] * e; im.data[q * 4 + 1] = cc[1] * e; im.data[q * 4 + 2] = cc[2] * e; im.data[q * 4 + 3] = 255;
+    }
+    x.putImageData(im, 0, 0);
+    return { img: c, band, w, h };
+  }
+
+  /* ---- shared drawing: the descent trail and its end ring, through any projection ---- */
+  function trail(ctx, pts, phone, endRing) {
+    if (pts.length < 1) return;
+    ctx.lineJoin = 'round'; ctx.strokeStyle = C.fg; ctx.lineWidth = phone ? 1.4 : 1.8;
+    ctx.beginPath(); pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke();
+    ctx.fillStyle = C.fg; const r = phone ? 1.6 : 2;
+    for (const [x, y] of pts) { ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); }
+    ctx.beginPath(); ctx.arc(pts[0][0], pts[0][1], 5, 0, 7); ctx.stroke();
+    if (endRing) { const [x, y] = pts[pts.length - 1]; ctx.strokeStyle = C.coral; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.arc(x, y, 9, 0, 7); ctx.stroke(); }
+  }
+
+  /* ================================================================ A: mesh lift */
+  const mesh = {
+    steps: ['Contour bands', 'Wire mesh', 'Height field'],
+    init(st) {
+      const { W, H, S } = st, cell = st.phone ? 13 : 16, nx = Math.round(W / cell), ny = Math.round(H / cell), n = (nx + 1) * (ny + 1), hf = new Float32Array(n), h0 = new Float32Array(n);
+      for (let j = 0; j <= ny; j++) for (let i = 0; i <= nx; i++) { const x = i / nx * S.R, y = j / ny; hf[j * (nx + 1) + i] = S.F(x, y); h0[j * (nx + 1) + i] = S.F(x, y, 0); }
+      st.g = { nx, ny, hf, h0, h: new Float32Array(n), sx: new Float32Array(n), sy: new Float32Array(n) };
+    },
+    proj(st, p) {
+      const { W, H } = st, k2 = smooth(.26, .95, p), th = k2 * 58 * Math.PI / 180, ct = Math.cos(th), sn = Math.sin(th), zz = 1 - .1 * k2, cy = H * (.5 + .08 * k2), amp = .62 * sn;
+      return (x, y, f) => { const s = (1 - .2 * sn * (1 - y)) * zz, X = x * H, Y = y * H; return [W / 2 + (X - W / 2) * s, cy + ((Y - cy) * ct - (f - .4) * amp * H) * s]; };
+    },
+    draw(ctx, st, p) {
+      const { W, H, S, g } = st, k1 = ease(seg(p, .05, .32)), P = this.proj(st, p), { nx, ny, h, hf, h0, sx, sy } = g, w = 1 - smooth(.12, .4, p);
+      for (let q = 0; q < h.length; q++) h[q] = h0[q] + (hf[q] - h0[q]) * w;
+      const Fw = (x, y) => S.F(x, y, w);
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+      if (k1 < 1) { ctx.globalAlpha = 1 - k1; ctx.imageSmoothingEnabled = true; ctx.drawImage(st.map.img, 0, 0, W, H); ctx.globalAlpha = 1; }
+      for (let j = 0; j <= ny; j++) for (let i = 0; i <= nx; i++) { const q = j * (nx + 1) + i, [a, b] = P(i / nx * S.R, j / ny, h[q]); sx[q] = a; sy[q] = b; }
+      /* one path per band, so 13 strokes cover the whole mesh */
+      const paths = [...Array(NB)].map(() => new Path2D());
+      const add = (q, r) => { const b = Math.min(NB - 1, Math.floor((h[q] + h[r]) / 2 * NB)); paths[b].moveTo(sx[q], sy[q]); paths[b].lineTo(sx[r], sy[r]); };
+      for (let j = 0; j <= ny; j++) for (let i = 0; i < nx; i++) add(j * (nx + 1) + i, j * (nx + 1) + i + 1);
+      for (let i = 0; i <= nx; i++) for (let j = 0; j < ny; j++) add(j * (nx + 1) + i, (j + 1) * (nx + 1) + i);
+      ctx.lineWidth = 1; ctx.globalAlpha = k1;
+      paths.forEach((pth, b) => { ctx.strokeStyle = rgb(mixc(BAND[b], FG2, b < 4 ? .45 - b * .08 : 0), .85); ctx.stroke(pth); });
+      ctx.globalAlpha = 1;
+      trail(ctx, S.path.map(([x, y]) => P(x, y, Fw(x, y))), st.phone, true);
+      return { label: (x, y) => P(x, y, Fw(x, y)), step: p < .22 ? 0 : p < .45 ? 1 : 2, rd: `Pitch <b>${Math.round(smooth(.26, .95, p) * 58)}°</b>` };
+    },
+  };
+
+  /* ================================================================ B: ASCII gradient */
+  const HG = ['.', '.', '·', ':', ':', '-', '-', '=', '+', '+', '*', '*', '#'];
+  const PATHC = rgb(mixc([255, 124, 107], FG, .35), .95);
+  const ARROW = ['→', '↘', '↓', '↙', '←', '↖', '↑', '↗'];
+  const ascii = {
+    steps: ['Contour bands', 'Character cells', 'Height glyphs', 'Gradient arrows', 'Descent'],
+    init(st) {
+      const { W, H, S } = st, cw = st.phone ? 7.5 : 9, ch = st.phone ? 12.5 : 15, cols = Math.ceil(W / cw), rows = Math.ceil(H / ch);
+      const cells = [];
+      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+        const x = (i + .5) * cw / H, y = (j + .5) * ch / H, f = S.F(x, y, 0), h = 1e-3, gx = (S.F(x + h, y, 0) - S.F(x - h, y, 0)) / (2 * h), gy = (S.F(x, y + h, 0) - S.F(x, y - h, 0)) / (2 * h), g = Math.hypot(gx, gy);
+        const b = Math.min(NB - 1, Math.floor(f * NB)), a = Math.atan2(-gy, -gx), di = ((Math.round(a / (Math.PI / 4)) % 8) + 8) % 8;
+        cells.push({ i, j, b, g, arrow: g < .14 ? '·' : ARROW[di], r: Math.random() });
+      }
+      /* the cells the descent passes through, in order */
+      const visit = [], seen = new Set();
+      S.path.forEach(([x, y], k) => { const i = Math.floor(x * H / cw), j = Math.floor(y * H / ch), key = j * cols + i; if (!seen.has(key)) { seen.add(key); visit.push({ key, k }); } });
+      const mos = document.createElement('canvas'); mos.width = cols; mos.height = rows;
+      const mx = mos.getContext('2d'); mx.imageSmoothingEnabled = true; mx.drawImage(st.map.img, 0, 0, cols, rows);
+      st.g = { cw, ch, cols, rows, cells, visit, mos, tmp: document.createElement('canvas'), font: `${st.phone ? 11 : 13}px "JetBrains Mono", ui-monospace, monospace`, bold: `500 ${st.phone ? 13 : 16}px "JetBrains Mono", ui-monospace, monospace` };
+    },
+    draw(ctx, st, p) {
+      const { W, H, S, g } = st, { cw, ch, cols, rows, cells, visit } = g;
+      const s1 = ease(seg(p, .03, .2)), s2 = seg(p, .14, .3), s3 = seg(p, .4, .62), s4 = seg(p, .7, .95);
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+      /* pixelate: the band map resampled at a falling resolution, down to one block per character cell */
+      if (s2 < 1) {
+        const w = Math.max(cols, Math.round(st.map.w + (cols - st.map.w) * s1)), h = Math.max(rows, Math.round(w * rows / cols));
+        g.tmp.width = w; g.tmp.height = h; const tx = g.tmp.getContext('2d'); tx.imageSmoothingEnabled = true; tx.drawImage(s1 >= 1 ? g.mos : st.map.img, 0, 0, w, h);
+        ctx.imageSmoothingEnabled = s1 < .05; ctx.globalAlpha = 1 - s2 * .92; ctx.drawImage(g.tmp, 0, 0, W, H); ctx.globalAlpha = 1; ctx.imageSmoothingEnabled = true;
+      }
+      if (s2 > 0) {
+        ctx.font = g.font; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        const lit = new Map(), n = Math.floor(s4 * visit.length), byCol = new Map();
+        for (let v = 0; v < n; v++) lit.set(visit[v].key, v === n - 1 ? 2 : 1);
+        for (const c of cells) {
+          const key = c.j * cols + c.i, L = lit.get(key);
+          let ch_, col;
+          if (L) { ch_ = L === 2 ? (s4 >= 1 ? '*' : '@') : 'o'; col = L === 2 ? C.coral : PATHC; }
+          else {
+            const arrow = c.r < s3 * 1.15 - .08;
+            ch_ = arrow ? c.arrow : HG[c.b];
+            const base = mixc(BAND[c.b], FG2, c.b < 5 ? .5 - c.b * .07 : 0);
+            col = rgb(arrow ? mixc(base, FG2, Math.max(0, .5 - c.g * .15)) : base, s2 * (1 - .3 * s4) * (arrow ? Math.min(1, .6 + c.g * .2) : 1));
+          }
+          if (!byCol.has(col)) byCol.set(col, []);
+          byCol.get(col).push([ch_, (c.i + .5) * cw, (c.j + .5) * ch]);
+        }
+        for (const [col, list] of byCol) { ctx.fillStyle = col; ctx.font = col === C.coral || col === PATHC ? g.bold : g.font; for (const [t, x, y] of list) ctx.fillText(t, x, y); }
+      }
+      if (s2 < .5) trail(ctx, S.path.map(([x, y]) => [x * H, y * H]), st.phone, true);
+      const it = s4 > 0 ? visit[Math.max(0, Math.floor(s4 * visit.length) - 1)].k : 0;
+      const step = p < .12 ? 0 : p < .24 ? 1 : p < .45 ? 2 : p < .68 ? 3 : 4;
+      const rd = step === 4 ? `Iteration <b>${it}</b>, <i class="m">f</i> = <b>${S.F(...S.path[it]).toFixed(3)}</b>` : step === 3 ? '<i class="m">−∇f</i>(<i class="m">x</i>)' : step === 2 ? '<i class="m">f</i>(<i class="m">x</i>)' : '';
+      return { label: (x, y) => [x * H, y * H], step, rd, done: s4 >= 1 || s2 < .5 };
+    },
+  };
+
+  /* ================================================================ C: terraces */
+  const terrace = {
+    steps: ['Contour bands', 'Level sets', 'Terraced model'],
+    init(st) {
+      const { band, w, h } = bandMap({ F: (x, y) => st.S.F(x, y, 0) }, st.W, st.H), tops = [], walls = [];
+      for (let L = 0; L < NB; L++) {
+        const a = document.createElement('canvas'), b = document.createElement('canvas'); a.width = b.width = w; a.height = b.height = h;
+        const ia = a.getContext('2d').createImageData(w, h), ib = b.getContext('2d').createImageData(w, h), top = BAND[L], wall = BAND[L].map(v => v * .5 + 6);
+        for (let q = 0; q < w * h; q++) {
+          if (band[q] < L) continue;
+          const i = q % w, j = (q / w) | 0, edge = (i > 0 && band[q - 1] < L) || (i < w - 1 && band[q + 1] < L) || (j > 0 && band[q - w] < L) || (j < h - 1 && band[q + w] < L), e = edge ? .62 : 1;
+          ia.data.set([top[0] * e, top[1] * e, top[2] * e, 255], q * 4); ib.data.set([wall[0], wall[1], wall[2], 255], q * 4);
+        }
+        a.getContext('2d').putImageData(ia, 0, 0); b.getContext('2d').putImageData(ib, 0, 0); tops.push(a); walls.push(b);
+      }
+      st.g = { tops, walls };
+    },
+    geo(st, p) {
+      const { W, H } = st, k = ease(seg(p, .08, .95)), th = k * 54 * Math.PI / 180, ct = Math.cos(th), zz = 1 - .2 * k, cy = H * (.5 + .17 * k), lift = k * .42 * H * Math.sin(th);
+      return { k, ct, zz, cy, lift, P: (x, y, f) => { const L = Math.min(NB - 1, Math.floor(f * NB)); return [W / 2 + (x * H - W / 2) * zz, cy + (y * H - cy) * zz * ct - L / (NB - 1) * lift * zz]; } };
+    },
+    draw(ctx, st, p) {
+      const { W, H, S, g, dpr } = st, G = this.geo(st, p), { ct, zz, cy, lift } = G;
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+      const at = z => ctx.setTransform(dpr * zz, 0, 0, dpr * zz * ct, dpr * W / 2 * (1 - zz), dpr * (cy * (1 - zz * ct) - z * zz));
+      ctx.imageSmoothingEnabled = true;
+      /* a plinth under the base layer, then each level's wall and top, low to high: the higher terraces hide what is behind them */
+      const slab = G.k * 18;
+      for (let z = -slab; z < 0; z += 1.5) { at(z); ctx.drawImage(g.walls[0], 0, 0, W, H); }
+      for (let L = 0; L < NB; L++) {
+        const zt = L / (NB - 1) * lift, zb = Math.max(0, (L - 1) / (NB - 1) * lift), n = Math.min(16, Math.ceil((zt - zb) * zz / 1.4));
+        for (let s = 0; s < n; s++) { at(zb + (zt - zb) * s / n); ctx.drawImage(g.walls[L], 0, 0, W, H); }
+        at(zt); ctx.drawImage(g.tops[L], 0, 0, W, H);
+      }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const fl = 1 - seg(p, .04, .2); if (fl > 0) { ctx.globalAlpha = fl; ctx.drawImage(st.map.img, 0, 0, W, H); ctx.globalAlpha = 1; }
+      trail(ctx, S.path.map(([x, y]) => G.P(x, y, S.F(x, y, 0))), st.phone, true);
+      return { label: (x, y) => G.P(x, y, S.F(x, y, 0)), step: p < .1 ? 0 : p < .55 ? 1 : 2, rd: `Pitch <b>${Math.round(G.k * 54)}°</b>` };
+    },
+  };
+
+  /* ================================================================ D: dive */
+  const dive = {
+    steps: ['Overview', 'Descending', 'Converged'],
+    init(st) {
+      const { S } = st, nx = st.phone ? 44 : 96, ny = st.phone ? 64 : 44, n = (nx + 1) * (ny + 1), hf = new Float32Array(n), h0 = new Float32Array(n);
+      for (let j = 0; j <= ny; j++) for (let i = 0; i <= nx; i++) { const x = i / nx * S.R, y = j / ny; hf[j * (nx + 1) + i] = S.F(x, y); h0[j * (nx + 1) + i] = S.F(x, y, 0); }
+      st.g = { nx, ny, hf, h0, h: new Float32Array(n), sx: new Float32Array(n), sy: new Float32Array(n), dz: new Float32Array(n) };
+    },
+    cam(st, p) {
+      const { W, H, S } = st, path = S.path, kc = ease(seg(p, .05, .9)), u = seg(p, .14, .9), fi = ease(u) * (path.length - 1);
+      const i0 = Math.floor(fi), t = fi - i0, a = path[i0], b = path[Math.min(path.length - 1, i0 + 1)], it = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+      const tx = S.R / 2 + (it[0] - S.R / 2) * kc, ty = .5 + (it[1] - .5) * kc, hs = .34 * kc, foc = 1.5 * H;
+      const dist = 1.5 + (.62 - 1.5) * kc, pit = (90 + (34 - 90) * kc) * Math.PI / 180, c = Math.cos(pit), s = Math.sin(pit), tz = S.F(tx, ty) * hs;
+      const cam = [tx, ty + dist * c, tz + dist * s], f = [0, -c, -s], up = [0, -s, c], cy = H * (.5 + .12 * kc);
+      const P = (x, y, z) => { const dx = x - cam[0], dy = y - cam[1], dz = z * hs - cam[2], zf = dx * f[0] + dy * f[1] + dz * f[2]; if (zf < .03) return null; return [W / 2 + foc * dx / zf, cy - foc * (dy * up[1] + dz * up[2]) / zf, zf]; };
+      return { P, dist, fi, it, kc };
+    },
+    draw(ctx, st, p) {
+      const { W, H, S, g } = st, cam = this.cam(st, p), { nx, ny, h, hf, h0, sx, sy, dz } = g, k1 = ease(seg(p, .02, .16)), w = 1 - smooth(.12, .4, p);
+      for (let q = 0; q < h.length; q++) h[q] = h0[q] + (hf[q] - h0[q]) * w;
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+      if (k1 < 1) { ctx.globalAlpha = 1 - k1; ctx.drawImage(st.map.img, 0, 0, W, H); ctx.globalAlpha = 1; }
+      for (let j = 0; j <= ny; j++) for (let i = 0; i <= nx; i++) { const q = j * (nx + 1) + i, r = cam.P(i / nx * S.R, j / ny, h[q]); if (r) { sx[q] = r[0]; sy[q] = r[1]; dz[q] = r[2]; } else dz[q] = -1; }
+      /* depth fade: four alpha buckets per band */
+      const paths = [...Array(NB * 4)].map(() => new Path2D()), far = cam.dist;
+      const add = (q, r) => {
+        if (dz[q] < 0 || dz[r] < 0) return;
+        const z = (dz[q] + dz[r]) / 2, a = Math.min(3, Math.max(0, Math.floor((z - far * .6) / (far * .45 + .25)))), b = Math.min(NB - 1, Math.floor((h[q] + h[r]) / 2 * NB));
+        paths[b * 4 + a].moveTo(sx[q], sy[q]); paths[b * 4 + a].lineTo(sx[r], sy[r]);
+      };
+      for (let j = 0; j <= ny; j++) for (let i = 0; i < nx; i++) add(j * (nx + 1) + i, j * (nx + 1) + i + 1);
+      for (let i = 0; i <= nx; i++) for (let j = 0; j < ny; j++) add(j * (nx + 1) + i, (j + 1) * (nx + 1) + i);
+      ctx.lineWidth = 1;
+      paths.forEach((pth, q) => { const b = (q / 4) | 0, a = q % 4; ctx.strokeStyle = rgb(mixc(BAND[b], FG2, b < 4 ? .45 - b * .08 : 0), k1 * [.95, .7, .45, .25][a]); ctx.stroke(pth); });
+      /* the solver so far, and the iterate the camera follows */
+      const n = Math.floor(cam.fi) + 1, done = cam.fi >= S.path.length - 1.01;
+      const pts = S.path.slice(0, n).map(([x, y]) => cam.P(x, y, S.F(x, y))).filter(Boolean);
+      const cur = cam.P(cam.it[0], cam.it[1], S.F(cam.it[0], cam.it[1]));
+      if (cur) pts.push(cur);
+      trail(ctx, pts, st.phone, false);
+      if (cur) { ctx.strokeStyle = C.coral; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.arc(cur[0], cur[1], done ? 9 : 6, 0, 7); ctx.stroke(); }
+      const it = Math.min(S.path.length - 1, Math.round(cam.fi));
+      return { label: (x, y) => cam.P(x, y, S.F(x, y)), step: p < .14 ? 0 : done ? 2 : 1, rd: `Iteration <b>${it}</b>, <i class="m">f</i> = <b>${S.F(...S.path[it]).toFixed(3)}</b>`, done };
+    },
+  };
+
+  /* ================================================================ E: scanlines */
+  const scan = {
+    steps: ['Contour bands', 'Slicing', 'Ridgelines'],
+    init(st) {
+      const { W, H, S } = st, n = Math.round(H / (st.phone ? 11 : 12.5)), step = st.phone ? 3 : 4, nx = Math.ceil(W / step), rows = [];
+      for (let j = 0; j < n; j++) { const y = (j + .5) / n, f = new Float32Array(nx + 1); for (let i = 0; i <= nx; i++) f[i] = S.F(i * step / H, y, 0); rows.push({ y, f }); }
+      st.g = { rows, step, nx, A: H * .17, gap: H / n };
+    },
+    k(p, y) { const ys = -.06 + seg(p, .05, .92) * 1.2; return ease(clamp01((ys - y) / .14)); },
+    draw(ctx, st, p) {
+      const { W, H, S, g } = st, ys = -.06 + seg(p, .05, .92) * 1.2, { rows, step, nx, A, gap } = g;
+      const off = (k, f) => A * k * ((1 - f) - .62);
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+      if (ys < 1) { ctx.save(); ctx.beginPath(); ctx.rect(0, ys * H, W, H); ctx.clip(); ctx.drawImage(st.map.img, 0, 0, W, H); ctx.restore(); }
+      for (const r of rows) {
+        const k = this.k(p, r.y); if (k <= 0) continue;
+        const y0 = r.y * H, line = new Path2D(), fill = new Path2D(), byB = [...Array(NB)].map(() => new Path2D());
+        let lo = 0;
+        for (let i = 0; i <= nx; i++) { const sy = y0 + off(k, r.f[i]); lo = Math.max(lo, sy); if (i) line.lineTo(i * step, sy); else line.moveTo(0, sy); }
+        fill.addPath(line); fill.lineTo(W, lo + gap * 1.2); fill.lineTo(0, lo + gap * 1.2); fill.closePath();
+        ctx.fillStyle = C.bg; ctx.fill(fill);
+        for (let i = 0; i < nx; i++) { const b = Math.min(NB - 1, Math.floor((r.f[i] + r.f[i + 1]) / 2 * NB)); byB[b].moveTo(i * step, y0 + off(k, r.f[i])); byB[b].lineTo((i + 1) * step, y0 + off(k, r.f[i + 1])); }
+        ctx.lineWidth = st.phone ? 1 : 1.2;
+        byB.forEach((pth, b) => { ctx.strokeStyle = rgb(mixc(BAND[b], FG2, b < 5 ? .55 - b * .08 : 0), .55 + .45 * k); ctx.stroke(pth); });
+      }
+      if (ys > 0 && ys < 1) { ctx.strokeStyle = C.coral; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(0, ys * H); ctx.lineTo(W, ys * H); ctx.stroke(); }
+      const P = (x, y) => [x * H, y * H + off(this.k(p, y), S.F(x, y, 0))];
+      trail(ctx, S.path.map(([x, y]) => P(x, y)), st.phone, true);
+      return { label: P, step: ys <= 0 ? 0 : ys < 1 ? 1 : 2, rd: ys > 0 && ys < 1 ? `<i class="m">f</i>(<i class="m">x</i>, <b>${ys.toFixed(2)}</b>)` : '' };
+    },
+  };
+
+  /* ================================================================ the scrub harness */
+  const OPTS = { mesh, ascii, terrace, dive, scan };
+  const stages = [];
+  document.querySelectorAll('.scrub').forEach(sec => {
+    const R = OPTS[sec.dataset.opt], stage = sec.querySelector('.stage'), cv = stage.querySelector('canvas'), labs = stage.querySelector('.labs');
+    const who = document.createElement('div'); who.className = 'who';
+    who.innerHTML = `<div class="id"><img alt="" src="${HEADSHOT}"><h3>Nicolas<br>Smits</h3></div><p>Optimisation, operations research, machine learning and reinforcement learning for process systems.</p>`;
+    stage.appendChild(who);
+    const stepEl = sec.querySelector('[data-step]'), rdEl = sec.querySelector('[data-rd]'), bar = sec.querySelector('.bar i');
+    const st = { sec, R, cv, ctx: cv.getContext('2d'), labs, who, stepEl, rdEl, bar, p: -1, vis: false, ready: false, els: {} };
+    stages.push(st);
+    function size() {
+      const r = stage.getBoundingClientRect(); st.W = Math.max(1, r.width); st.H = Math.max(1, r.height); st.phone = st.W < 700;
+      st.dpr = Math.min(devicePixelRatio || 1, 2); cv.width = Math.round(st.W * st.dpr); cv.height = Math.round(st.H * st.dpr);
+      who.style.opacity = '1'; who.style.transform = '';
+      const wr = who.getBoundingClientRect(), box = { l: wr.left - r.left, t: wr.top - r.top, r: wr.right - r.left, b: wr.bottom - r.top };
+      st.S = surface(st.W, st.H, box); st.map = bandMap(st.S, st.W, st.H); R.init(st);
+      labs.textContent = ''; st.els = {};
+      st.S.pts.forEach(q => { const a = document.createElement('span'); a.className = 'lab'; a.innerHTML = `<i>x*</i>${q.name}<small>${q.n} projects</small>`; labs.appendChild(a); st.els[q.id] = a; });
+      st.ready = true; st.p = -1; frame();
+    }
+    st.size = size;
+    new ResizeObserver(() => { const r = stage.getBoundingClientRect(); if (Math.round(r.width) === st.lw && Math.round(r.height) === st.lh) return; st.lw = Math.round(r.width); st.lh = Math.round(r.height); size(); }).observe(stage);
+    new IntersectionObserver(es => es.forEach(e => { st.vis = e.isIntersecting; if (st.vis) frame(); })).observe(sec);
+    function frame() {
+      if (!st.ready) return;
+      const r = sec.getBoundingClientRect(), span = Math.max(1, r.height - innerHeight), p = clamp01((-r.top / span - .06) / .86);
+      if (Math.abs(p - st.p) < .0005) return; st.p = p;
+      const { ctx, dpr } = st; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const out = R.draw(ctx, st, p);
+      const fade = seg(p, 0, .22); who.style.opacity = String(1 - fade); who.style.transform = `translateY(${-24 * ease(fade)}px)`;
+      st.S.pts.forEach(q => {
+        const a = st.els[q.id], pos = out.label(q.x, q.y);
+        if (!pos || pos[0] < -40 || pos[0] > st.W + 40 || pos[1] < -20 || pos[1] > st.H + 20) { a.style.opacity = '0'; return; }
+        const w = a.offsetWidth, x = Math.max(6, Math.min(st.W - w - 6, pos[0] - w / 2));
+        a.style.opacity = '1'; a.style.transform = `translate(${x}px,${pos[1] + 12}px)`;
+        a.classList.toggle('hit', q === st.S.hit && (out.done ?? true));
+      });
+      stepEl.textContent = R.steps[out.step]; rdEl.innerHTML = out.rd || ''; bar.style.transform = `scaleX(${p})`;
+    }
+    st.frame = frame;
+  });
+  let tick = 0;
+  addEventListener('scroll', () => { if (tick) return; tick = requestAnimationFrame(() => { tick = 0; stages.forEach(s => s.vis && s.frame()); }); }, { passive: true });
+  /* the ASCII stage draws with JetBrains Mono; redraw once it has loaded */
+  document.fonts?.load('13px "JetBrains Mono"').then(() => stages.forEach(s => { s.p = -1; s.frame && s.frame(); }));
+})();
+</script>

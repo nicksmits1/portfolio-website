@@ -1,0 +1,370 @@
+<title>Dive Placement Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400&family=Onest:wght@400;500;600&family=STIX+Two+Text:ital@1&display=swap">
+<style>
+/* Follow-up to "Scroll Landscape Options": Nicolas picked D, the dive. This board puts the dive on a mock home page
+   (hero, project rows, publications, contact) inside a scrollable frame, once per placement, so the difference between
+   scrolling away, a short pin and a backdrop can be felt rather than read. */
+:root{
+  color-scheme:dark;
+  --bg:#120A2A; --panel:#1A1038; --ink:#0D0722; --fg:#F3EDFF; --fg2:#B9AAE8; --dim:#7C6BB8;
+  --coral:#FF7C6B; --violet:#8B5CF6; --peach:#FFD9C2; --hair:rgba(243,237,255,.22); --hair2:rgba(243,237,255,.1); --tab:rgba(13,7,34,.72);
+  --disp:"Unbounded",system-ui,sans-serif; --text:"Onest",system-ui,sans-serif; --math:"STIX Two Text","Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--violet) var(--bg)}
+body{background:var(--bg);color:var(--fg);font:400 1rem/1.55 var(--text);margin:0}
+::selection{background:var(--coral);color:var(--bg)}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px}
+i.m{font:italic 1.06em/1 var(--math)}
+.wrap{max-width:1320px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.intro{padding-block:clamp(2rem,5vw,3.2rem) 1.2rem}
+.intro h1{font:300 clamp(2rem,5vw,3.2rem)/1 var(--disp);letter-spacing:-.04em;margin:0 0 .9rem;text-wrap:balance}
+.intro p{margin:0 0 .6rem;max-width:70ch;color:var(--fg2)}
+.intro p b{color:var(--fg);font-weight:600}
+
+/* the switch between placements */
+.modes{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.2rem 0 .9rem}
+.modes button{font:500 .95rem/1 var(--text);color:var(--fg);background:none;border:1px solid var(--hair);border-radius:999px;padding:.6rem .95rem;cursor:pointer;display:inline-flex;gap:.55rem;align-items:center;transition:border-color .2s,background .2s,color .2s}
+.modes button b{font:600 .78rem/1 var(--disp)}
+.modes button:hover{border-color:var(--coral)}
+.modes button[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:var(--bg)}
+.say{min-height:3.2em;margin:0 0 1rem;color:var(--fg2);max-width:74ch}
+.say b{color:var(--fg);font-weight:600}
+
+/* the frame: a small browser window with its own scroll */
+.frame{position:relative;height:min(74vh,700px);border:1px solid var(--hair);border-radius:12px;overflow:hidden;background:var(--bg)}
+.demo{position:absolute;inset:0}
+.demo[hidden]{display:none}
+.scroller{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--violet) transparent}
+.back{position:absolute;inset:0;pointer-events:none}
+.stage{position:absolute;inset:0;overflow:hidden}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.labs{position:absolute;inset:0;pointer-events:none;transition:opacity .3s}
+.lab{position:absolute;left:0;top:0;font:600 13px/1.1 var(--text);white-space:nowrap;padding:3px 8px;border-radius:999px;background:var(--tab);transition:background .3s,color .3s,opacity .25s}
+.lab i{font:italic 1.05em/1 var(--math);margin-right:4px;font-weight:400}
+.lab small{font:500 10px/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--fg2);margin-left:6px}
+.lab.hit{background:var(--coral);color:var(--bg)}
+.lab.hit small{color:var(--ink)}
+
+.hero-wrap{position:relative}
+.hero{position:relative;overflow:hidden}
+.demo[data-mode="pin"] .hero{position:sticky;top:0}
+.nav{position:absolute;top:0;right:0;z-index:3;display:flex;gap:20px;padding:14px 32px 10px 18px;font:500 14px/1 var(--text);background:var(--tab);border-bottom-left-radius:14px}
+.who{position:absolute;left:clamp(16px,3.4vw,40px);bottom:clamp(20px,6%,44px);z-index:2;max-width:560px;pointer-events:none}
+.who .id{display:flex;gap:16px;align-items:flex-end}
+.who img{flex:none;width:clamp(56px,7.5vw,104px);height:clamp(56px,7.5vw,104px);border-radius:12px;object-fit:cover;box-shadow:0 0 0 1px rgba(243,237,255,.3)}
+.who h2{font:300 clamp(1.8rem,4.6vw,3.4rem)/.96 var(--disp);letter-spacing:-.04em;margin:0}
+.who p{margin:12px 0 0;font:500 clamp(.85rem,1.3vw,1rem)/1.4 var(--text);max-width:34ch}
+.links{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+.links span{display:inline-flex;align-items:center;height:34px;padding:0 12px;border:1px solid var(--hair);border-radius:999px;background:rgba(13,7,34,.6);font:500 13px/1 var(--text)}
+.links .cv{background:var(--peach);color:var(--ink);border-color:var(--peach)}
+
+.sec{padding:40px clamp(16px,3.4vw,40px);position:relative}
+.sec h3{font:300 clamp(1.4rem,2.6vw,1.9rem)/1.1 var(--disp);letter-spacing:-.035em;margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.chips span{font:500 13px/1 var(--text);padding:8px 12px;border:1px solid var(--hair);border-radius:999px}
+.chips span:first-child{background:var(--coral);border-color:var(--coral);color:var(--bg)}
+.chips small{margin-left:6px;opacity:.75}
+.rows{list-style:none;margin:0;padding:0}
+.rows li{display:grid;grid-template-columns:84px minmax(0,1fr) minmax(0,1.6fr) 44px;gap:18px;align-items:center;padding:14px 0;border-top:1px solid var(--hair2)}
+.rows .th{width:84px;height:48px;border-radius:6px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--hair2)}
+.rows b{display:block;font:400 15px/1.25 var(--disp);letter-spacing:-.02em}
+.rows small{color:var(--fg2);font-size:13px}
+.rows p{margin:0;color:var(--fg2);font-size:14px}
+.rows em{font-style:normal;color:var(--dim);font-size:13px;text-align:right}
+.items{list-style:none;margin:0;padding:0}
+.items li{display:grid;grid-template-columns:52px 1fr;gap:14px;padding:10px 0;border-top:1px solid var(--hair2);font-size:14px}
+.items em{font-style:normal;color:var(--dim)}
+.items span{display:block;color:var(--fg2);font-size:13px}
+.contact{background:var(--peach);color:var(--ink);padding:44px clamp(16px,3.4vw,40px)}
+.contact h3{font:300 clamp(1.5rem,3vw,2.2rem)/1 var(--disp);letter-spacing:-.04em;margin:0}
+
+/* the meter under the frame */
+.meter{display:flex;align-items:center;gap:14px;margin-top:12px;font-size:.92rem;color:var(--fg2);font-variant-numeric:tabular-nums;min-height:1.7em}
+.meter .st{font:600 .78rem/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--fg2);border:1px solid var(--hair);border-radius:999px;padding:.38rem .6rem;flex:none;min-width:7.6em;text-align:center;transition:background .2s,color .2s,border-color .2s}
+.meter .st.on{background:var(--coral);border-color:var(--coral);color:var(--bg)}
+.meter .bar{flex:1;height:2px;background:var(--hair2);position:relative;border-radius:2px;overflow:hidden}
+.meter .bar i{position:absolute;inset:0;background:var(--fg2);transform-origin:0 50%;transform:scaleX(0)}
+.meter .rd{min-width:13em;text-align:right}
+.meter .rd b{color:var(--fg);font-weight:600}
+.hint{position:absolute;left:50%;top:50%;white-space:nowrap;transform:translate(-50%,-50%);z-index:5;pointer-events:none;font:500 .95rem/1 var(--text);background:var(--tab);padding:.7rem 1rem;border-radius:999px;box-shadow:0 0 0 1px var(--hair);transition:opacity .4s}
+.hint.gone{opacity:0}
+
+.compare{border-top:1px solid var(--hair);margin-top:clamp(2rem,5vw,3rem);padding-block:clamp(1.6rem,4vw,2.4rem) clamp(3rem,7vw,5rem)}
+.compare h2{font:400 1.3rem/1.15 var(--disp);letter-spacing:-.03em;margin:0 0 .8rem}
+.compare p{margin:0 0 .7rem;color:var(--fg2);max-width:74ch}
+.compare p b{color:var(--fg);font-weight:600}
+
+@media(max-width:700px){
+  .nav{display:none}
+  .who p{display:none}
+  .links span:not(.cv){display:none}
+  .rows li{grid-template-columns:64px minmax(0,1fr);gap:12px}
+  .rows .th{width:64px;height:40px}
+  .rows p,.rows em{display:none}
+  .meter .rd{display:none}
+  .lab{font-size:11.5px;padding:2px 6px}
+  .lab small{display:none}
+}
+</style>
+
+<div class="wrap intro">
+  <h1>Dive placement</h1>
+  <p>You picked <b>D, the dive</b>. Below is a mock of the home page with the dive in its hero. <b>Scroll inside the frame</b> as if it were the site, then switch placement and scroll again. The frame scrolls on its own, so the page around it stays put.</p>
+  <div class="modes" role="group" aria-label="Placement">
+    <button type="button" data-pick="away" aria-pressed="false"><b>1</b>Scroll away</button>
+    <button type="button" data-pick="pin" aria-pressed="true"><b>2</b>Short pin</button>
+    <button type="button" data-pick="back" aria-pressed="false"><b>3</b>Backdrop</button>
+  </div>
+  <p class="say" data-say></p>
+</div>
+
+<div class="wrap">
+  <div class="frame" data-frame><span class="hint" data-hint>Scroll inside this frame</span></div>
+  <div class="meter"><span class="st" data-st>Hero</span><span class="bar"><i></i></span><span class="rd" data-rd></span></div>
+
+  <section class="compare">
+    <h2>Difference in one line each</h2>
+    <p><b>1 Scroll away.</b> The hero scrolls off like any section. The dive plays while it leaves, so you watch the camera reach the basin while the hero is sliding out of view. Nothing ever holds the page.</p>
+    <p><b>2 Short pin.</b> The hero holds still for about one screen of scrolling while the dive plays in full, then lets go and the project list scrolls up under it. You see the whole dive, at the cost of one screen where scrolling moves the camera, not the page.</p>
+    <p><b>3 Backdrop.</b> The landscape never leaves. It sits behind the whole page, dives as you scroll, then dims under the project list and the rest. Always present, but text sits on top of the mesh from then on.</p>
+    <p>My recommendation for the dive is <b>2</b>: the dive needs room to read as a descent, and 1 spends most of it off screen. Reply with a number.</p>
+  </section>
+</div>
+
+<script>
+(() => {
+  const HEADSHOT = 'data:image/webp;base64,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';
+  const C = { bg: '#120A2A', ink: '#0D0722', fg: '#F3EDFF', fg2: '#B9AAE8', coral: '#FF7C6B', peach: '#FFD9C2' };
+  const STOPS = [[0, [13, 7, 34]], [.3, [42, 22, 112]], [.56, [112, 68, 232]], [.8, [238, 107, 96]], [1, [255, 214, 191]]];
+  const ramp = v => { for (let i = 1; i < STOPS.length; i++) if (v <= STOPS[i][0]) { const [a, A] = STOPS[i - 1], [b, B] = STOPS[i], k = (v - a) / (b - a); return A.map((q, j) => q + (B[j] - q) * k); } return STOPS[4][1]; };
+  const NB = 13, BAND = [...Array(NB)].map((_, k) => ramp(k / (NB - 1)));
+  const rgb = (c, a = 1) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
+  const mixc = (a, b, k) => a.map((q, i) => q + (b[i] - q) * k);
+  const FG2 = [185, 170, 232], FG = [243, 237, 255];
+  const clamp01 = v => Math.max(0, Math.min(1, v));
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const seg = (p, a, b) => clamp01((p - a) / (b - a));
+  const smooth = (a, b, x) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+  const g2 = (dx, dy, s) => Math.exp(-(dx * dx + dy * dy) / (2 * s * s));
+  const TOPICS = [
+    { id: 'rl', name: 'Reinforcement learning', n: 2, wide: [.2, .13], tall: [.3, .08] },
+    { id: 'sciml', name: 'Scientific ML', n: 2, wide: [.39, .17], tall: [.72, .18] },
+    { id: 'genai', name: 'GenAI', n: 3, wide: [.64, .3], tall: [.3, .3] },
+    { id: 'swe', name: 'Software engineering', n: 3, wide: [.84, .58], tall: [.7, .41] },
+  ];
+
+  /* ---- the hero's surface: four Gaussian bowls on a rolling field, with a flat floor under the name block ---- */
+  function surface(W, H, box) {
+    const R = W / H, phone = W < 700, s = phone ? .085 : .125;
+    const pts = TOPICS.map(t => { const [x, y] = phone ? t.tall : t.wide; return { ...t, x: x * R, y, d: .82, s }; });
+    const pad = phone ? .02 : .035;
+    const fl = box ? { cx: (box.l + box.r) / 2 / H, cy: (box.t + box.b) / 2 / H, rx: (box.r - box.l) / 2 / H + pad, ry: (box.b - box.t) / 2 / H + pad } : null;
+    const mask = (x, y) => { if (!fl) return 0; const d = Math.pow(Math.abs((x - fl.cx) / fl.rx) ** 4 + Math.abs((y - fl.cy) / fl.ry) ** 4, .25); return 1 - smooth(.9, 1.4, d); };
+    const F = (x, y, w = 1) => {
+      let f = .12 * Math.sin(2.1 * x + .6) * Math.cos(1.7 * y - .4) + .08 * Math.sin(3.3 * y + 1.2 * x + 1);
+      for (const q of pts) f -= q.d * g2(x - q.x, y - q.y, q.s);
+      const v = (f + .95) / 1.2, m = mask(x, y) * w;
+      return clamp01(m ? v * (1 - m) + .015 * m : v);
+    };
+    const grad = (x, y) => { const h = 1e-3; return [(F(x + h, y) - F(x - h, y)) / (2 * h), (F(x, y + h) - F(x, y - h)) / (2 * h)]; };
+    function solve(x, y) {
+      const path = [[x, y]], cap = phone ? .018 : .025; let vx = 0, vy = 0;
+      const curv = (x, y, dx, dy) => { const h = 2e-3, [ax, ay] = grad(x + dx * h, y + dy * h), [bx, by] = grad(x - dx * h, y - dy * h); return Math.abs(((ax - bx) * dx + (ay - by) * dy) / (2 * h)); };
+      for (let k = 0; k < 600; k++) {
+        const [gx, gy] = grad(x, y), g = Math.hypot(gx, gy); let lr = .011;
+        if (g > 1e-9) { const ux = gx / g, uy = gy / g, kap = Math.max(curv(x, y, ux, uy), curv(x, y, -uy, ux)); if (kap > 0) lr = Math.min(lr, .45 / kap); }
+        vx = .8 * vx - lr * gx; vy = .8 * vy - lr * gy;
+        const sp = Math.hypot(vx, vy); if (sp > cap) { vx *= cap / sp; vy *= cap / sp; }
+        x = Math.max(0, Math.min(R, x + vx)); y = Math.max(0, Math.min(1, y + vy)); path.push([x, y]);
+        if (g < .02 && Math.hypot(vx, vy) < 4e-4) break;
+        if (k > 40 && g < .1) { const q = path[path.length - 12]; if (Math.hypot(x - q[0], y - q[1]) < .0015) break; }
+      }
+      return path;
+    }
+    const nearest = ([x, y]) => { let best = null, bd = 1e9; for (const p of pts) { const d = Math.hypot(p.x - x, p.y - y); if (d < bd) { bd = d; best = p; } } return bd < .16 ? best : null; };
+    const crosses = path => !!box && path.some(([x, y]) => x * H > box.l - 12 && x * H < box.r + 12 && y * H > box.t - 12 && y * H < box.b + 12);
+    /* the opening descent: the site's starts, top right first; the first that lands on a topic without crossing the name */
+    const starts = phone ? [[.62, .06], [.9, .1], [.5, .2], [.85, .3]] : [[.6, .08], [.74, .1], [.88, .12], [.52, .14], [.8, .36]];
+    let path = null, hit = null;
+    for (const [a, b] of starts) { const pa = solve(a * R, b), h = nearest(pa[pa.length - 1]); if (h && !crosses(pa)) { path = pa; hit = h; break; } }
+    if (!path) { path = solve(starts[0][0] * R, starts[0][1]); hit = nearest(path[path.length - 1]); }
+    return { R, pts, F, grad, path, hit };
+  }
+
+  /* the flat contour map at half resolution, as the site's canvas fallback draws it: 13 bands with darkened edges */
+  function bandMap(S, W, H, k = .5) {
+    const w = Math.max(2, Math.round(W * k)), h = Math.max(2, Math.round(H * k)), c = document.createElement('canvas'); c.width = w; c.height = h;
+    const x = c.getContext('2d'), im = x.createImageData(w, h), band = new Int8Array(w * h), sx = W / H / w;
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) band[j * w + i] = Math.min(NB - 1, Math.floor(S.F((i + .5) * sx, (j + .5) / h) * NB));
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const q = j * w + i, b = band[q], cc = BAND[b], e = (i < w - 1 && band[q + 1] !== b) || (j < h - 1 && band[q + w] !== b) ? .72 : 1;
+      im.data[q * 4] = cc[0] * e; im.data[q * 4 + 1] = cc[1] * e; im.data[q * 4 + 2] = cc[2] * e; im.data[q * 4 + 3] = 255;
+    }
+    x.putImageData(im, 0, 0);
+    return { img: c, band, w, h };
+  }
+
+  /* ---- shared drawing: the descent trail and its end ring, through any projection ---- */
+  function trail(ctx, pts, phone, endRing) {
+    if (pts.length < 1) return;
+    ctx.lineJoin = 'round'; ctx.strokeStyle = C.fg; ctx.lineWidth = phone ? 1.4 : 1.8;
+    ctx.beginPath(); pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke();
+    ctx.fillStyle = C.fg; const r = phone ? 1.6 : 2;
+    for (const [x, y] of pts) { ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); }
+    ctx.beginPath(); ctx.arc(pts[0][0], pts[0][1], 5, 0, 7); ctx.stroke();
+    if (endRing) { const [x, y] = pts[pts.length - 1]; ctx.strokeStyle = C.coral; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.arc(x, y, 9, 0, 7); ctx.stroke(); }
+  }
+
+  /* ================================================================ D: dive */
+  const dive = {
+    steps: ['Overview', 'Descending', 'Converged'],
+    init(st) {
+      const { S } = st, nx = st.phone ? 44 : 96, ny = st.phone ? 64 : 44, n = (nx + 1) * (ny + 1), hf = new Float32Array(n), h0 = new Float32Array(n);
+      for (let j = 0; j <= ny; j++) for (let i = 0; i <= nx; i++) { const x = i / nx * S.R, y = j / ny; hf[j * (nx + 1) + i] = S.F(x, y); h0[j * (nx + 1) + i] = S.F(x, y, 0); }
+      st.g = { nx, ny, hf, h0, h: new Float32Array(n), sx: new Float32Array(n), sy: new Float32Array(n), dz: new Float32Array(n) };
+    },
+    cam(st, p) {
+      const { W, H, S } = st, path = S.path, kc = ease(seg(p, .05, .9)), u = seg(p, .14, .9), fi = ease(u) * (path.length - 1);
+      const i0 = Math.floor(fi), t = fi - i0, a = path[i0], b = path[Math.min(path.length - 1, i0 + 1)], it = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+      const tx = S.R / 2 + (it[0] - S.R / 2) * kc, ty = .5 + (it[1] - .5) * kc, hs = .34 * kc, foc = 1.5 * H;
+      const dist = 1.5 + (.62 - 1.5) * kc, pit = (90 + (34 - 90) * kc) * Math.PI / 180, c = Math.cos(pit), s = Math.sin(pit), tz = S.F(tx, ty) * hs;
+      const cam = [tx, ty + dist * c, tz + dist * s], f = [0, -c, -s], up = [0, -s, c], cy = H * (.5 + .12 * kc);
+      const P = (x, y, z) => { const dx = x - cam[0], dy = y - cam[1], dz = z * hs - cam[2], zf = dx * f[0] + dy * f[1] + dz * f[2]; if (zf < .03) return null; return [W / 2 + foc * dx / zf, cy - foc * (dy * up[1] + dz * up[2]) / zf, zf]; };
+      return { P, dist, fi, it, kc };
+    },
+    draw(ctx, st, p) {
+      const { W, H, S, g } = st, cam = this.cam(st, p), { nx, ny, h, hf, h0, sx, sy, dz } = g, k1 = ease(seg(p, .02, .16)), w = 1 - smooth(.12, .4, p);
+      for (let q = 0; q < h.length; q++) h[q] = h0[q] + (hf[q] - h0[q]) * w;
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+      if (k1 < 1) { ctx.globalAlpha = 1 - k1; ctx.drawImage(st.map.img, 0, 0, W, H); ctx.globalAlpha = 1; }
+      for (let j = 0; j <= ny; j++) for (let i = 0; i <= nx; i++) { const q = j * (nx + 1) + i, r = cam.P(i / nx * S.R, j / ny, h[q]); if (r) { sx[q] = r[0]; sy[q] = r[1]; dz[q] = r[2]; } else dz[q] = -1; }
+      /* depth fade: four alpha buckets per band */
+      const paths = [...Array(NB * 4)].map(() => new Path2D()), far = cam.dist;
+      const add = (q, r) => {
+        if (dz[q] < 0 || dz[r] < 0) return;
+        const z = (dz[q] + dz[r]) / 2, a = Math.min(3, Math.max(0, Math.floor((z - far * .6) / (far * .45 + .25)))), b = Math.min(NB - 1, Math.floor((h[q] + h[r]) / 2 * NB));
+        paths[b * 4 + a].moveTo(sx[q], sy[q]); paths[b * 4 + a].lineTo(sx[r], sy[r]);
+      };
+      for (let j = 0; j <= ny; j++) for (let i = 0; i < nx; i++) add(j * (nx + 1) + i, j * (nx + 1) + i + 1);
+      for (let i = 0; i <= nx; i++) for (let j = 0; j < ny; j++) add(j * (nx + 1) + i, (j + 1) * (nx + 1) + i);
+      ctx.lineWidth = 1;
+      paths.forEach((pth, q) => { const b = (q / 4) | 0, a = q % 4; ctx.strokeStyle = rgb(mixc(BAND[b], FG2, b < 4 ? .45 - b * .08 : 0), k1 * [.95, .7, .45, .25][a]); ctx.stroke(pth); });
+      /* the solver so far, and the iterate the camera follows */
+      const n = Math.floor(cam.fi) + 1, done = cam.fi >= S.path.length - 1.01;
+      const pts = S.path.slice(0, n).map(([x, y]) => cam.P(x, y, S.F(x, y))).filter(Boolean);
+      const cur = cam.P(cam.it[0], cam.it[1], S.F(cam.it[0], cam.it[1]));
+      if (cur) pts.push(cur);
+      trail(ctx, pts, st.phone, false);
+      if (cur) { ctx.strokeStyle = C.coral; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.arc(cur[0], cur[1], done ? 9 : 6, 0, 7); ctx.stroke(); }
+      const it = Math.min(S.path.length - 1, Math.round(cam.fi));
+      return { label: (x, y) => cam.P(x, y, S.F(x, y)), step: p < .14 ? 0 : done ? 2 : 1, rd: `Iteration <b>${it}</b>, <i class="m">f</i> = <b>${S.F(...S.path[it]).toFixed(3)}</b>`, done };
+    },
+  };
+
+
+  const SAY = {
+    away: '<b>1 Scroll away.</b> No pinning. The dive is tied to how far the hero has scrolled out, so the camera arrives in the basin as the hero leaves the top of the frame.',
+    pin: '<b>2 Short pin.</b> The hero holds in place for one screen of scrolling while the camera dives, then releases and the project list scrolls up. Watch the badge under the frame: it says Pinned while the page is held.',
+    back: '<b>3 Backdrop.</b> The landscape stays behind the whole page. It dives over the first screen, then dims while the project list, publications and contact scroll over it.',
+  };
+  const PROJECTS = [
+    ['Graph RL for resilient supply chains', 'Master’s thesis, CMU', 'A policy learns which transport arcs to add so demand still arrives when plants, warehouses or routes fail.', 2026],
+    ['SiNDAE', 'CAPD, Carnegie Mellon', 'Neural networks embedded in differential-algebraic process models and trained as one nonlinear program.', 2026],
+    ['Movie recommender with LLM cold start', 'Team project, CMU', 'A live recommendation service. An LLM turns a new user’s free-text tastes into a profile before their first request.', 2026],
+    ['Multimodal RAG over slides and reports', 'CMU, 10-423/623 Generative AI', 'Retrieve document pages as images, not OCR text, and a vision-language model answers questions about slides and reports more accurately.', 2026],
+    ['wayfinder-sidebar', 'Open source', 'A Claude Code plugin. Your ticket map sits beside the chat, and one click starts a new agent session with a handoff.', 2026],
+    ['FIFA player analytics pipeline', 'CMU', 'Spark to Postgres ETL, a live Kafka comment stream, and rating models trained locally and on GCP.', 2025],
+    ['DQN variants for ICU sepsis treatment', 'McGill, COMP 579', 'Which DQN extensions help on a clinical benchmark with 716 health states and 25 treatments?', 2025],
+    ['Energy-efficient electricity forecasting', 'McGill, ECSE 552', 'Which deep network forecasts tomorrow’s Houston electricity prices best per joule of GPU energy?', 2025],
+  ];
+  const page = `
+    <section class="sec"><h3>Research and projects</h3>
+      <div class="chips"><span>All<small>8</small></span><span>Reinforcement learning<small>2</small></span><span>Scientific ML<small>2</small></span><span>GenAI<small>3</small></span><span>Software engineering<small>3</small></span></div>
+      <ul class="rows">${PROJECTS.map(([t, w, l, y]) => `<li><span class="th"></span><div><b>${t}</b><small>${w}</small></div><p>${l}</p><em>${y}</em></li>`).join('')}</ul></section>
+    <section class="sec"><h3>Publications</h3><ul class="items">
+      <li><em>2026</em><div>SiNDAE: The Simultaneous Neural Differential-Algebraic systems of equations training Python package<span>Journal of Open Source Software</span></div></li>
+      <li><em>2027</em><div>Graph reinforcement learning for resilient supply chain network design<span>ESCAPE 37, Trondheim</span></div></li></ul></section>
+    <div class="contact"><h3>Contact</h3></div>`;
+  const heroInner = `<nav class="nav" aria-hidden="true"><span>Research</span><span>Publications</span><span>Experience</span><span>Skills</span><span>CV</span><span>Contact</span></nav>
+    <div class="who"><div class="id"><img alt="" src="${HEADSHOT}"><h2>Nicolas<br>Smits</h2></div><p>Optimisation, operations research, machine learning and reinforcement learning for process systems.</p>
+    <div class="links"><span>Email</span><span>LinkedIn</span><span>GitHub</span><span>ORCID</span><span class="cv">CV</span></div></div>`;
+  const stageHTML = `<div class="stage"><canvas role="img" aria-label="The hero landscape; scrolling moves a camera down the gradient-descent path into a topic basin"></canvas><div class="labs"></div></div>`;
+
+  const frame = document.querySelector('[data-frame]'), hint = document.querySelector('[data-hint]');
+  const stEl = document.querySelector('[data-st]'), rdEl = document.querySelector('[data-rd]'), bar = document.querySelector('.meter .bar i'), say = document.querySelector('[data-say]');
+  const demos = {};
+  for (const mode of ['away', 'pin', 'back']) {
+    const d = document.createElement('div'); d.className = 'demo'; d.dataset.mode = mode; d.hidden = true;
+    d.innerHTML = (mode === 'back' ? `<div class="back">${stageHTML}</div>` : '') +
+      `<div class="scroller"><div class="hero-wrap"><div class="hero">${mode === 'back' ? '' : stageHTML}${heroInner}</div></div>${page}</div>`;
+    frame.appendChild(d);
+    demos[mode] = { d, mode, scroller: d.querySelector('.scroller'), wrap: d.querySelector('.hero-wrap'), hero: d.querySelector('.hero'), stage: d.querySelector('.stage'), who: d.querySelector('.who') };
+  }
+  let cur = null;
+
+  function setup(o) {
+    const FH = frame.clientHeight, W = frame.clientWidth;
+    o.FH = FH; o.hero.style.height = FH + 'px';
+    o.pinLen = FH * 1.1;
+    o.wrap.style.height = (o.mode === 'pin' ? FH + o.pinLen : FH) + 'px';
+    const cv = o.stage.querySelector('canvas'), labs = o.stage.querySelector('.labs');
+    const st = o.st = { W, H: FH, phone: W < 700, dpr: Math.min(devicePixelRatio || 1, 2), ctx: cv.getContext('2d'), labs, els: {} };
+    cv.width = Math.round(W * st.dpr); cv.height = Math.round(FH * st.dpr);
+    o.who.style.opacity = '1'; o.who.style.transform = '';
+    const sr = o.hero.getBoundingClientRect(), wr = o.who.getBoundingClientRect(), top = sr.top + (o.mode === 'pin' ? 0 : 0);
+    const box = { l: wr.left - sr.left, t: wr.top - top, r: wr.right - sr.left, b: wr.bottom - top };
+    st.S = surface(W, FH, box); st.map = bandMap(st.S, W, FH); dive.init(st);
+    labs.textContent = '';
+    st.S.pts.forEach(q => { const a = document.createElement('span'); a.className = 'lab'; a.innerHTML = `<i>x*</i>${q.name}<small>${q.n} projects</small>`; labs.appendChild(a); st.els[q.id] = a; });
+    o.ready = true; o.last = -1;
+  }
+
+  function render(o) {
+    if (!o.ready) return;
+    const s = o.scroller.scrollTop, FH = o.FH, st = o.st;
+    let p, state = 'Hero', on = false;
+    if (o.mode === 'away') { p = clamp01(s / (FH * .8)); state = s < 4 ? 'Hero' : s < FH ? 'Scrolling away' : 'Page'; }
+    else if (o.mode === 'pin') { p = clamp01(s / o.pinLen); on = s > 2 && s < o.pinLen; state = s <= 2 ? 'Hero' : on ? 'Pinned' : 'Released'; }
+    else {
+      p = clamp01(s / (FH * 1.05));
+      const dim = seg(s, FH * .75, FH * 1.25);
+      o.stage.parentElement.style.opacity = String(1 - .68 * dim);
+      st.labs.style.opacity = String(1 - dim);
+      state = s < 4 ? 'Hero' : dim < 1 ? 'Diving' : 'Backdrop';
+    }
+    stEl.textContent = state; stEl.classList.toggle('on', on);
+    bar.style.transform = `scaleX(${p})`;
+    if (Math.abs(p - o.last) < .0004) return; o.last = p;
+    const { ctx, dpr } = st; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const out = dive.draw(ctx, st, p);
+    const fade = seg(p, 0, .22); o.who.style.opacity = String(1 - fade); o.who.style.transform = `translateY(${-24 * ease(fade)}px)`;
+    st.S.pts.forEach(q => {
+      const a = st.els[q.id], pos = out.label(q.x, q.y);
+      if (!pos || pos[0] < -40 || pos[0] > st.W + 40 || pos[1] < -20 || pos[1] > st.H + 20) { a.style.opacity = '0'; return; }
+      const w = a.offsetWidth, x = Math.max(6, Math.min(st.W - w - 6, pos[0] - w / 2));
+      a.style.opacity = '1'; a.style.transform = `translate(${x}px,${pos[1] + 12}px)`;
+      a.classList.toggle('hit', q === st.S.hit && !!out.done);
+    });
+    rdEl.innerHTML = out.rd;
+  }
+
+  function show(mode) {
+    document.querySelectorAll('[data-pick]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pick === mode)));
+    Object.values(demos).forEach(o => (o.d.hidden = o.mode !== mode));
+    cur = demos[mode]; cur.scroller.scrollTop = 0; say.innerHTML = SAY[mode];
+    setup(cur); render(cur);
+  }
+  Object.values(demos).forEach(o => o.scroller.addEventListener('scroll', () => {
+    hint.classList.add('gone');
+    if (o.raf) return; o.raf = requestAnimationFrame(() => { o.raf = 0; render(o); });
+  }, { passive: true }));
+  document.querySelectorAll('[data-pick]').forEach(b => b.addEventListener('click', () => show(b.dataset.pick)));
+  let lw = 0, lh = 0;
+  new ResizeObserver(() => { if (frame.clientWidth === lw && frame.clientHeight === lh) return; lw = frame.clientWidth; lh = frame.clientHeight; if (cur) { const s = cur.scroller.scrollTop; setup(cur); cur.scroller.scrollTop = s; render(cur); } }).observe(frame);
+  show('pin');
+})();
+</script>

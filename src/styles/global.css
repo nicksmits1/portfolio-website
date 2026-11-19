@@ -68,7 +68,17 @@ a.lab:hover { background: var(--fg); color: var(--ink); }
 @media (max-width: 699px) { .nav .wide { display: none; } .nav { font-size: .82rem; padding: 14px 16px 10px 14px; } .tab-name { padding: 14px 16px 10px 16px; font-size: .9rem; } }
 
 /* ---- home hero ---- */
-.hero { --reel: 142px; position: relative; height: calc(clamp(600px, 82vh, 700px) + var(--reel)); border-bottom: 1px solid var(--hair); }
+/* The hero is sticky inside .hero-pin, which is one screen taller than the hero: that screen of scrolling is the dive.
+   While pinned the hero fills at least the screen, so nothing shows under it. Reduced motion drops the extra screen,
+   so the hero scrolls away as a still. */
+.hero-pin { --reel: 142px; --hero-h: calc(clamp(600px, 82vh, 700px) + var(--reel)); --vp: 100vh; height: calc(max(var(--hero-h), var(--vp)) + var(--vp)); }
+@supports (height: 100svh) { .hero-pin { --vp: 100svh; } }
+.hero { position: sticky; top: 0; height: max(var(--hero-h), var(--vp)); border-bottom: 1px solid var(--hair); }
+/* the hero's canvases keep one compositing layer each while their opacity changes during the dive */
+.hero .land canvas { will-change: opacity; }
+.land canvas.dive { pointer-events: none; }
+.land.diving { cursor: default; }
+@media (prefers-reduced-motion: reduce) { .hero-pin { height: auto; } .hero { position: relative; height: var(--hero-h); } }
 .who { position: absolute; left: var(--gutter); right: var(--gutter); bottom: calc(40px + var(--reel)); z-index: 1; max-width: 640px; pointer-events: none; }
 .who .id { display: flex; gap: 22px; align-items: flex-end; }
 .who img { flex: none; width: 136px; height: 136px; border-radius: 14px; object-fit: cover; box-shadow: 0 0 0 1px rgba(243, 237, 255, .3); }
@@ -82,9 +92,10 @@ a.lab:hover { background: var(--fg); color: var(--ink); }
 .links .cv { background: var(--peach); color: var(--ink); border-color: var(--peach); }
 .who .read { pointer-events: auto; }
 
-/* Latest: a slow reel on translucent ink across the hero's lower edge. Cards fade out under the fixed label; the
+/* Latest: a slow reel on translucent ink across the hero's lower edge, unblurred: a backdrop blur inside the sticky
+   hero flickered while the dive redrew the map under it. Cards fade out under the fixed label; the
    loop shifts by one set's width (--shift, --dur set in home.ts at 28 px/s) and pauses under the pointer or focus. */
-.reel { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; height: var(--reel); display: flex; align-items: stretch; padding-block: 16px 18px; background: rgba(13, 7, 34, .8); border-top: 1px solid var(--hair); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+.reel { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; height: var(--reel); display: flex; align-items: stretch; padding-block: 16px 18px; background: rgba(13, 7, 34, .84); border-top: 1px solid var(--hair); }
 .reel-label { flex: none; margin: 0; padding: 2px 18px 0 var(--gutter); font: 600 .75rem/1 var(--text); letter-spacing: .09em; text-transform: uppercase; color: var(--coral); }
 .reel .win { flex: 1; min-width: 0; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 56px); mask-image: linear-gradient(90deg, transparent, #000 56px); }
 .reel .track { display: flex; width: max-content; padding-left: 48px; animation: reel var(--dur, 50s) linear infinite; }
@@ -115,7 +126,7 @@ a.lab:hover { background: var(--fg); color: var(--ink); }
 /* reduced motion: the reel stands still and scrolls sideways by hand, without the loop's copies */
 @media (prefers-reduced-motion: reduce) { .reel .win { overflow-x: auto; scrollbar-width: none; } .reel .set + .set { display: none; } }
 @media (max-width: 699px) {
-  .hero { --reel: 136px; height: calc(600px + var(--reel)); }
+  .hero-pin { --reel: 136px; --hero-h: calc(600px + var(--reel)); }
   .who { bottom: calc(22px + var(--reel)); }
   .who img { width: 76px; height: 76px; border-radius: 10px; }
   .focus { display: none; }

@@ -13,13 +13,15 @@ const chips = [...research.querySelectorAll<HTMLButtonElement>('[data-topic-chip
 const rows = [...research.querySelectorAll<HTMLElement>('li[data-topics]')];
 const topicIds = new Set(chips.map(b => b.dataset.topic).filter(Boolean) as string[]);
 let shown: string | null = null;
-function show(id: string | null, scroll = false) {
+/* url: write the topic into the address (chips, labels, links); a descent filters without it, so reloading after a
+   click on the map stays on the hero instead of jumping to the list */
+function show(id: string | null, scroll = false, url = true) {
   shown = id && topicIds.has(id) ? id : null;
   chips.forEach(b => b.setAttribute('aria-pressed', String((b.dataset.topic || null) === shown)));
   rows.forEach(r => (r.hidden = !!shown && !r.dataset.topics!.split(' ').includes(shown)));
   document.querySelectorAll<HTMLElement>('.hero .labs .lab').forEach(a => a.classList.toggle('hit', a.getAttribute('href') === `#${shown}`));
-  const url = shown ? `#${shown}` : location.pathname + location.search;
-  if (location.hash !== (shown ? `#${shown}` : '')) history.replaceState(null, '', url);
+  const want = url && shown ? `#${shown}` : '';
+  if (location.hash !== want) history.replaceState(null, '', want || location.pathname + location.search);
   if (scroll) research.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
 }
 chips.forEach(b => b.addEventListener('click', () => show(b.dataset.topic || null)));
@@ -87,10 +89,28 @@ mountAll('[data-land="hero"]', root => {
       if (hit.id === 'contact') return `${said(n)}, right on <a href="#contact">Contact</a>.${tail}`;
       /* a descent the visitor started also filters the rows; an opening one leaves the list as it is */
       const filter = tapped && !auto;
-      if (filter) show(hit.id);
+      if (filter) show(hit.id, false, false);
       return `${said(n)} on <a href="${hit.href}">${hit.label}</a>, ${hit.tag}${filter ? ' now listed below' : ''}.${tail}`;
     },
   });
+  /* The dive: the hero is pinned for one screen of scrolling (.hero-pin), and progress through that screen moves the
+     camera down the latest descent. The name block fades as the dive starts and is out of the tab order once gone.
+     Under reduced motion the pin collapses in CSS, so progress stays 0 and the hero is the flat map. */
+  const pin = hero.parentElement as HTMLElement;
+  if (pin.classList.contains('hero-pin')) {
+    let queued = 0;
+    const scrub = () => {
+      queued = 0;
+      const len = pin.offsetHeight - hero.offsetHeight, p = len > 0 ? Math.max(0, Math.min(1, -pin.getBoundingClientRect().top / len)) : 0;
+      L.dive(p);
+      const f = Math.min(1, p / 0.22);
+      who.style.opacity = f ? String(1 - f) : ''; who.style.transform = f ? `translateY(${(-24 * f * (2 - f)).toFixed(1)}px)` : '';
+      who.style.visibility = f >= 1 ? 'hidden' : '';
+    };
+    addEventListener('scroll', () => { if (!queued) queued = requestAnimationFrame(scrub); }, { passive: true });
+    addEventListener('resize', () => { if (!queued) queued = requestAnimationFrame(scrub); });
+    scrub();
+  }
   if (tab && fxs.length > 1) {
     const label = () => {
       const f = fxs[at], name = f.name(topics.length);

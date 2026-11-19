@@ -57,6 +57,10 @@ function ramp(v: number) {
 const g2 = (dx: number, dy: number, s: number) => Math.exp(-(dx * dx + dy * dy) / (2 * s * s));
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 const smooth = (a: number, b: number, x: number) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+const seg = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
+const inout = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const BANDS = Array.from({ length: 13 }, (_, k) => ramp(k / 12));
+const LILAC = [185, 170, 232]; // --fg2, mixed into the darkest bands so the mesh stays visible on the night ground
 
 export function landscape(root: HTMLElement, o: Opts) {
   const cv = root.querySelector('canvas')!, svg = root.querySelector('svg')!, labs = root.querySelector<HTMLElement>('.labs')!;
@@ -67,6 +71,8 @@ export function landscape(root: HTMLElement, o: Opts) {
   let from: { kind: Kind; par: number[]; pts: Pt[] } | null = null, mixT = 1;
   let fl: { cx: number; cy: number; rx: number; ry: number } | null = null, flBox: Box | null = null;
   let last: [number, number] | null = null; // the latest descent's start, redrawn after a resize
+  let path0: [number, number][] = [], hit0: Pt | null = null; // the latest descent, which the dive follows
+  let diveP = 0, dcv: HTMLCanvasElement | null = null;
   let gl: WebGL2RenderingContext | null = null; const loc: Record<string, WebGLUniformLocation | null> = {};
   try { gl = cv.getContext('webgl2', { antialias: false }); } catch { gl = null; }
   if (gl) {
@@ -97,10 +103,11 @@ export function landscape(root: HTMLElement, o: Opts) {
     const d = Math.pow(Math.abs((x - fl.cx) / fl.rx) ** 4 + Math.abs((y - fl.cy) / fl.ry) ** 4, 0.25);
     return 1 - smooth(EDGE[0], EDGE[1], d);
   };
-  const F = (x: number, y: number) => {
+  /** w scales the flat floor under the text block: 1 draws it, 0 leaves the surface as if the block were not there */
+  const F = (x: number, y: number, w = 1) => {
     let v = S(kind, par, pts, x, y);
     if (from && mixT < 1) v = S(from.kind, from.par, from.pts, x, y) * (1 - mixT) + v * mixT;
-    const m = mask(x, y);
+    const m = mask(x, y) * w;
     return m ? v * (1 - m) + FLOOR * m : v;
   };
   const grad = (x: number, y: number): [number, number] => { const h = 1e-3; return [(F(x + h, y) - F(x - h, y)) / (2 * h), (F(x, y + h) - F(x, y - h)) / (2 * h)]; };
@@ -148,6 +155,7 @@ export function landscape(root: HTMLElement, o: Opts) {
     read(); measureFloor(); place();
     trail.textContent = ''; dirty = true; draw();
     if (last) run(last[0], last[1], true);
+    if (diveP > 0) drawDive(diveP);
   }
   const pack = (ps: Pt[]) => { const arr = new Float32Array(MAXN * 4); ps.slice(0, MAXN).forEach((p, i) => arr.set([p.x, p.y, p.c, p.s], i * 4)); return arr; };
   function draw() {
@@ -176,7 +184,7 @@ export function landscape(root: HTMLElement, o: Opts) {
     pts.forEach(p => { const target = p.d * (p.t ?? 1); if (Math.abs(target - p.c) > 0.002) { p.c += (target - p.c) * (reduce ? 1 : 0.35); moving = true; } });
     if (moving) dirty = true;
     if (o.drift && !reduce && gl && kind === 'bowls') T += 0.0016;
-    if (gl || dirty) draw();
+    if ((gl && diveP < 0.2) || dirty) draw();
     raf = requestAnimationFrame(loop);
   }
 
@@ -205,7 +213,7 @@ export function landscape(root: HTMLElement, o: Opts) {
   const crosses = (path: [number, number][]) => !!flBox && path.some(([x, y]) => x * H > flBox!.l - 12 && x * H < flBox!.r + 12 && y * H > flBox!.t - 12 && y * H < flBox!.b + 12);
   function run(ux: number, uy: number, instant: boolean, auto = false) {
     const my = ++tok, path = solve(ux, uy), lw = W < 600 ? 1.4 : 1.8;
-    last = [ux, uy];
+    last = [ux, uy]; path0 = path; hit0 = nearest(path[path.length - 1]);
     trail.textContent = '';
     const line = el('polyline', { fill: 'none', stroke: t.fg, 'stroke-width': lw, 'stroke-linejoin': 'round' }, trail), dots = el('g', { fill: t.fg }, trail);
     el('circle', { cx: ux * H, cy: uy * H, r: 5, fill: 'none', stroke: t.fg, 'stroke-width': lw }, trail);
@@ -266,12 +274,12 @@ export function landscape(root: HTMLElement, o: Opts) {
   const local = (e: PointerEvent | MouseEvent) => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
   root.addEventListener('pointermove', e => {
     if (!cueG || e.pointerType !== 'mouse') return;
-    if ((e.target as Element).closest('a,button')) { cueG.style.display = 'none'; if (hint) hint.style.opacity = '0'; return; }
+    if (diveP > 0.01 || (e.target as Element).closest('a,button')) { cueG.style.display = 'none'; if (hint) hint.style.opacity = '0'; return; }
     const [x, y] = local(e); cue(x, y);
   });
   root.addEventListener('pointerleave', () => { if (cueG) cueG.style.display = 'none'; if (hint) hint.style.opacity = '0'; });
   root.addEventListener('click', e => {
-    if ((e.target as Element).closest('a,button')) return;
+    if (diveP > 0.01 || (e.target as Element).closest('a,button')) return;
     const [x, y] = local(e); clicked = true; run(x / H, y / H, reduce);
     if (cueG) cue(x, y);
   });
@@ -287,6 +295,73 @@ export function landscape(root: HTMLElement, o: Opts) {
   }).observe(cv);
   new IntersectionObserver(es => es.forEach(e => { vis = e.isIntersecting; if (vis && !raf) raf = requestAnimationFrame(loop); })).observe(root);
 
+  /* ---- the dive (home hero, while it is pinned): scroll progress p in 0..1 sets the iteration along the latest
+     descent, and a camera follows the iterate from straight above the map down into its basin, drawing the surface
+     as a wire mesh with depth fade. The flat floor under the name fills back in as the name fades, unless the descent
+     ended on it. Plain 2D canvas over the shader, which fades out under it. ---- */
+  function drawDive(p: number) {
+    if (!dcv) { dcv = document.createElement('canvas'); dcv.className = 'dive'; dcv.setAttribute('aria-hidden', 'true'); cv.after(dcv); }
+    const c = dcv.getContext('2d')!, dpr = Math.min(devicePixelRatio || 1, 2), R = W / H, phone = W < 700;
+    if (dcv.width !== Math.round(W * dpr) || dcv.height !== Math.round(H * dpr)) { dcv.width = Math.round(W * dpr); dcv.height = Math.round(H * dpr); }
+    c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
+    const k1 = inout(seg(p, 0.02, 0.16)), kc = inout(seg(p, 0.05, 0.9)), w = hit0?.id === 'contact' ? 1 : 1 - smooth(0.12, 0.4, p);
+    const Fw = (x: number, y: number) => F(x, y, w);
+    /* the camera: its target slides from the map's centre to the iterate as it descends and tilts from 90° to 34° */
+    const path = path0.length ? path0 : [[R / 2, 0.5] as [number, number]], fi = inout(seg(p, 0.14, 0.9)) * (path.length - 1);
+    const i0 = Math.floor(fi), ft = fi - i0, a = path[i0], b = path[Math.min(path.length - 1, i0 + 1)], it: [number, number] = [a[0] + (b[0] - a[0]) * ft, a[1] + (b[1] - a[1]) * ft];
+    const tx = R / 2 + (it[0] - R / 2) * kc, ty = 0.5 + (it[1] - 0.5) * kc, hs = 0.34 * kc, foc = 1.5 * H;
+    const dist = 1.5 + (0.62 - 1.5) * kc, pit = (90 + (34 - 90) * kc) * Math.PI / 180, cs = Math.cos(pit), sn = Math.sin(pit);
+    const cam = [tx, ty + dist * cs, Fw(tx, ty) * hs + dist * sn], cy = H * (0.5 + 0.12 * kc);
+    const P = (x: number, y: number, z: number): [number, number, number] | null => {
+      const dx = x - cam[0], dy = y - cam[1], dz = z * hs - cam[2], zf = -dy * cs - dz * sn;
+      return zf < 0.03 ? null : [W / 2 + foc * dx / zf, cy - foc * (-dy * sn + dz * cs) / zf, zf];
+    };
+    c.globalAlpha = k1; c.fillStyle = t.bg; c.fillRect(0, 0, W, H); c.globalAlpha = 1;
+    /* the mesh: lines of constant x and y, one path per band and depth bucket */
+    const nx = phone ? 44 : 96, ny = phone ? 64 : 44, n = (nx + 1) * (ny + 1), h = new Float32Array(n), sx = new Float32Array(n), sy = new Float32Array(n), dz = new Float32Array(n);
+    for (let j = 0; j <= ny; j++) for (let i = 0; i <= nx; i++) {
+      const q = j * (nx + 1) + i, x = i / nx * R, y = j / ny; h[q] = Fw(x, y);
+      const r = P(x, y, h[q]); if (r) { sx[q] = r[0]; sy[q] = r[1]; dz[q] = r[2]; } else dz[q] = -1;
+    }
+    const paths = Array.from({ length: 13 * 4 }, () => new Path2D());
+    const add = (q: number, r: number) => {
+      if (dz[q] < 0 || dz[r] < 0) return;
+      const z = (dz[q] + dz[r]) / 2, d = Math.min(3, Math.max(0, Math.floor((z - dist * 0.6) / (dist * 0.45 + 0.25)))), bd = Math.max(0, Math.min(12, Math.floor((h[q] + h[r]) / 2 * 13))); // the bowls dip just below 0 at their centres
+      paths[bd * 4 + d].moveTo(sx[q], sy[q]); paths[bd * 4 + d].lineTo(sx[r], sy[r]);
+    };
+    for (let j = 0; j <= ny; j++) for (let i = 0; i < nx; i++) add(j * (nx + 1) + i, j * (nx + 1) + i + 1);
+    for (let i = 0; i <= nx; i++) for (let j = 0; j < ny; j++) add(j * (nx + 1) + i, (j + 1) * (nx + 1) + i);
+    c.lineWidth = 1;
+    paths.forEach((pth, q) => {
+      const bd = (q / 4) | 0, k = bd < 4 ? 0.45 - bd * 0.08 : 0, col = BANDS[bd].map((v, i) => v + (LILAC[i] - v) * k);
+      c.strokeStyle = `rgba(${col[0] | 0},${col[1] | 0},${col[2] | 0},${k1 * [0.95, 0.7, 0.45, 0.25][q % 4]})`; c.stroke(pth);
+    });
+    /* the descent so far and the iterate the camera follows */
+    const done = fi >= path.length - 1.01, lw = phone ? 1.4 : 1.8, r0 = phone ? 1.6 : 2;
+    const tr = path.slice(0, i0 + 1).map(([x, y]) => P(x, y, Fw(x, y))).filter(Boolean) as [number, number, number][];
+    const cur = P(it[0], it[1], Fw(it[0], it[1])); if (cur) tr.push(cur);
+    if (tr.length) {
+      c.lineJoin = 'round'; c.strokeStyle = t.fg; c.fillStyle = t.fg; c.lineWidth = lw;
+      c.beginPath(); tr.forEach(([x, y], i) => (i ? c.lineTo(x, y) : c.moveTo(x, y))); c.stroke();
+      for (const [x, y] of tr) { c.beginPath(); c.arc(x, y, r0, 0, 7); c.fill(); }
+      c.beginPath(); c.arc(tr[0][0], tr[0][1], 5, 0, 7); c.stroke();
+    }
+    if (cur) { c.strokeStyle = t.coral; c.lineWidth = 2.4; c.beginPath(); c.arc(cur[0], cur[1], done ? 9 : 6, 0, 7); c.stroke(); }
+    /* the topic labels ride on the projected minima and drop out once they leave the frame or pass behind the camera */
+    for (const q of pts0()) {
+      const e = q.el!, r = P(q.x, q.y, Fw(q.x, q.y));
+      if (!r || r[0] < -40 || r[0] > W + 40 || r[1] < -20 || r[1] > H - 30) { e.style.visibility = 'hidden'; continue; }
+      const ew = e.offsetWidth; e.style.visibility = ''; e.style.left = Math.max(ew / 2 + 6, Math.min(W - ew / 2 - 6, r[0])) + 'px'; e.style.top = r[1] + 'px';
+    }
+    cv.style.opacity = String(1 - k1); svg.style.opacity = '0';
+  }
+  const pts0 = () => pts.filter(q => q.el && !q.hidden);
+  function undive() {
+    if (dcv) dcv.getContext('2d')!.clearRect(0, 0, dcv.width, dcv.height);
+    cv.style.opacity = ''; svg.style.opacity = '';
+    for (const q of pts0()) { const e = q.el!, ew = e.offsetWidth; e.style.visibility = ''; e.style.top = q.y * H + 'px'; e.style.left = Math.max(ew / 2 + 6, Math.min(W - ew / 2 - 6, q.x * H)) + 'px'; }
+  }
+
   /* touch: one pulse where the opening descent starts */
   function pulse(x: number, y: number) {
     if (reduce) return;
@@ -296,6 +371,15 @@ export function landscape(root: HTMLElement, o: Opts) {
 
   return {
     run,
+    /** Scroll progress through the pinned hero, 0..1; 0 is the flat map. Does nothing under reduced motion. */
+    dive(p: number) {
+      p = reduce ? 0 : clamp01(p);
+      if (p === diveP) return;
+      const was = diveP; diveP = p;
+      root.classList.toggle('diving', p > 0);
+      if (p > 0) { if (cueG) cueG.style.display = 'none'; if (hint) hint.style.opacity = '0'; drawDive(p); }
+      else if (was > 0) undive();
+    },
     setWeights(w: Record<string, number> | null) {
       pts.forEach(p => { p.t = !w || p.hidden ? 1 : (w[p.id] ?? 1); p.el?.classList.toggle('off', (p.t ?? 1) < 0.5); });
       trail.textContent = ''; last = null;

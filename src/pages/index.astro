@@ -25,6 +25,8 @@ const head = image('profile', 'headshot-square.webp');
 const [first, ...rest] = profile.name.split(' ');
 ---
 <Base title="Nicolas Smits" description={`${profile.name}: ${profile.focus}`}>
+  {/* the hero holds for one screen of scrolling while the camera dives down the descent (home.ts), then scrolls away */}
+  <div class="hero-pin">
   <header class="hero" id="top">
     <div class="land" data-land="hero" data-topics={JSON.stringify(topics)}>
       <canvas role="img" aria-label="Contour landscape of an objective function with one local minimum per research topic around a flat basin under the name; a gradient-descent solver converges on one of them"></canvas>
@@ -62,6 +64,7 @@ const [first, ...rest] = profile.name.split(' ');
       ))}</div></div>
     </section>
   </header>
+  </div>
 
   <main id="main" class="wrap">
     <section class="block" id="research" aria-labelledby="research-h">
