@@ -1,4 +1,4 @@
-import { landscape, type Pt } from './landscape';
+import { landscape, type Surface } from './landscape';
 import { MAPS, type ProjectRef } from './maps';
 import { mountAll, reduce } from './dom';
 
@@ -31,31 +31,80 @@ document.addEventListener('click', e => {
 });
 addEventListener('hashchange', () => show(location.hash.slice(1), true));
 
-/* Hero: one minimum per research topic, plus a broad basin under the name that converges on Contact. */
+/* Hero: one minimum per research topic on a calm basin: the name block sits on a flat ink floor, and a descent that
+   ends there lands on Contact. The formula tab top left rotates the surface through four functions; the three test
+   functions have four minimum slots, assigned to the topics in order, so they appear only while there are four topics. */
+type Key = 'bowls' | 'himmelblau' | 'rosenbrock' | 'ripple';
+const WORD = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+const FX: { key: Key; name: (n: number) => string; eq: string }[] = [
+  { key: 'bowls', name: n => `${WORD[n] ?? n} bowls`, eq: 'f(x) = w(x) − Σ<sub>i</sub> 0.82 exp(−‖x − c<sub>i</sub>‖² / 2σ²)' },
+  { key: 'himmelblau', name: () => 'Himmelblau', eq: 'f(x, y) = (x² + y − 11)² + (x + y² − 7)²' },
+  { key: 'rosenbrock', name: () => 'Rosenbrock', eq: 'f(x, y) = (1 − x)² + 100 (y − x²)²' },
+  { key: 'ripple', name: () => 'Ripple field', eq: 'Rastrigin ripples, 2 − cos 2πx/λ − cos 2πy/λ, over four basins' },
+];
+function surface(key: Key, W: number, H: number, topics: Topic[]): Surface {
+  const R = W / H, phone = W < 700, tall = phone || R < 1.25, fit = (a: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, a));
+  const base = (t: Topic) => ({ id: t.id, label: t.name, tag: count(t.n), href: `#${t.id}`, current: t.id === shown });
+  if (key === 'himmelblau') {
+    /* Himmelblau's four minima, mirrored left to right so the one nearest the name holds the shortest label */
+    const [xf, y0, k] = tall ? [.5, .22, .042 * fit(R / .53, .8, 1.3)] : [.702, .4, .095 * Math.min(1, R / 1.71)], x0 = xf * R;
+    const slot = [[3, 2], [-2.805118, 3.131312], [3.584428, -1.848126], [-3.77931, -3.283186]];
+    return { kind: key, p: [x0, y0, k], points: topics.map((t, i) => ({ ...base(t), x: x0 - k * slot[i][0], y: y0 - k * slot[i][1], d: 0, s: .1 })) };
+  }
+  if (key === 'rosenbrock') {
+    /* Rosenbrock's valley on a log scale; the topics are shallow pools along its floor */
+    const [xf, y0, ku, kw] = tall ? [.5, .36, .11 * fit(R / .53, .8, 1.3), .085] : [.655, .66, .27 * Math.min(1, R / 1.71), .16], x0 = xf * R;
+    const slot = tall ? [-1.75, -.85, .55, 1.45] : [-1.55, -.55, .45, 1.25];
+    return { kind: key, p: [x0, y0, ku, kw], points: topics.map((t, i) => ({ ...base(t), x: x0 + ku * slot[i], y: y0 - kw * slot[i] ** 2, d: .2, s: .05 })) };
+  }
+  if (key === 'ripple') {
+    /* a Rastrigin egg crate over a gentle slope; the topics are the deep basins where the ripple dies away */
+    const slot = tall ? [[.26, .1], [.74, .14], [.3, .3], [.72, .34]] : [[.2, .2], [.44, .12], [.66, .34], [.86, .6]];
+    return { kind: key, p: [tall ? .075 : .105], points: topics.map((t, i) => ({ ...base(t), x: slot[i][0] * R, y: slot[i][1], d: .42, s: tall ? .075 : .1 })) };
+  }
+  const s = phone ? .085 : .125;
+  return { kind: 'bowls', points: topics.map(t => { const [x, y] = phone ? t.tall : t.wide; return { ...base(t), x: x * R, y, d: .82, s }; }) };
+}
+
 mountAll('[data-land="hero"]', root => {
   const topics: Topic[] = JSON.parse(root.dataset.topics!), hero = root.closest('.hero') as HTMLElement, who = hero.querySelector('.who') as HTMLElement;
-  const read = hero.querySelector<HTMLElement>('[data-read]');
-  let tapped = false;
+  const read = hero.querySelector<HTMLElement>('[data-read]'), tab = hero.querySelector<HTMLButtonElement>('[data-fx]');
+  const fxs = FX.filter(f => f.key === 'bowls' || topics.length === 4);
+  let tapped = false, at = 0;
   root.addEventListener('click', () => (tapped = true));
   const L = landscape(root, {
     drift: true, cue: true, read,
-    points(W, H) {
-      const phone = W < 700, s = phone ? 0.085 : 0.125;
-      const hr = hero.getBoundingClientRect(), r = who.getBoundingClientRect();
-      const pts: Omit<Pt, 'c'>[] = topics.map(t => { const [x, y] = phone ? t.tall : t.wide; return { id: t.id, label: t.name, tag: count(t.n), href: `#${t.id}`, x: x * W / H, y, d: 0.82, s, current: t.id === shown }; });
-      pts.push({ id: 'contact', hidden: true, x: (r.left - hr.left + Math.min(r.width, W * 0.9) * 0.42) / H, y: (r.top - hr.top + r.height * 0.5) / H, d: 0.86, s: phone ? 0.2 : 0.27 });
-      return pts;
+    points: (W, H) => surface(fxs[at].key, W, H, topics),
+    floor() {
+      const hr = root.getBoundingClientRect(), r = who.getBoundingClientRect();
+      return { l: r.left - hr.left, t: r.top - hr.top, r: r.right - hr.left, b: r.bottom - hr.top };
     },
-    start: W => (W < 700 ? [[0.5, 0.22]] : [[0.47, 0.52]]),
-    done(hit, n) {
+    /* the opening descent starts top right and lands on a topic without crossing the name block */
+    start: W => (W < 700 ? [[.62, .06], [.9, .1], [.5, .2], [.85, .3], [.2, .2], [.6, .4]] : [[.6, .08], [.74, .1], [.88, .12], [.52, .14], [.8, .36], [.96, .42], [.62, .5], [.3, .08]]),
+    done(hit, n, auto) {
       const tail = L?.touch && !tapped ? ' Tap the map to start another descent.' : '';
-      if (!hit) return `Stopped after <b>${n}</b> iterations on a saddle. Try another start.`;
+      if (!hit) return fxs[at].key === 'ripple' ? `Stuck in a local minimum after <b>${n}</b> iterations. Try another start.` : `Stopped after <b>${n}</b> iterations on a saddle. Try another start.`;
       if (hit.id === 'contact') return `${said(n)}, right on <a href="#contact">Contact</a>.${tail}`;
-      /* a descent the visitor started also filters the rows; the opening one leaves the list whole */
-      if (tapped) show(hit.id);
-      return `${said(n)} on <a href="${hit.href}">${hit.label}</a>, ${hit.tag}${tapped ? ' now listed below' : ''}.${tail}`;
+      /* a descent the visitor started also filters the rows; an opening one leaves the list as it is */
+      const filter = tapped && !auto;
+      if (filter) show(hit.id);
+      return `${said(n)} on <a href="${hit.href}">${hit.label}</a>, ${hit.tag}${filter ? ' now listed below' : ''}.${tail}`;
     },
   });
+  if (tab && fxs.length > 1) {
+    const label = () => {
+      const f = fxs[at], name = f.name(topics.length);
+      tab.querySelector('[data-fx-eq]')!.innerHTML = f.eq;
+      tab.querySelector('[data-fx-name]')!.textContent = name;
+      tab.setAttribute('aria-label', `Landscape: ${name}. Show the next function.`);
+    };
+    label(); tab.hidden = false;
+    tab.addEventListener('click', () => {
+      at = (at + 1) % fxs.length; label();
+      if (read) read.innerHTML = `Switched to <b>${fxs[at].name(topics.length)}</b>.`;
+      L.morph();
+    });
+  }
 });
 if (topicIds.has(location.hash.slice(1))) show(location.hash.slice(1), true);
 

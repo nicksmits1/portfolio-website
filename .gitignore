@@ -13,3 +13,6 @@ Nicolas_Smits_Resume_*.md
 /assets/
 # Wrangler local state
 .wrangler/
+# Impeccable live mode: local session state and machine paths; config.json is shared
+.impeccable/live/*
+!.impeccable/live/config.json

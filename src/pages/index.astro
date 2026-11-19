@@ -27,10 +27,12 @@ const [first, ...rest] = profile.name.split(' ');
 <Base title="Nicolas Smits" description={`${profile.name}: ${profile.focus}`}>
   <header class="hero" id="top">
     <div class="land" data-land="hero" data-topics={JSON.stringify(topics)}>
-      <canvas role="img" aria-label="Contour landscape of an objective function with one local minimum per research topic; a gradient-descent solver converges on one of them"></canvas>
+      <canvas role="img" aria-label="Contour landscape of an objective function with one local minimum per research topic around a flat basin under the name; a gradient-descent solver converges on one of them"></canvas>
       <svg aria-hidden="true"></svg><div class="labs"></div>
     </div>
     <Nav page="home" />
+    {/* the landscape's function as its caption; clicking it rotates through the functions (home.ts shows it) */}
+    <button class="fx-tab" type="button" data-fx hidden><span class="eq" data-fx-eq></span><span class="nm"><i>f</i><span data-fx-name></span></span><span class="nx">Next<Fragment set:html={ICON.next} /></span></button>
     <div class="who">
       <div class="id"><img src={head.src} width={head.width} height={head.height} alt={profile.name} /><h1>{first}<br />{rest.join(' ')}</h1></div>
       <p class="focus">{profile.focus}</p>

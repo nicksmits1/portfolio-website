@@ -19,7 +19,9 @@ mountAll('[data-land="strip"]', root => {
         { id: 'who', hidden: true, x: sp.who[0] * R, y: sp.who[1], d: .7, s: ph ? .3 : .34 },
       ];
     },
-    start: W => (W < 600 ? [[.62, .1], [.95, .5], [.6, .4]] : [[.5, .1], [.8, .14], [.5, .6], [.78, .3]]),
+    /* basins keep their size in units of height, so on a wide strip the last starts, just above this project's
+       minimum, are the ones that still arrive */
+    start: W => (W < 600 ? [[.62, .1], [.95, .5], [.6, .4], [.8, .1]] : [[.5, .1], [.8, .14], [.5, .6], [.78, .3], [.7, .1], [.66, .16]]),
     done(hit, n) {
       if (!hit || hit.hidden) return `Stopped after <b>${n}</b> iterations under the title. Try another start.`;
       if (hit.current) return `Converged in <b>${n}</b> iterations on <b>${hit.label}</b>.`;

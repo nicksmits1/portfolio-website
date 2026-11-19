@@ -1,0 +1,596 @@
+<title>Hero Landscape Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Onest:wght@400;500;600&family=STIX+Two+Text:ital@1&display=swap">
+<style>
+/* Round four: the home hero. Two decisions: how the name, headshot and contact links stay legible over the landscape
+   (four treatments on today's terrain), and which objective function the landscape draws (four classic test functions
+   and shapes). Mocks are drawn at design size in the site's own world, zoomed to fit their frame, and every landscape
+   is computed per pixel from its function, so clicking any mock runs the real solver on it. */
+:root{
+  color-scheme:dark;
+  --bg:#120A2A; --panel:#1A1038; --ink:#0D0722; --fg:#F3EDFF; --fg2:#B9AAE8; --dim:#7C6BB8;
+  --coral:#FF7C6B; --violet:#8B5CF6; --peach:#FFD9C2; --hair:rgba(243,237,255,.22); --hair2:rgba(243,237,255,.1); --tab:rgba(13,7,34,.72);
+  --disp:"Unbounded",system-ui,sans-serif; --text:"Onest",system-ui,sans-serif; --math:"STIX Two Text","Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--violet) var(--bg)}
+body{background:var(--bg);color:var(--fg);font:400 1rem/1.55 var(--text);margin:0}
+::selection{background:var(--coral);color:var(--bg)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px}
+i.m{font:italic 1.06em/1 var(--math)}
+.wrap{max-width:1320px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---- board chrome ---- */
+.intro{padding-block:clamp(2rem,5vw,3.6rem) 1.6rem}
+.intro h1{font:300 clamp(2rem,5vw,3.4rem)/1 var(--disp);letter-spacing:-.04em;margin:0 0 1rem;text-wrap:balance}
+.intro p{margin:0 0 .7rem;max-width:70ch;color:var(--fg2)}
+.intro p b{color:var(--fg);font-weight:600}
+.toc{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.2rem}
+.toc a{font:500 .9rem/1 var(--text);padding:.5rem .8rem;border:1px solid var(--hair);border-radius:999px;text-decoration:none}
+.toc a:hover{border-color:var(--coral);color:var(--coral)}
+.decision{border-top:1px solid var(--hair);padding-block:clamp(2rem,5vw,3.2rem)}
+.decision>h2{font:400 clamp(1.4rem,3vw,2rem)/1.1 var(--disp);letter-spacing:-.035em;margin:0 0 .5rem;text-wrap:balance}
+.decision>p{margin:0 0 .6rem;color:var(--fg2);max-width:72ch}
+.decision>p b{color:var(--fg);font-weight:600}
+.opt{display:grid;gap:1.1rem;margin-top:clamp(2rem,5vw,3rem)}
+.opt header{display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap}
+.tag{font:600 .85rem/1 var(--disp);color:var(--bg);background:var(--coral);border-radius:999px;padding:.4rem .7rem;letter-spacing:.02em}
+.tag.now{background:none;color:var(--fg2);box-shadow:inset 0 0 0 1px var(--hair)}
+.opt h3{font:400 clamp(1.15rem,2.2vw,1.5rem)/1.15 var(--disp);letter-spacing:-.03em;margin:0}
+.opt header p{flex-basis:100%;margin:0;color:var(--fg2);max-width:76ch}
+.views{display:grid;gap:1.2rem;align-items:start}
+@media(min-width:900px){.views.two{grid-template-columns:minmax(0,1fr) 270px}}
+.opt>*,.views>*{min-width:0}
+.cap{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 .45rem}
+.frame{border:1px solid var(--hair);border-radius:10px;overflow:hidden;background:var(--ink);min-width:0}
+.notes{display:grid;gap:.8rem 2.4rem;font-size:.95rem;margin:0;padding:0;list-style:none}
+@media(min-width:860px){.notes{grid-template-columns:repeat(3,1fr)}}
+.notes b{display:block;font:600 .78rem/1.2 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-bottom:.3rem}
+.notes span{color:var(--fg2)}
+.eqn{font:italic 1.02rem/1.5 var(--math);color:var(--fg)}
+.end{padding-block:clamp(2rem,5vw,3rem) clamp(3rem,7vw,5rem);border-top:1px solid var(--hair);color:var(--fg2);max-width:74ch}
+.end h2{font:400 1.3rem/1.15 var(--disp);letter-spacing:-.03em;margin:0 0 .6rem;color:var(--fg)}
+.end p{margin:0 0 .7rem}
+
+/* ---- inside the mocks: design-size px, scaled by zoom ---- */
+.screen{background:var(--bg);color:var(--fg);font:400 16px/1.5 var(--text);position:relative;overflow:hidden}
+.m-hero{position:relative;overflow:hidden}
+.m-land{position:absolute;inset:0;overflow:hidden;cursor:crosshair}
+.m-land canvas,.m-land svg,.m-land .scrim{position:absolute;inset:0;width:100%;height:100%;display:block}
+.m-land svg,.m-land .scrim{pointer-events:none}
+.labs{position:absolute;inset:0;pointer-events:none}
+.lab{position:absolute;transform:translate(-50%,12px);font:600 14px/1.1 var(--text);white-space:nowrap;padding:3px 8px;border-radius:999px;background:var(--tab);transition:background .3s,color .3s}
+.lab i{font:italic 1.05em/1 var(--math);margin-right:4px;font-weight:400}
+.lab small{font:500 11px/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--fg2);margin-left:6px}
+.lab.hit{background:var(--coral);color:var(--bg)}
+.lab.hit small{color:var(--ink)}
+.m-nav{position:absolute;top:0;right:0;z-index:3;display:flex;gap:24px;padding:18px 44px 12px 20px;font:500 15px/1 var(--text);background:var(--tab);border-bottom-left-radius:14px}
+.m-who{position:absolute;left:44px;bottom:182px;z-index:2;max-width:640px;pointer-events:none}
+.m-who .id{display:flex;gap:22px;align-items:flex-end}
+.m-who img{flex:none;width:136px;height:136px;border-radius:14px;object-fit:cover;box-shadow:0 0 0 1px rgba(243,237,255,.3)}
+.m-who h1{font:300 76px/.96 var(--disp);letter-spacing:-.04em;margin:0}
+.m-who .focus{margin:16px 0 0;font:500 18px/1.4 var(--text);max-width:34ch}
+.m-links{display:flex;gap:8px;margin-top:16px;align-items:center}
+.m-links span{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px 0 12px;border:1px solid var(--hair);border-radius:999px;background:rgba(13,7,34,.6);font:500 14px/1 var(--text)}
+.m-links svg{width:18px;height:18px;flex:none}
+.m-links .tbd{border-style:dashed;color:var(--fg2)}
+.m-links .cv{background:var(--peach);color:var(--ink);border-color:var(--peach)}
+.m-read{margin:10px 0 0;font-size:15px;color:var(--fg2);min-height:1.5em;font-variant-numeric:tabular-nums}
+.m-read b{color:var(--fg);font-weight:600}
+.m-read u{color:var(--coral);font-weight:600;text-underline-offset:3px;text-decoration-thickness:1px}
+.m-reel{position:absolute;left:0;right:0;bottom:0;z-index:3;height:142px;display:flex;padding-block:16px 18px;background:rgba(13,7,34,.8);border-top:1px solid var(--hair);backdrop-filter:blur(3px)}
+.m-reel h2{flex:none;margin:0;padding:2px 18px 0 44px;font:600 12px/1 var(--text);letter-spacing:.09em;text-transform:uppercase;color:var(--coral)}
+.m-reel .win{flex:1;min-width:0;overflow:hidden;display:flex;padding-left:48px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 56px);mask-image:linear-gradient(90deg,transparent,#000 56px)}
+.m-reel .card{flex:none;width:300px}
+.m-reel em{font-style:normal;display:flex;column-gap:1.1em;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.m-reel b{display:block;font:400 16px/1.25 var(--disp);letter-spacing:-.025em;margin-top:8px}
+.m-reel .card span{display:block;font-size:13px;color:var(--fg2);margin-top:6px}
+.m-reel .mk{flex:none;width:18px;height:18px;margin:30px 28px 0;fill:none;stroke-width:1}
+.m-reel .mk circle:nth-child(1){stroke:var(--violet)}
+.m-reel .mk circle:nth-child(2){stroke:var(--fg2)}
+.m-reel .mk circle:nth-child(3){fill:var(--coral);stroke:none}
+
+/* phone: a true 390 px layout, as the site renders it */
+.phone .m-nav{gap:14px;padding:14px 16px 10px 14px;font-size:13px}
+.phone .m-who{left:16px;right:16px;bottom:158px;max-width:none}
+.phone .m-who .id{gap:14px}
+.phone .m-who img{width:76px;height:76px;border-radius:10px}
+.phone .m-who h1{font-size:40px}
+.phone .m-who .focus{display:none}
+.phone .m-links{gap:7px;flex-wrap:wrap}
+.phone .m-links span{width:36px;height:36px;padding:0;justify-content:center}
+.phone .m-links span .nm{display:none}
+.phone .m-links .cv{width:auto;padding:0 14px 0 12px}
+.phone .m-read{font-size:13px}
+.phone .m-reel{height:136px;padding-block:13px 15px}
+.phone .m-reel h2{writing-mode:vertical-rl;transform:rotate(180deg);padding:0 10px 0 12px;display:flex;align-items:center;justify-content:center}
+.phone .m-reel .win{padding-left:22px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 22px);mask-image:linear-gradient(90deg,transparent,#000 22px)}
+.phone .m-reel .card{width:240px}
+.phone .m-reel b{font-size:14px}
+.phone .m-reel .card span{font-size:12px}
+.phone .m-reel .mk{margin:26px 18px 0}
+.phone .lab{font-size:13px}
+
+/* 1B, ink scrim: translucent ink rising from the lower left, under the trail and labels */
+.v-scrim .scrim{background:radial-gradient(64% 80% at 0% 84%,rgba(13,7,34,.94) 0%,rgba(13,7,34,.88) 44%,rgba(13,7,34,.5) 70%,rgba(13,7,34,0) 96%)}
+.phone.v-scrim .scrim{background:linear-gradient(180deg,rgba(13,7,34,0) 30%,rgba(13,7,34,.62) 50%,rgba(13,7,34,.88) 66%)}
+/* 1C, ink tab: the block on the same translucent ink as the nav, flush left, its one inside corner rounded */
+.v-tab .m-who{left:0;bottom:142px;padding:30px 40px 22px 44px;background:rgba(13,7,34,.8);border-top-right-radius:14px;backdrop-filter:blur(3px);border-top:1px solid var(--hair2);border-right:1px solid var(--hair2)}
+.phone.v-tab .m-who{left:0;right:0;bottom:136px;padding:20px 16px 14px;border-top-right-radius:0;border-right:0}
+.v-tab .m-reel{border-top-color:var(--hair2)}
+/* 1D, clear ground: the landscape fades into the plain ground under the block */
+.v-clear .m-land canvas{-webkit-mask-image:linear-gradient(90deg,transparent 0,transparent 24%,rgba(0,0,0,.55) 38%,#000 54%);mask-image:linear-gradient(90deg,transparent 0,transparent 24%,rgba(0,0,0,.55) 38%,#000 54%)}
+/* round two, 1B deeper: the ink reaches past the name and the links */
+.v-scrim2 .scrim{background:radial-gradient(100% 122% at 0% 94%,rgba(13,7,34,.95) 0%,rgba(13,7,34,.92) 46%,rgba(13,7,34,.62) 66%,rgba(13,7,34,.2) 84%,rgba(13,7,34,0) 100%)}
+.phone.v-scrim2 .scrim{background:linear-gradient(180deg,rgba(13,7,34,0) 22%,rgba(13,7,34,.7) 40%,rgba(13,7,34,.92) 54%)}
+/* landscape switch, 3A: a pill at the head of the readout line */
+.m-readrow{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;margin-top:10px}
+.m-readrow .m-read{margin:0}
+.fx{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 11px 0 10px;border:1px solid var(--hair);border-radius:999px;background:rgba(13,7,34,.6);color:var(--fg);font:500 13px/1 var(--text);cursor:pointer;pointer-events:auto}
+.fx i{font:italic 16px/1 var(--math);color:var(--coral)}
+.fx svg{width:13px;height:13px;flex:none}
+.fx:hover{border-color:var(--fg)}
+/* 3B: an ink tab on the reel's edge, bottom right, the four functions as a segmented control */
+.m-fxtab{position:absolute;right:0;z-index:3;display:flex;align-items:center;gap:6px;padding:10px 44px 10px 18px;background:var(--tab);border-top-left-radius:14px;backdrop-filter:blur(3px)}
+.m-fxtab small{font:600 11px/1 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-right:6px}
+.m-fxtab button{font:500 13px/1 var(--text);padding:7px 11px;border:1px solid var(--hair);border-radius:999px;background:none;color:var(--fg);cursor:pointer}
+.m-fxtab button:hover{border-color:var(--fg)}
+.m-fxtab button[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:var(--bg)}
+/* on a phone the block fills the lower width, so the tab moves to the free top-left corner, opposite the nav */
+.phone .m-fxtab{top:0;left:0;right:auto;bottom:auto!important;padding:9px 12px 8px 14px;border-radius:0 0 14px 0}
+.m-fxtab .one{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.m-fxtab .one svg{width:12px;height:12px}
+.fx,.m-fxtab button{white-space:nowrap}
+.m-fxtab .one i{font:italic 15px/1 var(--math);color:var(--coral)}
+/* 3C: the function's formula as the map's caption, on an ink tab top left; clicking moves to the next */
+.m-fxf{position:absolute;top:0;left:0;z-index:3;display:flex;align-items:center;gap:16px;padding:17px 22px 13px 44px;background:var(--tab);border:0;border-bottom-right-radius:14px;color:var(--fg);cursor:pointer;text-align:left;font:inherit}
+.m-fxf .eq{font:italic 18px/1 var(--math);white-space:nowrap}
+.m-fxf .nx{font:600 11px/1 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--coral);display:inline-flex;gap:5px;align-items:center;white-space:nowrap}
+.m-fxf .nx svg{width:12px;height:12px}
+.m-fxf:hover .eq{color:var(--peach)}
+.phone .m-fxf{padding:13px 14px 10px 16px;gap:10px}
+.phone .m-fxf .eq{font:500 13px/1 var(--text);font-style:normal}
+.phone .m-fxf .eq i{font:italic 15px/1 var(--math);color:var(--coral);margin-right:5px}
+.labs.mv .lab{transition:left .7s cubic-bezier(.3,.7,.2,1),top .7s cubic-bezier(.3,.7,.2,1),background .3s,color .3s}
+.try{margin:0;font-size:.9rem;color:var(--fg2)}
+.phone.v-clear .m-land canvas{-webkit-mask-image:linear-gradient(180deg,#000 0,#000 34%,rgba(0,0,0,.4) 46%,transparent 58%);mask-image:linear-gradient(180deg,#000 0,#000 34%,rgba(0,0,0,.4) 46%,transparent 58%)}
+</style>
+
+<div class="wrap">
+  <section class="intro">
+    <h1>Hero landscape options</h1>
+    <p><b>Round two</b> is at the top: 1A Calm basin refined as the default, the deeper ink scrim beside it to confirm the pick, and three ways for a visitor to rotate between the bowls, Himmelblau, Rosenbrock and the ripple field. Round one follows below, unchanged.</p>
+    <p>Every mock is live. Click anywhere on a landscape to start a solver there, and use the switch in round two to change the function.</p>
+    <nav class="toc" aria-label="Options">
+      <a href="#round2">Round two</a><a href="#r2a">1A refined</a><a href="#r2b">1B deeper</a><a href="#o3a">3A Readout pill</a><a href="#o3b">3B Map tab</a><a href="#o3c">3C Formula tab</a><a href="#now">Now</a><a href="#legibility">Legibility</a><a href="#o1a">1A Calm basin</a><a href="#o1b">1B Ink scrim</a><a href="#o1c">1C Ink tab</a><a href="#o1d">1D Clear ground</a><a href="#landscape">Landscape</a><a href="#o2a">2A Himmelblau</a><a href="#o2b">2B Rosenbrock valley</a><a href="#o2c">2C Tilted plane</a><a href="#o2d">2D Ripple field</a>
+    </nav>
+  </section>
+
+  <section class="decision" id="round2">
+    <h2>Round two</h2>
+    <p>Picked: <b>1A Calm basin</b> as the default, with <b>Himmelblau</b>, <b>Rosenbrock</b> and the <b>ripple field</b> as alternates a visitor can rotate to. First the refined default and the deeper scrim, side by side to confirm the pick; then three places for the switch.</p>
+
+    <article class="opt" id="r2a">
+      <header><span class="tag">1A</span><h3>Calm basin, refined</h3><p>The Reinforcement learning minimum moves up and right, clear of the floor, and the floor's soft edge is tightened, so a descent started near it lands on it instead of sliding into the basin under the name.</p></header>
+      <div class="views two">
+        <div><p class="cap">Desktop, 1440</p><div class="frame" data-mock="calm" data-terrain="now" data-calm data-moved></div></div>
+        <div><p class="cap">Phone, 390</p><div class="frame" data-mock="calm" data-terrain="now" data-calm data-moved data-phone></div></div>
+      </div>
+      <p class="try">Try a click just above and right of the Reinforcement learning label, then one just above the name.</p>
+    </article>
+
+    <article class="opt" id="r2b">
+      <header><span class="tag">1B</span><h3>Ink scrim, deeper</h3><p>The ink now reaches past the name, the focus line and the links before it fades, on the same refined terrain. Compare it with 1A directly above.</p></header>
+      <div class="views two">
+        <div><p class="cap">Desktop, 1440</p><div class="frame" data-mock="scrim2" data-terrain="now" data-moved></div></div>
+        <div><p class="cap">Phone, 390</p><div class="frame" data-mock="scrim2" data-terrain="now" data-moved data-phone></div></div>
+      </div>
+      <ul class="notes"><li><b>Against 1A</b><span>Same legibility, reached by shading rather than shaping: the bands continue under the name instead of ringing it.</span></li><li><b>Solver</b><span>Contact is no longer a visible basin, so a descent that ends under the ink lands somewhere you cannot see.</span></li><li><b>With the switch</b><span>Works on every function unchanged; 1A needs the floor blended into each one, which these mocks already do.</span></li></ul>
+    </article>
+
+    <h2 style="font:400 clamp(1.25rem,2.6vw,1.7rem)/1.1 var(--disp);letter-spacing:-.035em;margin:clamp(2.4rem,5vw,3.4rem) 0 .5rem">Landscape switch</h2>
+    <p style="margin:0;color:var(--fg2);max-width:72ch">Three places for the control, each on 1A with the four functions in the order bowls, Himmelblau, Rosenbrock, ripple field. A switch blends the old surface into the new over about 0.7 s while the topic labels glide to their new minima, then a fresh descent runs; reduced motion swaps at once.</p>
+
+    <article class="opt" id="o3a">
+      <header><span class="tag">3A</span><h3>Readout pill</h3><p>A small pill at the head of the readout line names the current function; each click moves to the next. The solver's setting sits beside the line that reports on it.</p></header>
+      <div class="views two">
+        <div><p class="cap">Desktop, 1440</p><div class="frame" data-mock="calm" data-terrains="now,himmelblau,rosenbrock,ripple" data-switch="readout" data-calm data-moved></div></div>
+        <div><p class="cap">Phone, 390</p><div class="frame" data-mock="calm" data-terrains="now,himmelblau,rosenbrock,ripple" data-switch="readout" data-calm data-moved data-phone></div></div>
+      </div>
+      <ul class="notes"><li><b>Reads as</b><span>A parameter of the solver, like the iteration count next to it.</span></li><li><b>Phone</b><span>Same row, same pill; no new surface on the map.</span></li><li><b>Cost</b><span>The quietest of the three, and the easiest to miss.</span></li></ul>
+    </article>
+
+    <article class="opt" id="o3b">
+      <header><span class="tag">3B</span><h3>Map tab</h3><p>An ink tab bottom right, resting on the reel, holds the four functions as a segmented control with the current one in coral. It mirrors the nav tab in the opposite corner.</p></header>
+      <div class="views two">
+        <div><p class="cap">Desktop, 1440</p><div class="frame" data-mock="calm" data-terrains="now,himmelblau,rosenbrock,ripple" data-switch="tab" data-calm data-moved></div></div>
+        <div><p class="cap">Phone, 390</p><div class="frame" data-mock="calm" data-terrains="now,himmelblau,rosenbrock,ripple" data-switch="tab" data-calm data-moved data-phone></div></div>
+      </div>
+      <ul class="notes"><li><b>Reads as</b><span>A legend switch on a chart: all four choices visible at once.</span></li><li><b>Phone</b><span>The block fills the lower width, so the tab moves to the free top-left corner and shows the current name with a next arrow.</span></li><li><b>Cost</b><span>A second tab on the map, and the one most likely to be clicked.</span></li></ul>
+    </article>
+
+    <article class="opt" id="o3c">
+      <header><span class="tag">3C</span><h3>Formula tab</h3><p>The current function's formula, set in STIX italic, sits on an ink tab top left as the map's caption; clicking it moves to the next function. It says exactly what is drawn.</p></header>
+      <div class="views two">
+        <div><p class="cap">Desktop, 1440</p><div class="frame" data-mock="calm" data-terrains="now,himmelblau,rosenbrock,ripple" data-switch="formula" data-calm data-moved></div></div>
+        <div><p class="cap">Phone, 390</p><div class="frame" data-mock="calm" data-terrains="now,himmelblau,rosenbrock,ripple" data-switch="formula" data-calm data-moved data-phone></div></div>
+      </div>
+      <ul class="notes"><li><b>Reads as</b><span>A figure caption: the most research-like of the three, and it teaches the names.</span></li><li><b>Phone</b><span>The formula is too long at 390 px, so the tab shows the name and a next arrow.</span></li><li><b>Cost</b><span>The ripple field is not a standard function, so its caption is a short description instead of a formula.</span></li></ul>
+    </article>
+  </section>
+
+  <h2 style="font:400 clamp(1.4rem,3vw,2rem)/1.1 var(--disp);letter-spacing:-.035em;margin:0;padding-top:clamp(2rem,5vw,3.2rem);border-top:1px solid var(--hair)">Round one</h2>
+
+  <article class="opt" id="now">
+    <header><span class="tag now">Now</span><h3>Four bowls and a broad basin</h3><p>The built hero: one deep Gaussian bowl per topic and a wide basin under the name that converges on Contact. Reference for everything below.</p></header>
+    <div class="views two">
+      <div><p class="cap">Desktop, 1440</p><div class="frame" data-mock="now" data-terrain="now" data-legacy></div></div>
+      <div><p class="cap">Phone, 390</p><div class="frame" data-mock="now" data-terrain="now" data-phone data-legacy></div></div>
+    </div>
+  </article>
+
+  <section class="decision" id="legibility">
+    <h2>Legibility</h2>
+    <p>Four treatments on today's four-bowl terrain. A and D change the landscape itself; B and C lay ink over it, by the rule that anything sitting on the map sits on translucent ink.</p>
+
+    <article class="opt" id="o1a">
+      <header><span class="tag">1A</span><h3>Calm basin</h3><p>The basin under the name gets a flat floor: one uniform ink band behind the whole block, with the contours ringing it instead of crossing it. Nothing is laid on top; the landscape itself makes room.</p></header>
+      <div class="views two">
+        <div><p class="cap">Desktop, 1440</p><div class="frame" data-mock="calm" data-terrain="now" data-calm></div></div>
+        <div><p class="cap">Phone, 390</p><div class="frame" data-mock="calm" data-terrain="now" data-calm data-phone></div></div>
+      </div>
+      <ul class="notes"><li><b>Reads as</b><span>The name resting at the bottom of the deepest well on the map, which is what Contact already means in the solver.</span></li><li><b>Keeps</b><span>The full-bleed landscape and every band colour; no new surface, no blur.</span></li><li><b>Cost</b><span>The floor follows the block's measured size, so a longer focus line or an ORCID link widens the well on its own.</span></li></ul>
+    </article>
+
+    <article class="opt" id="o1b">
+      <header><span class="tag">1B</span><h3>Ink scrim</h3><p>A soft field of translucent ink rises from the lower left, under the solver trail and the labels. The bands still show through, dimmed to a quiet texture behind the text.</p></header>
+      <div class="views two">
+        <div><p class="cap">Desktop, 1440</p><div class="frame" data-mock="scrim" data-terrain="now"></div></div>
+        <div><p class="cap">Phone, 390</p><div class="frame" data-mock="scrim" data-terrain="now" data-phone></div></div>
+      </div>
+      <ul class="notes"><li><b>Reads as</b><span>Evening light falling off toward the corner: the landscape continues, the text simply sits in its shade.</span></li><li><b>Keeps</b><span>Today's terrain exactly; the change is one gradient layer.</span></li><li><b>Cost</b><span>The lower left of the map turns into a dark area that a click can still reach, but sees less of.</span></li></ul>
+    </article>
+
+    <article class="opt" id="o1c">
+      <header><span class="tag">1C</span><h3>Ink tab</h3><p>The block moves onto an ink tab flush with the left edge and the reel, its one inside corner rounded like the nav tab top right. The hero becomes a map with two labelled tabs on it.</p></header>
+      <div class="views two">
+        <div><p class="cap">Desktop, 1440</p><div class="frame" data-mock="tab" data-terrain="now"></div></div>
+        <div><p class="cap">Phone, 390</p><div class="frame" data-mock="tab" data-terrain="now" data-phone></div></div>
+      </div>
+      <ul class="notes"><li><b>Reads as</b><span>A legend box on a chart: the name, face and links are the map's key, the same ink as the nav and the reel.</span></li><li><b>Keeps</b><span>The landscape untouched everywhere outside the tab; maximum legibility at any terrain.</span></li><li><b>Cost</b><span>The most constructed of the four: the name no longer stands on the landscape but beside it.</span></li></ul>
+    </article>
+
+    <article class="opt" id="o1d">
+      <header><span class="tag">1D</span><h3>Clear ground</h3><p>The landscape fades out into the plain night ground across the left third, and the topic minima move right to stay on it. On a phone the fade runs top to bottom.</p></header>
+      <div class="views two">
+        <div><p class="cap">Desktop, 1440</p><div class="frame" data-mock="clear" data-terrain="clear"></div></div>
+        <div><p class="cap">Phone, 390</p><div class="frame" data-mock="clear" data-terrain="clear" data-phone></div></div>
+      </div>
+      <ul class="notes"><li><b>Reads as</b><span>A printed page with a figure bleeding off its right edge; the name is set on paper, not on the plot.</span></li><li><b>Keeps</b><span>Full contrast for the name and links, with no ink layer at all.</span></li><li><b>Cost</b><span>The landscape loses about a third of its area and the first viewport feels less immersive.</span></li></ul>
+    </article>
+  </section>
+
+  <section class="decision" id="landscape">
+    <h2>Landscape</h2>
+    <p>Four functions instead of four deep bowls, each with one minimum per topic. They are shown with 1A's calm floor under the name so the shape of the terrain is what differs; pair any of them with any treatment above. Three are standard test functions from optimisation, which is the subject of the PhD.</p>
+
+    <article class="opt" id="o2a">
+      <header><span class="tag">2A</span><h3>Himmelblau</h3><p><span class="eqn">f(x, y) = (x² + y − 11)² + (x + y² − 7)²</span> has exactly four minima, all at <span class="eqn">f = 0</span>, joined by saddles around one central peak. Four topics, four equal minima, and a name nobody needs to have heard of to see it is a real function.</p></header>
+      <div class="frame" data-mock="calm" data-terrain="himmelblau" data-calm></div>
+      <ul class="notes"><li><b>Reads as</b><span>A four-leaf basin with ridges between the topics; the upper left rises to coral and peach above the name.</span></li><li><b>Solver</b><span>A start on a ridge can stall on a saddle between two topics, which the readout already reports.</span></li><li><b>Cost</b><span>The count is fixed at four; a fifth topic would need its own small bowl added to the function.</span></li></ul>
+    </article>
+
+    <article class="opt" id="o2b">
+      <header><span class="tag">2B</span><h3>Rosenbrock valley</h3><p><span class="eqn">f(x, y) = (1 − x)² + 100(y − x²)²</span>, drawn on a log scale: one long curved valley sweeps across the map, and the topics are pools along its floor. Gradient descent is famously slow in this valley, and you can watch it zigzag.</p></header>
+      <div class="frame" data-mock="calm" data-terrain="rosenbrock" data-calm></div>
+      <ul class="notes"><li><b>Reads as</b><span>A river through high ground: one dark ribbon from top left to top right, the name below it on the calm floor.</span></li><li><b>Solver</b><span>Falls straight into the valley, then crawls along it to the nearest pool; long runs, many iterations.</span></li><li><b>Cost</b><span>Most of the map is high ground in coral and peach, a warmer, brighter hero than today's.</span></li></ul>
+    </article>
+
+    <article class="opt" id="o2c">
+      <header><span class="tag">2C</span><h3>Tilted plane</h3><p>The whole surface slopes from peach top right down to ink at the lower left, with the topics as shallow dimples on the slope. Bands run diagonally like a horizon, and the darkest ground is under the name by construction.</p></header>
+      <div class="frame" data-mock="calm" data-terrain="tilt" data-calm></div>
+      <ul class="notes"><li><b>Reads as</b><span>The calmest of the four: long parallel bands, four small pockets, very few closed rings.</span></li><li><b>Solver</b><span>Anything that misses a dimple rolls all the way down to Contact, a neat line for the readout.</span></li><li><b>Cost</b><span>The topic minima are small, so the map says "four places" less loudly than bowls do.</span></li></ul>
+    </article>
+
+    <article class="opt" id="o2d">
+      <header><span class="tag">2D</span><h3>Ripple field</h3><p>A Rastrigin-style egg crate of small local minima over a gentle slope, with the four topics as the deep basins among them. The ripples calm to nothing under the name.</p></header>
+      <div class="frame" data-mock="calm" data-terrain="ripple" data-calm></div>
+      <ul class="notes"><li><b>Reads as</b><span>Textured ground, closer to a contour map of real terrain; the busiest option.</span></li><li><b>Solver</b><span>Most clicks get stuck in a small local minimum, and the readout says so; only starts near a topic reach it.</span></li><li><b>Cost</b><span>The texture competes with the labels, and a visitor may need two or three clicks to land on a topic.</span></li></ul>
+    </article>
+  </section>
+
+  <section class="end">
+    <h2>Choosing</h2>
+    <p>Round two needs two picks: 1A or 1B, and one of 3A, 3B or 3C. Open after that: whether the chosen function holds for the rest of the visit, and whether project strips follow it.</p>
+    <p>Whatever is chosen is built into <span class="eqn">landscape.ts</span> and <span class="eqn">home.ts</span>; project pages share the function, so a new landscape also changes the 300 px strip on every project page.</p>
+  </section>
+</div>
+
+<script>
+(function () {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const NS = 'http://www.w3.org/2000/svg';
+  const HEADSHOT = 'data:image/webp;base64,UklGRoIPAABXRUJQVlA4IHYPAAAQXwCdASrwAPAAPnk6mEiko6KkJdOLgJAPCWdu3V4AsgwBvJ0dqVVYs2u2hmn3lLtRDB8z4n/yGxSnl/Cg8jAkJ63MU3Hbi0aZzpqD0MeQ589NI8CJejLsR+lthPYgmiZYckr94RQDP8YoJ38IeXsozp3DNLMJwZtGtFhZHmJKQrh/gCdsRmLSay8fyH+Jw5UWMT6VAGjL+cP77alPu3EIVa+wW+eli4QPOhU+FwBfH1fFAs9HW3lELXIAEJFNDFYDzKH1R74DMJaUCW+ItntPrTJpgBy4P12LmQWXtRUOycSaJKpjnvR3vnr9HDKX101qyOAzA0NjZQXPT3AXX6ENJtY2qqdAxTHlF6ulnXQ5/+2Tm1SZVq75GwSJExdkoFO1tiCUOopAT15+f/SlUnVs5jwdjsth/teUr378BS/cVGArrUlvS1nlAmRMmjJ7gaxbv8DLYQyxYAVIcPB7Kvq17twGNxa5gCWJh7rE6y95GAPlqGcGIIPfkfFhRsvbfG6eLcO34LlkVMJoyX5jUjM5mUyONB1Ett/r2fzGgrEsjexemPpcuuvqYi7+Ta8q9hwRVj4gEslhKC2fVSK2Ttg4AQz54tKm2k5hwgrfig2eUwVdN5ZULxT/CLA74Mmz+nfE9woEYgeWLPfVnMzNLcrgzXO8gw2UN16U6xYN3uBM0vVe5rv7jszdkka8+86SI7oXrkQ9ERjtGSV4l/YTJQukO48/Lj58gYUNz7WiSjc9S66SIcDVg/EtPuqxNCsS8vclFgViEgWSuckVcVkd4LD3i1CuTALoqIDOU/LV9WvEb1bG7tyKx5FiaTGNYHDLxwhU12lnNk/fzbNwze2q8dAB5pojDAdcgZ2JVQxzcIRxIQloT9lVg2CTh1+tRLMMetH//6kLnbTujgoLWgB4615HZXhIENoZIzirX7WaWLUGccf51VztKX09vm1z7oZBb/W9DCLfxhwIw8m7EL+JXauFNHdA+uN+wxONO4aGacSWDfuppRSm4Phbm/pfEbkLAgAQAP71chtGxWJp6YR1J9GVHiWI6tFOacw+QQoLukhGwWym6gJ50ovCVrwGCLpcT1zXXnNT3ZhRZ3042C0x07oGn23uq695pKPqEiXeYTXtPJH7PUejYAU6Ck9ae2ptMuudSSxv9yXMdhxaAsumALRvJdqndb+ybpQ1lDxb2iBngroROI8lhhLa92K9OCSXnP1w/PafVZu6zcKIJ8wBfEkAeQJFJXEBz5AzPnVIwLipH5euzRC0ry2qkQQzueBDr8SjiUxt/WCS99JLGJ2OSg9t6QhozlHfvnczJaTGDdiGZWhcXPDzUrwii6dlSO0BBm4sdeghjmPYQgepkal4/Fo5OE7qgwd50MzSLGe9wxvOMrkDCQ9sJzZ9PO3B0uSqR9jZ96fMUCqYYSh2nKUnK/kqhVCyyg+y7Ryc2ldb0LbpbleOBUhZljRartJGdno5rU9MjEcyWDdV1I6oMMbV5SGbDwWirso28oAGU+liiBqlUcJPAbn877k96qShsXB4lPP5TrCYZ0WrBnql6X9KsJ6gNpFo/S51dRSOkS4KwWOaYKDevIzetk6nverR46BgqfRCaO3ZY3F1WbDp7/Y32wsnAXQEPh0K9O22AQlkHtYI7k9/9nm8s4W03111fD5aGiwjx2HAm6cee4xn/2+Ig6rJxZ1IiX/Ym7rCsW6NCzQHzhozp4xroauN6TDcwcsZmd+orAguafTN4CIFROuZPEZEikiiGxOwKPcWG3OcIppNvU5W9e2QImDJqyytVxB0InGoiWhMaZOvb1k3XbZIuz6CoG8ELRSTIsMrs6pR6sfTRwXMRe+HCpMGABbDviGvDXCVbgE8X0X8e+CXVS4DkTzaniRMud1mT2hDiyDkkMaJSEWbbvlfGVHPy/U4KP8QT2mQxuT3OsamHeaN9RVmN80KHDr0vPVp49chCF027eh9fUFntDc6dP1ZilsqUPv9RDHsHNm41ri+Ia8CLN6PfC5uoQIk+HLfEuO7n61rjZoeXtX4+Sckfir8Dz/wNrZc5Rl5KLKdrP2iCN1HbZJZ3bF5gfPHBdHkghGmQMSJy6LnTCMx5NegZYAZVnOnNqLheKPSCX4sfwqgF8ZXLy6cLIzE8DSqUJkehfZEfdUP5HLEjQuiB4f7owthU3pjg7yZWDrGQITsgOEpP7EpmeJd0s14xc/ZIce1n+IXPvoX31VAl3W2ZbLX2qhdHOqVooCvG1x1sDv01s5nb7cWA/CXT4A0rR7/SDK33x0ELI8qQ4tOcDkCDYH32ringZXsA61o8fB/qFS1qqgiCyg4BRr6dOmX1fO7FX4Q7WQ1qTTb0pBTlIxb4rvjA6Mn9vfejDrtlNbIdE9uxWqPaE4dIaNigSgNE/EsEOmRvvRefSpwUQwEUimrQ/ztpE3beV3LogGKIUnVXr73tjfmIl7n8Tda55bCW4whyjqJFUY1ByI6Tuk+qGPDpePUmHtkkF9+U7DnpCjONe9BbzkZs+dmcT4IjP31NxdQag0CSq4g5W8XDIwds6XjUIU7jNAxl0hSioypg39ESHQ3HYq5omBJXeO3X3UXZoBfwD2e8XxEoDhzEHqe9nLr8BuPiSpyzW+qSVvFCxc0ecrg3bumWWrmEasM03s8BwljleC4m5gQNv+x9LLUk9Ccshifmu2Rcds6Io+wVuzW1/mhQJJ3fIYKeOmGTG76vMgBtTpKT0BWuvZJYo00JXY2PXlvXt5cs5mX4TyaOY47FH2Q3BH5+yEtS5UtjkoPN46gJwW5lrJBFDzH/Z+T0jVwY5r7vkXjap1SsD6EjycovBso3+Rb/SzqP4IzK1Kbl9GWO/On8+oOr+V1o1okG8LGGowg32t8ylIWVN3MXf1z3R3FunTU5WdU7Scot4ci68aFcUU3vYyj+Vult7nrzgMQIh9/3FNapXQG/zGaLjn9M/KDPmfuH3g3OulLmqJigUxUgOybAnidI9RbJucqOyTbThMdS8aAArU1AtCCvIWshBjUiA68rG9h+bOw9HvAG3JhExK0Q2lX8cu9BTdXm5MfxALMqQ+FOy20Z/6ic+FavnsNyKoNxLO8CvIXJcb383IgBecM0Nn3hfr+AK1wHNsGQI3hLZko6Xn6TttZS8Sbbqq9AvTOMOQ4uL1p2TcgAWVWHWui4W7eZnQCus2S5xUgDumwc+NuybgnlsibGHv3HVhHEskftP6NE1pbyjoxv1O+hfuh7+ljZPTOP6jnyEINOb3IyDllFZmLvYwn/PpF8GM1nZy08YIjUJMkQGM4FMp8If7KeW8uol+etNQ6BapG1Sy8/Vu3mzMwhm9ESjjsD3PACggOrzzL4/A7RiDhGp5+P8H6q8rV4kfhUTXe1mw8SQJ7H68GC0gaaly8DkEXRIhj5S6Ake/tou/iaC33Nk1223MQpzSwh2iuKqMRmw3SZ9xkoUm5dtJ85IFywjI3j/6gzaKvpMop8AtY6H7eu5E/ZOlPRkWVLY7jfP5SM+hT7ovytilB7RLkF6SODKhl5nviDa9SAr8kNmXR0bb4A7Q+mMSDljUB+3iT+xM+e24H6rvcePHBrttE22S//LIvA8bO9I5NRzjju4c88/xOaGwVhsH0by/yyfacRg2i++KpH6Ar6pSSeo9hEMVae/WOnGaTvVk8ZOczwVpSjrmIunwhV8KnP20pnTZcSvukk7bojLJ2DujbPmrW4fplGZgNW3Bz/PvSz2FNQfQdXqzFcqaOwmgrLs9UCuc34kqFi6zk1HU9NQBxIeonVqKt8tcMNvixQmuYxZ/44cVALt8KBBwJYcck+DWO/3moM65ddyo8FwEyxTuXZUs+/pTM/jClHd3WvIA4zmaM0TuvzKbes82QkOPlH+7mX3YucY4CBBjRYNAoYg1CE8EwT/esxII0lB3Vx1fvIQa241MouL+tbOWn810kLIWgq1Er2UGcZQz8ub9GLh0AQYFCajAAm5/LF9eRSAAs6L6Qa9CwMZTen18mC+Zq33UnIlJMdKJG2QYdDj/Aaa2x/rQbQj66kyoJCKkQ9v1uNveftrhtZUEri/I/gEKjg9XKEH2kC+WPdeIzFxmIt97Hc9ciSTxQcluPB2ppfvC7hxs8ljNDlMu2Ks1RBLxSumcfkZ0T0/gyvl7MdLfp6tQ+D4e4j5fcFaHWSl6dwuhdGnpYv9O6bl/mzQug4wsDuG855GqjefOGfQ5ZiYLtTuuRdmF3Y/WTKRP2AZ84kohct4VTivt7eWuxzB2zpUAaBcNh1u7ECEHzfAPO5GamwqaNWUxngkhmAAihkiGSdAmYl6klfUQaRt1Tx+fVOOLsbfKwLcxXaurQX4bcBXZ80FxkfFed9wIBI5waKoCG6M/j3sXp1pSZOPdeBdBD+r8qXCRC/z21A86JRhn0d+lQPu6rxeaAz8IdIePDmVIuzLclCTrgvXwgdqXe7HNY3tlCav3eAMr3mrEj71oijMQcPDo2JQShRte+uca2TM8Djv5XlTqeU5bmmR3Rgxj1SqgdYwLonKzg954ld5QUohuCslCe51q6yuK4vyxHdyJJKCdjh1Ewn2CeqTnq9HE++lyU4M/M6Z4pMXZDbAMoZ4Nq5QxHV0tK5kU5LNmFBZbNEQt7Um31WJu1kf/RPnPVBxi1gypSB/LNN7YQHvwLfCDoLI7Jc/i/9NQTXXZRWQGGH3e4Oaz3wa78PPZGiyxlW+EbE0uDybXyZYwBe0+LjOLsWfhKiQz0bcmqY8try8Ug8vHNN/w2kni7ChJD//RPl+IvN60cHDH8mtqESA51Fl8qK+tre0+okYynI0sgZcr/v7caJKQyD0bSOLoHIAQE+SzZ7t0iPBrOBXHNxnwuhK1WteQ5Gtao5rCdC4+Z6Km00GB88TPggvVvM/rSwMN0EQaR7UELC9hm1QKpvCjnZKVE1ihLoN430tfiSliJD3vwBoKLukZOILBfWlZMktd7GAHf5EGTe8vU0EdVN7XZToZ2IdS6nB3fI3Uc7njf2Ruk5uozEI6wtM2U2fZUi9M/FCsZr1SAMUO5rpOGcCga0N32ZM5OTMkU2skw2zf2p8q1wQA4l02wIra23LSyhm4N9f364Yx6J0fo9B2weR6nGR7qvu51G5ush/zlAgk3at0kByzaTPWZk6b9rgg3WqvsjsZKB75T68ghyeETXIu+W8r2OYTiuP9MLU+e2vvtyAhL1rffZnKST5LkKqAj/DmYjGmyf142MMQiq684IMq5MsGlAEPtluW8g3gVjBoAOiwagOGmBklNV8RlL2pDAVCsAAAA';
+  const ICON = {
+    mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/></svg>',
+    li: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Zm2.5 7v7.5H9V10H6.5Zm1.25-4a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 0 0 0-2.8ZM11 10v7.5h2.5v-4c0-1.1.6-1.8 1.5-1.8s1.4.6 1.4 1.8v4H19v-4.6c0-2.3-1.2-3.1-2.8-3.1-1.2 0-2 .6-2.4 1.2V10H11Z"/></svg>',
+    gh: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7c-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>',
+    orcid: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20ZM8.3 6.6a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8ZM7.6 9.8h1.4v7.4H7.6V9.8Zm3.3 0h3.2c2.6 0 3.9 1.8 3.9 3.7 0 2-1.5 3.7-3.9 3.7h-3.2V9.8Zm1.4 1.3v4.9h1.7c2 0 2.5-1.5 2.5-2.5 0-1.5-.9-2.4-2.5-2.4h-1.7Z"/></svg>',
+    file: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M12 11v6m-3-3 3 3 3-3"/></svg>',
+  };
+  const TOPICS = [
+    { id: 'rl', name: 'Reinforcement learning', n: 2, wide: [.13, .26], tall: [.3, .08] },
+    { id: 'sciml', name: 'Scientific ML', n: 1, wide: [.39, .17], tall: [.72, .18] },
+    { id: 'genai', name: 'GenAI', n: 3, wide: [.64, .3], tall: [.3, .3] },
+    { id: 'swe', name: 'Software engineering', n: 3, wide: [.84, .58], tall: [.7, .41] },
+  ];
+  const LATEST = [
+    ['Nov 2026', 'Abstract', 'ESCAPE 37 abstract accepted', 'Graph RL for supply chain design, first author'],
+    ['Nov 2026', 'Conference', 'SiNDAE shown at AIChE 2026', 'Session 542, Software Tools for Process Systems Engineering'],
+    ['Nov 2026', 'Open source', 'wayfinder-sidebar released', 'Claude Code plugin, 15k views on Reddit'],
+    ['Sep 2026', 'Teaching', 'TA for Systems and Toolchains for AI in Engineering', '06-763, Carnegie Mellon'],
+  ];
+  const count = n => `${n} ${n === 1 ? 'project' : 'projects'}`;
+
+  /* ---- the colour ramp: 13 discrete bands, ink to indigo to violet to coral to peach ---- */
+  const STOPS = [[0, [13, 7, 34]], [.3, [42, 22, 112]], [.56, [112, 68, 232]], [.8, [238, 107, 96]], [1, [255, 214, 191]]];
+  function ramp(v) { for (let i = 1; i < STOPS.length; i++) if (v <= STOPS[i][0]) { const [a, A] = STOPS[i - 1], [b, B] = STOPS[i], k = (v - a) / (b - a); return A.map((q, j) => q + (B[j] - q) * k); } return STOPS[4][1]; }
+  const RAMP = Array.from({ length: 13 }, (_, b) => ramp(b / 12));
+  const g2 = (dx, dy, s) => Math.exp(-(dx * dx + dy * dy) / (2 * s * s));
+  const ss = (a, b, x) => { const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+
+  /* ---- terrains: each returns minima (in units of height) and a height v in 0..1 ---- */
+  const TERRAIN = {
+    /* the site's function: rolling waves, a Gaussian bowl per topic, a broad basin under the name */
+    now(A, phone, who, opt) {
+      const s = phone ? .085 : .125;
+      /* round two moves Reinforcement learning up and right, clear of the floor under the name */
+      const pos = t => phone ? t.tall : (opt.moved && t.id === 'rl' ? [.2, .13] : t.wide);
+      const mins = TOPICS.map(t => { const [x, y] = pos(t); return { ...t, x: x * A, y }; });
+      const bowls = mins.map(m => ({ x: m.x, y: m.y, d: .82, s }));
+      if (!opt.calm) bowls.push({ x: who.cx, y: who.cy, d: .86, s: phone ? .2 : .27 });
+      return { mins, f(x, y) { let f = .12 * Math.sin(2.1 * x + .6) * Math.cos(1.7 * y - .4) + .08 * Math.sin(3.3 * y + 1.2 * x + 1); for (const b of bowls) f -= b.d * g2(x - b.x, y - b.y, b.s); return (f + .95) / 1.2; } };
+    },
+    /* 1D: the same bowls, moved onto the right two thirds (desktop) or the top half (phone) */
+    clear(A, phone, who) {
+      const s = phone ? .085 : .12;
+      const at = phone ? { rl: [.24, .1], sciml: [.74, .14], genai: [.3, .3], swe: [.72, .34] } : { rl: [.47, .3], sciml: [.62, .12], genai: [.74, .5], swe: [.9, .22] };
+      const mins = TOPICS.map(t => ({ ...t, x: at[t.id][0] * A, y: at[t.id][1] }));
+      return { mins, f(x, y) { let f = .12 * Math.sin(2.1 * x + .6) * Math.cos(1.7 * y - .4) + .08 * Math.sin(3.3 * y + 1.2 * x + 1); for (const m of mins) f -= .82 * g2(x - m.x, y - m.y, s); f -= .86 * g2(x - who.cx, y - who.cy, phone ? .2 : .27); return (f + .95) / 1.2; } };
+    },
+    /* 2A: Himmelblau on a log scale; its four minima are the topics */
+    himmelblau(A, phone) {
+      /* mirrored left to right so the minimum nearest the name holds the shortest label */
+      const [x0, y0, k] = phone ? [.265, .22, .042] : [1.2, .40, .095], map = ([u, w]) => [x0 - k * u, y0 - k * w];
+      const at = { rl: [3, 2], sciml: [-2.805118, 3.131312], genai: [3.584428, -1.848126], swe: [-3.779310, -3.283186] };
+      const mins = TOPICS.map(t => { const [x, y] = map(at[t.id]); return { ...t, x, y }; });
+      const L = Math.log1p(2e4);
+      return { mins, f(x, y) { const u = (x0 - x) / k, w = (y0 - y) / k, f = (u * u + w - 11) ** 2 + (u + w * w - 7) ** 2; return Math.min(1, Math.log1p(f) / L); } };
+    },
+    /* 2B: Rosenbrock's banana valley on a log scale, with a shallow pool per topic along the floor */
+    rosenbrock(A, phone) {
+      const [x0, y0, ku, kw] = phone ? [.265, .36, .11, .085] : [1.12, .66, .27, .16], map = u => [x0 + ku * u, y0 - kw * u * u];
+      const at = phone ? { rl: -1.75, sciml: -.85, genai: .55, swe: 1.45 } : { rl: -1.55, sciml: -.55, genai: .45, swe: 1.25 };
+      const mins = TOPICS.map(t => { const [x, y] = map(at[t.id]); return { ...t, x, y }; });
+      const L = Math.log1p(1e5);
+      return { mins, f(x, y) { const u = (x - x0) / ku, w = (y0 - y) / kw, f = (1 - u) ** 2 + 100 * (w - u * u) ** 2; let v = Math.log1p(f) / L; for (const m of mins) v -= .2 * g2(x - m.x, y - m.y, .05); return Math.max(0, Math.min(1, v + .04)); } };
+    },
+    /* 2C: a plane tilted down to the lower left, topics as dimples on the slope */
+    tilt(A) {
+      const at = { rl: [.2, .22], sciml: [.44, .14], genai: [.66, .36], swe: [.86, .6] };
+      const mins = TOPICS.map(t => ({ ...t, x: at[t.id][0] * A, y: at[t.id][1] }));
+      return { mins, f(x, y) { let v = .03 + .5 * (x / A) + .52 * (1 - y) + .03 * Math.sin(2.1 * x + .6) * Math.cos(1.7 * y - .4); for (const m of mins) v -= .2 * g2(x - m.x, y - m.y, .07); return Math.max(0, Math.min(1, v)); } };
+    },
+    /* 2D: a Rastrigin egg crate over a gentle slope, four deep basins where the ripple dies away */
+    ripple(A, phone) {
+      const at = phone ? { rl: [.26, .1], sciml: [.74, .14], genai: [.3, .3], swe: [.72, .34] } : { rl: [.2, .2], sciml: [.44, .12], genai: [.66, .34], swe: [.86, .6] };
+      const mins = TOPICS.map(t => ({ ...t, x: at[t.id][0] * A, y: at[t.id][1] }));
+      const P = 2 * Math.PI / (phone ? .075 : .105), bs = phone ? .075 : .1;
+      return { mins, f(x, y) {
+        let basin = 0; for (const m of mins) basin = Math.max(basin, g2(x - m.x, y - m.y, bs));
+        const rip = .075 * (2 - Math.cos(P * x) - Math.cos(P * y)) * (1 - basin);
+        return Math.max(0, Math.min(1, .3 + .24 * (x / A) + .12 * (1 - y) + rip - .42 * basin));
+      } };
+    },
+  };
+
+  /* ---- mock markup ---- */
+  function mock(frame) {
+    const phone = frame.hasAttribute('data-phone'), W = phone ? 390 : 1440, H = phone ? 736 : 842, reelH = phone ? 136 : 142;
+    const v = frame.dataset.mock, sw = frame.dataset.switch;
+    const s = document.createElement('div');
+    s.className = 'screen' + (phone ? ' phone' : '') + ' v-' + v; s.dataset.w = W; s.style.width = W + 'px';
+    const cards = LATEST.map(([d, k, t, x]) => `<div class="card"><em><i>${d}</i><i>${k}</i></em><b>${t}</b><span>${x}</span></div><svg class="mk" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8"/><circle cx="9" cy="9" r="5"/><circle cx="9" cy="9" r="2"/></svg>`).join('');
+    const nav = phone ? '<span>Research</span><span>CV</span><span>Contact</span>' : '<span>Research</span><span>Publications</span><span>Experience</span><span>Skills</span><span>CV</span><span>Contact</span>';
+    s.innerHTML = `<div class="m-hero" style="height:${H}px">
+      <div class="m-land"><canvas></canvas><div class="scrim"></div><svg></svg><div class="labs"></div></div>
+      <div class="m-nav">${nav}</div>
+      <div class="m-who"><div class="id"><img alt="Nicolas Smits" src="${HEADSHOT}"><h1>Nicolas<br>Smits</h1></div>
+        <p class="focus">Optimisation, operations research, machine learning and reinforcement learning for process systems.</p>
+        <div class="m-links"><span>${ICON.mail}<i class="nm" style="font-style:normal">Email</i></span><span>${ICON.li}<i class="nm" style="font-style:normal">LinkedIn</i></span><span>${ICON.gh}<i class="nm" style="font-style:normal">GitHub</i></span><span class="tbd">${ICON.orcid}<i class="nm" style="font-style:normal">ORCID</i></span><span class="cv">${ICON.file}CV</span></div>
+        ${sw === 'readout' ? `<div class="m-readrow"><button class="fx" data-fx="next"><i>f</i><span data-fxname></span>${CYCLE}</button><p class="m-read">Click anywhere to start a solver there.</p></div>` : '<p class="m-read">Click anywhere to start a solver there.</p>'}</div>
+      ${sw === 'tab' ? `<div class="m-fxtab" style="bottom:${reelH}px">${phone ? `<button data-fx="next" class="one"><i>f</i><span data-fxname></span>${NEXT}</button>` : `<small>Landscape</small>${FX.map((f, i) => `<button data-fx="${i}" aria-pressed="${i === 0}">${f.name}</button>`).join('')}`}</div>` : ''}
+      ${sw === 'formula' ? `<button class="m-fxf" data-fx="next"><span class="eq" data-fxeq></span><span class="nx">Next${NEXT}</span></button>` : ''}
+      <section class="m-reel" style="height:${reelH}px"><h2>Latest</h2><div class="win">${cards}</div></section>
+    </div>`;
+    frame.appendChild(s);
+    return { s, phone, W, H };
+  }
+  /* the four functions a visitor can rotate between, in order; the ripple field gets a description, not a formula */
+  const FX = [
+    { key: 'now', name: 'Four bowls', eq: 'f(x) = w(x) − Σ<sub>i</sub> 0.82 exp(−‖x − c<sub>i</sub>‖² / 2σ²)' },
+    { key: 'himmelblau', name: 'Himmelblau', eq: 'f(x, y) = (x² + y − 11)² + (x + y² − 7)²' },
+    { key: 'rosenbrock', name: 'Rosenbrock', eq: 'f(x, y) = (1 − x)² + 100 (y − x²)²' },
+    { key: 'ripple', name: 'Ripple field', eq: 'Rastrigin ripples, 2 − cos 2πx/λ − cos 2πy/λ, over four basins' },
+  ];
+  const CYCLE = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v2.8h-2.8"/></svg>';
+  const NEXT = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg>';
+
+  /* ---- one live landscape per frame ---- */
+  function live(frame) {
+    const { s, phone, W, H } = mock(frame);
+    const hero = s.querySelector('.m-hero'), land = s.querySelector('.m-land'), cv = land.querySelector('canvas'), svg = land.querySelector('svg'), labs = land.querySelector('.labs');
+    const whoEl = s.querySelector('.m-who'), read = s.querySelector('.m-read');
+    const A = W / H, calm = frame.hasAttribute('data-calm'), legacy = frame.hasAttribute('data-legacy'), moved = frame.hasAttribute('data-moved');
+    const names = (frame.dataset.terrains || frame.dataset.terrain).split(',');
+    let cur = 0, T, who, box, ready = false;
+
+    function measure() {
+      const hr = hero.getBoundingClientRect(), r = whoEl.getBoundingClientRect(), k = W / hr.width;
+      const l = (r.left - hr.left) * k / H, t = (r.top - hr.top) * k / H, w = r.width * k / H, h = r.height * k / H;
+      box = { l, t, r: l + w, b: t + h };
+      who = { cx: l + Math.min(w, A * .9) * .42, cy: t + h * .5 };
+    }
+    /* 1A: a flat floor under the block, ringed by the contours (a rounded-rectangle mask on the measured box) */
+    function floorMask(x, y) {
+      const pad = phone ? .02 : .035, cx = (box.l + box.r) / 2, cy = (box.t + box.b) / 2;
+      const rx = (box.r - box.l) / 2 + pad, ry = (box.b - box.t) / 2 + pad;
+      const d = Math.pow(Math.abs((x - cx) / rx) ** 4 + Math.abs((y - cy) / ry) ** 4, .25);
+      return 1 - ss(.9, moved ? 1.4 : 1.55, d);
+    }
+    let F;
+    function build() {
+      if (!box) measure();
+      const t = TERRAIN[names[cur]](A, phone, who, { calm, moved });
+      T = t;
+      F = calm ? (x, y) => { const m = floorMask(x, y); return t.f(x, y) * (1 - m) + .015 * m; } : t.f;
+    }
+
+    function render(lo) {
+      const sc = lo ? .3 : phone ? 1.6 : 1, w = Math.round(W * sc), h = Math.round(H * sc);
+      cv.width = w; cv.height = h;
+      const ctx = cv.getContext('2d'), im = ctx.createImageData(w, h), band = new Uint8Array(w * h);
+      for (let j = 0; j < h; j++) { const y = (j + .5) / h; for (let i = 0; i < w; i++) band[j * w + i] = Math.min(12, Math.floor(Math.max(0, Math.min(1, F((i + .5) / h, y))) * 13)); }
+      let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647 - .5) * 9;
+      for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+        const k = j * w + i, b = band[k], c = RAMP[b], e = (i < w - 1 && band[k + 1] !== b) || (j < h - 1 && band[k + w] !== b) ? .74 : 1, n = rnd();
+        im.data[k * 4] = c[0] * e + n; im.data[k * 4 + 1] = c[1] * e + n; im.data[k * 4 + 2] = c[2] * e + n; im.data[k * 4 + 3] = 255;
+      }
+      ctx.putImageData(im, 0, 0);
+    }
+    /* labels are made once and glide to each function's minima */
+    const labEl = {};
+    function place() {
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      T.mins.forEach(m => {
+        let a = labEl[m.id];
+        if (!a) { a = labEl[m.id] = document.createElement('span'); a.className = 'lab'; a.innerHTML = `<i>x*</i>${m.name}<small>${count(m.n)}</small>`; labs.appendChild(a); }
+        a.classList.remove('hit'); m.el = a;
+        const wd = a.offsetWidth || 160, x = Math.max(wd / 2 + 6, Math.min(W - wd / 2 - 6, m.x * H));
+        a.style.left = x + 'px'; a.style.top = m.y * H + 'px';
+      });
+    }
+    function ui() {
+      const f = FX.find(q => q.key === names[cur]);
+      if (!f) return;
+      s.querySelectorAll('[data-fxname]').forEach(e => (e.textContent = f.name));
+      s.querySelectorAll('[data-fxeq]').forEach(e => (e.innerHTML = phone ? `<i>f</i>${f.name}` : f.eq));
+      s.querySelectorAll('[data-fx]').forEach(b => { if (b.dataset.fx !== 'next') b.setAttribute('aria-pressed', String(+b.dataset.fx === cur)); });
+    }
+    /* switching: blend the old surface into the new over about 0.7 s at low resolution, then redraw and descend */
+    function swap(i) {
+      if (!ready || i === cur) return;
+      const Fa = F; cur = i; build(); const Fb = F;
+      tok++; svg.textContent = ''; place(); ui();
+      read.innerHTML = `Switched to <b>${FX[cur].name}</b>.`;
+      if (reduce) { render(); opening(); return; }
+      ready = false; let k = 0; const N = 22;
+      const tick = () => {
+        k++; const t = ss(0, 1, k / N); F = (x, y) => Fa(x, y) * (1 - t) + Fb(x, y) * t;
+        if (k < N) { render(true); requestAnimationFrame(tick); } else { F = Fb; render(); ready = true; setTimeout(opening, 120); }
+      };
+      tick();
+    }
+    s.querySelectorAll('[data-fx]').forEach(b => b.addEventListener('click', e => {
+      e.stopPropagation();
+      swap(b.dataset.fx === 'next' ? (cur + 1) % names.length : +b.dataset.fx);
+    }));
+
+    /* ---- the solver: heavy-ball gradient descent, two iterations drawn per frame ---- */
+    const grad = (x, y) => { const h = 1e-3; return [(F(x + h, y) - F(x - h, y)) / (2 * h), (F(x, y + h) - F(x, y - h)) / (2 * h)]; };
+    function solve(x, y) {
+      const path = [[x, y]]; let vx = 0, vy = 0;
+      for (let k = 0; k < 600; k++) {
+        /* the site's step (0.011), capped by the curvature along the gradient so steep test functions stay stable */
+        const [gx, gy] = grad(x, y), g = Math.hypot(gx, gy); let lr = .011;
+        if (g > 1e-9) {
+          /* curvature along the gradient and across it; the stiffer of the two sets the step */
+          const h = 2e-3, ux = gx / g, uy = gy / g, curv = (dx, dy) => { const [ax, ay] = grad(x + dx * h, y + dy * h), [bx, by] = grad(x - dx * h, y - dy * h); return Math.abs(((ax - bx) * dx + (ay - by) * dy) / (2 * h)); };
+          const kap = Math.max(curv(ux, uy), curv(-uy, ux)); if (kap > 0) lr = Math.min(lr, .45 / kap);
+        }
+        vx = .8 * vx - lr * gx; vy = .8 * vy - lr * gy;
+        const sp = Math.hypot(vx, vy), cap = phone ? .018 : .025; if (sp > cap) { vx *= cap / sp; vy *= cap / sp; }
+        x += vx; y += vy;
+        x = Math.max(0, Math.min(A, x)); y = Math.max(0, Math.min(1, y)); path.push([x, y]);
+        if (Math.hypot(gx, gy) < .02 && Math.hypot(vx, vy) < 4e-4) break;
+        if (k > 12) { const q = path[path.length - 12]; if (Math.hypot(x - q[0], y - q[1]) < .0015) break; } /* settled, jitter aside */
+      }
+      return path;
+    }
+    const inBox = ([x, y], m = .015) => x > box.l - m && x < box.r + m && y > box.t - m && y < box.b + m;
+    function verdict(end) {
+      let best = null, bd = 1e9; for (const m of T.mins) { const d = Math.hypot(m.x - end[0], m.y - end[1]); if (d < bd) { bd = d; best = m; } }
+      if (best && bd < .1) return { hit: best };
+      const toContact = calm ? floorMask(end[0], end[1]) > .4 : (Math.hypot(end[0] - who.cx, end[1] - who.cy) < .2 || inBox(end, .06));
+      return toContact ? { contact: true } : {};
+    }
+    let tok = 0;
+    function run(x, y, instant) {
+      const my = ++tok, path = solve(x, y), lw = phone ? 1.4 : 1.8, fg = '#F3EDFF';
+      svg.textContent = '';
+      const mk = (n, a, p = svg) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+      const line = mk('polyline', { fill: 'none', stroke: fg, 'stroke-width': lw, 'stroke-linejoin': 'round' }), dots = mk('g', { fill: fg });
+      mk('circle', { cx: x * H, cy: y * H, r: 5, fill: 'none', stroke: fg, 'stroke-width': lw });
+      T.mins.forEach(m => m.el && m.el.classList.remove('hit'));
+      let i = 0;
+      const n = path.length - 1;
+      const finish = () => {
+        const end = path[n], v = verdict(end);
+        mk('circle', { cx: end[0] * H, cy: end[1] * H, r: 9, fill: 'none', stroke: '#FF7C6B', 'stroke-width': 2.4 });
+        if (v.hit) { v.hit.el.classList.add('hit'); read.innerHTML = `Converged in <b>${n}</b> iterations on <u>${v.hit.name}</u>, ${count(v.hit.n)}.`; }
+        else if (v.contact) read.innerHTML = `Converged in <b>${n}</b> iterations, right on <u>Contact</u>.`;
+        else read.innerHTML = names[cur] === 'ripple' ? `Stuck in a local minimum after <b>${n}</b> iterations. Try another start.` : `Stopped after <b>${n}</b> iterations on a saddle. Try another start.`;
+      };
+      const step = () => {
+        if (my !== tok) return;
+        const k = instant ? path.length : Math.min(path.length, i + 2);
+        for (; i < k; i++) mk('circle', { cx: path[i][0] * H, cy: path[i][1] * H, r: phone ? 1.7 : 2.1 }, dots);
+        line.setAttribute('points', path.slice(0, i).map(p => (p[0] * H).toFixed(1) + ',' + (p[1] * H).toFixed(1)).join(' '));
+        if (i < path.length) { read.innerHTML = `Iteration <b>${i}</b>, <i class="m">f</i> = <b>${F(path[i - 1][0], path[i - 1][1]).toFixed(3)}</b>`; requestAnimationFrame(step); }
+        else finish();
+      };
+      step();
+    }
+    /* the opening descent: today's from mid-map; the options start top right, land on a topic, never cross the block */
+    function opening() {
+      if (legacy) { const st = phone ? [.5, .22] : [.47, .52]; return run(st[0] * A, st[1], reduce); }
+      const cands = phone ? [[.62, .06], [.9, .1], [.5, .2], [.85, .3], [.2, .2], [.6, .4]] : [[.6, .08], [.74, .1], [.88, .12], [.52, .14], [.8, .36], [.96, .42], [.62, .5], [.3, .08]];
+      let pick = null;
+      for (const [fx, fy] of cands) { const p = solve(fx * A, fy); if (verdict(p[p.length - 1]).hit && !p.some(q => inBox(q))) { pick = [fx * A, fy]; break; } }
+      if (!pick) pick = [cands[0][0] * A, cands[0][1]];
+      run(pick[0], pick[1], reduce);
+    }
+    land.addEventListener('click', e => {
+      if (!ready) return;
+      const r = cv.getBoundingClientRect(); run((e.clientX - r.left) / r.width * A, (e.clientY - r.top) / r.height, reduce);
+    });
+    return {
+      frame, start() { build(); render(); place(); ui(); requestAnimationFrame(() => { place(); labs.classList.add('mv'); }); ready = true; setTimeout(opening, reduce ? 0 : 350); },
+    };
+  }
+
+  /* ---- fit each design-size screen to its frame, then draw frames as they come into view ---- */
+  const mocks = [...document.querySelectorAll('[data-mock]')].map(live);
+  function fit() { document.querySelectorAll('.screen').forEach(s => { s.style.zoom = s.parentElement.clientWidth / +s.dataset.w; }); }
+  fit();
+  let lastW = innerWidth;
+  addEventListener('resize', () => { if (innerWidth !== lastW) { lastW = innerWidth; fit(); } });
+  /* draw the frames one at a time, top to bottom, so the page stays responsive while the landscapes compute */
+  const queue = mocks.slice();
+  const pump = () => { const m = queue.shift(); if (!m) return; m.start(); setTimeout(pump, 30); };
+  let go = false; const begin = () => { if (!go) { go = true; fit(); pump(); } };
+  if (document.fonts) document.fonts.ready.then(begin);
+  setTimeout(begin, 1200);
+})();
+</script>

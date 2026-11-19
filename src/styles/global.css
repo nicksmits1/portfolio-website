@@ -49,6 +49,19 @@ a.lab:hover { background: var(--fg); color: var(--ink); }
 .read b { color: var(--fg); font-weight: 600; }
 .read a { color: var(--coral); font-weight: 600; }
 .tab-name { position: absolute; top: 0; left: 0; z-index: 2; padding: 18px 22px 12px var(--gutter); font: 300 1.1rem/1 var(--disp); letter-spacing: -.03em; background: var(--tab); border-bottom-right-radius: 14px; text-decoration: none; }
+/* the landscape's caption: its function, set in STIX on an ink tab top left; clicking moves to the next function */
+.fx-tab { position: absolute; top: 0; left: 0; z-index: 2; display: flex; align-items: center; gap: 16px; padding: 18px 22px 12px var(--gutter); border: 0; border-bottom-right-radius: 14px; background: var(--tab); color: var(--fg); text-align: left; cursor: pointer; }
+.fx-tab[hidden] { display: none; }
+.fx-tab .eq { font: italic 1.1rem/1 var(--math); white-space: nowrap; transition: color .2s; }
+.fx-tab .eq sub { font-size: .68em; line-height: 0; }
+.fx-tab .nm { display: none; font: 500 .95rem/1 var(--text); white-space: nowrap; }
+.fx-tab .nm i { font: italic 1.12em/1 var(--math); color: var(--coral); margin-right: 6px; }
+.fx-tab .nx { display: inline-flex; align-items: center; gap: 4px; font: 600 .7rem/1 var(--text); letter-spacing: .08em; text-transform: uppercase; color: var(--coral); }
+.fx-tab .nx svg { width: 14px; height: 14px; }
+.fx-tab:hover .eq, .fx-tab:hover .nm { color: var(--peach); }
+@media (max-width: 1099px) { .fx-tab .eq { display: none; } .fx-tab .nm { display: inline; } }
+@media (max-width: 699px) { .fx-tab { gap: 10px; padding: 14px 14px 10px 16px; } .fx-tab .nm { font-size: .82rem; } }
+.labs.glide .lab { transition: left .7s cubic-bezier(.3, .7, .2, 1), top .7s cubic-bezier(.3, .7, .2, 1), background .3s, color .3s, opacity .3s; }
 .nav { position: absolute; top: 0; right: 0; z-index: 2; display: flex; gap: clamp(14px, 2vw, 24px); padding: 18px var(--gutter) 12px 20px; font: 500 .95rem/1 var(--text); background: var(--tab); border-bottom-left-radius: 14px; }
 .nav a { text-decoration: none; }
 .nav a:hover, .nav a[aria-current] { color: var(--coral); }

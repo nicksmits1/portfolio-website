@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-18T12:00:00Z",
+  "title": "Design System: Nicolas Smits",
+  "extensions": {
+    "colorMeta": {
+      "night": { "role": "neutral", "displayName": "Night", "canonical": "#120A2A", "tonalRamp": ["#0D0722", "#120A2A", "#1A1038", "#2A1670", "#4B2CA8", "#7044E8", "#B9AAE8", "#F3EDFF"] },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#0D0722", "tonalRamp": ["#07031A", "#0D0722", "#120A2A", "#1A1038", "#1E1244", "#2A1670", "#4B2CA8", "#7C6BB8"] },
+      "lavender-white": { "role": "neutral", "displayName": "Lavender White", "canonical": "#F3EDFF", "tonalRamp": ["#2A2340", "#463D66", "#62588C", "#7C6BB8", "#9A89D2", "#B9AAE8", "#D6CCF4", "#F3EDFF"] },
+      "lavender-mist": { "role": "neutral", "displayName": "Lavender Mist", "canonical": "#B9AAE8" },
+      "dusk-violet": { "role": "neutral", "displayName": "Dusk Violet", "canonical": "#7C6BB8" },
+      "solver-coral": { "role": "primary", "displayName": "Solver Coral", "canonical": "#FF7C6B", "tonalRamp": ["#3D1210", "#6B211C", "#9B322A", "#C9473C", "#EE6B60", "#FF7C6B", "#FFA597", "#FFD0C8"] },
+      "peach": { "role": "secondary", "displayName": "Peach", "canonical": "#FFD9C2", "tonalRamp": ["#4A2E1E", "#7A4E36", "#A8714F", "#D0966F", "#EDB595", "#FFD6BF", "#FFD9C2", "#FFF0E7"] },
+      "signal-violet": { "role": "tertiary", "displayName": "Signal Violet", "canonical": "#8B5CF6" },
+      "ramp-indigo": { "role": "ramp", "displayName": "Ramp Indigo", "canonical": "#2A1670" },
+      "ramp-violet": { "role": "ramp", "displayName": "Ramp Violet", "canonical": "#7044E8" },
+      "ramp-coral": { "role": "ramp", "displayName": "Ramp Coral", "canonical": "#EE6B60" },
+      "ramp-peach": { "role": "ramp", "displayName": "Ramp Peach", "canonical": "#FFD6BF" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The name on the home hero only." },
+      "headline": { "displayName": "Headline", "purpose": "Project titles on the strip; home section heads." },
+      "title": { "displayName": "Title", "purpose": "Prose section headings and Further reading." },
+      "card-title": { "displayName": "Card Title", "purpose": "Project rows, previous / next, reel cards." },
+      "body": { "displayName": "Body", "purpose": "Default text." },
+      "prose": { "displayName": "Prose", "purpose": "Project page sections, measure under 62ch." },
+      "meta": { "displayName": "Meta", "purpose": "Dates, where-lines, row details, source lines." },
+      "label": { "displayName": "Label", "purpose": "Eyebrows, sub-heads, reel label; uppercase." },
+      "math": { "displayName": "Math", "purpose": "Every mathematical symbol, italic." },
+      "mono": { "displayName": "Mono", "purpose": "Kind and edge labels in system diagrams only." }
+    },
+    "shadows": [
+      { "name": "hairline", "value": "0 0 0 1px rgba(243, 237, 255, .22)", "purpose": "Outline on plates, thumbnails, banners and badges without affecting layout." },
+      { "name": "diagram-offset", "value": "3px 3px 0 #07031A", "purpose": "Hard offset under system-diagram nodes (Proschi grammar)." }
+    ],
+    "motion": [
+      { "name": "hover", "value": "color .2s, background .3s", "purpose": "Title and label colour changes on hover." },
+      { "name": "reel", "value": "linear, 28 px/s", "purpose": "Latest reel; pauses on hover or focus, still under reduced motion." },
+      { "name": "solver", "value": "two iterations per frame", "purpose": "Gradient-descent path on landscapes; weights ease over about nine frames." }
+    ],
+    "breakpoints": [
+      { "name": "phone", "value": "699px" },
+      { "name": "list", "value": "860px" },
+      { "name": "rail", "value": "899px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Link Pill",
+      "kind": "button",
+      "refersTo": "pill-link",
+      "description": "Profile and project links: icon plus name on translucent ink with a hairline.",
+      "html": "<a class=\"ds-pill\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"m3 7 9 6 9-6\"/></svg>Email</a>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px 0 12px; border: 1px solid rgba(243,237,255,.22); border-radius: 999px; background: rgba(13,7,34,.6); color: #F3EDFF; font: 500 .875rem/1 Onest, system-ui, sans-serif; text-decoration: none; transition: border-color .2s; } .ds-pill:hover { border-color: #F3EDFF; } .ds-pill:focus-visible { outline: 2px solid #FF7C6B; outline-offset: 3px; }"
+    },
+    {
+      "name": "CV Button",
+      "kind": "button",
+      "refersTo": "button-cv",
+      "description": "The one primary action: peach fill, ink text.",
+      "html": "<a class=\"ds-cv\" href=\"#\">Download CV</a>",
+      "css": ".ds-cv { display: inline-flex; align-items: center; height: 40px; padding: 0 16px; border-radius: 999px; background: #FFD9C2; color: #0D0722; font: 500 .875rem/1 Onest, system-ui, sans-serif; text-decoration: none; } .ds-cv:hover { background: #FF7C6B; } .ds-cv:focus-visible { outline: 2px solid #FF7C6B; outline-offset: 3px; }"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Skill and topic filters; pressed fills coral.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">PyTorch</button><button class=\"ds-chip\" aria-pressed=\"false\">Pyomo</button><button class=\"ds-chip\" aria-pressed=\"false\">Kafka</button></div>",
+      "css": ".ds-chips { display: flex; flex-wrap: wrap; gap: 7px; } .ds-chip { font: 500 .875rem/1 Onest, system-ui, sans-serif; padding: 8px 12px; border: 1px solid rgba(243,237,255,.22); border-radius: 999px; background: none; color: #F3EDFF; cursor: pointer; } .ds-chip:hover { border-color: #F3EDFF; } .ds-chip[aria-pressed=\"true\"] { background: #FF7C6B; border-color: #FF7C6B; color: #120A2A; } .ds-chip:focus-visible { outline: 2px solid #FF7C6B; outline-offset: 3px; }"
+    },
+    {
+      "name": "Map Label",
+      "kind": "custom",
+      "refersTo": "map-label",
+      "description": "Topic or project label on a landscape; coral when the solver converges on it.",
+      "html": "<div class=\"ds-labs\"><a class=\"ds-lab\" href=\"#\"><i>x*</i>GenAI<small>3</small></a><span class=\"ds-lab ds-hit\">SiNDAE<small>here</small></span></div>",
+      "css": ".ds-labs { display: flex; gap: 12px; padding: 24px; background: #2A1670; } .ds-lab { font: 600 .9rem/1.1 Onest, system-ui, sans-serif; padding: 3px 8px; border-radius: 999px; background: rgba(13,7,34,.72); color: #F3EDFF; text-decoration: none; white-space: nowrap; transition: background .3s, color .3s; } .ds-lab i { font: italic 1.05em/1 'STIX Two Text', serif; margin-right: 4px; } .ds-lab small { font: 500 .7rem/1 Onest, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: #B9AAE8; margin-left: 6px; } a.ds-lab:hover { background: #F3EDFF; color: #0D0722; } .ds-hit { background: #FF7C6B; color: #120A2A; } .ds-hit small { color: #0D0722; }"
+    },
+    {
+      "name": "Nav Tab",
+      "kind": "nav",
+      "refersTo": "nav-tab",
+      "description": "Ink tab flush top right of every landscape; current item coral.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\" aria-current=\"page\">Research</a><a href=\"#\">Publications</a><a href=\"#\">Skills</a><a href=\"#\">CV</a><a href=\"#\">Contact</a></nav>",
+      "css": ".ds-nav { display: inline-flex; gap: 22px; padding: 18px 28px 12px 20px; font: 500 .95rem/1 Onest, system-ui, sans-serif; background: rgba(13,7,34,.72); border-bottom-left-radius: 14px; color: #F3EDFF; } .ds-nav a { color: inherit; text-decoration: none; } .ds-nav a:hover, .ds-nav a[aria-current] { color: #FF7C6B; }"
+    },
+    {
+      "name": "Rail Facts",
+      "kind": "card",
+      "refersTo": "",
+      "description": "At most four facts in the project rail: peach number over a mist label.",
+      "html": "<ul class=\"ds-run\"><li><b>21,000×</b><span>faster than greedy search</span></li><li><b>70</b><span>nodes designed, trained on 19</span></li></ul>",
+      "css": ".ds-run { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px 24px; max-width: 360px; } .ds-run li { display: flex; flex-direction: column; border-top: 1px solid rgba(243,237,255,.22); padding-top: 9px; } .ds-run b { font: 400 1.5rem/1.1 Unbounded, system-ui, sans-serif; letter-spacing: -.03em; color: #FFD9C2; font-variant-numeric: tabular-nums; } .ds-run span { font: 400 .82rem/1.3 Onest, sans-serif; color: #B9AAE8; margin-top: 5px; }"
+    },
+    {
+      "name": "Project Row",
+      "kind": "card",
+      "refersTo": "",
+      "description": "Home index row: thumbnail from the project's own figure, title, summary, year.",
+      "html": "<a class=\"ds-row\" href=\"#\"><span class=\"ds-th\"></span><span><b>Graph RL for network design</b><small>Master's thesis, McGill</small></span><p>A policy trained on small networks designs networks up to 70 nodes.</p><em>2026</em></a>",
+      "css": ".ds-row { display: grid; grid-template-columns: 120px minmax(0,220px) minmax(0,1fr) 48px; gap: 22px; align-items: center; padding: 16px 0; border-top: 1px solid rgba(243,237,255,.1); color: #F3EDFF; text-decoration: none; font-family: Onest, system-ui, sans-serif; } .ds-th { width: 120px; height: 69px; border-radius: 8px; background: linear-gradient(135deg, #2A1670, #7044E8 60%, #EE6B60); box-shadow: 0 0 0 1px rgba(243,237,255,.1); } .ds-row b { display: block; font: 400 1.12rem/1.2 Unbounded, sans-serif; letter-spacing: -.03em; transition: color .2s; } .ds-row small { display: block; color: #B9AAE8; font-size: .82rem; margin-top: 4px; } .ds-row p { margin: 0; font-size: .95rem; color: #B9AAE8; } .ds-row em { font-style: normal; font-size: .82rem; color: #7C6BB8; text-align: right; } .ds-row:hover b { color: #FF7C6B; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Objective Landscape",
+    "overview": "Every page is a surface the visitor probes. The home page is an objective function drawn as a banded contour map: research topics are its local minima, a click starts a gradient-descent solver, and where the solver converges decides what the page shows. Project pages open on the same landscape, close in on that project's basin, with the solver arriving. The interface is the chart's furniture: labels, rails and pills sit on the map and step back so the work, and the figures made from its own mathematics, lead.\n\nThe world is one dark night-violet ground warming through a 13-band ramp, ink to indigo to violet to coral to peach, which are the SiNDAE logo's colours. Warmth means arrival: coral marks where the solver lands and every selected state; peach carries the figures that matter (rail facts), the primary action (the CV) and the closing contact block. Density is low on the map and comfortable in lists; prose is the smallest part of any page.\n\nThere is one theme by choice. No light mode, no glass cards, no gradient text, no coloured side rules.",
+    "keyCharacteristics": [
+      "Full-bleed contour landscapes under the name (home, 640 px) and the title (project pages, 300 px strip).",
+      "Translucent ink tabs and pills sitting on the map; hairline rules everywhere else.",
+      "Coral is the solver's end and every pressed, hit or current state; peach is reserved for numbers, the CV and contact.",
+      "Unbounded light for display, Onest for text, STIX Two italic for every mathematical symbol.",
+      "Every animation converges to a still that reduced motion shows directly."
+    ],
+    "rules": [
+      { "name": "The Arrival Rule", "body": "Coral marks where something landed: the solver's end, a selected chip, a hit label, a focused control. If nothing was chosen or reached, nothing is coral.", "section": "colors" },
+      { "name": "The Peach Is Scarce Rule", "body": "Peach appears on numbers that matter, the one primary action and the contact block. A second peach button on a page is wrong.", "section": "colors" },
+      { "name": "The Math Is Set In Math Rule", "body": "Every variable, in labels, captions, legends or prose, is STIX Two italic. Never fake maths in Onest italic.", "section": "typography" },
+      { "name": "The Noun Heading Rule", "body": "Headings are short noun phrases (Motivation, Formulation, Results), never a clause, a question or opened with an article.", "section": "typography" },
+      { "name": "The Calm Basin Rule", "body": "Text that sits on a landscape gets a flat floor of the darkest band under it, never an overlay card. Labels and tabs (ink pills) are the only things laid over the map.", "section": "elevation" },
+      { "name": "The Ink Over Map Rule", "body": "Anything that sits on a landscape (nav, name tab, labels, reel, cue) sits on translucent ink so the bands show through. Anything off the map sits directly on Night with a hairline.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do lead every project with a figure built from that project's own mathematics, data or system.",
+      "Do keep coral for arrival and selection only (The Arrival Rule) and peach for numbers, the CV and contact.",
+      "Do put labels and tabs that sit on a landscape on translucent ink (#0D0722 at 72 to 84%), and give a block of text a calm basin instead.",
+      "Do set every mathematical symbol in STIX Two italic, and every equation as build-time MathML in STIX Two Math.",
+      "Do give every animation a reduced-motion still that shows its converged result.",
+      "Do separate items in meta lines with spacing or plain punctuation, each item its own span."
+    ],
+    "donts": [
+      "Don't add a light theme, glass cards or gradient text; the world is one dark theme by choice.",
+      "Don't set a callout, quote, caption or formula apart with a coloured side rule or a tinted side highlight; use spacing and type.",
+      "Don't put a middle dot (·) between meta items; it reads as machine-made.",
+      "Don't use soft drop shadows for depth; outlines are 1 px hairlines and the only real shadow is the diagrams' hard 3 px offset.",
+      "Don't write a step caption as a sentence, or explanation inside a drawing.",
+      "Don't use Dusk Violet (#7C6BB8) for body copy; it is for eyebrows, dates and markers."
+    ]
+  }
+}
