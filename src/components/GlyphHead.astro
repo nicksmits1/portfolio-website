@@ -1,0 +1,19 @@
+---
+/* The list pages' header (Publications, Experience): a character grid drawn by src/scripts/glyphs.ts in place of the
+   project pages' landscape strip, the name tab and nav on ink, and the title on a calm patch of the grid.
+   kind picks the generator; data is passed to it as JSON in data-<key> attributes. */
+import Nav from './Nav.astro';
+interface Props { page: 'publications' | 'experience'; title: string; line: string; kind: string; label: string; data?: Record<string, unknown> }
+const { page, title, line, kind, label, data = {} } = Astro.props;
+const attrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data-${k}`, JSON.stringify(v)]));
+---
+<header class="glyph-head">
+  <div class="glyphs" data-glyphs={kind} {...attrs}><canvas role="img" aria-label={label}></canvas></div>
+  <a class="tab-name" href="/">Nicolas Smits</a>
+  <Nav page={page} />
+  <div class="title">
+    <h1>{title}</h1>
+    <p>{line}</p>
+  </div>
+</header>
+<script>import '../scripts/glyphs';</script>

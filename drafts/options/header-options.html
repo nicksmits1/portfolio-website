@@ -1,0 +1,478 @@
+<title>Section Header Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=STIX+Two+Text:ital@1&display=swap">
+<style>
+/* Header options for the two list pages, Publications and Experience. Each header is a character grid drawn on canvas
+   in the site's 13-band ramp, in the spirit of ascii-magic's character renderings, with the page title on a calm basin.
+   Publications: three renderings of optimisation. Experience: three renderings of the path through the roles.
+   Layout: one option per band, the live header full width at desktop size, a 390 px phone frame beside the notes. */
+:root{
+  color-scheme:dark;
+  --bg:#120A2A; --panel:#1A1038; --ink:#0D0722; --node:#1E1244; --fg:#F3EDFF; --fg2:#B9AAE8; --dim:#7C6BB8;
+  --coral:#FF7C6B; --violet:#8B5CF6; --peach:#FFD9C2; --hair:rgba(243,237,255,.22); --hair2:rgba(243,237,255,.1); --tab:rgba(13,7,34,.72);
+  --disp:"Unbounded",system-ui,sans-serif; --text:"Onest",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace; --math:"STIX Two Text","Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--violet) var(--bg)}
+body{background:var(--bg);color:var(--fg);font:400 1rem/1.55 var(--text);margin:0}
+::selection{background:var(--coral);color:var(--bg)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px}
+.wrap{max-width:1320px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.intro{padding-block:clamp(2rem,5vw,3.6rem) 1.6rem}
+.intro h1{font:300 clamp(2rem,5vw,3.4rem)/1 var(--disp);letter-spacing:-.04em;margin:0 0 1rem;text-wrap:balance}
+.intro p{margin:0 0 .7rem;max-width:72ch;color:var(--fg2)}
+.intro p b{color:var(--fg);font-weight:600}
+.toc{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.2rem}
+.toc a{font:500 .9rem/1 var(--text);padding:.5rem .8rem;border:1px solid var(--hair);border-radius:999px;text-decoration:none}
+.toc a:hover{border-color:var(--coral);color:var(--coral)}
+.group-h{font:300 clamp(1.6rem,3.6vw,2.4rem)/1 var(--disp);letter-spacing:-.04em;margin:0;padding-block:clamp(2.4rem,6vw,4rem) .4rem;border-top:1px solid var(--hair)}
+.group-p{color:var(--fg2);max-width:72ch;margin:0 0 .6rem}
+.opt{display:grid;gap:1.1rem;padding-block:clamp(1.6rem,4vw,2.6rem);border-top:1px solid var(--hair2)}
+.opt header{display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap}
+.tag{font:600 .85rem/1 var(--disp);color:var(--bg);background:var(--coral);border-radius:999px;padding:.4rem .7rem}
+.opt h3{font:400 clamp(1.2rem,2.4vw,1.6rem)/1.1 var(--disp);letter-spacing:-.035em;margin:0}
+.opt header p{flex-basis:100%;margin:0;color:var(--fg2);max-width:80ch}
+.cap{font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:0 0 .45rem}
+.frame{border:1px solid var(--hair);border-radius:10px;overflow:hidden;background:var(--bg);min-width:0}
+.below{display:grid;gap:1.4rem;align-items:start}
+@media(min-width:900px){.below{grid-template-columns:392px minmax(0,1fr)}}
+.below>*{min-width:0}
+.phone{width:100%;max-width:392px}
+.notes{display:grid;gap:.9rem;font-size:.95rem;margin:0;padding:0;list-style:none}
+.notes b{display:block;font:600 .75rem/1.2 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:.25rem}
+.notes span{color:var(--fg2)}
+.shared{padding-block:clamp(2rem,5vw,3rem);border-top:1px solid var(--hair);color:var(--fg2);max-width:80ch}
+.shared h2{font:400 1.3rem/1.15 var(--disp);letter-spacing:-.03em;margin:0 0 .6rem;color:var(--fg)}
+.shared ul{margin:0;padding-left:1.1rem}.shared li{margin-bottom:.5rem}.shared b{color:var(--fg);font-weight:600}
+
+/* ---- the header mock ---- */
+.hd{position:relative;height:320px;background:var(--bg);overflow:hidden}
+.phone .hd{height:300px}
+.hd canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hd .m-name{position:absolute;top:0;left:0;padding:18px 22px 12px 44px;font:300 17px/1 var(--disp);letter-spacing:-.03em;background:var(--tab);border-bottom-right-radius:14px;z-index:2}
+.hd .m-nav{position:absolute;top:0;right:0;display:flex;gap:24px;padding:18px 44px 12px 20px;font:500 15px/1 var(--text);background:var(--tab);border-bottom-left-radius:14px;z-index:2}
+.hd .m-nav .on{color:var(--coral)}
+.phone .m-name{padding:14px 14px 10px 16px;font-size:14px}
+.phone .m-nav{gap:14px;padding:14px 16px 10px 14px;font-size:13px}
+.hd .m-title{position:absolute;left:44px;bottom:34px;z-index:2;max-width:min(560px,70%)}
+.phone .m-title{left:16px;bottom:22px;max-width:calc(100% - 32px)}
+.hd .m-title h4{font:300 clamp(34px,4.2vw,54px)/1 var(--disp);letter-spacing:-.045em;margin:0 0 10px}
+.phone .m-title h4{font-size:32px}
+.hd .m-title p{margin:0;color:var(--fg2);font-size:16px;max-width:44ch}
+.phone .m-title p{font-size:14px}
+.hd.top-title .m-title{top:84px;bottom:auto}
+.phone .hd.top-title .m-title{top:64px}
+/* a peek of the page below the header */
+.peek{padding:18px 44px 22px;border-top:1px solid var(--hair)}
+.phone .peek{padding:14px 16px 16px}
+.pk{display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;padding:10px 0;border-top:1px solid var(--hair2);font-size:14px}
+.pk:first-child{border-top:0}
+.pk em{font-style:normal;color:var(--dim);font-size:12.5px;font-variant-numeric:tabular-nums;padding-top:2px}
+.pk b{font-weight:600;display:block}
+.pk span{color:var(--fg2);font-size:13px}
+.pk .st{display:inline-block;margin-left:8px;font:600 10px/1 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--coral);vertical-align:2px}
+@media(max-width:899px){.big .m-nav span.w{display:none}}
+</style>
+
+<div class="wrap">
+  <section class="intro">
+    <h1>Section headers for Publications and Experience</h1>
+    <p>Both pages get a <b>320 px header</b> in the place the project pages carry their landscape strip: a character grid drawn live in the site's ramp, with the page title sitting on a calm patch of it. Each header animates and settles to a still under reduced motion.</p>
+    <p>Publications gets three takes on <b>optimisation in ASCII</b>, after ascii-magic's density, braille and box renderings. Experience gets three takes on <b>the path through the roles</b>, from Lhoist to the PhD. Pick one of each, or mix.</p>
+    <nav class="toc" aria-label="Options">
+      <a href="#p1">P1 Character landscape</a><a href="#p2">P2 Braille surface</a><a href="#p3">P3 Scenario tree</a>
+      <a href="#e1">E1 Flowsheet</a><a href="#e2">E2 Strata</a><a href="#e3">E3 LED timeline</a>
+    </nav>
+  </section>
+
+  <h2 class="group-h">Publications</h2>
+  <p class="group-p">A page of its own at /publications, newest first, ready to grow through the PhD. The two entries below each header are the real ones going in now.</p>
+
+  <section class="opt" id="p1">
+    <header><span class="tag">P1</span><h3>Character landscape</h3>
+      <p>Himmelblau's function shaded in a ten-step character ramp, each band in its own colour, drifting slowly. Gradient descent runs from a fresh start every few seconds and leaves its iterates in coral, ending on a minimum. The closest relative of the home hero, in another medium.</p></header>
+    <div class="frame big"><div class="hd" data-gen="landscape" data-title="Publications"></div><div class="peek" data-peek="pubs"></div></div>
+    <div class="below">
+      <div class="phone"><p class="cap">Phone, 390 px</p><div class="frame"><div class="hd" data-gen="landscape" data-title="Publications" data-phone></div></div></div>
+      <ul class="notes">
+        <li><b>Reads as</b><span>The site's objective landscape again, made of type. Strongest continuity with home.</span></li>
+        <li><b>Motion</b><span>Slow rotation of the surface, one descent every six seconds, readout of iterations and f(x) at the bottom right.</span></li>
+        <li><b>Reduced motion</b><span>One converged descent drawn on a still surface.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="opt" id="p2">
+    <header><span class="tag">P2</span><h3>Braille surface</h3>
+      <p>A two-minimum surface in 3D, drawn as a wire mesh in braille dots (eight per character, so the lines stay fine), turning slowly. A coral iterate rolls downhill on it. Closest to the hero's dive, where the map turns into a mesh.</p></header>
+    <div class="frame big"><div class="hd" data-gen="braille" data-title="Publications"></div><div class="peek" data-peek="pubs"></div></div>
+    <div class="below">
+      <div class="phone"><p class="cap">Phone, 390 px</p><div class="frame"><div class="hd" data-gen="braille" data-title="Publications" data-phone></div></div></div>
+      <ul class="notes">
+        <li><b>Reads as</b><span>A surface you could hold. Finer and more technical than P1; the mesh sits to the right of the title.</span></li>
+        <li><b>Motion</b><span>A full turn every 40 seconds; the iterate restarts from the rim when it settles.</span></li>
+        <li><b>Reduced motion</b><span>The mesh at a three-quarter view with the iterate's path down to the minimum.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="opt" id="p3">
+    <header><span class="tag">P3</span><h3>Scenario tree</h3>
+      <p>Stochastic programming drawn in box characters: a first-stage decision x, branching on uncertainty ξ into second- and third-stage recourse. Sampled scenarios run root to leaf in coral and pile up into a cost distribution at the right edge. The PhD's own subject rather than the site's metaphor.</p></header>
+    <div class="frame big"><div class="hd" data-gen="tree" data-title="Publications"></div><div class="peek" data-peek="pubs"></div></div>
+    <div class="below">
+      <div class="phone"><p class="cap">Phone, 390 px</p><div class="frame"><div class="hd top-title" data-gen="tree" data-title="Publications" data-phone></div></div></div>
+      <ul class="notes">
+        <li><b>Reads as</b><span>Decisions under uncertainty. Most specific to the PhD topics; least like the rest of the site.</span></li>
+        <li><b>Motion</b><span>A scenario every half second; the histogram fills, then resets.</span></li>
+        <li><b>Reduced motion</b><span>The tree with a filled distribution and one highlighted path.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <h2 class="group-h">Experience</h2>
+  <p class="group-p">The existing page, with the plain title block replaced by a header. All three are drawn from the real roles and dates; the PhD runs January 2027 to an end between September and December 2030.</p>
+
+  <section class="opt" id="e1">
+    <header><span class="tag">E1</span><h3>Flowsheet</h3>
+      <p>The career as a process flow diagram in box characters: the Lhoist reactor, the hydrate crystalliser at McGill, the BEng separator, the CMU column and a PhD product drum still filling. Stream characters run along the pipes. Chemical engineering's own drawing convention.</p></header>
+    <div class="frame big"><div class="hd top-title" data-gen="flowsheet" data-title="Experience"></div><div class="peek" data-peek="xp"></div></div>
+    <div class="below">
+      <div class="phone"><p class="cap">Phone, 390 px</p><div class="frame"><div class="hd top-title" data-gen="flowsheet" data-title="Experience" data-phone></div></div></div>
+      <ul class="notes">
+        <li><b>Reads as</b><span>Playful and unmistakably ChemE. Each unit is a role, each label a year.</span></li>
+        <li><b>Motion</b><span>Flow along the pipes; the PhD drum's level rises slowly.</span></li>
+        <li><b>Reduced motion</b><span>The flowsheet at rest with streams marked and the drum part full.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="opt" id="e2">
+    <header><span class="tag">E2</span><h3>Strata</h3>
+      <p>Each role a sediment layer in shade characters, oldest at the bottom, each with its own texture and band colour and a year at its edge. The PhD layer is still being laid down: characters fall and settle on top.</p></header>
+    <div class="frame big"><div class="hd" data-gen="strata" data-title="Experience"></div><div class="peek" data-peek="xp"></div></div>
+    <div class="below">
+      <div class="phone"><p class="cap">Phone, 390 px</p><div class="frame"><div class="hd" data-gen="strata" data-title="Experience" data-phone></div></div></div>
+      <ul class="notes">
+        <li><b>Reads as</b><span>Depth and accumulation; matches the descent theme without repeating the landscape.</span></li>
+        <li><b>Motion</b><span>Falling deposit on the top layer only; everything below is still.</span></li>
+        <li><b>Reduced motion</b><span>The layers as they stand, the top one part laid.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="opt" id="e3">
+    <header><span class="tag">E3</span><h3>LED timeline</h3>
+      <p>A dot-matrix display, one dot per month from 2022 to 2030, one row per track. Lit runs are the roles; a coral column marks now; the PhD's run beyond it pulses, and its last months fade because the end date is still open. The most informative of the three.</p></header>
+    <div class="frame big"><div class="hd top-title" data-gen="led" data-title="Experience"></div><div class="peek" data-peek="xp"></div></div>
+    <div class="below">
+      <div class="phone"><p class="cap">Phone, 390 px</p><div class="frame"><div class="hd top-title" data-gen="led" data-title="Experience" data-phone></div></div></div>
+      <ul class="notes">
+        <li><b>Reads as</b><span>An actual chart of the CV at a glance. On phones a dot is a quarter, not a month.</span></li>
+        <li><b>Motion</b><span>A scan sweeps to now and lights the runs; the future pulses.</span></li>
+        <li><b>Reduced motion</b><span>All runs lit, now marked.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="shared">
+    <h2>Shared by every option</h2>
+    <ul>
+      <li><b>Title and line</b> stay HTML text on a calm patch of the grid, so they are selectable and read by screen readers; the canvas is decorative.</li>
+      <li><b>Characters</b> are JetBrains Mono (already the site's mono) and braille, coloured from the 13-band ramp; coral only for the solver, the sampled path or now.</li>
+      <li><b>Publications page</b> lists each entry with year, title, authors, venue and status, and links to the PDF and project. Home keeps its short list with a link to the page; the nav's Publications goes to the page.</li>
+      <li><b>PhD entry</b> goes under Education as 2027–2030, with its five topics: Optimisation, Process Systems Engineering, Machine Learning, Stochastic Programming, Reinforcement Learning.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+(() => {
+const RAMP_HEX = ['#0D0722','#2A1670','#7044E8','#EE6B60','#FFD6BF'];
+const hex = h => [1,3,5].map(i => parseInt(h.slice(i,i+2),16));
+const mix = (a,b,t) => a.map((v,i) => Math.round(v+(b[i]-v)*t));
+// 13 bands along the four-stop ramp
+const BANDS = Array.from({length:13},(_,k)=>{const u=k/12*4, i=Math.min(3,Math.floor(u)); const c=mix(hex(RAMP_HEX[i]),hex(RAMP_HEX[i+1]),u-i); return `rgb(${c})`;});
+const CORAL='#FF7C6B', PEACH='#FFD9C2', FG='#F3EDFF', FG2='#B9AAE8', DIM='#7C6BB8', NODE='#2A1D5C', BG='#120A2A';
+const DENS=' .:-=+*#%@';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function peek(el){
+  if (el.dataset.peek==='pubs') el.innerHTML = `
+    <div class="pk"><em>2026</em><div><b>SiNDAE: the simultaneous neural DAE training Python package<span class="st">submitted</span></b><span>Smits, Lueg, Alves, Laird, Kitchin, Biegler. Journal of Open Source Software</span></div></div>
+    <div class="pk"><em>2027</em><div><b>Graph RL for resilient supply chain network design<span class="st">accepted</span></b><span>Smits et al. ESCAPE 37, Trondheim, abstract</span></div></div>`;
+  else el.innerHTML = `
+    <div class="pk"><em>2026</em><div><b>CAPD, Carnegie Mellon</b><span>Graduate Research Assistant, Jun – Aug 2026</span></div></div>`;
+}
+document.querySelectorAll('[data-peek]').forEach(peek);
+
+// ---------- character grid engine ----------
+function Grid(host){
+  const phone = host.hasAttribute('data-phone');
+  const cv = document.createElement('canvas'); host.prepend(cv);
+  host.insertAdjacentHTML('beforeend', `<div class="m-name">Nicolas Smits</div>
+    <div class="m-nav">${phone?'<span>Research</span><span>CV</span><span>Contact</span>':
+      `<span>Research</span><span class="w ${host.dataset.title==='Publications'?'on':''}">Publications</span><span class="w ${host.dataset.title==='Experience'?'on':''}">Experience</span><span class="w">Skills</span><span>CV</span><span>Contact</span>`}</div>
+    <div class="m-title"><h4>${host.dataset.title}</h4><p>${host.dataset.title==='Publications'?'Papers, abstracts and talks, newest first.':'Research and industry roles, newest first, each with a figure from the work it produced.'}</p></div>`);
+  const g = {host, cv, phone, ctx: cv.getContext('2d'), fs: phone?10:12};
+  g.resize = () => {
+    const r = host.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio||1);
+    g.W = r.width; g.H = r.height; cv.width = g.W*dpr; cv.height = g.H*dpr;
+    g.ctx.setTransform(dpr,0,0,dpr,0,0);
+    g.cw = g.fs*0.62; g.ch = g.fs*1.18;
+    g.cols = Math.ceil(g.W/g.cw); g.rows = Math.ceil(g.H/g.ch);
+    g.chr = new Array(g.cols*g.rows).fill(' '); g.col = new Array(g.cols*g.rows).fill(null); g.font = new Array(g.cols*g.rows).fill(0);
+    // calm basin: the title block's rect in cells, padded, with a soft edge
+    const t = host.querySelector('.m-title').getBoundingClientRect(), n = host.querySelector('.m-name').getBoundingClientRect(), v = host.querySelector('.m-nav').getBoundingClientRect();
+    const cell = (b,p) => ({c0:(b.left-r.left)/g.cw-p, c1:(b.right-r.left)/g.cw+p, r0:(b.top-r.top)/g.ch-p*.55, r1:(b.bottom-r.top)/g.ch+p*.55});
+    g.boxes = [cell(t,3), cell(n,1), cell(v,1)];
+    g.tbox = {left:t.left-r.left, right:t.right-r.left, top:t.top-r.top, bottom:t.bottom-r.top};
+    g.bits = new Uint8Array(g.cols*g.rows); g.bcol = new Array(g.cols*g.rows).fill(null);
+  };
+  // 0 inside a box, 1 well outside
+  g.calm = (c,r) => { let m=1; for (const b of g.boxes){ const dx=Math.max(b.c0-c,0,c-b.c1), dy=Math.max(b.r0-r,0,r-b.r1)*1.8; const d=Math.hypot(dx,dy); m=Math.min(m, Math.min(1,d/5)); } return m; };
+  g.clear = () => { g.chr.fill(' '); g.col.fill(null); g.font.fill(0); g.bits.fill(0); g.bcol.fill(null); };
+  // a thin line in braille sub-dots, in cell coordinates
+  const BB=[[0x01,0x08],[0x02,0x10],[0x04,0x20],[0x40,0x80]];
+  g.bline = (c0,r0,c1,r1,color) => { const x0=c0*2+1, y0=r0*4+2, x1=c1*2+1, y1=r1*4+2; const n=Math.max(Math.abs(x1-x0),Math.abs(y1-y0),1);
+    for (let k=0;k<=n;k++){ const X=Math.round(x0+(x1-x0)*k/n), Y=Math.round(y0+(y1-y0)*k/n); const c=X>>1, r=Y>>2; if(c<0||r<0||c>=g.cols||r>=g.rows) continue; const i=r*g.cols+c; g.bits[i]|=BB[Y&3][X&1]; g.bcol[i]=color; } };
+  g.put = (c,r,ch,color,f=0) => { c=Math.round(c); r=Math.round(r); if(c<0||r<0||c>=g.cols||r>=g.rows) return; const i=r*g.cols+c; g.chr[i]=ch; g.col[i]=color; g.font[i]=f; };
+  g.text = (c,r,s,color,f=0) => { for (let k=0;k<s.length;k++) g.put(c+k,r,s[k],color,f); };
+  g.line = (c0,r0,c1,r1,ch,color) => { const n=Math.max(Math.abs(c1-c0),Math.abs(r1-r0),1); for(let k=0;k<=n;k++) g.put(c0+(c1-c0)*k/n, r0+(r1-r0)*k/n, typeof ch==='function'?ch(k/n):ch, color); };
+  g.render = () => {
+    const x = g.ctx; x.fillStyle=BG; x.fillRect(0,0,g.W,g.H); x.textBaseline='top';
+    const fonts = [`400 ${g.fs}px "JetBrains Mono", ui-monospace, monospace`, `600 ${g.fs}px "JetBrains Mono", ui-monospace, monospace`, `italic ${g.fs*1.2}px "STIX Two Text", serif`];
+    for (let i=0;i<g.bits.length;i++) if (g.bits[i] && g.chr[i]===' '){ g.chr[i]=String.fromCharCode(0x2800+g.bits[i]); g.col[i]=g.bcol[i]; g.font[i]=0; }
+    let cur=-1;
+    for (let r=0;r<g.rows;r++) for (let c=0;c<g.cols;c++){ const i=r*g.cols+c, ch=g.chr[i]; if(ch===' '||!g.col[i]) continue;
+      if (g.font[i]!==cur){ cur=g.font[i]; x.font=fonts[cur]; }
+      x.fillStyle=g.col[i]; x.fillText(ch, c*g.cw, r*g.ch + (cur===2?-1:1)); }
+  };
+  return g;
+}
+
+// ---------- P1: character landscape ----------
+function landscape(g){
+  const himmel = (x,y) => (x*x+y-11)**2 + (x+y*y-7)**2;
+  const grad = (x,y) => [4*x*(x*x+y-11)+2*(x+y*y-7), 2*(x*x+y-11)+4*y*(x+y*y-7)];
+  let run=null, rot=0.35;
+  const SX=()=>g.cols/(g.phone?11:13), SY=()=>g.rows/(g.phone?11:10.5), CX=()=>g.cols*(g.phone?.5:.6);
+  const toScreen = (x,y) => { const s=Math.sin(rot), c=Math.cos(rot); const u=x*c-y*s, v=x*s+y*c; return [CX()+u*SX(), g.rows*.5 - v*SY()]; };
+  const toWorld = (cc,rr) => { const u=(cc-CX())/SX(), v=-(rr-g.rows*.5)/SY(); const s=Math.sin(-rot), c=Math.cos(-rot); return [u*c-v*s, u*s+v*c]; };
+  const newRun = (seed) => { const a = seed ?? Math.random()*6.283, R=4.6; let p=[R*Math.cos(a), R*Math.sin(a)]; const pts=[p.slice()]; for(let k=0;k<160;k++){ const d=grad(p[0],p[1]); const lr=0.006; let sx=lr*d[0], sy=lr*d[1]; const n=Math.hypot(sx,sy); if(n>0.32){ sx*=0.32/n; sy*=0.32/n; } p=[p[0]-sx, p[1]-sy]; pts.push(p.slice()); if(n<0.003) break; } return {pts, t0:performance.now()}; };
+  return (t, still) => {
+    if (!still) rot = 0.35 + t*0.00002;
+    if (!run || (!still && t-run.t0 > 6500)) run = newRun(still?2.4:undefined);
+    g.clear();
+    for (let r=0;r<g.rows;r++) for (let c=0;c<g.cols;c++){
+      const [x,y]=toWorld(c+.5,r+.5); let v=Math.pow(Math.log1p(himmel(x,y))/Math.log1p(2400),1.25); v=Math.min(1,Math.max(0,v));
+      v *= g.calm(c,r);
+      const d = Math.min(9, Math.floor(v*10)); if (!d) continue;
+      g.put(c,r,DENS[d],BANDS[Math.min(12,Math.floor(v*12.99))]);
+    }
+    const n = still ? run.pts.length : Math.min(run.pts.length, Math.floor((t-run.t0)/70)+1);
+    for (let k=1;k<n;k++){ const a=toScreen(...run.pts[k-1]), b=toScreen(...run.pts[k]); g.line(a[0],a[1],b[0],b[1],'.',CORAL); }
+    for (let k=0;k<n;k+=3){ const a=toScreen(...run.pts[k]); g.put(a[0],a[1],'o',CORAL,1); }
+    const s=toScreen(...run.pts[0]); g.put(s[0],s[1],'x',CORAL,1);
+    const e=run.pts[n-1], es=toScreen(...e);
+    const done = n===run.pts.length;
+    if (done){ g.put(es[0],es[1],'*',PEACH,1); }
+    const label = done ? `converged  k=${n-1}  f=${himmel(...e).toExponential(1)}` : `k=${n-1}  f=${himmel(...e).toFixed(2)}`;
+    const lr = g.phone ? 5 : g.rows-3;
+    for (let c=g.cols-label.length-6;c<g.cols;c++) for (let r=lr-1;r<lr+2;r++) g.put(c,r,' ',null);
+    g.text(g.cols-label.length-3, lr, label, done?CORAL:FG2);
+  };
+}
+
+// ---------- P2: braille surface ----------
+function braille(g){
+  const f = (x,y) => { const a=(x-0.9)**2+(y-0.5)**2, b=(x+1)**2+(y+0.7)**2; return 1.15 - 0.95*Math.exp(-a*1.1) - 0.7*Math.exp(-b*1.3) + 0.08*(x*x+y*y); };
+  const gr = (x,y) => { const h=1e-3; return [(f(x+h,y)-f(x-h,y))/(2*h),(f(x,y+h)-f(x,y-h))/(2*h)]; };
+  let ball=null;
+  const reset = () => { const a=Math.random()*6.28; ball={p:[2.3*Math.cos(a),2.3*Math.sin(a)], trail:[]}; };
+  const BITS=[[0x01,0x08],[0x02,0x10],[0x04,0x20],[0x40,0x80]];
+  return (t, still) => {
+    const ang = still ? 0.8 : 0.8 + t*0.000157, el=0.5;
+    const W=g.cols*2, H=g.rows*4, dots=new Uint8Array(g.cols*g.rows), hz=new Float32Array(g.cols*g.rows).fill(-1);
+    const cx = g.phone? W*.55 : W*.68, cy = H*(g.phone?.36:.6), sc = g.phone ? Math.min(W*.15, H*.13) : H*.16;
+    const proj = (x,y,z) => { const ca=Math.cos(ang), sa=Math.sin(ang); const u=x*ca-y*sa, v=x*sa+y*ca; const X=cx+u*sc, Y=cy + (v*Math.sin(el) - (z-0.6)*1.25*Math.cos(el))*sc*0.55*2; return [X,Y,v]; };
+    const plot = (X,Y,z) => { X=Math.round(X); Y=Math.round(Y); if(X<0||Y<0||X>=W||Y>=H) return; const c=X>>1, r=Y>>2; if (g.calm(c,r)<.6) return; const i=r*g.cols+c; dots[i]|=BITS[Y&3][X&1]; hz[i]=Math.max(hz[i],z); };
+    const N=17, L=2.6, step=0.03;
+    for (let i=0;i<=N;i++){ const s=-L+2*L*i/N; for (let u=-L;u<=L;u+=step){ let z=f(s,u); let [X,Y]=proj(s,u,z); plot(X,Y,z); z=f(u,s); [X,Y]=proj(u,s,z); plot(X,Y,z); } }
+    g.clear();
+    for (let i=0;i<dots.length;i++) if (dots[i]){ const z=hz[i]; const b=Math.max(2,Math.min(12,Math.round(2+z*8.5))); g.chr[i]=String.fromCharCode(0x2800+dots[i]); g.col[i]=BANDS[b]; }
+    if (!ball) reset();
+    const steps = still ? 400 : 2;
+    for (let k=0;k<steps;k++){ const d=gr(...ball.p); ball.p=[ball.p[0]-0.05*d[0], ball.p[1]-0.05*d[1]]; if (k%6===0||!still) ball.trail.push(ball.p.slice()); if (ball.trail.length>220) ball.trail.shift(); }
+    for (const p of ball.trail){ const [X,Y]=proj(p[0],p[1],f(...p)); g.put(X/2,Y/4,'.',CORAL); }
+    const [X,Y]=proj(ball.p[0],ball.p[1],f(...ball.p)); g.put(X/2,Y/4,'●',CORAL,1);
+    const d=gr(...ball.p); if (!still && Math.hypot(...d)<0.002 && Math.random()<0.01) reset();
+    const label = `f(x)=${f(...ball.p).toFixed(3)}`; g.text(g.cols-label.length-3, g.rows-3, label, FG2);
+  };
+}
+
+// ---------- P3: scenario tree ----------
+function tree(g){
+  let parts=[], hist=new Array(18).fill(0), last=0, highlighted=null;
+  const probs=[[.3,.5,.2],[.25,.5,.25]];
+  return (t, still) => {
+    g.clear();
+    const x0 = g.phone ? 4 : Math.round(g.cols*.42), x1 = g.phone? Math.round(g.cols*.32) : Math.round(g.cols*.6), x2 = g.phone? Math.round(g.cols*.62): Math.round(g.cols*.8), hx = g.phone? Math.round(g.cols*.7) : Math.round(g.cols*.84);
+    const top = g.phone ? Math.round(g.rows*.5) : 5, bot = g.rows-4, ymid=(top+bot)/2;
+    const leafY = k => top + (bot-top)*(k+.5)/9, midY = k => top + (bot-top)*(k*3+1.5)/9;
+    const glyph = (c0,r0,c1,r1) => () => { const s=(r1-r0)/Math.max(1,(c1-c0)); return Math.abs(s)<.18?'─':s>0?'╲':'╱'; };
+    const edge = (c0,r0,c1,r1,col) => { // horizontal stub then diagonal then stub
+      const m0=c0+2, m1=c1-2; g.bline(c0,r0,m0,r0,col); g.bline(m0,r0,m1,r1,col); g.bline(m1,r1,c1,r1,col); };
+    // background texture: faint dither
+    for (let r=0;r<g.rows;r++) for (let c=0;c<g.cols;c++){ const n=Math.sin(c*.37+r*.91)*Math.sin(c*.11-r*.23+t*.0002); if (n>.55 && g.calm(c,r)>.9) g.put(c,r,n>.8?':':'.',BANDS[1]); }
+    for (let a=0;a<3;a++){ edge(x0,ymid,x1,midY(a),BANDS[6]); for (let b=0;b<3;b++) edge(x1,midY(a),x2,leafY(a*3+b),BANDS[4]); }
+    g.put(x0,ymid,'■',FG,1); for (let a=0;a<3;a++){ g.put(x1,midY(a),'□',FG2,1); for (let b=0;b<3;b++) g.put(x2,leafY(a*3+b),'○',FG2); }
+    // labels: stage symbols in STIX italic
+    const ly = top-2 >= 1 ? top-2 : 1;
+    if (!g.phone){ g.text(x0-1,ly,'x',FG,2); g.text(x1-1,ly,'y',FG,2); g.text(x1,ly,'₁',FG2); g.text(x2-1,ly,'y',FG,2); g.text(x2,ly,'₂',FG2); g.text(hx,ly,'Q(x,ξ)',FG2,2); }
+    for (let a=0;a<3;a++) g.text(Math.round((x0+x1)/2)-1, Math.round((ymid+midY(a))/2)-1, probs[0][a].toFixed(1), DIM);
+    // scenarios
+    if (!still && t-last>420){ last=t; const a=pick(probs[0]), b=pick(probs[1]); parts.push({a,b,t0:t}); }
+    if (still && !highlighted){ hist=[0,1,2,4,7,9,11,12,11,9,7,6,4,3,2,1,1,0]; highlighted={a:1,b:0}; }
+    const pathPts = (a,b) => [[x0,ymid],[x1,midY(a)],[x2,leafY(a*3+b)],[hx-1,leafY(a*3+b)]];
+    const drawPath = (pp,u,ch) => { const seg=u*3, i=Math.min(2,Math.floor(seg)), w=seg-i; const p=pp[i], q=pp[i+1]; g.put(p[0]+(q[0]-p[0])*w, p[1]+(q[1]-p[1])*w, ch, CORAL, 1); };
+    parts = parts.filter(p => { const u=(t-p.t0)/1800; if (u>=1){ const cost=Math.max(0,Math.min(17, Math.round(4+p.a*4+p.b*2+ (Math.random()*4-2)))); hist[cost]++; if (Math.max(...hist)>(g.rows*.6|0)) hist=hist.map(v=>v>>1); return false;} drawPath(pathPts(p.a,p.b),u,'●'); return true; });
+    if (highlighted){ const pp=pathPts(highlighted.a,highlighted.b); for(let k=0;k<3;k++){ const a=pp[k], b=pp[k+1]; const m0=a[0]+2, m1=b[0]-2; if (k<2){ g.bline(a[0],a[1],m0,a[1],CORAL); g.bline(m0,a[1],m1,b[1],CORAL); g.bline(m1,b[1],b[0],b[1],CORAL);} else g.bline(a[0],a[1],b[0],b[1],CORAL); } }
+    // histogram along the right edge, one row per cost bin
+    const bins=hist.length, hb=(bot-top)/bins;
+    for (let k=0;k<bins;k++){ const r=Math.round(top+k*hb); const n=Math.min(g.cols-hx-3, hist[k]); for (let j=0;j<n;j++) g.put(hx+1+j, r, j===n-1?'▌':'█', BANDS[Math.min(12,4+Math.round(k/bins*8))]); }
+  };
+  function pick(p){ let u=Math.random(); for (let i=0;i<p.length;i++){ if ((u-=p[i])<0) return i; } return p.length-1; }
+}
+
+// ---------- E1: flowsheet ----------
+function flowsheet(g){
+  // units: [label, year, template]
+  const units = [
+    ['Lhoist', '2022–23', ['╭──────╮','│  ╳   │','│ ─┼─  │','│  │   │','╰──────╯'], 'reactor'],
+    ['HydrateTech', '2024', ['╭─────╮','│⬡ ⬡ ⬡│','│ ⬡ ⬡ │','│⬡ ⬡ ⬡│','╰──┬──╯'], 'hydrate'],
+    ['McGill BEng', '2025', ['  ╱╲  ',' ╱  ╲ ','╱────╲','│ ░░ │','╰────╯'], 'separator'],
+    ['CMU MS, CAPD', '2026', ['╭──╮','├──┤','├──┤','├──┤','├──┤','├──┤','╰──╯'], 'column'],
+    ['PhD', '2027–30', ['╭────────╮','│        │','│        │','│        │','╰────────╯'], 'drum'],
+  ];
+  return (t, still) => {
+    g.clear();
+    const n = units.length, base = g.rows - (g.phone?5:7);
+    const startC = g.phone ? 2 : Math.round(g.tbox.right/g.cw)+6, endC = g.cols - 4;
+    const widths = units.map(u=>Math.max(...u[2].map(s=>s.length)));
+    const free = endC - startC - widths.reduce((a,b)=>a+b,0), gap = Math.floor(free/(n));
+    let c = startC + Math.floor(gap/2), pos=[];
+    units.forEach((u,k)=>{ const tpl=u[2], h=tpl.length, r0=base-h+1;
+      tpl.forEach((row,j)=>{ for (let i=0;i<row.length;i++) if (row[i]!==' ') g.put(c+i,r0+j,row[i], k===n-1?PEACH:BANDS[7+Math.min(4,k)]); });
+      pos.push({c, w:widths[k], r0, h, mid: base-Math.floor(h/2)}); c += widths[k] + gap; });
+    // pipes between units, along each unit's mid-height
+    const yPipe = base-2;
+    for (let k=0;k<n-1;k++){ const a=pos[k], b=pos[k+1]; const c0=a.c+a.w, c1=b.c-1; for (let x=c0;x<=c1;x++) g.put(x,yPipe,'═',BANDS[5]); g.put(c1,yPipe,'▶',BANDS[8]);
+      // moving stream marks
+      const L=c1-c0; if (L>2){ const ph = still?0.4:(t*0.004)%1; for (let m=0;m<L;m+=6){ const x=c0+((m+ph*6)%L); g.put(x,yPipe,'›',k===n-2?CORAL:FG2,1);} } }
+    // feed in, and the drum level
+    for (let x=g.phone?0:startC-4;x<pos[0].c;x++) g.put(x,yPipe,'═',BANDS[4]);
+    const d = pos[n-1], lvl = still ? .45 : .15 + .7*((t*0.00006)%1);
+    const fillRows = Math.round(lvl*(d.h-2)); for (let j=0;j<fillRows;j++){ const r=d.r0+d.h-2-j; for (let i=1;i<d.w-1;i++) g.put(d.c+i, r, j===fillRows-1? (((i+Math.floor(t*0.003))%3)?'~':'≈') : '▒', j===fillRows-1?CORAL:BANDS[9]); }
+    // labels below
+    pos.forEach((p,k)=>{ const u=units[k]; const lab=u[0], yr=u[1]; const cc=p.c+Math.round(p.w/2);
+      if (g.phone && lab.length>p.w+gap-1){ g.text(cc-Math.floor(yr.length/2), base+2, yr, k===n-1?CORAL:FG2); }
+      else { g.text(cc-Math.floor(lab.length/2), base+2, lab, k===n-1?PEACH:FG); g.text(cc-Math.floor(yr.length/2), base+3, yr, k===n-1?CORAL:DIM); } });
+  };
+}
+
+// ---------- E2: strata ----------
+function strata(g){
+  const layers = [ // oldest first (bottom)
+    ['McGill BEng','2021–25','░',3], ['Lhoist','2022–23','▒',5], ['HydrateTech','2024','▓',6], ['CMU MS','2025–26','░',8], ['CAPD','2026','▒',10], ['PhD','2027–30','▓',11],
+  ];
+  let grains=[]; let laid=0;
+  const noise = (c,k) => Math.sin(c*0.07+k*1.7)*1.2 + Math.sin(c*0.19+k*0.6)*0.6;
+  return (t, still) => {
+    g.clear();
+    const n=layers.length, top=g.phone?Math.round(g.rows*.3):4, bot=g.rows-2, H=(bot-top)/n;
+    const lc = g.phone? g.cols-8 : g.cols - 16;
+    for (let c=0;c<g.cols;c++){
+      for (let k=0;k<n;k++){
+        const y1 = bot - k*H + noise(c,k)*.6, y0 = bot - (k+1)*H + noise(c,k+1)*.6;
+        const isTop = k===n-1;
+        let ytop = isTop ? y1 - (H*(still?.55:Math.min(.95,.25+laid))) + noise(c,9)*.3 : y0;
+        for (let r=Math.ceil(ytop); r<=Math.floor(y1); r++){ if (r<0||r>=g.rows) continue; const m=g.calm(c,r); if (m<.5) continue;
+          const ch = (r===Math.ceil(ytop) && (c+k)%3===0) ? '▁' : layers[k][2];
+          if (c>lc-5) continue; g.put(c,r, ch, BANDS[layers[k][3]]); }
+      }
+    }
+    // labels at right edge of each layer
+    if (!g.phone) layers.forEach((L,k)=>{ const r=Math.round(bot-(k+.5)*H); g.text(lc+2,r,L[0].slice(0,13),k===n-1?PEACH:FG); g.text(lc+2,r+1,L[1],k===n-1?CORAL:DIM); for(let c=lc-3;c<=lc;c++) g.put(c,r,'─',FG2); });
+    else layers.forEach((L,k)=>{ const r=Math.round(bot-(k+.5)*H); const s=L[1].replace('20','’').replace('–20','–'); if (g.calm(g.cols-s.length-1,r)<1) return; g.text(g.cols-s.length-1,r,s,k===n-1?CORAL:FG2); });
+    // falling deposit onto the top layer
+    if (!still){ laid = ((t*0.00003)%0.7); if (Math.random()<.5) grains.push({c:Math.random()*lc, r:top-3, v:.12+Math.random()*.2}); }
+    const surf = c => bot-(n-1)*H - H*(still?.55:Math.min(.95,.25+laid)) + noise(c,9)*.3;
+    grains = grains.filter(p=>{ p.r+=p.v; if (p.r>=surf(p.c)-0.5) return false; if (g.calm(p.c,p.r)>.6) g.put(p.c,p.r, p.v>.25?'▪':'.', CORAL); return true; });
+  };
+}
+
+// ---------- E3: LED timeline ----------
+function led(g){
+  // months since Jan 2022
+  const M = (y,m) => (y-2022)*12 + (m-1);
+  const tracks = [
+    ['Education', BANDS[9], [[M(2022,1),M(2025,5),'BEng, McGill'],[M(2025,9),M(2026,12),'MS, CMU'],[M(2027,1),M(2030,12),'PhD']]],
+    ['Research', BANDS[11], [[M(2024,5),M(2024,7),'HydrateTech'],[M(2026,1),M(2026,12),'Thesis'],[M(2026,6),M(2026,8),'CAPD']]],
+    ['Industry', BANDS[7], [[M(2022,6),M(2022,7),'Lhoist'],[M(2023,6),M(2023,8),'']]],
+    ['Teaching', BANDS[6], [[M(2026,9),M(2026,12),'TA']]],
+  ];
+  const NOW = M(2026,11), END=M(2030,12)+1;
+  return (t, still) => {
+    const x = g.ctx; x.fillStyle=BG; x.fillRect(0,0,g.W,g.H);
+    const per = g.phone ? 3 : 1, cols = Math.ceil(END/per);
+    const left = g.phone?16:Math.round(g.tbox.right)+48, right = g.phone?16:44, labW = g.phone?0:82;
+    const pitch = (g.W-left-right-labW)/cols, rD = Math.max(1.4, pitch*.34);
+    const rowP = g.phone? 22 : 30, y0 = g.phone ? g.H - 32 - tracks.length*rowP : Math.round(g.H*.5 - tracks.length*rowP*.5 + 18);
+    const scan = still ? END : Math.min(END, ((t*0.012)%(END+40)));
+    x.font = `500 ${g.phone?10:11}px "Onest", system-ui, sans-serif`; x.textBaseline='middle';
+    tracks.forEach((tr,k)=>{ const y=y0+k*rowP+rowP/2;
+      if (!g.phone){ x.fillStyle=DIM; x.fillText(tr[0].toUpperCase(), left, y); }
+      for (let i=0;i<cols;i++){ const m0=i*per, m1=m0+per-1, cx=left+labW+i*pitch+pitch/2;
+        let on=null; for (const s of tr[2]) if (m1>=s[0] && m0<=s[1]) on=s;
+        let a=.16, col=NODE;
+        if (on){ col=tr[1]; a = m0<=scan ? 1 : .16;
+          if (m0>NOW){ const pulse = still?.75:.55+.45*Math.sin(t*0.003 - i*0.25); a = (m0<=scan? pulse:.16); if (m0>M(2030,8)) a*= .45; } }
+        x.globalAlpha=a; x.fillStyle=col; x.beginPath(); x.arc(cx,y,rD,0,6.283); x.fill(); }
+      x.globalAlpha=1;
+      // run labels above the first lit dot
+      x.font = `500 ${g.phone?9.5:11}px "Onest", system-ui, sans-serif`;
+      for (const s of tr[2]) if (s[2] && (s[0]<=scan)){ const cx=left+labW+Math.floor(s[0]/per)*pitch; if (s[2]==='CAPD' || (g.phone && s[2].length>6 && s[1]-s[0]<6)) continue; x.fillStyle = s[2]==='PhD'?PEACH:FG2; x.fillText(s[2], cx, y-rowP*.52); }
+    });
+    // now column
+    const nx = left+labW+Math.floor(NOW/per)*pitch+pitch/2;
+    x.strokeStyle=CORAL; x.lineWidth=1; x.beginPath(); x.moveTo(nx, y0-8); x.lineTo(nx, y0+tracks.length*rowP+4); x.stroke();
+    x.fillStyle=CORAL; x.font=`600 ${g.phone?9:10}px "Onest", system-ui, sans-serif`; x.textBaseline='bottom'; x.fillText('NOW', nx-10, y0-10);
+    // years
+    x.textBaseline='top'; x.font=`400 ${g.phone?9.5:11}px "Onest", system-ui, sans-serif`;
+    for (let y=2022;y<=2030;y++){ const cx=left+labW+Math.floor(M(y,1)/per)*pitch; if ((g.phone || pitch<7) && y%2) continue; x.fillStyle=DIM; x.fillText(String(y), cx, y0+tracks.length*rowP+8); }
+    // scan line
+    if (!still && scan<END){ const sx=left+labW+(scan/per)*pitch; x.fillStyle='rgba(255,124,107,.25)'; x.fillRect(sx,y0-4,2,tracks.length*rowP+4); }
+  };
+}
+
+const GEN = {landscape, braille, tree, flowsheet, strata, led};
+const live = [];
+document.querySelectorAll('.hd[data-gen]').forEach(host => {
+  const g = Grid(host); const draw = GEN[host.dataset.gen](g); const canvasOnly = host.dataset.gen==='led';
+  const item = {g, draw, canvasOnly, visible:false, last:0};
+  const frame = (t, still) => { item.draw(t, still); if (!canvasOnly) g.render(); };
+  item.frame = frame;
+  g.resize(); live.push(item);
+  new IntersectionObserver(es => es.forEach(e => item.visible = e.isIntersecting), {rootMargin:'100px'}).observe(host);
+  frame(performance.now(), true);
+});
+let rt; addEventListener('resize', () => { clearTimeout(rt); rt=setTimeout(()=>live.forEach(i=>{ i.g.resize(); i.frame(performance.now(), reduce); }),120); });
+document.fonts && document.fonts.ready.then(() => live.forEach(i=>{ i.g.resize(); i.frame(performance.now(), true); }));
+if (!reduce){
+  const tick = t => { for (const i of live) if (i.visible && t-i.last>45){ i.last=t; i.frame(t,false); } requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+}
+})();
+</script>

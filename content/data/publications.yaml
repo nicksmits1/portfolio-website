@@ -1,3 +1,27 @@
-# Publications and talks. Only Nicolas's own work: never list the SiNDAE method paper (Lueg et al., arXiv 2504.04665) here.
-- { id: sindae-joss, year: "2026", title: "SiNDAE: the simultaneous neural DAE training Python package", detail: "Smits, Lueg, Alves, Laird, Kitchin, Biegler. Journal of Open Source Software", status: submitted, href: /projects/sindae }
-- { id: escape37, year: "2027", title: "Graph RL for resilient supply chain network design", detail: "ESCAPE 37 abstract, Trondheim, first author", status: accepted, href: /projects/thesis }
+# Publications and talks, newest first. Only Nicolas's own work: never list the SiNDAE method paper (Lueg et al.,
+# arXiv 2504.04665) here. Home shows each entry's year, title, status and venue; /publications shows all of it.
+# authors: as on the paper, Nicolas first where he is first author. venue: journal or meeting. kind: what it is.
+# links: icon is one of gh, paper, file, next; href is a URL, a site path, or a file under content/assets/<owner>/
+# when owner is set. The ESCAPE abstract is marked "not for citation" in its source, so it is not hosted.
+- id: escape37
+  year: "2027"
+  title: "Graph RL for resilient supply chain network design"
+  authors: [Nicolas Smits, Arsh Bhatia, Carl D. Laird]
+  venue: "ESCAPE 37, Trondheim"
+  kind: Conference abstract
+  status: accepted
+  href: /projects/thesis
+  links:
+    - { label: Project, href: /projects/thesis, icon: next }
+- id: sindae-joss
+  year: "2026"
+  title: "SiNDAE: the simultaneous neural DAE training Python package"
+  authors: [Nicolas Smits, Laurens Lueg, Victor Alves, Carl D. Laird, John R. Kitchin, Lorenz T. Biegler]
+  venue: "Journal of Open Source Software"
+  kind: Software paper
+  status: submitted
+  href: /projects/sindae
+  links:
+    - { label: Paper (PDF), href: joss-paper.pdf, owner: sindae, icon: file }
+    - { label: Project, href: /projects/sindae, icon: next }
+    - { label: GitHub, href: "https://github.com/Alves-research-group/SiNDAE", icon: gh }

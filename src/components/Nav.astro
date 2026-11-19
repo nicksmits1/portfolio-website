@@ -1,13 +1,13 @@
 ---
-/* The nav on its ink tab, top right of every page. Off home, the section links go back to home; Experience is its own page. */
+/* The nav on its ink tab, top right of every page. Off home, the section links go back to home; Experience and Publications are their own pages. */
 import { cvUrl } from '../lib/assets';
-interface Props { page: 'home' | 'project' | 'experience' }
+interface Props { page: 'home' | 'project' | 'experience' | 'publications' }
 const { page } = Astro.props;
 const at = (hash: string) => (page === 'home' ? `#${hash}` : `/#${hash}`);
 ---
 <nav class="nav" aria-label="Site">
   <a href={at('research')} aria-current={page === 'project' ? 'page' : undefined}>Research</a>
-  <a class="wide" href={at('publications')}>Publications</a>
+  <a class="wide" href="/publications" aria-current={page === 'publications' ? 'page' : undefined}>Publications</a>
   <a class="wide" href="/experience" aria-current={page === 'experience' ? 'page' : undefined}>Experience</a>
   <a class="wide" href={at('skills')}>Skills</a>
   <a href={cvUrl}>CV</a>

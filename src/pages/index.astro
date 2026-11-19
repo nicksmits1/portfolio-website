@@ -5,7 +5,7 @@ import Nav from '../components/Nav.astro';
 import { ICON } from '../lib/icons';
 import { thumb } from '../lib/thumbs';
 import { image, cvUrl } from '../lib/assets';
-import { projects, body, skillsOf, profile, TOPICS } from '../lib/site';
+import { projects, body, skillsOf, profile, TOPICS, timelineNewest, publicationsNewest } from '../lib/site';
 
 const list = await projects();
 const refs = JSON.stringify(list.map(p => ({ id: p.id, short: p.data.short })));
@@ -15,8 +15,8 @@ const topicName = Object.fromEntries(topics.map(t => [t.id, t.name]));
 for (const p of list) for (const t of p.data.topics) if (!topicName[t]) throw new Error(`${p.id} lists topic "${t}", which is not in content/data/topics.yaml`);
 for (const t of topics) if (!t.n) throw new Error(`Topic ${t.id} has no projects; give one a topics entry or remove it from content/data/topics.yaml`);
 const latest = (await getCollection('latest')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 4);
-const pubs = await getCollection('publications');
-const timeline = await getCollection('timeline');
+const pubs = await publicationsNewest();
+const timeline = await timelineNewest();
 const groups = (await getCollection('skills')).map(g => ({
   name: g.data.name,
   skills: g.data.skills.map(s => ({ s, uses: list.filter(p => skillsOf(p).includes(s)).map(p => p.id) })).filter(x => x.uses.length),
@@ -82,15 +82,16 @@ const [first, ...rest] = profile.name.split(' ');
       <div id="publications">
         <h2 class="sec-h">Publications</h2>
         <ul class="items">{pubs.map(x => (
-          <li class="item"><em>{x.data.year}</em><div>{x.data.href ? <a href={x.data.href}><b>{x.data.title}{x.data.status && <span class="status">{x.data.status}</span>}</b></a> : <b>{x.data.title}</b>}<span>{x.data.detail}</span></div></li>
+          <li class="item"><em>{x.data.year}</em><div>{x.data.href ? <a href={x.data.href}><b>{x.data.title}{x.data.status && <span class="status">{x.data.status}</span>}</b></a> : <b>{x.data.title}</b>}<span>{x.data.kind}, {x.data.venue}</span></div></li>
         ))}</ul>
+        <a class="more" href="/publications">All publications<Fragment set:html={ICON.next} /></a>
       </div>
       <div id="experience">
         <h2 class="sec-h">Experience and education</h2>
         {(['Experience', 'Teaching', 'Education'] as const).map(g => (
           <>
             <p class="subh">{g}</p>
-            <ul class="items">{timeline.filter(x => x.data.group === g).map(x => <li class="item"><em>{x.data.years}</em><div><b>{x.data.title}</b><span>{x.data.detail}</span></div></li>)}</ul>
+            <ul class="items">{timeline.filter(x => x.data.group === g).map(x => <li class="item"><em>{x.data.years}</em><div><b>{x.data.title}</b><span>{x.data.detail}</span>{x.data.topics.length > 0 && <span class="tps">{x.data.topics.map(t => <span>{t}</span>)}</span>}</div></li>)}</ul>
             {g === 'Experience' && <a class="more" href="/experience">Each role in detail<Fragment set:html={ICON.next} /></a>}
           </>
         ))}

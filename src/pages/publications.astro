@@ -1,0 +1,41 @@
+---
+/* Publications: every paper, abstract and talk, newest first, with authors, venue and links.
+   Content: content/data/publications.yaml. Home keeps a short list that links here. */
+import Base from '../layouts/Base.astro';
+import GlyphHead from '../components/GlyphHead.astro';
+import { ICON } from '../lib/icons';
+import { href } from '../lib/assets';
+import { publicationsNewest } from '../lib/site';
+
+const pubs = await publicationsNewest();
+const ext = (h: string) => /^https?:/.test(h);
+const ME = 'Nicolas Smits';
+---
+<Base title="Publications | Nicolas Smits" description="Papers, abstracts and talks by Nicolas Smits: optimisation, machine learning and reinforcement learning for process systems engineering.">
+  <GlyphHead page="publications" title="Publications" line="Papers, abstracts and talks, newest first." kind="scenario"
+    label="A scenario tree from stochastic programming: a first-stage decision branching on uncertainty into recourse decisions, with sampled scenarios building a cost distribution at the right edge." />
+
+  <main id="main">
+    <section class="block wrap" aria-label="Publications">
+      <ol class="papers">{pubs.map(p => {
+        const d = p.data;
+        return (
+          <li class="paper" id={p.id}>
+            <em>{d.year}</em>
+            <div>
+              <h2>{d.href ? <a href={d.href}>{d.title}</a> : d.title}{d.status && <span class="status">{d.status}</span>}</h2>
+              <p class="authors">{d.authors.map((a, i) => <>{i > 0 && ', '}{a === ME ? <b>{a}</b> : a}</>)}</p>
+              <p class="venue"><span>{d.venue}</span><span>{d.kind}</span></p>
+              {d.links.length > 0 && (
+                <div class="meta">{d.links.map(l => {
+                  const to = l.owner ? href(l.owner, l.href) : l.href;
+                  return <a class="pill" href={to} target={ext(to) ? '_blank' : undefined} rel={ext(to) ? 'noopener' : undefined}><Fragment set:html={ICON[l.icon]} />{l.label}</a>;
+                })}</div>
+              )}
+            </div>
+          </li>
+        );
+      })}</ol>
+    </section>
+  </main>
+</Base>

@@ -280,6 +280,12 @@ The banded contour map with a click-to-descend solver and a live iteration reado
 
 **The Calm Basin Rule.** Text that sits on a landscape gets a flat floor of the darkest band under it, never an overlay card. Labels and tabs (ink pills) are the only things laid over the map.
 
+### Character-grid header (list pages)
+Publications and Experience open on a 320 px header in place of the landscape strip: a canvas of JetBrains Mono cells coloured from the 13-band ramp, after ascii-magic's character renderings (`src/scripts/glyphs.ts`, `src/components/GlyphHead.astro`). The name tab and nav sit on ink as everywhere; the title and its line stay HTML on a calm patch the grid leaves under them. Below 600 px the header grows, the title moves to the bottom, and the drawing fits above it.
+- **Publications, scenario tree:** a first-stage decision x branching on uncertainty into recourse stages (3, 2, 2 on desktop, 3, 2 on phones), edges drawn in slope characters. A sampled scenario every half second runs root to leaf with a coral tail and peach head; edges brighten where scenarios have just passed. Each leaf's bar sits on the leaf's own row and converges to p(ξ). Faint annotations: branch probabilities, and x, y₁, y₂, ξ, p(ξ) in STIX italic along the bottom.
+- **Experience, strata:** each Experience and Education entry from `timeline.yaml` a sediment layer, oldest at the bottom, in its own shade character and band colour, labelled at the right edge with its short name and years. The newest layer (the PhD) is still being laid: coral characters fall and settle on it.
+- **Reduced motion:** the tree with four highlighted scenarios and bars at the exact probabilities; the strata with the top layer part laid.
+
 ## Do's and Don'ts
 
 ### Do:

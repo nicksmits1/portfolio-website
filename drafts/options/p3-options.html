@@ -1,0 +1,326 @@
+<title>Scenario Tree Variants</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=STIX+Two+Text:ital@1&display=swap">
+<style>
+/* Header options for the two list pages, Publications and Experience. Each header is a character grid drawn on canvas
+   in the site's 13-band ramp, in the spirit of ascii-magic's character renderings, with the page title on a calm basin.
+   Publications: three renderings of optimisation. Experience: three renderings of the path through the roles.
+   Layout: one option per band, the live header full width at desktop size, a 390 px phone frame beside the notes. */
+:root{
+  color-scheme:dark;
+  --bg:#120A2A; --panel:#1A1038; --ink:#0D0722; --node:#1E1244; --fg:#F3EDFF; --fg2:#B9AAE8; --dim:#7C6BB8;
+  --coral:#FF7C6B; --violet:#8B5CF6; --peach:#FFD9C2; --hair:rgba(243,237,255,.22); --hair2:rgba(243,237,255,.1); --tab:rgba(13,7,34,.72);
+  --disp:"Unbounded",system-ui,sans-serif; --text:"Onest",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace; --math:"STIX Two Text","Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--violet) var(--bg)}
+body{background:var(--bg);color:var(--fg);font:400 1rem/1.55 var(--text);margin:0}
+::selection{background:var(--coral);color:var(--bg)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px}
+.wrap{max-width:1320px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.intro{padding-block:clamp(2rem,5vw,3.6rem) 1.6rem}
+.intro h1{font:300 clamp(2rem,5vw,3.4rem)/1 var(--disp);letter-spacing:-.04em;margin:0 0 1rem;text-wrap:balance}
+.intro p{margin:0 0 .7rem;max-width:72ch;color:var(--fg2)}
+.intro p b{color:var(--fg);font-weight:600}
+.toc{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.2rem}
+.toc a{font:500 .9rem/1 var(--text);padding:.5rem .8rem;border:1px solid var(--hair);border-radius:999px;text-decoration:none}
+.toc a:hover{border-color:var(--coral);color:var(--coral)}
+.group-h{font:300 clamp(1.6rem,3.6vw,2.4rem)/1 var(--disp);letter-spacing:-.04em;margin:0;padding-block:clamp(2.4rem,6vw,4rem) .4rem;border-top:1px solid var(--hair)}
+.group-p{color:var(--fg2);max-width:72ch;margin:0 0 .6rem}
+.opt{display:grid;gap:1.1rem;padding-block:clamp(1.6rem,4vw,2.6rem);border-top:1px solid var(--hair2)}
+.opt header{display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap}
+.tag{font:600 .85rem/1 var(--disp);color:var(--bg);background:var(--coral);border-radius:999px;padding:.4rem .7rem}
+.opt h3{font:400 clamp(1.2rem,2.4vw,1.6rem)/1.1 var(--disp);letter-spacing:-.035em;margin:0}
+.opt header p{flex-basis:100%;margin:0;color:var(--fg2);max-width:80ch}
+.cap{font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:0 0 .45rem}
+.frame{border:1px solid var(--hair);border-radius:10px;overflow:hidden;background:var(--bg);min-width:0}
+.below{display:grid;gap:1.4rem;align-items:start}
+@media(min-width:900px){.below{grid-template-columns:392px minmax(0,1fr)}}
+.below>*{min-width:0}
+.phone{width:100%;max-width:392px}
+.notes{display:grid;gap:.9rem;font-size:.95rem;margin:0;padding:0;list-style:none}
+.notes b{display:block;font:600 .75rem/1.2 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:.25rem}
+.notes span{color:var(--fg2)}
+.shared{padding-block:clamp(2rem,5vw,3rem);border-top:1px solid var(--hair);color:var(--fg2);max-width:80ch}
+.shared h2{font:400 1.3rem/1.15 var(--disp);letter-spacing:-.03em;margin:0 0 .6rem;color:var(--fg)}
+.shared ul{margin:0;padding-left:1.1rem}.shared li{margin-bottom:.5rem}.shared b{color:var(--fg);font-weight:600}
+
+/* ---- the header mock ---- */
+.hd{position:relative;height:320px;background:var(--bg);overflow:hidden}
+.phone .hd{height:300px}
+.hd canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hd .m-name{position:absolute;top:0;left:0;padding:18px 22px 12px 44px;font:300 17px/1 var(--disp);letter-spacing:-.03em;background:var(--tab);border-bottom-right-radius:14px;z-index:2}
+.hd .m-nav{position:absolute;top:0;right:0;display:flex;gap:24px;padding:18px 44px 12px 20px;font:500 15px/1 var(--text);background:var(--tab);border-bottom-left-radius:14px;z-index:2}
+.hd .m-nav .on{color:var(--coral)}
+.phone .m-name{padding:14px 14px 10px 16px;font-size:14px}
+.phone .m-nav{gap:14px;padding:14px 16px 10px 14px;font-size:13px}
+.hd .m-title{position:absolute;left:44px;bottom:34px;z-index:2;max-width:min(560px,70%)}
+.phone .m-title{left:16px;bottom:22px;max-width:calc(100% - 32px)}
+.hd .m-title h4{font:300 clamp(34px,4.2vw,54px)/1 var(--disp);letter-spacing:-.045em;margin:0 0 10px}
+.phone .m-title h4{font-size:32px}
+.hd .m-title p{margin:0;color:var(--fg2);font-size:16px;max-width:44ch}
+.phone .m-title p{font-size:14px}
+.hd.top-title .m-title{top:84px;bottom:auto}
+.phone .hd.top-title .m-title{top:64px}
+/* a peek of the page below the header */
+.peek{padding:18px 44px 22px;border-top:1px solid var(--hair)}
+.phone .peek{padding:14px 16px 16px}
+.pk{display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;padding:10px 0;border-top:1px solid var(--hair2);font-size:14px}
+.pk:first-child{border-top:0}
+.pk em{font-style:normal;color:var(--dim);font-size:12.5px;font-variant-numeric:tabular-nums;padding-top:2px}
+.pk b{font-weight:600;display:block}
+.pk span{color:var(--fg2);font-size:13px}
+.pk .st{display:inline-block;margin-left:8px;font:600 10px/1 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--coral);vertical-align:2px}
+@media(max-width:899px){.big .m-nav span.w{display:none}}
+</style>
+
+<div class="wrap">
+  <section class="intro">
+    <h1>Scenario tree, three denser takes</h1>
+    <p>All three now span the <b>whole banner</b>: the tree starts at the left edge and runs to the cost distribution at the right, with the title cut out of it on a calm patch. Traces are coral and peach over brighter violet edges.</p>
+    <nav class="toc" aria-label="Options"><a href="#a">P3a Comet traces</a><a href="#b">P3b Scenario fan</a><a href="#c">P3c Heat tree</a></nav>
+  </section>
+
+  <section class="opt" id="a">
+    <header><span class="tag">P3a</span><h3>Comet traces</h3>
+      <p>Three stages, eighteen leaves. A new scenario every 160 ms runs root to leaf with a coral tail and a peach head; edges glow brighter where many have just passed, then cool. Each finished scenario adds to its leaf's bar on the right.</p></header>
+    <div class="frame big"><div class="hd" data-gen="treeA" data-title="Publications"></div><div class="peek" data-peek="pubs"></div></div>
+    <div class="below">
+      <div class="phone"><p class="cap">Phone, 390 px</p><div class="frame"><div class="hd top-title" data-gen="treeA" data-title="Publications" data-phone></div></div></div>
+      <ul class="notes">
+        <li><b>Reads as</b><span>The original P3, alive: several traces in flight at once, the tree lighting up under them.</span></li>
+        <li><b>Reduced motion</b><span>Five highlighted scenarios and a filled distribution.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="opt" id="b">
+    <header><span class="tag">P3b</span><h3>Scenario fan</h3>
+      <p>Thirty-six scenarios from a 4, 3, 3 branching tree, each node placed at its sampled value, so the tree opens into a fan of outcomes. Every path takes its colour from where it ends. A coral decision front sweeps left to right, drawing the fan as it goes, and a fresh tree is sampled every nine seconds.</p></header>
+    <div class="frame big"><div class="hd" data-gen="treeB" data-title="Publications"></div><div class="peek" data-peek="pubs"></div></div>
+    <div class="below">
+      <div class="phone"><p class="cap">Phone, 390 px</p><div class="frame"><div class="hd top-title" data-gen="treeB" data-title="Publications" data-phone></div></div></div>
+      <ul class="notes">
+        <li><b>Reads as</b><span>The most colour and the most coverage: a stochastic program's uncertainty as one dense, vivid shape.</span></li>
+        <li><b>Reduced motion</b><span>The finished fan with its distribution.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="opt" id="c">
+    <header><span class="tag">P3c</span><h3>Heat tree</h3>
+      <p>Twenty-seven leaves, sampled hundreds of times. Each edge is drawn in the ten-step character ramp by how much probability flows through it, so likely branches become dense @ and # strokes and rare ones thin dots. Coral samples flicker along the paths.</p></header>
+    <div class="frame big"><div class="hd" data-gen="treeC" data-title="Publications"></div><div class="peek" data-peek="pubs"></div></div>
+    <div class="below">
+      <div class="phone"><p class="cap">Phone, 390 px</p><div class="frame"><div class="hd top-title" data-gen="treeC" data-title="Publications" data-phone></div></div></div>
+      <ul class="notes">
+        <li><b>Reads as</b><span>The most ASCII of the three, closest to ascii-magic: the tree as a density rendering of probability.</span></li>
+        <li><b>Reduced motion</b><span>The tree after 900 samples.</span></li>
+      </ul>
+    </div>
+  </section>
+</div>
+<script>
+(() => {
+const RAMP_HEX = ['#0D0722','#2A1670','#7044E8','#EE6B60','#FFD6BF'];
+const hex = h => [1,3,5].map(i => parseInt(h.slice(i,i+2),16));
+const mix = (a,b,t) => a.map((v,i) => Math.round(v+(b[i]-v)*t));
+// 13 bands along the four-stop ramp
+const BANDS = Array.from({length:13},(_,k)=>{const u=k/12*4, i=Math.min(3,Math.floor(u)); const c=mix(hex(RAMP_HEX[i]),hex(RAMP_HEX[i+1]),u-i); return `rgb(${c})`;});
+const CORAL='#FF7C6B', PEACH='#FFD9C2', FG='#F3EDFF', FG2='#B9AAE8', DIM='#7C6BB8', NODE='#2A1D5C', BG='#120A2A';
+const DENS=' .:-=+*#%@';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function peek(el){
+  if (el.dataset.peek==='pubs') el.innerHTML = `
+    <div class="pk"><em>2026</em><div><b>SiNDAE: the simultaneous neural DAE training Python package<span class="st">submitted</span></b><span>Smits, Lueg, Alves, Laird, Kitchin, Biegler. Journal of Open Source Software</span></div></div>
+    <div class="pk"><em>2027</em><div><b>Graph RL for resilient supply chain network design<span class="st">accepted</span></b><span>Smits et al. ESCAPE 37, Trondheim, abstract</span></div></div>`;
+  else el.innerHTML = `
+    <div class="pk"><em>2026</em><div><b>CAPD, Carnegie Mellon</b><span>Graduate Research Assistant, Jun – Aug 2026</span></div></div>`;
+}
+document.querySelectorAll('[data-peek]').forEach(peek);
+
+// ---------- character grid engine ----------
+function Grid(host){
+  const phone = host.hasAttribute('data-phone');
+  const cv = document.createElement('canvas'); host.prepend(cv);
+  host.insertAdjacentHTML('beforeend', `<div class="m-name">Nicolas Smits</div>
+    <div class="m-nav">${phone?'<span>Research</span><span>CV</span><span>Contact</span>':
+      `<span>Research</span><span class="w ${host.dataset.title==='Publications'?'on':''}">Publications</span><span class="w ${host.dataset.title==='Experience'?'on':''}">Experience</span><span class="w">Skills</span><span>CV</span><span>Contact</span>`}</div>
+    <div class="m-title"><h4>${host.dataset.title}</h4><p>${host.dataset.title==='Publications'?'Papers, abstracts and talks, newest first.':'Research and industry roles, newest first, each with a figure from the work it produced.'}</p></div>`);
+  const g = {host, cv, phone, ctx: cv.getContext('2d'), fs: phone?10:12};
+  g.resize = () => {
+    const r = host.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio||1);
+    g.W = r.width; g.H = r.height; cv.width = g.W*dpr; cv.height = g.H*dpr;
+    g.ctx.setTransform(dpr,0,0,dpr,0,0);
+    g.cw = g.fs*0.62; g.ch = g.fs*1.18;
+    g.cols = Math.ceil(g.W/g.cw); g.rows = Math.ceil(g.H/g.ch);
+    g.chr = new Array(g.cols*g.rows).fill(' '); g.col = new Array(g.cols*g.rows).fill(null); g.font = new Array(g.cols*g.rows).fill(0);
+    // calm basin: the title block's rect in cells, padded, with a soft edge
+    const t = host.querySelector('.m-title').getBoundingClientRect(), n = host.querySelector('.m-name').getBoundingClientRect(), v = host.querySelector('.m-nav').getBoundingClientRect();
+    const cell = (b,p) => ({c0:(b.left-r.left)/g.cw-p, c1:(b.right-r.left)/g.cw+p, r0:(b.top-r.top)/g.ch-p*.55, r1:(b.bottom-r.top)/g.ch+p*.55});
+    g.boxes = [cell(t,3), cell(n,1), cell(v,1)];
+    g.tbox = {left:t.left-r.left, right:t.right-r.left, top:t.top-r.top, bottom:t.bottom-r.top};
+    g.bits = new Uint8Array(g.cols*g.rows); g.bcol = new Array(g.cols*g.rows).fill(null);
+  };
+  // 0 inside a box, 1 well outside
+  g.calm = (c,r) => { let m=1; for (const b of g.boxes){ const dx=Math.max(b.c0-c,0,c-b.c1), dy=Math.max(b.r0-r,0,r-b.r1)*1.8; const d=Math.hypot(dx,dy); m=Math.min(m, Math.min(1,d/5)); } return m; };
+  g.clear = () => { g.chr.fill(' '); g.col.fill(null); g.font.fill(0); g.bits.fill(0); g.bcol.fill(null); };
+  // a thin line in braille sub-dots, in cell coordinates
+  const BB=[[0x01,0x08],[0x02,0x10],[0x04,0x20],[0x40,0x80]];
+  g.bline = (c0,r0,c1,r1,color) => { const x0=c0*2+1, y0=r0*4+2, x1=c1*2+1, y1=r1*4+2; const n=Math.max(Math.abs(x1-x0),Math.abs(y1-y0),1);
+    for (let k=0;k<=n;k++){ const X=Math.round(x0+(x1-x0)*k/n), Y=Math.round(y0+(y1-y0)*k/n); const c=X>>1, r=Y>>2; if(c<0||r<0||c>=g.cols||r>=g.rows) continue; const i=r*g.cols+c; g.bits[i]|=BB[Y&3][X&1]; g.bcol[i]=color; } };
+  g.put = (c,r,ch,color,f=0) => { c=Math.round(c); r=Math.round(r); if(c<0||r<0||c>=g.cols||r>=g.rows) return; const i=r*g.cols+c; g.chr[i]=ch; g.col[i]=color; g.font[i]=f; };
+  g.text = (c,r,s,color,f=0) => { for (let k=0;k<s.length;k++) g.put(c+k,r,s[k],color,f); };
+  g.line = (c0,r0,c1,r1,ch,color) => { const n=Math.max(Math.abs(c1-c0),Math.abs(r1-r0),1); for(let k=0;k<=n;k++) g.put(c0+(c1-c0)*k/n, r0+(r1-r0)*k/n, typeof ch==='function'?ch(k/n):ch, color); };
+  g.render = () => {
+    const x = g.ctx; x.fillStyle=BG; x.fillRect(0,0,g.W,g.H); x.textBaseline='top';
+    const fonts = [`400 ${g.fs}px "JetBrains Mono", ui-monospace, monospace`, `600 ${g.fs}px "JetBrains Mono", ui-monospace, monospace`, `italic ${g.fs*1.2}px "STIX Two Text", serif`];
+    for (let i=0;i<g.bits.length;i++) if (g.bits[i] && g.chr[i]===' '){ g.chr[i]=String.fromCharCode(0x2800+g.bits[i]); g.col[i]=g.bcol[i]; g.font[i]=0; }
+    let cur=-1;
+    for (let r=0;r<g.rows;r++) for (let c=0;c<g.cols;c++){ const i=r*g.cols+c, ch=g.chr[i]; if(ch===' '||!g.col[i]) continue;
+      if (g.font[i]!==cur){ cur=g.font[i]; x.font=fonts[cur]; }
+      x.fillStyle=g.col[i]; x.fillText(ch, c*g.cw, r*g.ch + (cur===2?-1:1)); }
+  };
+  return g;
+}
+
+
+// ---------- shared: a scenario tree laid across the whole banner ----------
+function rng(seed){ let a=seed>>>0; return () => { a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function layout(g, branch){
+  const hw = g.phone ? 9 : 16;                      // histogram width in cells
+  const hx = g.cols - hw - 1;
+  const x0 = g.phone ? 1 : Math.round(g.tbox.right/g.cw)+4, xl = hx - 3;
+  const S = branch.length;
+  const xs = Array.from({length:S+1}, (_,k) => Math.round(x0 + (xl-x0)*k/S));
+  const top = g.phone ? 4 : 3.2, bot = g.rows - 1.6;
+  // nodes per stage; leaves spread evenly, parents centred over children
+  const stages = [[{y:0,kids:[]}]];
+  for (let s=0;s<S;s++){ const next=[]; for (const p of stages[s]) for (let b=0;b<branch[s];b++){ const n={y:0,kids:[],parent:p,b}; p.kids.push(n); next.push(n);} stages.push(next); }
+  const L = stages[S]; L.forEach((n,i) => n.y = top + (bot-top)*(i+.5)/L.length);
+  for (let s=S-1;s>=0;s--) for (const n of stages[s]) n.y = n.kids.reduce((a,k)=>a+k.y,0)/n.kids.length;
+  stages.forEach((st,s) => st.forEach(n => n.x = xs[s]));
+  return {xs, stages, leaves:L, hx, hw, top, bot, S};
+}
+// smooth step between two nodes: flat out of the parent, eased into the child
+const ease = u => u<.5 ? 2*u*u : 1-2*(1-u)*(1-u);
+function edgePt(a, b, u){ return [a.x + (b.x-a.x)*u, a.y + (b.y-a.y)*ease(u)]; }
+function strokeEdge(g, a, b, color, steps){ let p=edgePt(a,b,0); for (let k=1;k<=steps;k++){ const q=edgePt(a,b,k/steps); if (g.calm(q[0],q[1])>.55) g.bline(p[0],p[1],q[0],q[1],color); p=q; } }
+// walk an eased edge finely; each cell visited gets a character for the curve's local slope
+function slopeCh(dx, dy){ const v = dy*1.9/(Math.abs(dx)+1e-6); const a=Math.abs(v); return a<.35?'─':a>2.6?'│':(v>0?'╲':'╱'); }
+function asciiEdge(g, a, b, u0, u1, put){ const n = Math.max(8, Math.ceil(Math.abs(b.x-a.x)*3 + Math.abs(b.y-a.y)*4)*(u1-u0)); let last=-1;
+  for (let k=0;k<=n;k++){ const u=u0+(u1-u0)*k/n; const p=edgePt(a,b,u), q=edgePt(a,b,Math.min(1,u+.01)), o=edgePt(a,b,Math.max(0,u-.01)); const c=Math.round(p[0]), r=Math.round(p[1]); const id=r*9999+c; if (id===last) continue; last=id; if (g.calm(c,r)<=.55) continue; put(c, r, slopeCh(q[0]-o[0], q[1]-o[1]), u); } }
+function asciiPath(g, ns, w0, w1, put){ const S=ns.length-1; for (let s=0;s<S;s++){ const a=s/S, b=(s+1)/S; const lo=Math.max(w0,a), hi=Math.min(w1,b); if (hi<=lo) continue; asciiEdge(g, ns[s], ns[s+1], (lo-a)*S, (hi-a)*S, (c,r,ch,u)=>put(c,r,ch,(a+u/S))); } }
+function pathNodes(leaf){ const ns=[]; for (let n=leaf;n;n=n.parent) ns.unshift(n); return ns; }
+function pointOnPath(ns, u){ const S=ns.length-1, s=Math.min(S-1, Math.floor(u*S)), w=u*S-s; return edgePt(ns[s], ns[s+1], w); }
+function histogram(g, lay, hist, colorFor){
+  const bins=hist.length, rows=lay.bot-lay.top, max=Math.max(1,...hist);
+  for (let k=0;k<bins;k++){ const r=Math.round(lay.top + rows*(k+.5)/bins); const w=hist[k]/max*(lay.hw-1); const full=Math.floor(w), frac=w-full;
+    for (let j=0;j<full;j++) g.put(lay.hx+1+j, r, '█', colorFor(k/bins));
+    if (frac>.15) g.put(lay.hx+1+full, r, frac>.66?'▓':frac>.33?'▒':'░', colorFor(k/bins)); }
+}
+// faint drifting field of density characters across the whole banner
+function field(g, t, lay){ const R=' .:-=+'; for (let r=0;r<g.rows;r++) for (let c=0;c<lay.hx;c++){ const m=g.calm(c,r); if (m<1) continue;
+  const n = Math.sin(c*.09 + t*.00012) + Math.sin(r*.45 - c*.031 + t*.00009) + Math.sin((c+r*2.2)*.05 - t*.00007);
+  const v = (n+3)/6; const d = Math.floor(Math.pow(v,2.2)*6); if (d<1) continue; g.put(c,r,R[d], BANDS[d>3?4:d>1?3:2]); } }
+const costColor = v => BANDS[Math.min(12, 6 + Math.round(v*6))];
+
+// ---------- P3a: full-bleed tree with comet traces ----------
+function treeA(g){
+  const branch=[3,3,2]; let lay=null, key='', parts=[], hist=[], heat=null, last=0, R=rng(7);
+  return (t, still) => {
+    if (key !== g.cols+'x'+g.rows){ key=g.cols+'x'+g.rows; lay=layout(g, g.phone?[3,2,2]:branch); hist=new Array(lay.leaves.length).fill(0); heat=new Map(); parts=[]; }
+    g.clear(); field(g, still?0:t, lay);
+    const ease01 = h => Math.min(1, h/6);
+    // edges, brighter where scenarios have recently passed
+    lay.stages.forEach((st,s) => { if (s===lay.S) return; for (const a of st) for (const b of a.kids){ const h = still ? 2+ (b.b===0?3:0) : (heat.get(b)||0); const band = Math.round(5 + ease01(h)*5); asciiEdge(g, a, b, 0, 1, (c,r,ch)=>g.put(c,r,ch,BANDS[band])); } });
+    for (const n of lay.leaves) if (g.calm(n.x,n.y)>.55) g.put(n.x+1, n.y, '○', FG2);
+    if (still){
+      const pick=[1,4,9,13,16].filter(i=>i<lay.leaves.length);
+      for (const i of pick){ const ns=pathNodes(lay.leaves[i]); asciiPath(g, ns, 0, 1, (c,r,ch)=>g.put(c,r,ch, i===9?PEACH:CORAL, 1)); }
+      const h0 = lay.leaves.map((_,i)=>Math.round(12*Math.exp(-((i-lay.leaves.length*.45)**2)/(lay.leaves.length*1.6))));
+      histogram(g, lay, h0, costColor);
+      return;
+    }
+    if (t-last > 160){ last=t; const leaf = lay.leaves[Math.floor(R()*lay.leaves.length)]; parts.push({ns:pathNodes(leaf), leaf, t0:t, dur:1500+R()*900}); }
+    for (const [k,v] of heat) heat.set(k, v*0.985);
+    parts = parts.filter(p => { const u=(t-p.t0)/p.dur; if (u>=1){ hist[lay.leaves.indexOf(p.leaf)]++; for (const n of p.ns) heat.set(n,(heat.get(n)||0)+1); return false; }
+      const tail = 0.28; asciiPath(g, p.ns, Math.max(0,u-tail), u, (c,r,ch,w)=>{ const f=(w-(u-tail))/tail; g.put(c,r,ch, f>.7?PEACH:f>.35?CORAL:BANDS[10], f>.35?1:0); });
+      const h=pointOnPath(p.ns,u); if (g.calm(h[0],h[1])>.55) g.put(h[0],h[1],'●',PEACH,1); return true; });
+    if (Math.max(...hist) > 40) hist = hist.map(v=>v*.5);
+    histogram(g, lay, hist, costColor);
+  };
+}
+
+// ---------- P3b: scenario fan ----------
+function treeB(g){
+  let lay=null, key='', vals=null, seed=3, born=0;
+  const build = () => { const R=rng(seed++); vals=new Map(); const root=lay.stages[0][0]; vals.set(root, 0);
+    for (let s=1;s<=lay.S;s++) for (const n of lay.stages[s]) vals.set(n, vals.get(n.parent) + (R()*2-1)*(0.9+s*.25) + (n.b - (n.parent.kids.length-1)/2)*0.8);
+    const vs=[...vals.values()], lo=Math.min(...vs), hi=Math.max(...vs);
+    const span = lay.bot - lay.top; for (const [n,v] of vals) n.y = lay.top + span*(1-(v-lo)/(hi-lo||1)); lay.stages[0][0].y = (lay.top+lay.bot)/2 + (lay.stages[0][0].y - (lay.top+lay.bot)/2)*.3; };
+  return (t, still) => {
+    if (key !== g.cols+'x'+g.rows){ key=g.cols+'x'+g.rows; lay=layout(g, g.phone?[3,3,2]:[4,3,3]); build(); born=t; }
+    if (!still && t-born > 9000){ build(); born=t; }
+    g.clear(); field(g, still?0:t, lay);
+    const sweep = still ? 1 : Math.min(1, (t-born)/4200);
+    const xr = lay.xs[0] + (lay.xs[lay.S]-lay.xs[0])*sweep;
+    const hist = new Array(18).fill(0);
+    lay.leaves.forEach((leaf, i) => {
+      const ns = pathNodes(leaf), v = 1 - (leaf.y-lay.top)/(lay.bot-lay.top);
+      const color = BANDS[Math.min(12, 5 + Math.round(v*7))];
+      asciiPath(g, ns, 0, 1, (c,r,ch)=>{ if (c<=xr) g.put(c,r,ch,color, v>.6?1:0); });
+      if (sweep>=1){ g.put(leaf.x+1, leaf.y, '•', color, 1); hist[Math.min(17, Math.floor((leaf.y-lay.top)/(lay.bot-lay.top)*18))]++; }
+    });
+    // decision front: coral column moving left to right
+    if (sweep<1){ for (let r=Math.ceil(lay.top)-1;r<=lay.bot;r++) if (g.calm(xr,r)>.55) g.put(xr, r, '│', CORAL); }
+    // stage nodes where the scenarios split (non-anticipativity)
+    lay.stages.forEach((st,s) => { if (s===lay.S || lay.xs[s] > xr) return; for (const n of st) if (g.calm(n.x,n.y)>.55) g.put(n.x, n.y, s===0?'■':'◆', s===0?FG:PEACH, 1); });
+    if (sweep>=1) histogram(g, lay, hist, v => BANDS[Math.min(12, 12 - Math.round(v*7))]);
+  };
+}
+
+// ---------- P3c: heat tree in density characters ----------
+function treeC(g){
+  let lay=null, key='', heat=null, hist=[], last=0, R=rng(11);
+  const RAMPC = ' .:-=+*#%@';
+  return (t, still) => {
+    if (key !== g.cols+'x'+g.rows){ key=g.cols+'x'+g.rows; lay=layout(g, g.phone?[3,3,2]:[3,3,3]); heat=new Map(); hist=new Array(lay.leaves.length).fill(0); }
+    // probabilities: branch b of each node is likelier toward the middle
+    const pickLeaf = () => { let n=lay.stages[0][0]; while (n.kids.length){ const w=n.kids.map((_,b)=>1+ (b===Math.floor(n.kids.length/2)?1.4:0)); let u=R()*w.reduce((a,b)=>a+b,0), i=0; while ((u-=w[i])>0) i++; n=n.kids[i]; } return n; };
+    if (still){ if (!heat.size){ for (let k=0;k<900;k++){ const l=pickLeaf(); hist[lay.leaves.indexOf(l)]++; for (const n of pathNodes(l)) heat.set(n,(heat.get(n)||0)+1); } } }
+    else if (t-last > 60){ last=t; for (let j=0;j<3;j++){ const l=pickLeaf(); hist[lay.leaves.indexOf(l)]++; for (const n of pathNodes(l)) heat.set(n,(heat.get(n)||0)+1); } for (const [k,v] of heat) heat.set(k, v*.993); hist = hist.map(v=>v*.993); }
+    g.clear(); field(g, still?0:t, lay);
+    const total = heat.get(lay.stages[0][0]) || 1;
+    lay.stages.forEach((st,s) => { if (s===lay.S) return; for (const a of st) for (const b of a.kids){
+      const share = Math.min(1, (heat.get(b)||0)/total * (s===0?1.6:s===1?3.2:6));
+      const d = Math.max(1, Math.round(share*9)); const ch = RAMPC[d], col = BANDS[Math.min(12, 4 + Math.round(share*8))];
+      asciiEdge(g, a, b, 0, 1, (c,r)=>g.put(c,r,ch,col, d>6?1:0)); } });
+    // sampled paths flicker in coral over the heat
+    if (!still) for (let j=0;j<3;j++){ const l=lay.leaves[Math.floor(R()*lay.leaves.length)]; const ns=pathNodes(l); const u=R(); const q=pointOnPath(ns,u); if (g.calm(q[0],q[1])>.55) g.put(q[0],q[1],'@',CORAL,1); }
+    for (const n of lay.leaves) if (g.calm(n.x,n.y)>.55) g.put(n.x+1, n.y, '○', FG2);
+    histogram(g, lay, hist, costColor);
+  };
+}
+
+const GEN = {treeA, treeB, treeC};
+const live = [];
+document.querySelectorAll('.hd[data-gen]').forEach(host => {
+  const g = Grid(host); const draw = GEN[host.dataset.gen](g); const canvasOnly = host.dataset.gen==='led';
+  const item = {g, draw, canvasOnly, visible:false, last:0};
+  const frame = (t, still) => { item.draw(t, still); if (!canvasOnly) g.render(); };
+  item.frame = frame;
+  g.resize(); live.push(item);
+  new IntersectionObserver(es => es.forEach(e => item.visible = e.isIntersecting), {rootMargin:'100px'}).observe(host);
+  frame(performance.now(), true);
+});
+let rt; addEventListener('resize', () => { clearTimeout(rt); rt=setTimeout(()=>live.forEach(i=>{ i.g.resize(); i.frame(performance.now(), reduce); }),120); });
+document.fonts && document.fonts.ready.then(() => live.forEach(i=>{ i.g.resize(); i.frame(performance.now(), true); }));
+if (!reduce){
+  const tick = t => { for (const i of live) if (i.visible && t-i.last>45){ i.last=t; i.frame(t,false); } requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+}
+})();
+</script>

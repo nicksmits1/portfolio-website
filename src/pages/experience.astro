@@ -3,28 +3,27 @@
    then teaching and education. Content: content/data/roles.yaml and content/data/timeline.yaml. */
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import Nav from '../components/Nav.astro';
+import GlyphHead from '../components/GlyphHead.astro';
 import Flow from '../components/figures/Flow.astro';
 import Cage from '../components/figures/Cage.astro';
 import Kinetics from '../components/figures/Kinetics.astro';
 import { ICON } from '../lib/icons';
+import { timelineNewest, firstYear } from '../lib/site';
 import { image, url } from '../lib/assets';
 
 const roles = await getCollection('roles');
-const timeline = await getCollection('timeline');
+const timeline = await timelineNewest();
 const known = new Set((await getCollection('skills')).flatMap(g => g.data.skills));
 const logo = (owner: string, file: string) => (file.endsWith('.svg') ? { src: url(owner, file), width: undefined, height: undefined } : image(owner, file));
 const ext = (h: string) => /^https?:/.test(h);
+/* strata layers: Experience and Education entries, oldest first by the first year in years */
+const layers = timeline.filter(x => x.data.group !== 'Teaching' && x.data.short)
+  .map(x => ({ short: x.data.short!, years: x.data.years, y: firstYear(x.data.years) }))
+  .sort((a, b) => a.y - b.y).map(({ short, years }) => ({ short, years }));
 ---
-<Base title="Experience | Nicolas Smits" description="Research and industry roles: CAPD at Carnegie Mellon, the HydrateTech Laboratory at McGill and Lhoist's flue gas treatment team, with the work each produced.">
-  <header class="xp-head">
-    <a class="tab-name" href="/">Nicolas Smits</a>
-    <Nav page="experience" />
-    <div class="wrap">
-      <h1>Experience</h1>
-      <p>Research and industry roles, newest first, each with a figure from the work it produced.</p>
-    </div>
-  </header>
+<Base title="Experience | Nicolas Smits" description="Research and industry roles: CAPD at Carnegie Mellon, the HydrateTech Laboratory at McGill and Lhoist's flue gas treatment team, with the work each produced, then teaching and education.">
+  <GlyphHead page="experience" title="Experience" line="Research and industry roles, newest first, each with a figure from the work it produced." kind="strata" data={{ layers }}
+    label={`Strata, one layer per role and degree, oldest at the bottom: ${layers.map(l => `${l.short} ${l.years}`).join(', ')}. The newest layer is still being laid down.`} />
 
   <main id="main">
     {roles.map(r => {
@@ -67,7 +66,7 @@ const ext = (h: string) => /^https?:/.test(h);
       {(['Teaching', 'Education'] as const).map(g => (
         <div>
           <h2 class="sec-h">{g}</h2>
-          <ul class="items">{timeline.filter(x => x.data.group === g).map(x => <li class="item"><em>{x.data.years}</em><div><b>{x.data.title}</b><span>{x.data.detail}</span></div></li>)}</ul>
+          <ul class="items">{timeline.filter(x => x.data.group === g).map(x => <li class="item"><em>{x.data.years}</em><div><b>{x.data.title}</b><span>{x.data.detail}</span>{x.data.topics.length > 0 && <span class="tps">{x.data.topics.map(t => <span>{t}</span>)}</span>}</div></li>)}</ul>
         </div>
       ))}
     </section>

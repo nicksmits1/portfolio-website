@@ -175,6 +175,15 @@
   \resumeSubHeadingListStart
     \resumeSubheading
       {\small{Carnegie Mellon University}}{\small{Pittsburgh, PA}}
+      {Doctor of Philosophy in Chemical Engineering}{Jan 2027 - Present}
+
+    \vspace{-3pt}
+    \small{\textbf{Advisor:} Carl D. Laird $|$ \textbf{Research:} Optimisation, Process Systems Engineering, Stochastic Programming, ML, RL}
+
+    \vspace{-3pt}
+
+    \resumeSubheading
+      {\small{Carnegie Mellon University}}{\small{Pittsburgh, PA}}
       {Master of Science in Artificial Intelligence Engineering - Chemical Engineering}{Dec 2026}
 
     % \vspace{-1pt}
@@ -329,13 +338,13 @@
 
     
 % ------- GenAI Multi Modal RAG QA---------
-% \resumeProjectHeading
-%     {\textbf{Multimodal RAG Pipeline for Grounded Document QA}}{\emph{CMU} $|$ \textit{Jan 2026 - Present}}
-%     \resumeItemListStart
-%       \resumeItem{Built a multimodal RAG pipeline using a frozen ColQwen3 retriever for page-image retrieval and a Qwen3-VL generator fine-tuned with LoRA on teacher-distilled, evidence-conditioned supervision.}
-%       \resumeItem{Evaluated 3 configurations (vanilla VLM, VLM+RAG, VLM+RAG+LoRA fine-tuning) on the REAL-MM-RAG benchmark (8k pages, 5k queries) across answer quality (BERTScore, LLM-as-a-Judge), and groundedness metrics.}
-%       \resumeItem{Designed ablations on training signal quality and input modality (OCR text vs. page images) to isolate the effects of supervision and visual grounding on generation performance.}
-%     \resumeItemListEnd
+\resumeProjectHeading
+    {\textbf{Multimodal RAG Pipeline for Grounded Document QA}}{\emph{CMU} $|$ \textit{Jan 2026 - Present}}
+    \resumeItemListStart
+      \resumeItem{Built a multimodal RAG pipeline using a frozen ColQwen3 retriever for page-image retrieval and a Qwen3-VL generator fine-tuned with LoRA on teacher-distilled, evidence-conditioned supervision.}
+      \resumeItem{Evaluated 3 configurations (vanilla VLM, VLM+RAG, VLM+RAG+LoRA fine-tuning) on the REAL-MM-RAG benchmark (8k pages, 5k queries) across answer quality (BERTScore, LLM-as-a-Judge), and groundedness metrics.}
+      \resumeItem{Designed ablations on training signal quality and input modality (OCR text vs. page images) to isolate the effects of supervision and visual grounding on generation performance.}
+    \resumeItemListEnd
 
 
 % ------- GenAI PEFT Assignment ---------
@@ -348,15 +357,16 @@
 %     \resumeItemListEnd
 
 
-% \resumeProjectHeading {\textbf{FIFA Player ETL Platform, Streaming Analytics \& Cloud ML Pipeline \faGithub}}{\emph{CMU} $|$ \textit{Sep 2025 - Dec 2025}}
-%   \resumeItemListStart
+% -------- FIFA Player Analytics --------
+\resumeProjectHeading {\textbf{FIFA Player ETL Platform, Streaming Analytics \& Cloud ML Pipeline \faGithub}}{\emph{CMU} $|$ \textit{Sep 2025 - Dec 2025}}
+  \resumeItemListStart
 %     % \resumeItem{Developed an end-to-end pipeline on the Sofifa Kaggle dataset (2015–2022) integrating PySpark ETL with PostgreSQL for unified analytics; performed preprocessing and feature engineering for downstream ML modeling and evaluation.}
-%     \resumeItem{Developed an end-to-end pipeline on the Sofifa Kaggle dataset (2015–2022) integrating PySpark ETL with PostgreSQL.}
+    \resumeItem{Developed an end-to-end pipeline on the Sofifa Kaggle dataset (2015–2022) integrating PySpark ETL with PostgreSQL.}
 %     % \resumeItem{Streamed real-time YouTube comments via the YouTube API using a Kafka producer–consumer model to assess player popularity, applying lightweight NLP to aggregate mentions and sentiment trends.}
-%     \resumeItem{Implemented ML models including Random Forest Regressor and Gradient Boosting Tree (SparkML), as well as both deep and shallow MLPs (PyTorch) to predict player overall rating from player skills, achieving $R^2\ge$ 96\%.}
+    \resumeItem{Implemented ML models including Random Forest Regressor and Gradient Boosting Tree (SparkML), as well as both deep and shallow MLPs (PyTorch) to predict player overall rating from player skills, achieving $R^2\ge$ 96\%.}
 %     % \resumeItem{Conducted preprocessing and feature engineering (numeric scaling, categorical encoding, outlier filtering) and performed model comparison using RMSE and $R^2$ metrics on held-out data.}
-%     \resumeItem{Containerized services and deployed inference on Google Cloud Platform, connecting a containerized PostgreSQL instance on a cloud VM to a Dataproc Hadoop Cluster, ensuring reproducibility, version control, and modular pipeline structure.}
-%   \resumeItemListEnd
+    \resumeItem{Containerized services and deployed inference on Google Cloud Platform, connecting a containerized PostgreSQL instance on a cloud VM to a Dataproc Hadoop Cluster, ensuring reproducibility, version control, and modular pipeline structure.}
+  \resumeItemListEnd
 
   % -------- Biogas Upgrading Plant Capstone VERSION 1 --------
     % \resumeProjectHeading
@@ -381,22 +391,22 @@
   % \resumeItemListEnd
 
 % -------- ICU-Sepsis RL Project --------
-  % \resumeProjectHeading {\href{https://github.com/nicksmits1/COMP-579-Reinforcement-Learning}{\textbf{Deep Reinforcement Learning for Sepsis Treatment in the ICU \faGithub}}}{\emph{McGill} $|$ \textit{Jan 2025 - Apr 2025}}
-  %     \resumeItemListStart
-  %       \resumeItem{Implemented multiple DQN variants (Double, Dueling, Prioritized, Multi-Step, Rainbow) in the ICU-Sepsis-v2 environment, modeling patient treatment as an MDP to improve treatment decision making.}
-  %       \resumeItem{Benchmarked DQN algorithms across 300k training episodes and 10 random seeds, revealing that Dueling DQN achieved the highest final return with improved convergence speeds over alternatives.}
-  %       \resumeItem{Analyzed learning dynamics, showing that prioritized replay accelerated convergence by 100k episodes, and other DQN variants' sensitivity to hyperparameters}
-  %     \resumeItemListEnd
+  \resumeProjectHeading {\href{https://github.com/nicksmits1/COMP-579-Reinforcement-Learning}{\textbf{Deep Reinforcement Learning for Sepsis Treatment in the ICU \faGithub}}}{\emph{McGill} $|$ \textit{Jan 2025 - Apr 2025}}
+      \resumeItemListStart
+        \resumeItem{Implemented multiple DQN variants (Double, Dueling, Prioritized, Multi-Step, Rainbow) in the ICU-Sepsis-v2 environment, modeling patient treatment as an MDP to improve treatment decision making.}
+        \resumeItem{Benchmarked DQN algorithms across 300k training episodes and 10 random seeds, revealing that Dueling DQN achieved the highest final return with improved convergence speeds over alternatives.}
+        \resumeItem{Analyzed learning dynamics, showing that prioritized replay accelerated convergence by 100k episodes, and other DQN variants' sensitivity to hyperparameters}
+      \resumeItemListEnd
 
   % -------- Day-Ahead Electricity Price Forecasting --------
-  % \resumeProjectHeading
+  \resumeProjectHeading
   %     % {\textbf{Energy-Efficient Day-Ahead Electricity Forecasting} $|$ \emph{LSTM, Transformer, SARIMA}}{\textit{Jan 2025 - Apr 2025}}
-  %     {\textbf{Energy-Efficient Day-Ahead Electricity Price Forecasting}}{\emph{McGill} $|$ \textit{Jan 2025 - Apr 2025}}
-  %     \resumeItemListStart
-  %       \resumeItem{Developed (in a team of 4) SARIMA, RNN, LSTM, hybrid CNN-LSTM, and Transformer models trained on 4 years of ERCOT market and NOAA weather data to forecast day-ahead electricity prices, documented in NeurIPS-style report.}
-  %       \resumeItem{Demonstrated tuned CNN-LSTM outperformed baselines SARIMA model by 2$\times$ in RMSE and MAE, capturing volatile price spikes and improving generalization capacity while using few input features.}
-  %       \resumeItem{Applied compound scaling to CNN, reducing training energy consumption by 12\%/epoch with accuracy maintained.}
-  %     \resumeItemListEnd
+      {\textbf{Energy-Efficient Day-Ahead Electricity Price Forecasting}}{\emph{McGill} $|$ \textit{Jan 2025 - Apr 2025}}
+      \resumeItemListStart
+        \resumeItem{Developed (in a team of 4) SARIMA, RNN, LSTM, hybrid CNN-LSTM, and Transformer models trained on 4 years of ERCOT market and NOAA weather data to forecast day-ahead electricity prices, documented in NeurIPS-style report.}
+        \resumeItem{Demonstrated tuned CNN-LSTM outperformed baselines SARIMA model by 2$\times$ in RMSE and MAE, capturing volatile price spikes and improving generalization capacity while using few input features.}
+        \resumeItem{Applied compound scaling to CNN, reducing training energy consumption by 12\%/epoch with accuracy maintained.}
+      \resumeItemListEnd
 
  % -------- Emotion Classification with LLMs Project --------
   % \resumeProjectHeading

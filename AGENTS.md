@@ -23,9 +23,9 @@ Project material lives in sibling directories (`../rl-sc-design`, `../CMU/SiNDAE
 ## Where a fact lives
 
 - `content/projects/<id>.md`: one file per project, and the only place its copy and numbers live. Frontmatter holds the page: `rail` (at most four facts), `links`, `figures` (each a `kind` drawn by a component in `src/components/figures/`), `order` (figure ids and `### ` headings, top to bottom) and `reading`. The body holds the one-line summary, `## Facts` (evidence notes with sources), `## Sections` (the prose; display math in `$$`, rendered to MathML at build time) and `## Visual` (notes and TODOs for agents). The `disclosure` line is binding. The build fails on an `order` entry that matches nothing and on a section left out of `order`.
-- `content/data/`: Latest, publications, the experience / teaching / education timeline, skill groups and the profile. Never list the SiNDAE method paper (Lueg et al.) as Nicolas's publication.
+- `content/data/`: Latest, publications (shown in full on /publications, briefly on home), the experience / teaching / education timeline (each entry's `short` names its layer in the experience header), skill groups and the profile. Collections load ordered by id, so pages sort these lists newest first (`timelineNewest`, `publicationsNewest` in `src/lib/site.ts`). Never list the SiNDAE method paper (Lueg et al.) as Nicolas's publication.
 - `content/assets/<id>/`: every shipping image, PDF and video, each named in that folder's README with its provenance.
-- `src/scripts/`: the drawing engine (landscape and solver, network episode, recommender, streamlines and two-tank field, pipeline, ladder, scales). Numbers drawn there come from the project file; change the file first, then the script.
+- `src/scripts/`: the drawing engine (landscape and solver, network episode, recommender, streamlines and two-tank field, pipeline, ladder, scales, and `glyphs.ts`, the character-grid headers of /publications and /experience). Numbers drawn there come from the project file; change the file first, then the script.
 - `content/diagrams/*.proschi`: system diagrams as code. After any edit run `npx proschi@latest check <file>` and `npx proschi@latest test <file>`, then re-render into `content/diagrams/rendered/`.
 
 ## Adding a project

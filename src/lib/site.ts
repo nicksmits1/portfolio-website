@@ -36,6 +36,12 @@ export function body(p: Project) {
   return { line, sections };
 }
 
+/** The first four-digit year in a years string ("2022–23" -> 2022). */
+export const firstYear = (y: string) => parseInt(y.match(/\d{4}/)?.[0] ?? '0', 10);
+/** Content collections come back ordered by id; data lists sort newest first by their first year. */
+export const timelineNewest = async () => (await getCollection('timeline')).sort((a, b) => firstYear(b.data.years) - firstYear(a.data.years));
+export const publicationsNewest = async () => (await getCollection('publications')).sort((a, b) => firstYear(b.data.year) - firstYear(a.data.year));
+
 export const skillsOf = (p: Project) => [...p.data.methods, ...p.data.tools];
 
 type Profile = { name: string; focus: string; email: string; linkedin: string; github: string; orcid: string | null };

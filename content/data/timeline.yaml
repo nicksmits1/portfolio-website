@@ -1,7 +1,17 @@
 # Experience, teaching and education, from the CV. group sets the sub-heading; order within a group is newest first.
-- { id: capd, group: Experience, years: "2026", title: "CAPD, Carnegie Mellon", detail: "Graduate Research Assistant" }
-- { id: hydratetech, group: Experience, years: "2024", title: "HydrateTech Laboratory, McGill", detail: "Computational Research Assistant" }
-- { id: lhoist, group: Experience, years: "2022–23", title: "Lhoist Group, Belgium", detail: "R&D Engineer Intern, flue gas treatment" }
+# short names the entry in the experience page's strata header, where each Experience and Education entry is a layer,
+# oldest at the bottom by the first year in years; the newest layer is the one still being laid down.
+# topics (optional) are research areas, shown as tags under the entry.
+- { id: capd, group: Experience, years: "2026", title: "CAPD, Carnegie Mellon", detail: "Graduate Research Assistant", short: CAPD }
+- { id: hydratetech, group: Experience, years: "2024", title: "HydrateTech Laboratory, McGill", detail: "Computational Research Assistant", short: HydrateTech }
+- { id: lhoist, group: Experience, years: "2022–23", title: "Lhoist Group, Belgium", detail: "R&D Engineer Intern, flue gas treatment", short: Lhoist }
 - { id: ta-06763, group: Teaching, years: "2026", title: "Systems and Toolchains for AI in Engineering", detail: "Teaching Assistant, 06-763, Carnegie Mellon" }
-- { id: cmu, group: Education, years: "2026", title: "Carnegie Mellon University", detail: "MS, AI Engineering, Chemical Engineering" }
-- { id: mcgill, group: Education, years: "2025", title: "McGill University", detail: "BEng Chemical Engineering, minor in Applied AI" }
+- id: phd
+  group: Education
+  years: "2027–30"
+  title: "Carnegie Mellon University"
+  detail: "PhD, Chemical Engineering, advisor Carl D. Laird"
+  short: CMU PhD
+  topics: [Optimisation, Process Systems Engineering, Machine Learning, Stochastic Programming, Reinforcement Learning]
+- { id: cmu, group: Education, years: "2026", title: "Carnegie Mellon University", detail: "MS, AI Engineering, Chemical Engineering", short: CMU MS }
+- { id: mcgill, group: Education, years: "2025", title: "McGill University", detail: "BEng Chemical Engineering, minor in Applied AI", short: McGill BEng }

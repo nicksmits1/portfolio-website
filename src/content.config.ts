@@ -38,11 +38,15 @@ const latest = defineCollection({
 });
 const publications = defineCollection({
   loader: file('content/data/publications.yaml'),
-  schema: z.object({ year: z.string(), title: z.string(), detail: z.string(), status: z.string().optional(), href: z.string().optional() }),
+  schema: z.object({
+    year: z.string(), title: z.string(), authors: z.array(z.string()).min(1), venue: z.string(), kind: z.string(),
+    status: z.string().optional(), href: z.string().optional(),
+    links: z.array(z.object({ label: z.string(), href: z.string(), owner: z.string().optional(), icon: z.enum(['gh', 'paper', 'file', 'next']) })).default([]),
+  }),
 });
 const timeline = defineCollection({
   loader: file('content/data/timeline.yaml'),
-  schema: z.object({ group: z.enum(['Experience', 'Teaching', 'Education']), years: z.string(), title: z.string(), detail: z.string() }),
+  schema: z.object({ group: z.enum(['Experience', 'Teaching', 'Education']), years: z.string(), title: z.string(), detail: z.string(), short: z.string().optional(), topics: z.array(z.string()).default([]) }),
 });
 const roles = defineCollection({
   loader: file('content/data/roles.yaml'),
