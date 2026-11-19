@@ -41,6 +41,7 @@ const publications = defineCollection({
   schema: z.object({
     year: z.string(), title: z.string(), authors: z.array(z.string()).min(1), venue: z.string(), kind: z.string(),
     status: z.string().optional(), href: z.string().optional(),
+    document: z.object({ owner: z.string(), pdf: z.string(), preview: z.string() }).optional(),
     links: z.array(z.object({ label: z.string(), href: z.string(), owner: z.string().optional(), icon: z.enum(['gh', 'paper', 'file', 'next']) })).default([]),
   }),
 });

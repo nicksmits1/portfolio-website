@@ -80,14 +80,14 @@ const [first, ...rest] = profile.name.split(' ');
 
     <section class="block two">
       <div id="publications">
-        <h2 class="sec-h">Publications</h2>
+        <h2 class="sec-h"><a href="/publications">Publications<Fragment set:html={ICON.next} /></a></h2>
         <ul class="items">{pubs.map(x => (
           <li class="item"><em>{x.data.year}</em><div>{x.data.href ? <a href={x.data.href}><b>{x.data.title}{x.data.status && <span class="status">{x.data.status}</span>}</b></a> : <b>{x.data.title}</b>}<span>{x.data.kind}, {x.data.venue}</span></div></li>
         ))}</ul>
         <a class="more" href="/publications">All publications<Fragment set:html={ICON.next} /></a>
       </div>
       <div id="experience">
-        <h2 class="sec-h">Experience and education</h2>
+        <h2 class="sec-h"><a href="/experience">Experience and education<Fragment set:html={ICON.next} /></a></h2>
         {(['Experience', 'Teaching', 'Education'] as const).map(g => (
           <>
             <p class="subh">{g}</p>

@@ -2,7 +2,8 @@
 # arXiv 2504.04665) here. Home shows each entry's year, title, status and venue; /publications shows all of it.
 # authors: as on the paper, Nicolas first where he is first author. venue: journal or meeting. kind: what it is.
 # links: icon is one of gh, paper, file, next; href is a URL, a site path, or a file under content/assets/<owner>/
-# when owner is set. The ESCAPE abstract is marked "not for citation" in its source, so it is not hosted.
+# when owner is set. document: the full paper or abstract (a PDF under content/assets/<owner>/) and its first page as
+# a WebP preview, shown at the right of the entry and linked to the PDF.
 - id: escape37
   year: "2027"
   title: "Graph RL for resilient supply chain network design"
@@ -11,7 +12,9 @@
   kind: Conference abstract
   status: accepted
   href: /projects/thesis
+  document: { owner: thesis, pdf: escape37-abstract.pdf, preview: escape37-abstract-p1.webp }
   links:
+    - { label: Abstract (PDF), href: escape37-abstract.pdf, owner: thesis, icon: file }
     - { label: Project, href: /projects/thesis, icon: next }
 - id: sindae-joss
   year: "2026"
@@ -21,6 +24,7 @@
   kind: Software paper
   status: submitted
   href: /projects/sindae
+  document: { owner: sindae, pdf: joss-paper.pdf, preview: joss-paper-p1.webp }
   links:
     - { label: Paper (PDF), href: joss-paper.pdf, owner: sindae, icon: file }
     - { label: Project, href: /projects/sindae, icon: next }

@@ -4,7 +4,7 @@
 import Base from '../layouts/Base.astro';
 import GlyphHead from '../components/GlyphHead.astro';
 import { ICON } from '../lib/icons';
-import { href } from '../lib/assets';
+import { href, image, url } from '../lib/assets';
 import { publicationsNewest } from '../lib/site';
 
 const pubs = await publicationsNewest();
@@ -20,7 +20,7 @@ const ME = 'Nicolas Smits';
       <ol class="papers">{pubs.map(p => {
         const d = p.data;
         return (
-          <li class="paper" id={p.id}>
+          <li class:list={['paper', { doc: d.document }]} id={p.id}>
             <em>{d.year}</em>
             <div>
               <h2>{d.href ? <a href={d.href}>{d.title}</a> : d.title}{d.status && <span class="status">{d.status}</span>}</h2>
@@ -29,13 +29,19 @@ const ME = 'Nicolas Smits';
               {d.links.length > 0 && (
                 <div class="meta">{d.links.map(l => {
                   const to = l.owner ? href(l.owner, l.href) : l.href;
-                  return <a class="pill" href={to} target={ext(to) ? '_blank' : undefined} rel={ext(to) ? 'noopener' : undefined}><Fragment set:html={ICON[l.icon]} />{l.label}</a>;
+                  return <a class="pill" href={to} data-pdf={to.endsWith('.pdf') ? d.title : undefined} target={ext(to) ? '_blank' : undefined} rel={ext(to) ? 'noopener' : undefined}><Fragment set:html={ICON[l.icon]} />{l.label}</a>;
                 })}</div>
               )}
             </div>
+            {d.document && (() => { const pv = image(d.document.owner, d.document.preview); return (
+              <a class="page" href={url(d.document.owner, d.document.pdf)} data-pdf={d.title} aria-label={`${d.title}, full ${d.kind.toLowerCase()} (PDF)`}>
+                <img src={pv.src} width={pv.width} height={pv.height} alt="" loading="lazy" decoding="async" />
+              </a>
+            ); })()}
           </li>
         );
       })}</ol>
     </section>
   </main>
 </Base>
+<script>import '../scripts/pdf';</script>
