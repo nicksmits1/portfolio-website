@@ -1,5 +1,5 @@
 # Skill groups for the home skills landscape. A skill shows only if some project lists it in methods or tools.
-- { id: methods, name: Methods, skills: ["Reinforcement learning", "Graph neural networks", "Supervised learning", "Ranking & recommenders", "Retrieval-augmented generation", "Vision-language models", "Hybrid modelling", "Nonlinear optimisation", "Simulation", "LLM pipelines", "Parameter-efficient fine-tuning", "Agent tooling"] }
-- { id: ml, name: Machine learning, skills: ["PyTorch", "PyG", "JAX", "Gymnasium", "LightGBM", "Qwen3-VL", "ColQwen"] }
+- { id: methods, name: Methods, skills: ["Reinforcement learning", "Graph neural networks", "Supervised learning", "Time-series forecasting", "Ranking & recommenders", "Retrieval-augmented generation", "Vision-language models", "Hybrid modelling", "Nonlinear optimisation", "Simulation", "LLM pipelines", "Parameter-efficient fine-tuning", "Agent tooling"] }
+- { id: ml, name: Machine learning, skills: ["PyTorch", "TensorFlow", "PyG", "JAX", "Gymnasium", "LightGBM", "Qwen3-VL", "ColQwen"] }
 - { id: opt, name: Optimisation, skills: ["Pyomo"] }
 - { id: systems, name: Data and systems, skills: ["Kafka", "Spark", "PostgreSQL", "Qdrant", "Flask", "Docker", "AWS", "GCP", "TypeScript", "MLOps", "Data engineering"] }

@@ -1,0 +1,13 @@
+---
+/* Energy per epoch against test RMSE as compound scaling shrinks the networks (src/scripts/trade.ts). */
+---
+<figure class="fg" data-fig="trade">
+  <svg></svg>
+  <div class="figbar"><p class="step" data-step aria-live="polite"></p><div class="steps" data-steps role="group" aria-label="Scaling factor"></div></div>
+  <p class="read trade-read" data-read></p>
+  <dl class="legend">
+    <dt><i class="m">β</i></dt><dd>Width scaling factor; each network shrinks by <i class="m">β</i><sup>−<i class="m">φ</i></sup>.</dd>
+    <dt>Band</dt><dd>The 10% error budget above each baseline, the most accuracy an energy saving was allowed to cost.</dd>
+  </dl>
+</figure>
+<script>import '../../scripts/trade';</script>

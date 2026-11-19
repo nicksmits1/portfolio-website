@@ -88,6 +88,7 @@ const [first, ...rest] = profile.name.split(' ');
           <>
             <p class="subh">{g}</p>
             <ul class="items">{timeline.filter(x => x.data.group === g).map(x => <li class="item"><em>{x.data.years}</em><div><b>{x.data.title}</b><span>{x.data.detail}</span></div></li>)}</ul>
+            {g === 'Experience' && <a class="more" href="/experience">Each role in detail<Fragment set:html={ICON.next} /></a>}
           </>
         ))}
       </div>

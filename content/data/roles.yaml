@@ -1,0 +1,71 @@
+# The experience page (/experience): one chapter per role, newest first. Sources: the CV (content/cv/cv.tex and the
+# private CV), the 2023 Lhoist reference letter (read, not hosted), and the hydrate repo's README
+# (github.com/nicksmits1/CHEE-494-hydrate-cage-research-project). The compact list on home stays in timeline.yaml.
+# figure: flow (SiNDAE's phase portrait, src/scripts/flow.ts), cage (src/scripts/cage.ts) or kinetics (src/scripts/kinetics.ts).
+# Lhoist's pilot data, letter and screenshots are private: the kinetics figure is illustrative and says so.
+- id: capd
+  org: 'CAPD, Carnegie Mellon'
+  role: Graduate Research Assistant
+  when: 'Jun – Aug 2026'
+  where: Pittsburgh
+  logo: { owner: experience, file: capd-logo.svg, alt: 'Center for Advanced Process Decision-making, Carnegie Mellon University' }
+  line: 'At the Center for Advanced Process Decision-making I built and released SiNDAE, an open-source Python package that trains neural networks inside differential-algebraic process models with nonlinear programming solvers.'
+  figure: flow
+  points:
+    - 'Built the package on the hybrid DAE training methods developed at CAPD, so a data-driven surrogate sits inside a first-principles model and both train as one nonlinear program.'
+    - 'Wrote the documentation and worked examples, from process control to bioprocess kinetics and dynamical systems, built with Jupyter Book and published by CI.'
+    - 'Integrated further NLP solvers and tested them test-first.'
+    - 'Presented in AIChE 2026, session 542, Software Tools and Implementations for Process Systems Engineering.'
+  facts:
+    - ["JOSS", "first-author software paper, submitted"]
+    - ["3", "NLP solvers integrated: Ipopt, POUNCE, FERAL"]
+    - ["84", "automated tests, run by CI on every pull request"]
+    - ["2", "training backends, simultaneous and decomposition"]
+  tools: [Python, JAX, Equinox, Optax, Pyomo, Ipopt, Jupyter Book, GitHub Actions, pytest]
+  badge: { owner: sindae, logo: joss-logo.webp, alt: 'Journal of Open Source Software', title: 'Journal of Open Source Software', text: 'SiNDAE software paper, first author, submitted.' }
+  links:
+    - { label: 'SiNDAE project', href: /projects/sindae, icon: next }
+    - { label: GitHub, href: 'https://github.com/Alves-research-group/SiNDAE', icon: gh }
+
+- id: hydratetech
+  org: 'HydrateTech Laboratory, McGill'
+  role: Computational Research Assistant
+  when: 'May – Jul 2024'
+  where: Montreal
+  logo: { owner: experience, file: mcgill-logo.webp, alt: 'McGill University' }
+  line: 'Clathrate hydrates hold gas molecules such as methane and CO₂ in cages of hydrogen-bonded water. I implemented the GRADE cage-recognition algorithm in Python and improved on its functionality: it reads any .xyz frame and also recognises partly formed cages.'
+  figure: cage
+  points:
+    - 'A depth-first search over the hydrogen-bond network finds five- and six-membered water rings, kept only if they pass geometric filters for planarity, convexity and interior angles.'
+    - 'Rings join into cups by adjacency and orientation, and cups pair into 5¹² and 6²5¹² cages, partly formed ones included.'
+    - 'Tuned the geometric validation across hydrate-host systems to 97% detection accuracy.'
+    - 'CH₄ and CO₂: injected into methane hydrate, CO₂ can take the methane''s place in the cages, storing the CO₂ and releasing the methane as fuel. Counting cages frame by frame follows that exchange, and the tool''s output fed entropy analysis for CO₂ sequestration studies.'
+  facts:
+    - ["97%", "cage detection accuracy across hydrate-host systems"]
+    - ["9", "reference hydrates, structures I and II, eight guest molecules"]
+    - ["3", "stages: rings, cups, cages"]
+    - ["2", "cage types recognised, 5¹² and 6²5¹², partial ones included"]
+  tools: [Python, NumPy, pandas, Matplotlib, Jupyter, Depth-first search, RANSAC]
+  links:
+    - { label: GitHub, href: 'https://github.com/nicksmits1/CHEE-494-hydrate-cage-research-project', icon: gh }
+
+- id: lhoist
+  org: 'Lhoist Group, Belgium'
+  role: 'R&D Engineer Intern, Flue Gas Treatment'
+  when: 'Jun – Jul 2022, Jun – Aug 2023'
+  where: Nivelles
+  logo: { owner: experience, file: lhoist-logo.svg, alt: Lhoist }
+  line: 'Two summers in the global Flue Gas Treatment team at Lhoist''s Business Innovation Center, where the Sorbacal® sorbents that scrub acid gases from industrial flue gas are developed.'
+  figure: kinetics
+  points:
+    - 'Built kinetic models of a pilot scrubbing reactor in Python (SciPy): ordinary differential equations coupled to nonlinear parameter estimation, fitted to the pilot runs and used to predict outcomes at new conditions.'
+    - 'Added the second-order reaction dynamics the legacy model left out, which give conversion its logistic rise with the stoichiometric ratio.'
+    - 'Extended it to secondary reactions of HCl, SO₂ and CO₂ and to temperature dependence, which captures the change from HCl to SO₂ capture as the gas gets hotter, and halved the mean squared error against pilot reactor data.'
+    - 'Tuned the stiff ODE solvers and put the Python model behind an Excel front-end (openpyxl), so engineers and experimentalists could run simulations and estimate rate constants themselves.'
+  facts:
+    - ["50%", "lower mean squared error against pilot reactor data"]
+    - ["3", "acid gases with secondary reactions: HCl, SO₂, CO₂"]
+    - ["2nd", "order kinetics, missing from the legacy model"]
+    - ["2", "summers in the global FGT team"]
+  tools: [Python, SciPy, NumPy, Matplotlib, openpyxl, Excel]
+  links: []

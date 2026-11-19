@@ -1,0 +1,75 @@
+---
+/* Experience: one chapter per role in the project page's grammar (rail left, the work's own figure right),
+   then teaching and education. Content: content/data/roles.yaml and content/data/timeline.yaml. */
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Flow from '../components/figures/Flow.astro';
+import Cage from '../components/figures/Cage.astro';
+import Kinetics from '../components/figures/Kinetics.astro';
+import { ICON } from '../lib/icons';
+import { image, url } from '../lib/assets';
+
+const roles = await getCollection('roles');
+const timeline = await getCollection('timeline');
+const known = new Set((await getCollection('skills')).flatMap(g => g.data.skills));
+const logo = (owner: string, file: string) => (file.endsWith('.svg') ? { src: url(owner, file), width: undefined, height: undefined } : image(owner, file));
+const ext = (h: string) => /^https?:/.test(h);
+---
+<Base title="Experience | Nicolas Smits" description="Research and industry roles: CAPD at Carnegie Mellon, the HydrateTech Laboratory at McGill and Lhoist's flue gas treatment team, with the work each produced.">
+  <header class="xp-head">
+    <a class="tab-name" href="/">Nicolas Smits</a>
+    <Nav page="experience" />
+    <div class="wrap">
+      <h1>Experience</h1>
+      <p>Research and industry roles, newest first, each with a figure from the work it produced.</p>
+    </div>
+  </header>
+
+  <main id="main">
+    {roles.map(r => {
+      const d = r.data, lg = logo(d.logo.owner, d.logo.file), bd = d.badge ? image(d.badge.owner, d.badge.logo) : null;
+      return (
+        <section class="role" id={r.id} aria-labelledby={`${r.id}-h`}>
+          <div class="wrap cols">
+            <aside class="rail">
+              <span class="org-logo"><img src={lg.src} width={lg.width} height={lg.height} alt={d.logo.alt} /></span>
+              <h2 class="org" id={`${r.id}-h`}>{d.org}</h2>
+              <p class="job">{d.role}</p>
+              <p class="when"><span>{d.when}</span><span>{d.where}</span></p>
+              <ul class="run">{d.facts.map(([v, l]) => <li><b>{v}</b><span>{l}</span></li>)}</ul>
+              {bd && <div class="pub"><img src={bd.src} width={bd.width} height={bd.height} alt={d.badge!.alt} /><p><b>{d.badge!.title}</b>{d.badge!.text}</p></div>}
+              {d.links.length > 0 && (
+                <div class="meta">{d.links.map(l => (
+                  <a class="pill" href={l.href} target={ext(l.href) ? '_blank' : undefined} rel={ext(l.href) ? 'noopener' : undefined}><Fragment set:html={ICON[l.icon]} />{l.label}</a>
+                ))}</div>
+              )}
+              {d.tools.length > 0 && (
+                <div class="skl">
+                  <p class="eyebrow">Tools</p>
+                  <div class="chips">{d.tools.map(t => known.has(t) ? <a href={`/?skill=${encodeURIComponent(t)}#skills`}>{t}</a> : <span>{t}</span>)}</div>
+                </div>
+              )}
+            </aside>
+            <div class="figs">
+              <p class="role-line">{d.line}</p>
+              {d.figure === 'flow' && <Flow />}
+              {d.figure === 'cage' && <Cage />}
+              {d.figure === 'kinetics' && <Kinetics />}
+              <ul class="points">{d.points.map(p => <li>{p}</li>)}</ul>
+            </div>
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="block wrap xp-rows" aria-label="Teaching and education">
+      {(['Teaching', 'Education'] as const).map(g => (
+        <div>
+          <h2 class="sec-h">{g}</h2>
+          <ul class="items">{timeline.filter(x => x.data.group === g).map(x => <li class="item"><em>{x.data.years}</em><div><b>{x.data.title}</b><span>{x.data.detail}</span></div></li>)}</ul>
+        </div>
+      ))}
+    </section>
+  </main>
+</Base>

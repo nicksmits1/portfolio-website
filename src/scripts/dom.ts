@@ -42,7 +42,7 @@ export function gate(target: Element, threshold = 0.35) {
 export function tween(ms: number, fn: (e: number) => void) {
   return new Promise<void>(res => {
     const t0 = performance.now();
-    const f = (now: number) => { const k = Math.min(1, (now - t0) / ms); fn(1 - Math.pow(1 - k, 3)); if (k < 1) requestAnimationFrame(f); else res(); };
+    const f = (now: number) => { const k = Math.max(0, Math.min(1, (now - t0) / ms)); fn(1 - Math.pow(1 - k, 3)); if (k < 1) requestAnimationFrame(f); else res(); };
     requestAnimationFrame(f);
   });
 }

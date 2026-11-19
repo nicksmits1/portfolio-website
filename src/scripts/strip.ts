@@ -11,7 +11,8 @@ mountAll('[data-land="strip"]', root => {
     offset: -0.4, cue: true, read,
     points(W, H) {
       const ph = W < 600, R = W / H;
-      const sp = ph ? { cur: [.76, .34], prev: [.16, .33], next: [.44, .17], who: [.4, .9] } : { cur: [.64, .44], prev: [.36, .2], next: [.9, .62], who: [.22, .86] };
+      /* on a phone the minima sit at fixed heights in the band above the title, which can grow */
+      const sp = ph ? { cur: [.76, 102 / H], prev: [.16, 99 / H], next: [.44, 51 / H], who: [.4, 1 - 40 / H] } : { cur: [.64, .44], prev: [.36, .2], next: [.9, .62], who: [.22, .86] };
       return [
         { id: cur.id, label: cur.short, current: true, x: sp.cur[0] * R, y: sp.cur[1], d: .92, s: ph ? .16 : .19 },
         { id: prev.id, label: prev.short, href: prev.href, tag: 'previous', x: sp.prev[0] * R, y: sp.prev[1], d: .62, s: ph ? .1 : .12 },

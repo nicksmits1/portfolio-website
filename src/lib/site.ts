@@ -6,7 +6,7 @@ export type Project = CollectionEntry<'projects'>;
 
 /* Home list order, and the order of previous / next on project pages. A new project gets a place here and a
    minimum in each landscape map (src/scripts/maps.ts). */
-export const ORDER = ['thesis', 'sindae', 'recsys', 'mmrag', 'wayfinder', 'fifa', 'sepsis'];
+export const ORDER = ['thesis', 'sindae', 'recsys', 'mmrag', 'wayfinder', 'fifa', 'sepsis', 'electricity'];
 
 export async function projects(): Promise<Project[]> {
   const all = await getCollection('projects');

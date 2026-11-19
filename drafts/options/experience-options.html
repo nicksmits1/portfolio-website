@@ -1,0 +1,306 @@
+<title>Experience Page Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Onest:wght@400;500;600&family=STIX+Two+Text:ital@1&display=swap">
+<style>
+/* Experience page: three layouts for one page that gives each role room (CAPD, HydrateTech, Lhoist), with teaching and
+   education as compact rows. Mocks at design size in the site's own world, zoomed into their frames. Figures are live:
+   the hydrate cage is the tool's own output on the sI reference; the Lhoist curves are illustrative. */
+:root{
+  color-scheme:dark;
+  --bg:#120A2A; --panel:#1A1038; --ink:#0D0722; --fg:#F3EDFF; --fg2:#B9AAE8; --dim:#7C6BB8;
+  --coral:#FF7C6B; --violet:#8B5CF6; --peach:#FFD9C2; --hair:rgba(243,237,255,.22); --hair2:rgba(243,237,255,.1); --tab:rgba(13,7,34,.72);
+  --disp:"Unbounded",system-ui,sans-serif; --text:"Onest",system-ui,sans-serif; --math:"STIX Two Text","Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--violet) var(--bg)}
+body{background:var(--bg);color:var(--fg);font:400 1rem/1.55 var(--text);margin:0}
+::selection{background:var(--coral);color:var(--bg)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px}
+.wrap{max-width:1320px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.intro{padding-block:clamp(2rem,5vw,3.6rem) 1.6rem}
+.intro h1{font:300 clamp(2rem,5vw,3.4rem)/1 var(--disp);letter-spacing:-.04em;margin:0 0 1rem;text-wrap:balance}
+.intro p{margin:0 0 .7rem;max-width:72ch;color:var(--fg2)}
+.intro p b{color:var(--fg);font-weight:600}
+.toc{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.2rem}
+.toc a{font:500 .9rem/1 var(--text);padding:.5rem .8rem;border:1px solid var(--hair);border-radius:999px;text-decoration:none}
+.toc a:hover{border-color:var(--coral);color:var(--coral)}
+.opt{display:grid;gap:1.1rem;padding-block:clamp(2rem,5vw,3rem);border-top:1px solid var(--hair)}
+.opt header{display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap}
+.tag{font:600 .85rem/1 var(--disp);color:var(--bg);background:var(--coral);border-radius:999px;padding:.4rem .7rem}
+.opt h2{font:400 clamp(1.25rem,2.6vw,1.7rem)/1.1 var(--disp);letter-spacing:-.035em;margin:0}
+.opt header p{flex-basis:100%;margin:0;color:var(--fg2);max-width:78ch}
+.views{display:grid;gap:1.2rem;align-items:start}
+@media(min-width:900px){.views{grid-template-columns:minmax(0,1fr) 270px}}
+.views>*{min-width:0}
+.cap{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 .45rem}
+.frame{border:1px solid var(--hair);border-radius:10px;overflow:hidden;background:var(--ink);min-width:0}
+.notes{display:grid;gap:.8rem 2.4rem;font-size:.95rem;margin:0;padding:0;list-style:none}
+@media(min-width:860px){.notes{grid-template-columns:repeat(3,1fr)}}
+.notes b{display:block;font:600 .78rem/1.2 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-bottom:.3rem}
+.notes span{color:var(--fg2)}
+.shared{padding-block:clamp(2rem,5vw,3rem);border-top:1px solid var(--hair);color:var(--fg2);max-width:78ch}
+.shared h2{font:400 1.3rem/1.15 var(--disp);letter-spacing:-.03em;margin:0 0 .6rem;color:var(--fg)}
+.shared ul{margin:0;padding-left:1.1rem}.shared li{margin-bottom:.5rem}.shared b{color:var(--fg);font-weight:600}
+
+/* ---- inside the mocks: design-size px ---- */
+.screen{background:var(--bg);color:var(--fg);font:400 16px/1.55 var(--text);position:relative;overflow:hidden}
+.m-top{position:relative;height:64px}
+.m-name{position:absolute;top:0;left:0;padding:18px 22px 12px 44px;font:300 17px/1 var(--disp);letter-spacing:-.03em;background:var(--tab);border-bottom-right-radius:14px}
+.m-nav{position:absolute;top:0;right:0;display:flex;gap:24px;padding:18px 44px 12px 20px;font:500 15px/1 var(--text);background:var(--tab);border-bottom-left-radius:14px}
+.m-nav .on{color:var(--coral)}
+.phone .m-name{padding:14px 16px 10px 16px;font-size:14px}
+.phone .m-nav{gap:14px;padding:14px 16px 10px 14px;font-size:13px}
+.m-head{padding:40px 44px 8px}
+.m-head h1{font:300 54px/1 var(--disp);letter-spacing:-.04em;margin:0 0 12px}
+.m-head p{margin:0;max-width:56ch;color:var(--fg2);font-size:17px}
+.phone .m-head{padding:26px 16px 4px}.phone .m-head h1{font-size:34px}.phone .m-head p{font-size:15px}
+.m-meta{display:flex;flex-wrap:wrap;column-gap:1.2em;color:var(--fg2);font-size:15px;margin:6px 0 0}
+.m-org{font:400 28px/1.12 var(--disp);letter-spacing:-.035em;margin:0}
+.m-role{font-weight:600;margin:8px 0 0;font-size:17px}
+.m-run{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}
+.m-run li{display:flex;flex-direction:column;border-top:1px solid var(--hair);padding-top:9px}
+.m-run b{font:400 24px/1.1 var(--disp);letter-spacing:-.03em;color:var(--peach)}
+.m-run span{font-size:13px;line-height:1.3;color:var(--fg2);margin-top:5px}
+.m-pill{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:1px solid var(--hair);border-radius:999px;font:500 14px/1 var(--text);margin-top:20px}
+.m-prose{font-size:17px;line-height:1.6;max-width:62ch;margin:18px 0 0}
+.m-cap{font-size:14px;line-height:1.45;margin:10px 0 0;max-width:60ch}
+.m-cap .src{display:block;color:var(--fg2);font-size:13px;margin-top:3px}
+.m-cap .ill{color:var(--coral);font-weight:600}
+.m-fig{background:var(--ink);border-radius:10px;box-shadow:0 0 0 1px var(--hair2);overflow:hidden;position:relative}
+.m-fig canvas,.m-fig svg{display:block;width:100%;height:auto}
+.m-card{display:flex;gap:16px;align-items:center;padding:16px;border-radius:10px;box-shadow:0 0 0 1px var(--hair2)}
+.m-card img{width:168px;height:96px;border-radius:8px;object-fit:cover;flex:none}
+.m-card b{display:block;font:400 18px/1.2 var(--disp);letter-spacing:-.03em}
+.m-card span{display:block;font-size:14px;color:var(--fg2);margin-top:4px}
+.m-card em{font-style:normal;display:block;color:var(--coral);font:600 13px/1 var(--text);margin-top:8px}
+.plate .m-card,.phone .m-card{flex-direction:column;align-items:flex-start;gap:12px}.plate .m-card img,.phone .m-card img{width:100%;height:auto;aspect-ratio:336/192}
+.m-rows{padding:30px 44px 40px}
+.m-rows h3{font:600 12px/1 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:22px 0 4px}
+.m-item{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;padding:12px 0;border-top:1px solid var(--hair2);font-size:15px}
+.m-item em{font-style:normal;color:var(--dim);font-size:13px;padding-top:2px}
+.m-item b{display:block;font-weight:600}.m-item span{color:var(--fg2);font-size:14px}
+.phone .m-rows{padding:20px 16px 30px}.phone .m-item{grid-template-columns:76px minmax(0,1fr)}
+.m-foot{background:var(--peach);color:var(--ink);padding:40px 44px}
+.m-foot h2{font:300 34px/1 var(--disp);letter-spacing:-.04em;margin:0 0 10px}
+.m-foot p{margin:0;font-size:13px;opacity:.7}
+.phone .m-foot{padding:28px 16px}.phone .m-foot h2{font-size:26px}
+
+/* A, chapters: the project page's rail and column, once per role */
+.a-role{display:grid;grid-template-columns:4fr 8fr;gap:28px;padding:44px 44px 36px;border-top:1px solid var(--hair)}
+.phone .a-role{display:block;padding:26px 16px}
+.phone .a-role .m-figwrap{margin-top:20px}
+/* B, ledger: a dated column, the role, a short paragraph and a small plate; the whole run on about two screens */
+.b-list{padding:20px 44px 0}
+.b-row{display:grid;grid-template-columns:140px minmax(0,1fr) 300px;gap:30px;padding:26px 0;border-top:1px solid var(--hair)}
+.b-row .when{color:var(--dim);font-size:14px;font-variant-numeric:tabular-nums;padding-top:6px}
+.b-row .m-org{font-size:22px}
+.b-row .m-prose{font-size:15px;margin-top:10px}
+.b-row ul{margin:10px 0 0;padding-left:1.1rem;font-size:15px;color:var(--fg2)}
+.b-row ul b{color:var(--peach);font-weight:600}
+.phone .b-list{padding:10px 16px 0}
+.phone .b-row{display:block;padding:20px 0}
+.phone .b-row .plate{margin-top:14px}
+/* C, timeline strip: the landscape across the top with one minimum per role, placed by year */
+.c-strip{position:relative;height:300px;border-bottom:1px solid var(--hair);overflow:hidden}
+.c-strip canvas,.c-strip svg{position:absolute;inset:0;width:100%;height:100%}
+.c-strip .title{position:absolute;left:44px;bottom:26px;z-index:2}
+.c-strip h1{font:300 50px/1 var(--disp);letter-spacing:-.04em;margin:0 0 10px}
+.c-strip .read{margin:0;color:var(--fg2);font-size:15px}
+.c-strip .read b{color:var(--fg)}
+.c-strip .labs{position:absolute;inset:0;z-index:1}
+.lab{position:absolute;transform:translate(-50%,12px);font:600 14px/1.1 var(--text);white-space:nowrap;padding:3px 8px;border-radius:999px;background:var(--tab)}
+.lab i{font:italic 1.05em/1 var(--math);margin-right:4px;font-weight:400}
+.lab small{font:500 11px/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--fg2);margin-left:6px}
+.lab.hit{background:var(--coral);color:var(--bg)}.lab.hit small{color:var(--ink)}
+.c-strip .m-top{position:absolute;inset:0 0 auto;z-index:3}
+.c-axis{position:absolute;left:0;right:0;bottom:0;height:22px;z-index:1}
+.phone .c-strip{height:320px}.phone .c-strip h1{font-size:34px}.phone .c-strip .title{left:16px;bottom:20px}
+.c-role{display:grid;grid-template-columns:7fr 5fr;gap:40px;padding:44px;border-top:1px solid var(--hair);align-items:start}
+.c-role.flip{grid-template-columns:5fr 7fr}
+.c-role.flip .m-figwrap{order:-1}
+.phone .c-role,.phone .c-role.flip{display:block;padding:26px 16px}
+.phone .c-role .m-figwrap{margin-top:18px}
+</style>
+
+<div class="wrap">
+  <section class="intro">
+    <h1>Experience page options</h1>
+    <p>Experience moves to its own page, <b>/experience</b>, with room for each role: what the work was, a few facts, and a figure from the work itself where one exists. Three layouts below, each on desktop and phone, all with the same content. Teaching and education stay as compact rows at the end of the page.</p>
+    <p>The hydrate cage is real: your tool's output on the sI reference structure, 24 waters and 36 hydrogen bonds, drawn in 3D. The Lhoist curves are <b>illustrative</b>, the shape of a second-order sorbent model, because the pilot data belongs to Lhoist; the page would say so under the figure.</p>
+    <nav class="toc" aria-label="Options"><a href="#a">A Chapters</a><a href="#b">B Ledger</a><a href="#c">C Timeline strip</a><a href="#shared">Shared changes</a></nav>
+  </section>
+
+  <article class="opt" id="a">
+    <header><span class="tag">A</span><h2>Chapters</h2><p>Each role gets the project page's grammar: a rail on the left with the organisation, role, dates and two facts, and on the right a figure from the work with a short paragraph under it. Reads like three short project pages in a row.</p></header>
+    <div class="views">
+      <div><p class="cap">Desktop, 1440</p><div class="frame" data-mock="a"></div></div>
+      <div><p class="cap">Phone, 390</p><div class="frame" data-mock="a" data-phone></div></div>
+    </div>
+    <ul class="notes"><li><b>Reads as</b><span>Work told the same way as the projects; the strongest page for each role on its own.</span></li><li><b>Length</b><span>About four desktop screens; the longest of the three.</span></li><li><b>Cost</b><span>Teaching has no figure, so it stays a row rather than a chapter.</span></li></ul>
+  </article>
+
+  <article class="opt" id="b">
+    <header><span class="tag">B</span><h2>Ledger</h2><p>A dated column down the left, the role and a short paragraph in the middle, the key numbers as a short list, and a small figure plate on the right. Closest to a CV, with the figures as evidence beside each entry.</p></header>
+    <div class="views">
+      <div><p class="cap">Desktop, 1440</p><div class="frame" data-mock="b"></div></div>
+      <div><p class="cap">Phone, 390</p><div class="frame" data-mock="b" data-phone></div></div>
+    </div>
+    <ul class="notes"><li><b>Reads as</b><span>A scannable record: dates first, every role visible in about two screens.</span></li><li><b>Length</b><span>The shortest; the figures shrink to thumbnails.</span></li><li><b>Cost</b><span>The cage and the kinetics lose detail at plate size.</span></li></ul>
+  </article>
+
+  <article class="opt" id="c">
+    <header><span class="tag">C</span><h2>Timeline strip</h2><p>The page opens on the site's landscape, with one minimum per role placed by year from 2022 to 2026 and the solver arriving at the current one. Below, a chapter per role, figure and text alternating sides. Clicking a minimum jumps to its chapter.</p></header>
+    <div class="views">
+      <div><p class="cap">Desktop, 1440</p><div class="frame" data-mock="c"></div></div>
+      <div><p class="cap">Phone, 390</p><div class="frame" data-mock="c" data-phone></div></div>
+    </div>
+    <ul class="notes"><li><b>Reads as</b><span>The same world as home and the project pages: a career as a surface with four minima.</span></li><li><b>Length</b><span>About four screens, like A, with a strip on top.</span></li><li><b>Cost</b><span>The x-axis means time here and nothing on the other landscapes, a new rule to learn.</span></li></ul>
+  </article>
+
+  <section class="shared" id="shared">
+    <h2>Shared changes</h2>
+    <ul>
+      <li><b>Nav:</b> Experience opens the new page; home keeps its compact Experience, Teaching and Education list, with a link to the page.</li>
+      <li><b>HydrateTech</b> could also become its own project page, with the cage as its lead figure and the GitHub repository linked. Say if you want that; the experience entry would then link to it.</li>
+      <li><b>Lhoist</b>: nothing from Lhoist is shown. The text comes from your CV and the 2023 reference letter; the letter, the screenshots and the parameter notes stay private.</li>
+      <li><b>Footer:</b> every page now ends with "Last updated", the date of the latest commit.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+(function () {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const NS = 'http://www.w3.org/2000/svg';
+  const SINDAE_THUMB = 'data:image/webp;base64,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';
+  const GH = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7c-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>';
+
+  /* ---- content: from the CV, the 2023 reference letter and the hydrate repo's README ---- */
+  const ROLES = [
+    { id: 'capd', org: 'CAPD, Carnegie Mellon', role: 'Graduate Research Assistant', when: 'Jun – Aug 2026', where: 'Pittsburgh', year: 2026.5,
+      facts: [['JOSS', 'first-author software paper, submitted'], ['AIChE', 'shown in session 542, 2026']],
+      prose: 'At the Center for Advanced Process Decision-making I built and released SiNDAE, the open-source package for training neural networks inside differential-algebraic process models with nonlinear programming solvers. I wrote its documentation and examples, from process control to bioprocess kinetics, published through CI, and added solvers test-first.',
+      fig: 'sindae', link: null },
+    { id: 'hydrate', org: 'HydrateTech Laboratory, McGill', role: 'Computational Research Assistant', when: 'May – Jul 2024', where: 'Montreal', year: 2024.45,
+      facts: [['97%', 'cage detection accuracy across hydrate-host systems'], ['3', 'stages: ring, cup, cage']],
+      prose: 'Clathrate hydrates hold gases such as CO₂ in cages of hydrogen-bonded water. I rebuilt the GRADE cage-recognition method in Python: a depth-first search finds five- and six-membered water rings under geometric filters, rings join into cups, and cups pair into cages, partly formed ones included, read from any .xyz frame. The output fed entropy analysis for CO₂ sequestration studies.',
+      fig: 'cage', link: 'GitHub' },
+    { id: 'lhoist', org: 'Lhoist Group, Belgium', role: 'R&D Engineer Intern, Flue Gas Treatment', when: 'Jun – Jul 2022, Jun – Aug 2023', where: 'Nivelles', year: 2022.9,
+      facts: [['50%', 'lower model error against pilot reactor data'], ['2', 'summers in the global FGT team']],
+      prose: 'Two summers in the global Flue Gas Treatment team at Lhoist’s Business Innovation Center, where Sorbacal® sorbents are developed to scrub acid gases from industrial flue gas. I built kinetic models of a pilot scrubbing reactor as ordinary differential equations coupled to nonlinear parameter estimation, adding second-order kinetics, secondary reactions of HCl, SO₂ and CO₂ and temperature dependence, and put the model behind an Excel front-end so engineers could run it.',
+      fig: 'kinetics', link: null },
+  ];
+  const ROWS = [
+    ['Teaching', [['2026', 'Systems and Toolchains for AI in Engineering', 'Teaching Assistant, 06-763, Carnegie Mellon']]],
+    ['Education', [['2026', 'Carnegie Mellon University', 'MS, AI Engineering, Chemical Engineering'], ['2025', 'McGill University', 'BEng Chemical Engineering, minor in Applied AI']]],
+  ];
+
+  /* ---- the 6²5¹² cage from the tool's output (sI reference): oxygen positions in Å, hydrogen bonds ---- */
+  const O = [[3.01,0,3.02],[-1.42,-2.32,3.02],[-3.75,2.3,-0.78],[-3.01,0,3.02],[0,-4.59,-0.67],[2.32,1.42,-2.99],[0,4.59,-0.67],[3.75,-2.3,-0.78],[-2.32,1.42,-2.99],[2.26,3.81,0.72],[0,3.01,-2.99],[-1.42,2.32,3.02],[-2.26,3.81,0.72],[1.42,-2.32,3.02],[-4.59,0,0.7],[2.32,-1.42,-2.99],[-3.75,-2.3,-0.78],[3.75,2.3,-0.78],[0,-3.01,-2.99],[-2.32,-1.42,-2.99],[4.59,0,0.7],[-2.26,-3.81,0.72],[2.26,-3.81,0.72],[1.42,2.32,3.02]];
+  const E = [[0,13],[0,20],[0,23],[1,3],[1,13],[1,21],[2,8],[2,12],[2,14],[3,11],[3,14],[4,18],[4,21],[4,22],[5,10],[5,15],[5,17],[6,9],[6,10],[6,12],[7,15],[7,20],[7,22],[8,10],[8,19],[9,17],[9,23],[11,12],[11,23],[13,22],[14,16],[15,18],[16,19],[16,21],[17,20],[18,19]];
+  const cages = [];
+  function cage(host, w, h) {
+    const cv = document.createElement('canvas'); cv.width = w * 2; cv.height = h * 2; host.appendChild(cv);
+    const c = cv.getContext('2d'); let a = 0.6;
+    function draw() {
+      c.clearRect(0, 0, cv.width, cv.height);
+      const s = Math.min(cv.width, cv.height) / 12.5, cx = cv.width / 2, cy = cv.height / 2, ca = Math.cos(a), sa = Math.sin(a), tilt = 0.42, ct = Math.cos(tilt), st = Math.sin(tilt);
+      const P = O.map(([x, y, z]) => { const x1 = x * ca - y * sa, y1 = x * sa + y * ca; const y2 = y1 * ct - z * st, z2 = y1 * st + z * ct; return [cx + x1 * s, cy - z2 * s, y2]; });
+      E.map(([i, j]) => [i, j, (P[i][2] + P[j][2]) / 2]).sort((p, q) => q[2] - p[2]).forEach(([i, j, d]) => {
+        const f = (5 - d) / 10; c.strokeStyle = `rgba(243,237,255,${0.2 + 0.7 * f})`; c.lineWidth = 2 + 2.5 * f;
+        c.beginPath(); c.moveTo(P[i][0], P[i][1]); c.lineTo(P[j][0], P[j][1]); c.stroke();
+      });
+      P.map((p, i) => [p, i]).sort((p, q) => q[0][2] - p[0][2]).forEach(([p]) => {
+        const f = (5 - p[2]) / 10; c.fillStyle = `rgba(255,124,107,${0.35 + 0.65 * f})`; c.beginPath(); c.arc(p[0], p[1], 5 + 5 * f, 0, 7); c.fill();
+      });
+    }
+    cages.push(() => { a += 0.006; draw(); });
+    draw();
+  }
+  if (!reduce) (function spin() { cages.forEach(f => f()); requestAnimationFrame(spin); })();
+
+  /* ---- illustrative: conversion against stoichiometric ratio for a second-order sorbent model, A + νB, fixed residence ---- */
+  function kinetics(host, w, h) {
+    const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', `0 0 ${w} ${h}`); host.appendChild(svg);
+    const mk = (n, a, t) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (t) e.textContent = t; svg.appendChild(e); return e; };
+    const L = 50, R = w - 20, T = 20, B = h - 40, X = sr => L + sr / 3 * (R - L), Y = x => B - x * (B - T);
+    [0, .25, .5, .75, 1].forEach(v => { mk('line', { x1: L, x2: R, y1: Y(v), y2: Y(v), stroke: 'rgba(243,237,255,.1)' }); mk('text', { x: L - 8, y: Y(v) + 4, 'text-anchor': 'end', 'font-size': 12, fill: '#B9AAE8' }, `${v * 100}%`); });
+    [0, 1, 2, 3].forEach(v => mk('text', { x: X(v), y: B + 18, 'text-anchor': 'middle', 'font-size': 12, fill: '#B9AAE8' }, String(v)));
+    mk('text', { x: R, y: h - 6, 'text-anchor': 'end', 'font-size': 12, fill: '#B9AAE8' }, 'stoichiometric ratio');
+    mk('text', { x: L, y: T - 6, 'font-size': 12, fill: '#B9AAE8' }, 'acid gas removed');
+    const conv = (sr, kt) => { let a = 1, b = sr; const n = 400, dt = kt / n; for (let i = 0; i < n; i++) { const r = a * b; a -= r * dt; b -= r * dt; if (a < 0) a = 0; if (b < 0) b = 0; } return 1 - a; };
+    /* labels where the curves are furthest apart: HCl above its steep rise, SO₂ below its slower one */
+    [['HCl', 6, '#FF7C6B', 2.6, .55, -12, 'end'], ['SO₂', 1.6, '#F3EDFF', 1.8, 1.25, 22, 'start']].forEach(([n, kt, col, wd, at, dy, anchor]) => {
+      const pts = []; for (let sr = 0; sr <= 3.0001; sr += 0.05) pts.push(`${X(sr).toFixed(1)},${Y(conv(sr, kt)).toFixed(1)}`);
+      mk('polyline', { points: pts.join(' '), fill: 'none', stroke: col, 'stroke-width': wd });
+      mk('text', { x: X(at) + (anchor === 'end' ? -6 : 6), y: Y(conv(at, kt)) + dy, 'text-anchor': anchor, 'font-size': 13, 'font-weight': 700, fill: col }, n);
+    });
+  }
+
+  /* ---- shared blocks ---- */
+  const run = r => `<ul class="m-run">${r.facts.map(([v, l]) => `<li><b>${v}</b><span>${l}</span></li>`).join('')}</ul>`;
+  const meta = r => `<p class="m-meta"><span>${r.when}</span><span>${r.where}</span></p>`;
+  function figure(r, phone, small) {
+    if (r.fig === 'sindae') return `<a class="m-card"><img src="${SINDAE_THUMB}" alt=""><div><b>SiNDAE</b><span>Neural networks inside differential-algebraic process models, trained as one nonlinear program.</span><em>Project page</em></div></a>`;
+    const id = r.fig + Math.random().toString(36).slice(2, 7);
+    const cap = r.fig === 'cage'
+      ? `<p class="m-cap">A 6²5¹² cage, 24 waters and 36 hydrogen bonds, as the tool found it in the sI reference structure.<span class="src">Output of the cage finder, CHEE-494-hydrate-cage-research-project.</span></p>`
+      : `<p class="m-cap"><span class="ill">Illustrative.</span> The shape of a second-order sorbent model: more sorbent removes more acid gas, HCl faster than SO₂.<span class="src">Not Lhoist data; the pilot results stay private.</span></p>`;
+    return `<div class="m-fig" data-draw="${r.fig}" data-id="${id}" data-small="${small ? 1 : ''}"></div>${small ? '' : cap}`;
+  }
+  const rows = () => `<div class="m-rows">${ROWS.map(([g, items]) => `<h3>${g}</h3>${items.map(([y, t, d]) => `<div class="m-item"><em>${y}</em><div><b>${t}</b><span>${d}</span></div></div>`).join('')}`).join('')}</div>`;
+  const top = phone => `<div class="m-top"><div class="m-name">Nicolas Smits</div><div class="m-nav">${phone ? '<span>Research</span><span class="on">Experience</span><span>CV</span>' : '<span>Research</span><span>Publications</span><span class="on">Experience</span><span>Skills</span><span>CV</span><span>Contact</span>'}</div></div>`;
+  const foot = `<div class="m-foot"><h2>Contact</h2><p>Last updated 19 November 2026</p></div>`;
+  const head = `<div class="m-head"><h1>Experience</h1><p>Research and industry roles, newest first, with the work each one produced.</p></div>`;
+  const pill = r => r.link ? `<span class="m-pill">${GH}GitHub</span>` : '';
+
+  const LAYOUT = {
+    a: phone => top(phone) + head + ROLES.map(r => `<section class="a-role"><div><h2 class="m-org">${r.org}</h2><p class="m-role">${r.role}</p>${meta(r)}${run(r)}${pill(r)}</div><div class="m-figwrap">${figure(r, phone)}<p class="m-prose">${r.prose}</p></div></section>`).join('') + rows() + foot,
+    b: phone => top(phone) + head + `<div class="b-list">${ROLES.map(r => `<section class="b-row"><div class="when">${r.when.replace(', ', '<br>')}</div><div><h2 class="m-org">${r.org}</h2><p class="m-role">${r.role}, ${r.where}</p><p class="m-prose">${r.prose}</p><ul>${r.facts.map(([v, l]) => `<li><b>${v}</b> ${l}</li>`).join('')}</ul>${pill(r)}</div><div class="plate">${figure(r, phone, true)}</div></section>`).join('')}</div>` + rows() + foot,
+    c: phone => `<div class="c-strip"><canvas></canvas><svg></svg><div class="labs"></div>${top(phone)}<div class="title"><h1>Experience</h1><p class="read">Converged in <b>47</b> iterations on <b>CAPD</b>, 2026.</p></div></div>` + ROLES.map((r, i) => `<section class="c-role${i % 2 ? ' flip' : ''}"><div><h2 class="m-org">${r.org}</h2><p class="m-role">${r.role}</p>${meta(r)}<p class="m-prose">${r.prose}</p>${run(r)}${pill(r)}</div><div class="m-figwrap">${figure(r, phone)}</div></section>`).join('') + rows() + foot,
+  };
+
+  /* ---- C's strip: the site's bowls function, one minimum per role placed by year ---- */
+  const STOPS = [[0, [13, 7, 34]], [.3, [42, 22, 112]], [.56, [112, 68, 232]], [.8, [238, 107, 96]], [1, [255, 214, 191]]];
+  const ramp = v => { for (let i = 1; i < STOPS.length; i++) if (v <= STOPS[i][0]) { const [a, A] = STOPS[i - 1], [b, B] = STOPS[i], k = (v - a) / (b - a); return A.map((q, j) => q + (B[j] - q) * k); } return STOPS[4][1]; };
+  function strip(root, phone) {
+    const W = phone ? 390 : 1440, H = phone ? 320 : 300, cv = root.querySelector('canvas'), svg = root.querySelector('svg'), labs = root.querySelector('.labs');
+    const yr = y => (phone ? .1 + (y - 2022) / 4.6 * .8 : .3 + (y - 2022) / 4.6 * .62) * W / H;
+    const mins = [{ n: 'Lhoist', t: '2022', y: 2022.5, yy: phone ? .3 : .3 }, { n: 'Lhoist', t: '2023', y: 2023.5, yy: phone ? .48 : .55 }, { n: 'HydrateTech', t: '2024', y: 2024.45, yy: phone ? .3 : .3 }, { n: 'CAPD', t: '2026', y: 2026.4, yy: phone ? .48 : .5, hit: 1 }]
+      .map(m => ({ ...m, x: yr(m.y) }));
+    const s = phone ? .085 : .12;
+    const F = (x, y) => { let f = -.25 + .12 * Math.sin(2.1 * x + .6) * Math.cos(1.7 * y - .4) + .08 * Math.sin(3.3 * y + 1.2 * x + 1); for (const m of mins) f -= .8 * Math.exp(-((x - m.x) ** 2 + (y - m.yy) ** 2) / (2 * s * s)); f -= .7 * Math.exp(-((x - .2 * W / H) ** 2 + (y - .9) ** 2) / (2 * .3 * .3)); return (f + .95) / 1.2; };
+    const sc = 0.6, w = Math.round(W * sc), h = Math.round(H * sc); cv.width = w; cv.height = h;
+    const c = cv.getContext('2d'), im = c.createImageData(w, h), band = new Uint8Array(w * h);
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) band[j * w + i] = Math.min(12, Math.floor(Math.max(0, Math.min(1, F((i + .5) / h, (j + .5) / h))) * 13));
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { const k = j * w + i, b = band[k], col = ramp(b / 12), e = (i < w - 1 && band[k + 1] !== b) || (j < h - 1 && band[k + w] !== b) ? .74 : 1; im.data[k * 4] = col[0] * e; im.data[k * 4 + 1] = col[1] * e; im.data[k * 4 + 2] = col[2] * e; im.data[k * 4 + 3] = 255; }
+    c.putImageData(im, 0, 0);
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    mins.forEach(m => { const a = document.createElement('span'); a.className = 'lab' + (m.hit ? ' hit' : ''); a.innerHTML = `<i>x*</i>${m.n}<small>${m.t}</small>`; a.style.left = Math.max(70, Math.min(W - 60, m.x * H)) + 'px'; a.style.top = m.yy * H + 'px'; labs.appendChild(a); });
+    /* a short arrival into CAPD, drawn as the site draws a converged descent */
+    const end = mins[3], start = [end.x - (phone ? .16 : .3), end.yy - .32];
+    const path = []; for (let k = 0; k <= 30; k++) { const t = 1 - Math.pow(1 - k / 30, 2.2); path.push([start[0] + (end.x - start[0]) * t + .02 * Math.sin(k * .7) * (1 - t), start[1] + (end.yy - start[1]) * t]); }
+    const p = document.createElementNS(NS, 'polyline'); p.setAttribute('points', path.map(q => `${q[0] * H},${q[1] * H}`).join(' ')); p.setAttribute('fill', 'none'); p.setAttribute('stroke', '#F3EDFF'); p.setAttribute('stroke-width', '1.8'); svg.appendChild(p);
+    [[start, 5, '#F3EDFF', 1.8], [[end.x, end.yy], 9, '#FF7C6B', 2.4]].forEach(([q, r, col, sw]) => { const e = document.createElementNS(NS, 'circle'); e.setAttribute('cx', q[0] * H); e.setAttribute('cy', q[1] * H); e.setAttribute('r', r); e.setAttribute('fill', 'none'); e.setAttribute('stroke', col); e.setAttribute('stroke-width', sw); svg.appendChild(e); });
+    /* the year axis along the strip's foot */
+    const ax = document.createElementNS(NS, 'g');
+    [2022, 2023, 2024, 2025, 2026].forEach(y => { const t = document.createElementNS(NS, 'text'); t.setAttribute('x', yr(y + .5) * H); t.setAttribute('y', H - 8); t.setAttribute('text-anchor', 'middle'); t.setAttribute('font-size', phone ? 11 : 12); t.setAttribute('fill', 'rgba(243,237,255,.55)'); t.textContent = y; ax.appendChild(t); });
+    if (!phone) svg.appendChild(ax);
+  }
+
+  /* ---- build ---- */
+  document.querySelectorAll('[data-mock]').forEach(frame => {
+    const phone = frame.hasAttribute('data-phone'), W = phone ? 390 : 1440, s = document.createElement('div');
+    s.className = 'screen' + (phone ? ' phone' : ''); s.dataset.w = W; s.style.width = W + 'px';
+    s.innerHTML = LAYOUT[frame.dataset.mock](phone); frame.appendChild(s);
+    s.querySelectorAll('[data-draw]').forEach(host => {
+      const small = !!host.dataset.small, w = small ? 300 : phone ? 358 : 820, h = small ? 190 : phone ? 240 : 440;
+      if (host.dataset.draw === 'cage') cage(host, w, h); else kinetics(host, w, h);
+    });
+    const st = s.querySelector('.c-strip'); if (st) strip(st, phone);
+  });
+  function fit() { document.querySelectorAll('.screen').forEach(s => { s.style.zoom = s.parentElement.clientWidth / +s.dataset.w; }); }
+  fit(); let lw = innerWidth; addEventListener('resize', () => { if (innerWidth !== lw) { lw = innerWidth; fit(); } });
+})();
+</script>

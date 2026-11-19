@@ -1,3 +1,3 @@
 # Publications and talks. Only Nicolas's own work: never list the SiNDAE method paper (Lueg et al., arXiv 2504.04665) here.
-- { id: sindae-joss, year: "2026", title: "SiNDAE: the simultaneous neural DAE training Python package", detail: "Smits, Lueg, Alves, Laird, Kitchin, Biegler. Journal of Open Source Software", status: pending, href: /projects/sindae }
+- { id: sindae-joss, year: "2026", title: "SiNDAE: the simultaneous neural DAE training Python package", detail: "Smits, Lueg, Alves, Laird, Kitchin, Biegler. Journal of Open Source Software", status: submitted, href: /projects/sindae }
 - { id: escape37, year: "2027", title: "Graph RL for resilient supply chain network design", detail: "ESCAPE 37 abstract, Trondheim, first author", status: accepted, href: /projects/thesis }

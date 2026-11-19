@@ -1,6 +1,7 @@
 import { el, theme, mountAll } from './dom';
 
-/* One value scale with a mark per model. Numbers: FIFA repo notebook (test RMSE); sepsis report, Table 1. */
+/* One value scale with a mark per model. Numbers: FIFA repo notebook (test RMSE); sepsis report, Table 1;
+   electricity forecasting report, Table 1 (ablation). */
 type Mark = { v: number; label: string; hi?: boolean; dim?: boolean };
 const DATA: Record<string, { unit: string; min: number; max: number; ticks: number; marks: Mark[] }> = {
   fifa: { unit: 'test RMSE, rating points', min: 1, max: 2.6, ticks: 8, marks: [
@@ -11,6 +12,9 @@ const DATA: Record<string, { unit: string; min: number; max: number; ticks: numb
     { v: 0.8089, label: 'DQN' }, { v: 0.8056, label: 'Double DQN' }, { v: 0.8005, label: 'Noisy DQN' },
     { v: 0.7868, label: 'Multi-step DQN', dim: true }, { v: 0.7813, label: 'Distributional DQN', dim: true },
     { v: 0.7782, label: 'Rainbow DQN', dim: true }] },
+  electricity: { unit: 'test RMSE, $/MWh', min: 16, max: 30, ticks: 7, marks: [
+    { v: 18.07, label: 'Full CNN-LSTM', hi: true }, { v: 20.6, label: 'No time encoding' }, { v: 21.67, label: 'No convolutions' },
+    { v: 22.31, label: 'Neither' }, { v: 28.66, label: 'No LSTM after concatenation', dim: true }] },
 };
 
 mountAll('[data-fig="scale"]', root => {

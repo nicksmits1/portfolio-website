@@ -2,6 +2,12 @@
 import { ICON } from '../lib/icons';
 import { cvUrl } from '../lib/assets';
 import { profile } from '../lib/site';
+import { execSync } from 'node:child_process';
+
+/* Last updated: the date of the latest commit, read at build time; the build date if git is unavailable. */
+let stamp = new Date();
+try { stamp = new Date(execSync('git log -1 --format=%cI', { encoding: 'utf8' }).trim()); } catch {}
+const updated = stamp.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/New_York' });
 ---
 <footer class="foot" id="contact">
   <div class="wrap">
@@ -16,6 +22,7 @@ import { profile } from '../lib/site';
         : <span class="tbd" aria-label="ORCID, coming soon" title="ORCID, coming soon" set:html={ICON.orcid} />}
       <a class="lb" href={cvUrl}><Fragment set:html={ICON.file} />CV (PDF)</a>
     </div>
+    <p class="fine">Last updated <time datetime={stamp.toISOString().slice(0, 10)}>{updated}</time></p>
   </div>
 </footer>
 <script>

@@ -13,6 +13,8 @@ import System from '../../components/figures/System.astro';
 import Flow from '../../components/figures/Flow.astro';
 import Ladder from '../../components/figures/Ladder.astro';
 import Scale from '../../components/figures/Scale.astro';
+import Trade from '../../components/figures/Trade.astro';
+import Forecast from '../../components/figures/Forecast.astro';
 import Img from '../../components/figures/Img.astro';
 import Grid from '../../components/figures/Grid.astro';
 import Video from '../../components/figures/Video.astro';
@@ -57,6 +59,8 @@ const banner = d.banner ? image(p.id, d.banner.src) : null;
             {it.type === 'fig' && it.f.kind === 'flow' && <Flow />}
             {it.type === 'fig' && it.f.kind === 'ladder' && <Ladder />}
             {it.type === 'fig' && it.f.kind === 'scale' && <Scale data={it.f.data!} caption={it.f.caption} />}
+            {it.type === 'fig' && it.f.kind === 'trade' && <Trade />}
+            {it.type === 'fig' && it.f.kind === 'forecast' && <Forecast />}
             {it.type === 'fig' && it.f.kind === 'img' && <Img owner={p.id} src={it.f.src!} alt={it.f.alt!} caption={it.f.caption} source={it.f.source} plate={it.f.plate} narrow={it.f.narrow} />}
             {it.type === 'fig' && it.f.kind === 'grid' && <Grid owner={p.id} items={it.f.items!} caption={it.f.caption} source={it.f.source} />}
             {it.type === 'fig' && it.f.kind === 'video' && <Video owner={p.id} src={it.f.src!} poster={it.f.poster} alt={it.f.alt!} fine={it.f.fine} />}

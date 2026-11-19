@@ -199,6 +199,8 @@ a.lab:hover { background: var(--fg); color: var(--ink); }
 .strip h1 { font: 300 clamp(1.75rem, 4.2vw, 3.1rem)/1 var(--disp); letter-spacing: -.04em; margin: 0 0 12px; text-wrap: balance; }
 .strip .where { color: var(--fg2); font-size: .95rem; margin: 0; display: flex; flex-wrap: wrap; column-gap: 1.25em; }
 .strip .read { pointer-events: auto; font-size: .875rem; margin-top: 8px; }
+/* phone: the strip grows with a long title or credit line; its minima keep the band above it (strip.ts) */
+@media (max-width: 599px) { .strip { height: auto; min-height: 300px; display: flex; flex-direction: column; justify-content: flex-end; padding-top: 140px; } .strip .title { position: relative; left: auto; right: auto; bottom: auto; margin: 0 var(--gutter) 26px; } }
 .cols { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 28px; align-items: start; padding-block: 48px 56px; }
 .rail { grid-column: 1 / 5; position: sticky; top: 24px; min-width: 0; padding-right: 8px; }
 .figs { grid-column: 5 / 13; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); --gap: 48px; gap: var(--gap); }
@@ -320,6 +322,7 @@ dialog.pdf iframe { display: block; width: 100%; height: calc(100% - 53px); bord
 .fg[data-fig="scale"] > svg { max-width: 660px; }
 
 /* ---- animated figures: step names, legends, extension tags, the amortised-cost schematic ---- */
+.trade-read { display: flex; flex-wrap: wrap; gap: 4px 22px; }
 .step { margin: 12px 0 0; min-height: 1.4em; font: 500 .95rem/1.4 var(--text); color: var(--fg); }
 .legend { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 16px; margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--hair); font-size: .875rem; color: var(--fg2); }
 .legend dt { color: var(--fg); font-size: 1rem; line-height: 1.4; }
@@ -342,3 +345,41 @@ dialog.pdf iframe { display: block; width: 100%; height: calc(100% - 53px); bord
 .fg[data-fig="amort"] .po-d { fill: var(--coral); }
 .fg[data-fig="amort"] .se-l { font: 600 12px var(--text); fill: var(--fg); }
 .fg[data-fig="amort"] .po-l { font: 600 12px var(--text); fill: var(--coral); }
+
+/* ---- experience page: one chapter per role, the project page's rail and column ---- */
+.more { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; font: 600 .875rem/1 var(--text); color: var(--coral); text-decoration: none; }
+.more svg { width: 14px; height: 14px; }
+.more:hover { text-decoration: underline; }
+.xp-head { position: relative; padding-top: clamp(96px, 12vw, 140px); padding-bottom: clamp(28px, 4vw, 44px); border-bottom: 1px solid var(--hair); }
+.xp-head h1 { font: 300 clamp(1.75rem, 4.2vw, 3.1rem)/1 var(--disp); letter-spacing: -.045em; margin: 0 0 14px; }
+.xp-head p { margin: 0; max-width: 56ch; color: var(--fg2); font-size: 1.12rem; }
+.role { border-bottom: 1px solid var(--hair); scroll-margin-top: 16px; }
+.role .cols { padding-block: clamp(36px, 5vw, 60px); }
+.org-logo { display: flex; align-items: center; justify-content: center; height: 112px; background: #fff; border-radius: 12px; padding: 18px 24px; box-shadow: 0 0 0 1px var(--hair2); }
+.org-logo img { display: block; height: 100%; width: auto; max-width: 100%; object-fit: contain; }
+.role .rail .chips { flex-wrap: wrap; overflow: visible; }
+.role .rail .chips span { font: 500 .875rem/1 var(--text); padding: 8px 12px; border: 1px solid var(--hair2); border-radius: 999px; color: var(--fg2); white-space: nowrap; }
+@media (max-width: 899px) { .org-logo { height: 96px; max-width: 420px; } }
+.org { font: 400 1.6rem/1.15 var(--disp); letter-spacing: -.035em; margin: 22px 0 0; text-wrap: balance; }
+.job { font-weight: 600; margin: 8px 0 0; font-size: 1.06rem; }
+.when { display: flex; flex-wrap: wrap; column-gap: 1.2em; color: var(--fg2); font-size: .95rem; margin: 4px 0 0; }
+.role .figs { --gap: 22px; }
+.role-line { margin: 0 0 6px; font-size: 1.12rem; line-height: 1.55; max-width: 62ch; text-wrap: pretty; }
+.points { margin: 10px 0 0; padding: 0 0 0 1.1em; max-width: 66ch; display: grid; gap: 10px; }
+.points li { line-height: 1.6; padding-left: .2em; }
+.points li::marker { color: var(--dim); }
+.xp-rows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 56px; }
+@media (max-width: 899px) { .xp-rows { grid-template-columns: minmax(0, 1fr); } .role .figs { margin-top: 26px; } }
+
+/* hydrate cage and sorbent kinetics figures */
+.cagebox { position: relative; aspect-ratio: 16 / 10; }
+@media (max-width: 599px) { .cagebox { aspect-ratio: 1; } }
+.cagebox canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; touch-action: pan-y; }
+.cagebox canvas:active { cursor: grabbing; }
+.keys { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .82rem; color: var(--fg2); }
+.keys li { display: inline-flex; align-items: center; gap: 7px; }
+.keys i { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.keys .k-o { background: var(--fg); } .keys .k-h { background: var(--fg2); width: 7px; height: 7px; } .keys .k-g { background: var(--peach); }
+.keys .k-hb { width: 16px; height: 0; border-radius: 0; border-top: 2px dashed var(--fg2); }
+.fg[data-fig="kinetics"] > svg { max-width: 680px; }
+.fine .ill { color: var(--coral); font-weight: 600; }

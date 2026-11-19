@@ -6,7 +6,7 @@ import { z } from 'astro/zod';
    the body holds the line, ## Facts (evidence notes), ## Sections (the prose) and ## Visual (notes for agents). */
 const link = z.object({ label: z.string(), href: z.string(), icon: z.enum(['gh', 'paper', 'file']), lead: z.boolean().optional() });
 const figure = z.object({
-  kind: z.enum(['net', 'policy', 'amort', 'dqn', 'system', 'flow', 'ladder', 'scale', 'img', 'grid', 'video']),
+  kind: z.enum(['net', 'policy', 'amort', 'dqn', 'system', 'flow', 'ladder', 'scale', 'trade', 'forecast', 'img', 'grid', 'video']),
   src: z.string().optional(), poster: z.string().optional(), alt: z.string().optional(),
   caption: z.string().optional(), source: z.string().optional(), fine: z.string().optional(),
   plate: z.enum(['white', 'dash', 'shot']).optional(), narrow: z.boolean().optional(), data: z.string().optional(),
@@ -44,9 +44,20 @@ const timeline = defineCollection({
   loader: file('content/data/timeline.yaml'),
   schema: z.object({ group: z.enum(['Experience', 'Teaching', 'Education']), years: z.string(), title: z.string(), detail: z.string() }),
 });
+const roles = defineCollection({
+  loader: file('content/data/roles.yaml'),
+  schema: z.object({
+    org: z.string(), role: z.string(), when: z.string(), where: z.string(),
+    logo: z.object({ owner: z.string(), file: z.string(), alt: z.string() }),
+    line: z.string(), figure: z.enum(['flow', 'cage', 'kinetics']), points: z.array(z.string()),
+    facts: z.array(z.tuple([z.string(), z.string()])).max(4), tools: z.array(z.string()).default([]),
+    badge: z.object({ owner: z.string(), logo: z.string(), alt: z.string(), title: z.string(), text: z.string() }).optional(),
+    links: z.array(z.object({ label: z.string(), href: z.string(), icon: z.enum(['gh', 'paper', 'file', 'next']) })).default([]),
+  }),
+});
 const skills = defineCollection({
   loader: file('content/data/skills.yaml'),
   schema: z.object({ name: z.string(), skills: z.array(z.string()) }),
 });
 
-export const collections = { projects, latest, publications, timeline, skills };
+export const collections = { projects, latest, publications, timeline, roles, skills };
