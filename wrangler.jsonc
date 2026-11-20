@@ -8,6 +8,11 @@
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page"
   },
+  // the domain is registered on Cloudflare; each deploy attaches it to this Worker and keeps its certificate
+  "routes": [
+    { "pattern": "nicolas-smits.com", "custom_domain": true },
+    { "pattern": "www.nicolas-smits.com", "custom_domain": true }
+  ],
   // branch builds run `npx wrangler preview`, which refuses to start without this block (it may stay empty)
   "previews": {}
 }
