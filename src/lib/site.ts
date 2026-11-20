@@ -48,6 +48,6 @@ type Profile = { name: string; focus: string; email: string; linkedin: string; g
 export const profile = load(readFileSync('content/data/profile.yaml', 'utf8')) as Profile;
 
 /* Research topics in the order content/data/topics.yaml lists them (the file loader would sort them by id). */
-type TopicRow = { id: string; name: string; wide: [number, number]; tall: [number, number] };
+type TopicRow = { id: string; name: string; short?: string; wide: [number, number]; tall: [number, number] };
 export const TOPICS = load(readFileSync('content/data/topics.yaml', 'utf8')) as TopicRow[];
 for (const t of TOPICS) if (!t.id || !t.name || t.wide?.length !== 2 || t.tall?.length !== 2) throw new Error(`content/data/topics.yaml: ${t.id ?? 'an entry'} needs id, name, wide [x, y] and tall [x, y]`);

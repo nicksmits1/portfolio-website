@@ -7,3 +7,8 @@ export const thumb = (id: string) => {
   try { img = image(id, 'thumb.webp'); } catch { throw new Error(`No thumbnail for ${id}: add content/assets/${id}/thumb.webp`); }
   return `<img class="th" src="${img.src}" width="${img.width}" height="${img.height}" alt="" loading="lazy" decoding="async">`;
 };
+
+/* Its card image for /research: a larger crop of the same material (content/assets/<id>/card.webp, 1050 by 600). */
+export const card = (id: string) => {
+  try { return image(id, 'card.webp'); } catch { throw new Error(`No card image for ${id}: add content/assets/${id}/card.webp (1050 by 600)`); }
+};

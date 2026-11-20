@@ -256,6 +256,7 @@ Precise and warm: hairline restraint everywhere, with coral and peach doing the 
 - **State:** a hit label (where the solver converged) turns coral; off labels fade to 30%; link labels invert to Lavender White on hover.
 
 ### Rows and Cards
+- **Research cards:** two columns (one below 760 px), each card the project's own figure at 7:4 (`card.webp`, 1050 × 600, a larger crop of the thumbnail's source) on a 10 px radius, then a Card Title at 1.35 rem, the where-line, the one-line summary, the two leading rail facts in peach, and topic tags. The figure's outline and the title turn coral on hover. Topic chips above filter them; /research#<topic> opens filtered.
 - **Project rows:** thumbnail cropped from the project's own figure, a Card Title that turns coral on hover, Lavender Mist summary, faint hairline between rows. No card backgrounds.
 - **Reel cards:** 300 px text-only cards on the translucent reel, separated by a small contour-minimum mark (violet ring, mist ring, coral dot).
 - **Rail facts:** numbers in Unbounded 1.5 rem Peach over a 0.82 rem Lavender Mist label, each under a hairline, two per row.
@@ -281,10 +282,11 @@ The banded contour map with a click-to-descend solver and a live iteration reado
 **The Calm Basin Rule.** Text that sits on a landscape gets a flat floor of the darkest band under it, never an overlay card. Labels and tabs (ink pills) are the only things laid over the map.
 
 ### Character-grid header (list pages)
-Publications and Experience open on a 320 px header in place of the landscape strip: a canvas of JetBrains Mono cells coloured from the 13-band ramp, after ascii-magic's character renderings (`src/scripts/glyphs.ts`, `src/components/GlyphHead.astro`). The name tab and nav sit on ink as everywhere; the title and its line stay HTML on a calm patch the grid leaves under them. Below 600 px the header grows, the title moves to the bottom, and the drawing fits above it.
+Research, Publications and Experience open on a 320 px header in place of the landscape strip: a canvas of JetBrains Mono cells coloured from the 13-band ramp, after ascii-magic's character renderings (`src/scripts/glyphs.ts`, `src/components/GlyphHead.astro`). The name tab and nav sit on ink as everywhere; the title and its line stay HTML on a calm patch the grid leaves under them. Below 600 px the header grows, the title moves to the bottom, and the drawing fits above it.
+- **Research, character landscape:** the home landscape's topic minima, one basin per topic right of the title (above it on phones), shaded in the ten-step character ramp. A descent from a basin's rim every 6.5 s takes each topic in turn; the hit topic turns coral and the readout names it, as on home. Labels carry the topic's project count; phones use the topic's short name.
 - **Publications, scenario tree:** a first-stage decision x branching on uncertainty into recourse stages (3, 2, 2 on desktop, 3, 2 on phones), edges drawn in slope characters. A sampled scenario every half second runs root to leaf with a coral tail and peach head; edges brighten where scenarios have just passed. Each leaf's bar sits on the leaf's own row and converges to p(ξ). Faint annotations: branch probabilities, and x, y₁, y₂, ξ, p(ξ) in STIX italic along the bottom.
 - **Experience, strata:** each Experience and Education entry from `timeline.yaml` a sediment layer, oldest at the bottom, in its own shade character and band colour, labelled at the right edge with its short name and years. The newest layer (the PhD) is still being laid: coral characters fall and settle on it.
-- **Reduced motion:** the tree with four highlighted scenarios and bars at the exact probabilities; the strata with the top layer part laid.
+- **Reduced motion:** one converged descent on the landscape; the tree with four highlighted scenarios and bars at the exact probabilities; the strata with the top layer part laid.
 
 ## Do's and Don'ts
 

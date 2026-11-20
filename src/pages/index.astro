@@ -68,7 +68,7 @@ const [first, ...rest] = profile.name.split(' ');
 
   <main id="main" class="wrap">
     <section class="block" id="research" aria-labelledby="research-h">
-      <h2 class="sec-h" id="research-h">Research and projects</h2>
+      <h2 class="sec-h" id="research-h"><a href="/research">Research and projects<Fragment set:html={ICON.next} /></a></h2>
       <div class="chips topics" role="group" aria-label="Show one topic" data-topic-chips>
         <button type="button" data-topic="" aria-pressed="true">All<small>{list.length}</small></button>
         {topics.map(t => <button type="button" data-topic={t.id} aria-pressed="false">{t.name}<small>{t.n}</small></button>)}

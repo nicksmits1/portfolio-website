@@ -5,3 +5,4 @@ Sepsis DQN assets.
 
 - `report-p1.webp`: first page of the PDF, rendered with pdftoppm on 2026-11-17 for the further-reading preview.
 - `thumb.webp`: the home row and previous / next thumbnail, cropped from `returns-over-training.webp` (scaled to cover, centre crop), 336 by 192 px, WebP q72.
+- `card.webp`: the /research card, cropped from `returns-over-training.webp` (scaled to cover, centre crop; upscaled from 585 px), 1050 by 600 px, WebP q78.

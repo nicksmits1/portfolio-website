@@ -4,7 +4,8 @@
 # its width and height. Keep them clear of the name block's flat basin, lower left on desktop and lower half on phones.
 # The hero's alternate functions (Himmelblau, Rosenbrock, ripple field) have four minimum slots, filled by the topics in
 # this order; with more or fewer than four topics the formula tab offers only the bowls.
-- { id: rl, name: Reinforcement learning, wide: [.2, .13], tall: [.3, .08] }
-- { id: sciml, name: Scientific ML, wide: [.39, .17], tall: [.72, .18] }
-- { id: genai, name: GenAI, wide: [.64, .3], tall: [.3, .3] }
-- { id: swe, name: Software engineering, wide: [.84, .58], tall: [.7, .41] }
+# short: the label on narrow screens (the /research header on phones).
+- { id: rl, name: Reinforcement learning, short: RL, wide: [.2, .13], tall: [.3, .08] }
+- { id: sciml, name: Scientific ML, short: SciML, wide: [.39, .17], tall: [.72, .18] }
+- { id: genai, name: GenAI, short: GenAI, wide: [.64, .3], tall: [.3, .3] }
+- { id: swe, name: Software engineering, short: SWE, wide: [.84, .58], tall: [.7, .41] }

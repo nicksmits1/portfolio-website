@@ -33,7 +33,7 @@ Project material lives in sibling directories (`../rl-sc-design`, `../CMU/SiNDAE
 1. Read the source project and write `content/projects/<id>.md` in the shape of the existing seven.
 2. Pick the lead visual from the project's own mathematics, data or system. A figure that could illustrate a different project is the wrong figure. A new kind of figure is a new component in `src/components/figures/` with a reduced-motion still.
 3. Copy real assets into `content/assets/<id>/` and record their provenance in its README. Anything illustrative is labelled as illustrative on the page until a real export replaces it.
-4. Give it a place in `ORDER` (`src/lib/site.ts`), a minimum in every skills map (`src/scripts/maps.ts`), `topics` in its frontmatter (ids from `content/data/topics.yaml`, home topic first) and a thumbnail cropped from its own figure (`content/assets/<id>/thumb.webp`, 336 by 192); the build stops until all four exist.
+4. Give it a place in `ORDER` (`src/lib/site.ts`), a minimum in every skills map (`src/scripts/maps.ts`), `topics` in its frontmatter (ids from `content/data/topics.yaml`, home topic first) a thumbnail cropped from its own figure (`content/assets/<id>/thumb.webp`, 336 by 192) and a larger crop of the same for its /research card (`card.webp`, 1050 by 600); the build stops until all five exist.
 5. One line of prose, then the visual, then at most four facts. A sentence that restates the visual or another page gets deleted.
 
 ## Writing

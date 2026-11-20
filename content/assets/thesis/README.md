@@ -7,3 +7,4 @@ Thesis assets.
 - `poster-p1.webp`: first page of the PDF, rendered with pdftoppm on 2026-11-17 for the further-reading preview.
 - `thumb.webp`: the home row and previous / next thumbnail, cropped from `design-value-by-size.webp` (scaled to cover, centre crop), 336 by 192 px, WebP q72.
 - `escape37-abstract.pdf`: the submitted ESCAPE 37 abstract (`../rl-sc-design/paper/escape37_abstract.pdf`, built 2026-10-16), rewritten with qpdf to drop document metadata. Hosted at Nicolas's request (2026-11-19); shown on /publications. `escape37-abstract-p1.webp`: its first page, pdftoppm at 110 dpi, WebP q82 at 600 px.
+- `card.webp`: the /research card, cropped from `design-value-by-size.webp` (scaled to cover, centre crop), 1050 by 600 px, WebP q78.

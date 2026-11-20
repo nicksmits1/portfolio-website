@@ -1,0 +1,55 @@
+---
+/* Research: every project as a card, its own figure first, filterable by topic. Home keeps the compact rows; this page
+   adds the larger figures and each project's two leading numbers. Header: the topic minima in characters (glyphs.ts). */
+import Base from '../layouts/Base.astro';
+import GlyphHead from '../components/GlyphHead.astro';
+import { card } from '../lib/thumbs';
+import { projects, body, TOPICS, whereLine } from '../lib/site';
+
+const list = await projects();
+const topics = TOPICS.map(t => ({ id: t.id, name: t.name, short: t.short ?? t.name, n: list.filter(p => p.data.topics.includes(t.id)).length })).filter(t => t.n);
+const topicName = Object.fromEntries(topics.map(t => [t.id, t.name]));
+---
+<Base title="Research | Nicolas Smits" description="Research and projects by Nicolas Smits across reinforcement learning, scientific machine learning, GenAI and software engineering, each shown through its own figure.">
+  <GlyphHead page="research" title="Research" line={`Projects across ${topics.map(t => t.name.toLowerCase().replace('ml', 'ML').replace('genai', 'GenAI')).join(', ').replace(/, ([^,]+)$/, ' and $1')}.`} kind="landscape"
+    data={{ topics: topics.map(t => ({ name: t.name, short: t.short, n: t.n })) }}
+    label={`Contour landscape in characters with one minimum per research topic: ${topics.map(t => `${t.name}, ${t.n} projects`).join('; ')}. A gradient descent converges on each in turn.`} />
+
+  <main id="main">
+    <section class="block wrap" aria-label="Projects">
+      <div class="chips topics" role="group" aria-label="Show one topic" data-card-chips>
+        <button type="button" data-topic="" aria-pressed="true">All<small>{list.length}</small></button>
+        {topics.map(t => <button type="button" data-topic={t.id} aria-pressed="false">{t.name}<small>{t.n}</small></button>)}
+      </div>
+      <ul class="cards">{list.map(p => {
+        const img = card(p.id), rail = (p.data.rail ?? []).slice(0, 2);
+        return (
+          <li data-topics={p.data.topics.join(' ')}>
+            <a href={`/projects/${p.id}`}>
+              <img src={img.src} width={img.width} height={img.height} alt="" loading="lazy" decoding="async" />
+              <b>{p.data.name}</b>
+              <span class="wh">{whereLine(p).map(x => <span>{x}</span>)}</span>
+              <p>{body(p).line}</p>
+              {rail.length > 0 && <span class="fx">{rail.map(([v, l]) => <span><i>{v}</i>{l}</span>)}</span>}
+              <span class="tps">{p.data.topics.map(t => <span>{topicName[t]}</span>)}</span>
+            </a>
+          </li>
+        );
+      })}</ul>
+    </section>
+  </main>
+</Base>
+<script>
+  /* topic chips filter the cards; /research#<topic> opens filtered */
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-card-chips] button')];
+  const cards = [...document.querySelectorAll<HTMLElement>('.cards li[data-topics]')];
+  const ids = new Set(chips.map(b => b.dataset.topic).filter(Boolean));
+  const show = (id: string | null, url = true) => {
+    const t = id && ids.has(id) ? id : null;
+    chips.forEach(b => b.setAttribute('aria-pressed', String((b.dataset.topic || null) === t)));
+    cards.forEach(c => (c.hidden = !!t && !c.dataset.topics!.split(' ').includes(t)));
+    if (url) history.replaceState(null, '', t ? `#${t}` : location.pathname);
+  };
+  chips.forEach(b => b.addEventListener('click', () => show(b.dataset.topic || null)));
+  show(location.hash.slice(1) || null, false);
+</script>

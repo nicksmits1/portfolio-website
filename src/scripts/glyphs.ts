@@ -212,7 +212,62 @@ const scenario: Gen = g => {
   function walkHead(ns: Node[], u: number): [number, number] { const S = ns.length - 1, s = Math.min(S - 1, Math.floor(u * S)); return edgePt(ns[s], ns[s + 1], u * S - s); }
 };
 
-const GENS: Record<string, Gen> = { strata, scenario };
+/* Research: the home landscape's topic minima, one basin per topic across the open ground right of the title (above
+   it on phones), shaded in the ten-step character ramp. A descent starts on a basin's rim every six and a half seconds,
+   taking each topic in turn; where it converges the topic turns coral and the readout names it, as on home. */
+type Topic = { name: string; short: string; n: number };
+const DENS = ' .:-=+*#%@';
+const landscape: Gen = (g, host) => {
+  const topics: Topic[] = JSON.parse(host.dataset.topics || '[]');
+  let key = '', B: { c: number; r: number }[] = [], sx = 1, sy = 1, run: { pts: [number, number][]; k: number; t0: number } | null = null, target = 0;
+  const f = (c: number, r: number) => { let v = 1; for (const b of B) { const dx = (c - b.c) / sx, dy = (r - b.r) / sy; v -= 0.92 * Math.exp(-(dx * dx + dy * dy)); } return v + 0.02 * Math.sin(c * 0.08) * Math.cos(r * 0.3); };
+  const grad = (c: number, r: number): [number, number] => { const h = 0.25; return [(f(c + h, r) - f(c - h, r)) / (2 * h), (f(c, r + h) - f(c, r - h)) / (2 * h)]; };
+  const layout = () => {
+    const n = topics.length, x0 = g.phone ? 3 : g.titleRight + 7, x1 = g.cols - 4, y0 = 4.5, y1 = g.phone ? g.titleTop - 1.5 : g.rows - 2;
+    const ys = [0.34, 0.7, 0.36, 0.66];
+    B = topics.map((_, k) => ({ c: x0 + ((x1 - x0) * (k + 0.5)) / n, r: y0 + (y1 - y0) * ys[k % 4] }));
+    sx = n > 1 ? (B[1].c - B[0].c) * 0.42 : 10; sy = Math.max(2.2, g.rows * 0.17); run = null;
+  };
+  const descend = (k: number, seed?: number) => {
+    const b = B[k], a = seed ?? Math.random() * 6.283;
+    let p: [number, number] = [b.c + Math.cos(a) * sx * 1.6, b.r + Math.sin(a) * sy * 1.7];
+    const pts: [number, number][] = [p];
+    for (let i = 0; i < 200; i++) {
+      const d = grad(p[0], p[1]); let vx = d[0] * sx * sx * 0.18, vy = d[1] * sy * sy * 0.18;
+      const m = Math.hypot(vx, vy * 2); if (m > 1.4) { vx *= 1.4 / m; vy *= 1.4 / m; }
+      p = [p[0] - vx, p[1] - vy]; pts.push(p); if (m < 0.02) break;
+    }
+    return { pts, k, t0: performance.now() };
+  };
+  return (t, still) => {
+    const k0 = `${g.cols}x${g.rows}x${Math.round(g.titleRight)}x${Math.round(g.titleTop)}`;
+    if (key !== k0) { key = k0; layout(); }
+    if (!topics.length) return;
+    if (!run || (!still && t - run.t0 > 6500)) { run = descend(still ? Math.min(2, topics.length - 1) : target, still ? 0.8 : undefined); target = (target + 1) % topics.length; }
+    for (let r = 0; r < g.rows; r++) for (let c = 0; c < g.cols; c++) {
+      const m = g.calm(c, r); if (m < 0.3) continue;
+      const v = Math.pow(Math.min(1, Math.max(0, f(c, r))), 1.6) * 0.78 * m, d = Math.min(9, Math.floor(v * 10));
+      if (d) g.put(c, r, DENS[d], BANDS[Math.min(12, 1 + Math.floor(v * 12.5))]);
+    }
+    const n = still ? run.pts.length : Math.min(run.pts.length, Math.floor((t - run.t0) / 60) + 1), done = n === run.pts.length;
+    for (let k = 1; k < n; k++) { const [a, b] = [run.pts[k - 1], run.pts[k]], s = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]))); for (let j = 0; j <= s; j++) g.put(a[0] + ((b[0] - a[0]) * j) / s, a[1] + ((b[1] - a[1]) * j) / s, '.', CORAL); }
+    for (let k = 0; k < n; k += 3) g.put(run.pts[k][0], run.pts[k][1], 'o', CORAL, true);
+    g.put(run.pts[0][0], run.pts[0][1], 'x', CORAL, true);
+    if (done) { const e = run.pts[n - 1]; g.put(e[0], e[1], '*', PEACH, true); }
+    topics.forEach((tp, k) => {
+      const s = g.phone ? tp.short : tp.name, hit = done && run!.k === k, lc = Math.round(B[k].c - s.length / 2), lr = Math.round(B[k].r) - 2;
+      for (let i = -1; i <= s.length + 3; i++) g.put(lc + i, lr, ' ', BG);
+      g.text(lc, lr, s, hit ? CORAL : FG, true);
+      if (!g.phone) g.text(lc + s.length + 1, lr, String(tp.n), hit ? CORAL : FG2);
+    });
+    const hitName = g.phone ? topics[run.k].short : topics[run.k].name;
+    const label = done ? `converged in ${n - 1} iterations on ${hitName}` : `k=${n - 1}`, lr = g.phone ? 4 : g.rows - 2;
+    for (let c = g.cols - label.length - 5; c < g.cols; c++) g.put(c, lr, ' ', BG);
+    g.text(g.cols - label.length - 2, lr, label, done ? CORAL : FG2);
+  };
+};
+
+const GENS: Record<string, Gen> = { strata, scenario, landscape };
 
 mountAll('[data-glyphs]', host => {
   const cv = host.querySelector('canvas')!;

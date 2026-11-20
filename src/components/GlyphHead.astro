@@ -3,7 +3,7 @@
    project pages' landscape strip, the name tab and nav on ink, and the title on a calm patch of the grid.
    kind picks the generator; data is passed to it as JSON in data-<key> attributes. */
 import Nav from './Nav.astro';
-interface Props { page: 'publications' | 'experience'; title: string; line: string; kind: string; label: string; data?: Record<string, unknown> }
+interface Props { page: 'research' | 'publications' | 'experience'; title: string; line: string; kind: string; label: string; data?: Record<string, unknown> }
 const { page, title, line, kind, label, data = {} } = Astro.props;
 const attrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data-${k}`, JSON.stringify(v)]));
 ---
